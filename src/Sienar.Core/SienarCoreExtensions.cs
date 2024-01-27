@@ -2,9 +2,9 @@
 using System.Reflection;
 using Sienar.Configuration;
 
-namespace Sienar.Utils;
+namespace Sienar;
 
-public static class Enums
+public static class SienarCoreExtensions
 {
 	public static string? GetMediaDirectory(this Enum self)
 	{

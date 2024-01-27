@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor;
 using MudBlazor.Services;
+using Sienar.Configuration;
 using Sienar.UI.Drawers;
 using Sienar.Infrastructure;
 using Sienar.Email;
@@ -22,9 +23,9 @@ using Sienar.Infrastructure.States;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Menus;
 
-namespace Sienar.Configuration;
+namespace Sienar;
 
-public static class SienarBlazorServiceCollectionExtensions
+public static class SienarBlazorExtensions
 {
 	public static IServiceCollection AddSienarUtilities(this IServiceCollection self)
 	{

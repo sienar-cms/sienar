@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Services;
 
 namespace Sienar.Pages;
@@ -22,11 +21,11 @@ public abstract class UpsertPage<TModel> : FormPage<TModel>
 	protected bool IsEditing => Id.HasValue;
 	protected string Title => IsEditing
 		? $"Edit {Name}"
-		: $"Add {EntityExtensions.GetEntityName<TModel>()}";
+		: $"Add {typeof(TModel).GetEntityName()}";
 	
 	protected string SubmitText => IsEditing
 		? $"Update {Name}"
-		: $"Add {EntityExtensions.GetEntityName<TModel>()}";
+		: $"Add {typeof(TModel).GetEntityName()}";
 
 	/// <inheritdoc />
 	protected override async Task OnInitializedAsync()

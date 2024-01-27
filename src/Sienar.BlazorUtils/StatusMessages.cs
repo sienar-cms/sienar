@@ -7,17 +7,17 @@ public static partial class StatusMessages
 {
 	public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";
 
-	public static class Crud<TEntity>
+	public static class Crud<TEntity> where TEntity : EntityBase
 	{
-		public static string CreateFailed() => $"Unable to create new {EntityExtensions.GetEntityName<TEntity>()}";
-		public static string CreateSuccessful() => $"{EntityExtensions.GetEntityName<TEntity>()} created successfully";
-		public static string ReadSingleFailed() => $"Unable to read {EntityExtensions.GetEntityName<TEntity>()}";
-		public static string ReadMultipleFailed() => $"Unable to read {EntityExtensions.GetEntityPluralName<TEntity>()}";
-		public static string UpdateFailed() => $"Unable to update {EntityExtensions.GetEntityName<TEntity>()}";
-		public static string UpdateSuccessful() => $"{EntityExtensions.GetEntityName<TEntity>()} updated successfully";
-		public static string DeleteFailed() => $"Unable to delete {EntityExtensions.GetEntityName<TEntity>()}";
-		public static string DeleteSuccessful() => $"{EntityExtensions.GetEntityName<TEntity>()} deleted successfully";
-		public static string NotFound(Guid id) => $"{EntityExtensions.GetEntityName<TEntity>()} with ID {id} not found";
+		public static string CreateFailed() => $"Unable to create new {typeof(TEntity).GetEntityName()}";
+		public static string CreateSuccessful() => $"{typeof(TEntity).GetEntityName()} created successfully";
+		public static string ReadSingleFailed() => $"Unable to read {typeof(TEntity).GetEntityName()}";
+		public static string ReadMultipleFailed() => $"Unable to read {typeof(TEntity).GetEntityPluralName()}";
+		public static string UpdateFailed() => $"Unable to update {typeof(TEntity).GetEntityName()}";
+		public static string UpdateSuccessful() => $"{typeof(TEntity).GetEntityName()} updated successfully";
+		public static string DeleteFailed() => $"Unable to delete {typeof(TEntity).GetEntityName()}";
+		public static string DeleteSuccessful() => $"{typeof(TEntity).GetEntityName()} deleted successfully";
+		public static string NotFound(Guid id) => $"{typeof(TEntity).GetEntityName()} with ID {id} not found";
 	}
 
 	public static class Database
