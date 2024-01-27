@@ -23,6 +23,13 @@
 				For="() => Model.Password"
 				InputType="InputType.Password"
 				Label="Password"/>
+			<MudCheckBox
+				Class="mt-4"
+				Color="Color.Primary"
+				UnCheckedColor="Color.Default"
+				@bind-Value="Model.RememberMe"
+				For="() => Model.RememberMe"
+				Label="Remember me"/>
 			<Honeypot @bind-Value="Model.SecretKeyField"/>
 		</Fields>
 
