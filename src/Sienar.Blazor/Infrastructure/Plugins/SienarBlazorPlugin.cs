@@ -38,7 +38,6 @@ public class SienarBlazorPlugin : ISienarPlugin
 			.AddSienarUtilities()
 			.AddSienarIdentity()
 			.AddSienarMedia()
-			.AddSienarStates()
 			.ConfigureSienarOptions(config)
 			.ConfigureSienarBlazor()
 			.ConfigureSienarBlazorAuth();
@@ -105,14 +104,6 @@ public class SienarBlazorPlugin : ISienarPlugin
 					Text = "Users",
 					Icon = Icons.Material.Filled.SupervisorAccount,
 					Url = DashboardUrls.Users.Index,
-					Roles = [Roles.Admin]
-				})
-			.AddMenuLink(
-				new()
-				{
-					Text = "States",
-					Icon = Icons.Material.Filled.AccountBalance,
-					Url = DashboardUrls.States.Index,
 					Roles = [Roles.Admin]
 				})
 			.AddMenuLink(

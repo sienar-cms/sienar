@@ -18,9 +18,6 @@ public class SienarDbContext : DbContext, ISienarDbContext
 	public virtual DbSet<SienarRole> Roles { get; set; }
 
 	/// <inheritdoc />
-	public virtual DbSet<Infrastructure.State> States { get; set; }
-
-	/// <inheritdoc />
 	public virtual DbSet<Medium> Files { get; set; }
 
 	/// <inheritdoc />

@@ -66,11 +66,4 @@ public static class DashboardUrls
 		public const string Index = Prefix;
 		public const string Add = $"{Prefix}/add";
 	}
-
-	public static class States
-	{
-		private const string Prefix = $"{DashboardUrls.Prefix}/states";
-		public const string Index = Prefix;
-		public const string Add = $"{Prefix}/add";
-	}
 }

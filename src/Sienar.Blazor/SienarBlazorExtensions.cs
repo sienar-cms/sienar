@@ -19,7 +19,6 @@ using Sienar.Identity;
 using Sienar.Identity.Hooks;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
-using Sienar.Infrastructure.States;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Menus;
 
@@ -110,14 +109,6 @@ public static class SienarBlazorExtensions
 			.AddTransient<IBeforeUpsert<Medium>, UploadFileHook>()
 			.AddTransient<IBeforeUpsert<Medium>, VerifyUserCanModifyFileHook>()
 			.AddTransient<IBeforeDelete<Medium>, VerifyUserCanModifyFileHook>();
-	}
-
-	public static IServiceCollection AddSienarStates(this IServiceCollection self)
-	{
-		self.TryAddTransient<IFilterProcessor<Infrastructure.State>, StateFilterProcessor>();
-		self.TryAddTransient<IEntityStateValidator<Infrastructure.State>, EnsureStateNameAbbreviationUniqueHook>();
-
-		return self;
 	}
 
 	public static IServiceCollection ConfigureSienarOptions(
