@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Sienar.Tools;
+namespace Sienar;
 
 public static class FileUtils
 {

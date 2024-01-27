@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Utils;
 
 namespace Sienar.Identity.Hooks;
 

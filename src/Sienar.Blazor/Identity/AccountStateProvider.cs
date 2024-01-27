@@ -1,6 +1,5 @@
-﻿using Sienar.Tools;
+﻿using Sienar.State;
 
-// ReSharper disable once checknamespace
 namespace Sienar.Identity;
 
 public class AccountStateProvider : StateProviderBase

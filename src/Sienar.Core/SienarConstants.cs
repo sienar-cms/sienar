@@ -1,4 +1,4 @@
-﻿namespace Sienar.Utils;
+﻿namespace Sienar;
 
 public static class SienarConstants
 {

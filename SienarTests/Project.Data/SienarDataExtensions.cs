@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sienar.Tools;
+using Sienar;
 
 namespace Project.Data;
 

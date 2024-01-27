@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
-using Sienar.Utils;
 
 namespace Sienar.Identity;
 

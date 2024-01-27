@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor;
-using Sienar.Configuration;
-using Sienar.Tools;
 using Sienar.Infrastructure.Menus;
 
 namespace Sienar.Infrastructure.Plugins;

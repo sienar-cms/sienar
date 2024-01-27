@@ -1,5 +1,5 @@
 // ReSharper disable MemberHidesStaticFromOuterClass
-namespace Sienar.Tools;
+namespace Sienar;
 
 public static class DashboardUrls
 {
