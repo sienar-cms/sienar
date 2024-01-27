@@ -66,11 +66,6 @@ public class SienarUser : EntityBase
 	public DateTime? LockoutEnd { get; set; }
 
 	/// <summary>
-	/// Gets or sets whether the user has 2FA enabled
-	/// </summary>
-	public bool TwoFactorEnabled { get; set; }
-
-	/// <summary>
 	/// Gets or sets a list of verification codes
 	/// </summary>
 	public List<VerificationCode> VerificationCodes { get; set; } = new();
@@ -101,18 +96,6 @@ public class SienarUser : EntityBase
 	[PersonalData]
 	[MaxLength(100)]
 	public string? PendingEmail { get; set; }
-
-    /// <summary>
-    /// Gets or sets the telephone number
-    /// </summary>
-    [PersonalData]
-    [MaxLength(20)]
-    public string? PhoneNumber { get; set; }
-
-	/// <summary>
-	/// Gets or sets whether the phone number for the user has been confirmed
-	/// </summary>
-	public bool PhoneNumberConfirmed { get; set; }
 
 #endregion
 
