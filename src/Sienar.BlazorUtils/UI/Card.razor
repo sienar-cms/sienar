@@ -16,7 +16,9 @@
 
 		@if (!string.IsNullOrEmpty(Icon))
 		{
-			<MudIcon Icon="@Icon"/>
+			<MudIcon
+				Icon="@Icon"
+				Title="@IconTitle"/>
 		}
 	</MudCardHeader>
 
@@ -48,6 +50,9 @@
 
 	[Parameter]
 	public string? Icon { get; set; }
+
+	[Parameter]
+    public string? IconTitle { get; set; }
 
 	[Parameter]
 	public RenderFragment? CardContent { get; set; }

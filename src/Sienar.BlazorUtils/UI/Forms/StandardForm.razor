@@ -1,13 +1,17 @@
 ﻿@typeparam TFormModel
 @inherits BaseForm<TFormModel>
 
-<EditForm Model="Model"
-          OnValidSubmit="HandleSubmit">
+<EditForm
+	Model="Model"
+	OnValidSubmit="HandleSubmit">
 	<DataAnnotationsValidator/>
 
-	<Card Title="@Title"
-	      ThemeColor="ThemeColor"
-	      Square="Square">
+	<Card
+		Title="@Title"
+		ThemeColor="ThemeColor"
+		Square="Square"
+		Icon="@Icon"
+		IconTitle="@IconTitle">
 		<CardContent>
 			@Information
 

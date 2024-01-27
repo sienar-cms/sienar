@@ -10,7 +10,9 @@
 		Model="Model"
 		OnSubmit="OnSubmit"
 		Title="@Title"
-		SubmitText="@SubmitText">
+		SubmitText="@SubmitText"
+		Icon="@Icon"
+		IconTitle="@($"{Model.Username}'s email is confirmed")">
 		<Fields>
 			<MudTextField
 				@bind-Value="Model.Username"
@@ -48,6 +50,10 @@
 @code {
 
 	protected override string Name => Model.Username;
+
+	private string? Icon => Model.EmailConfirmed
+		? Icons.Material.Filled.CheckCircle
+		: null;
 
 	/// <inheritdoc />
 	protected override Task OnSuccess()

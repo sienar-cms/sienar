@@ -33,6 +33,12 @@ public class BaseForm : ComponentBase
 	public string? ResetText { get; set; } = "Reset";
 
 	[Parameter]
+	public string? Icon { get; set; }
+
+	[Parameter]
+	public string? IconTitle { get; set; }
+
+	[Parameter]
 	public bool ShowReset { get; set; }
 
 	[Parameter]
