@@ -50,6 +50,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
 			.AddTransient<IBeforeUpsert<SienarUser>, UserPasswordUpdateHook>()
 			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
+			.AddTransient<IBeforeDelete<SienarUser>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>()
 
 			// Login
@@ -73,6 +74,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IProcessor<ResetPasswordRequest>, ResetPasswordHook>()
 
 			// Personal data
+			.AddTransient<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountHook>();
 
 		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
