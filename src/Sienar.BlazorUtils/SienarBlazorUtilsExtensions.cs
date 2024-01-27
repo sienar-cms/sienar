@@ -2,12 +2,14 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Menus;
+using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Services;
 
 namespace Sienar;
@@ -22,6 +24,8 @@ public static class SienarBlazorUtilsExtensions
 	{
 		self.TryAddSingleton<IMenuProvider, MenuProvider>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.TryAddScoped<IStyleProvider, StyleProvider>();
+		self.TryAddScoped<IScriptProvider, ScriptProvider>();
 		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient<INotificationService, NotificationService>();
 		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
@@ -63,6 +67,14 @@ public static class SienarBlazorUtilsExtensions
 
 	public static void RemoveService<TService>(this IServiceCollection self)
 		=> RemoveService(self, typeof(TService));
+
+#endregion
+
+#region Middleware
+
+	public static void UsePluginMiddleware<TPlugin>(this IApplicationBuilder self)
+		where TPlugin : ISienarPlugin
+		=> self.UseMiddleware<SienarPluginMiddleware<TPlugin>>();
 
 #endregion
 
@@ -114,6 +126,20 @@ public static class SienarBlazorUtilsExtensions
 			.GetField(stringified)
 			?.GetCustomAttribute<DescriptionAttribute>();
 		return a?.Description ?? stringified;
+	}
+
+	/// <summary>
+	/// Gets the HTML-expected value of <see cref="ReferrerPolicy"/> and <see cref="CrossOriginMode"/> members
+	/// </summary>
+	/// <param name="self">the referrer policy or cross-origin mode to get a value for</param>
+	/// <returns>the value if the enum is not null and the value is defined, else null</returns>
+	public static string? GetHtmlValue(this Enum? self)
+	{
+		return self?
+			.GetType()
+			.GetField(self.ToString())?
+			.GetCustomAttribute<HtmlValueAttribute>()
+			?.Value;
 	}
 
 #endregion

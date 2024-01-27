@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using MudBlazor;
 using Sienar.Infrastructure.Menus;
@@ -23,7 +23,10 @@ public class SienarBlazorPlugin : ISienarPlugin
 	/// <inheritdoc />
 	public PluginSettings PluginSettings { get; } = new()
 	{
-		HasRoutableComponents = true
+		HasRoutableComponents = true,
+		ModifiesStyles = true,
+		ModifiesScripts = true,
+		ModifiesMenus = true
 	};
 
 	/// <inheritdoc />
@@ -59,10 +62,30 @@ public class SienarBlazorPlugin : ISienarPlugin
 			.UseAuthorization();
 		app.MapBlazorHub();
 		app.MapFallbackToPage("/_Host");
+	}
 
-		var menuProvider = app.Services.GetRequiredService<IMenuProvider>();
+	public bool PluginShouldExecute(HttpContext context)
+		=> context.Request.Path.StartsWithSegments("/dashboard");
+
+	public void SetupMenu(IMenuProvider menuProvider)
+	{
 		CreateMainMenu(menuProvider);
 		CreateInfoMenu(menuProvider);
+	}
+
+	public void SetupStyles(IStyleProvider styleProvider)
+	{
+		styleProvider
+			.Enqueue("/_content/MudBlazor/MudBlazor.min.css")
+			.Enqueue("/_content/Sienar.Blazor/sienar.css");
+	}
+
+	public void SetupScripts(IScriptProvider scriptProvider)
+	{
+		scriptProvider
+			.Enqueue("/_framework/blazor.server.js")
+			.Enqueue("/_content/MudBlazor/MudBlazor.min.js")
+			.Enqueue("/_content/Sienar.Blazor/sienar.js");
 	}
 
 	private static void CreateMainMenu(IMenuProvider menuProvider)

@@ -39,4 +39,11 @@ public class ScriptResource
 	/// The expected hash of the resource
 	/// </summary>
 	public string? Integrity { get; init; }
+
+	public string GetScriptType()
+	{
+		return IsModule
+			? "module"
+			: "text/javascript";
+	}
 }

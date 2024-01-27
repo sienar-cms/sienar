@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
+using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
@@ -14,6 +15,7 @@ public class SienarWebAppBuilder
 {
 	public readonly WebApplicationBuilder Builder;
 	public readonly List<ISienarPlugin> Plugins = [];
+	public readonly List<Action<IApplicationBuilder>> MiddlewareSetupFuncs = [];
 	public MudTheme? Theme;
 	public bool IsDarkMode;
 
@@ -69,11 +71,18 @@ public class SienarWebAppBuilder
 		Builder.Services.AddSingleton(themeState);
 
 		var app = Builder.Build();
+		var menuProvider = app.Services.GetRequiredService<IMenuProvider>();
 
 		foreach (var plugin in Plugins)
 		{
 			plugin.SetupApp(app);
+			if (plugin.PluginSettings.ModifiesMenus)
+			{
+				plugin.SetupMenu(menuProvider);
+			}
 		}
+
+		foreach (var func in MiddlewareSetupFuncs) func(app);
 
 		return app;
 	}

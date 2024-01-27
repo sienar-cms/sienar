@@ -1,7 +1,12 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Web
+@using Sienar
+@using Sienar.Infrastructure.Plugins
 @namespace Project.App.Blazor.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject IStyleProvider StyleProvider
+@inject IScriptProvider ScriptProvider
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,12 +18,17 @@
 	<link rel="icon"
 	      type="image/png"
 	      href="~/favicon.png"/>
-	<link rel="stylesheet"
-	      href="~/_content/MudBlazor/MudBlazor.min.css"/>
-	<link rel="stylesheet"
-	      href="~/css/site.css"/>
-	<link rel="stylesheet"
-	      href="~/_content/Sienar.Blazor/sienar.css"/>
+
+	@foreach (var stylesheet in StyleProvider.GetStylesheets())
+	{
+		<link
+			href="@stylesheet.Url"
+			crossorigin="@stylesheet.Mode.GetHtmlValue()"
+			referrerpolicy="@stylesheet.Referrer.GetHtmlValue()"
+			integrity="@stylesheet.Integrity"
+			rel="stylesheet"/>
+	}
+
 	<component type="typeof(HeadOutlet)"
 	           render-mode="ServerPrerendered"/>
 </head>
@@ -36,8 +46,16 @@
         <a class="dismiss">🗙</a>
     </div>
 
-<script src="~/_framework/blazor.server.js"></script>
-<script src="~/_content/MudBlazor/MudBlazor.min.js"></script>
-<script src="~/_content/Sienar.Blazor/sienar.js"></script>
+@foreach (var script in ScriptProvider.GetScripts())
+{
+	<script
+		type="@script.GetScriptType()"
+		src="@script.Url"
+		crossorigin="@script.Mode.GetHtmlValue()"
+		referrerpolicy="@script.Referrer.GetHtmlValue()"
+		integrity="@script.Integrity"
+		async="@script.IsAsync"
+		defer="@script.ShouldDefer"></script>
+}
 </body>
 </html>

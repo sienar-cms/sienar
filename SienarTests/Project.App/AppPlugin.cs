@@ -1,22 +1,15 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Project.Data;
+using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Project.App.Blazor;
 
 public class AppPlugin : ISienarPlugin
 {
-	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder) {}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
-	{
-		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
-	}
-
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -28,5 +21,28 @@ public class AppPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new();
+	public PluginSettings PluginSettings { get; } = new() { ModifiesStyles = true };
+
+	/// <inheritdoc />
+	public void SetupDependencies(WebApplicationBuilder builder) {}
+
+	/// <inheritdoc />
+	public void SetupApp(WebApplication app)
+	{
+		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
+	}
+
+	public bool PluginShouldExecute(HttpContext context) => true;
+
+	/// <inheritdoc />
+	public void SetupStyles(IStyleProvider styleProvider)
+	{
+		styleProvider.Enqueue("/css/site.css");
+	}
+
+	/// <inheritdoc />
+	public void SetupScripts(IScriptProvider scriptProvider) {}
+
+	/// <inheritdoc />
+	public void SetupMenu(IMenuProvider menuProvider) {}
 }

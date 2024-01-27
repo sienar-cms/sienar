@@ -1,14 +1,24 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Sienar.Infrastructure.Menus;
 
 namespace Sienar.Infrastructure.Plugins;
 
 public interface ISienarPlugin
 {
-	void SetupDependencies(WebApplicationBuilder builder);
-
-	void SetupApp(WebApplication app);
-
 	PluginData PluginData { get; }
 
 	PluginSettings PluginSettings { get; }
+
+	void SetupDependencies(WebApplicationBuilder builder);
+
+	bool PluginShouldExecute(HttpContext context);
+
+	void SetupApp(WebApplication app);
+
+	void SetupMenu(IMenuProvider menuProvider);
+
+	void SetupStyles(IStyleProvider styleProvider);
+
+	void SetupScripts(IScriptProvider scriptProvider);
 }

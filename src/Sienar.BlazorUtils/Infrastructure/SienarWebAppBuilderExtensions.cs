@@ -11,15 +11,22 @@ public static class SienarWebAppBuilderExtensions
 		this TBuilder self,
 		TPlugin plugin)
 		where TBuilder : SienarWebAppBuilder
-		where TPlugin : ISienarPlugin
+		where TPlugin : class, ISienarPlugin
 	{
 		self.Plugins.Add(plugin);
 		plugin.SetupDependencies(self.Builder);
 		self.Builder.Services.AddSingleton<ISienarPlugin>(plugin);
+		self.Builder.Services.AddSingleton(plugin);
 
 		if (plugin.PluginSettings.HasRoutableComponents)
 		{
 			RoutableComponentAssemblyContainer.Assemblies.Add(typeof(TPlugin).Assembly);
+		}
+
+		if (plugin.PluginSettings.ModifiesScripts
+			|| plugin.PluginSettings.ModifiesStyles)
+		{
+			self.MiddlewareSetupFuncs.Add(app => app.UsePluginMiddleware<TPlugin>());
 		}
 
 		return self;
