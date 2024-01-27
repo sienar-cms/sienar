@@ -45,6 +45,9 @@ public class SienarWebAppBuilder
 			contextServiceDefinition.Lifetime);
 
 		builder.Builder.Services.Add(baseContextDefinition);
+
+		builder.Builder.Services.AddSienarBlazorUtilities();
+
 		return builder;
 	}
 

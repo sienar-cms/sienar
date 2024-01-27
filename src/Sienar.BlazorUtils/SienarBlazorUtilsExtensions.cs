@@ -4,7 +4,11 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Menus;
+using Sienar.Infrastructure.Services;
 
 namespace Sienar;
 
@@ -13,27 +17,52 @@ public static class SienarBlazorUtilsExtensions
 
 #region IServiceCollection
 
-	public static TService? GetAndRemoveService<TService>(this IServiceCollection self)
+	public static IServiceCollection AddSienarBlazorUtilities(
+		this IServiceCollection self)
+	{
+		self.TryAddSingleton<IMenuProvider, MenuProvider>();
+		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
+		self.TryAddTransient<INotificationService, NotificationService>();
+		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
+		self.TryAddTransient(typeof(IEntityWriter<>), typeof(EntityWriter<>));
+		self.TryAddTransient(typeof(IEntityDeleter<>), typeof(EntityDeleter<>));
+
+		return self;
+	}
+
+	public static object? GetAndRemoveService(
+		this IServiceCollection self,
+		Type serviceType)
 	{
 		var service = self.FirstOrDefault(
-			s => s.ServiceType == typeof(TService));
+			s => s.ServiceType == serviceType);
 		if (service is not null)
 		{
 			self.Remove(service);
 		}
 
-		return (TService?)service?.ImplementationInstance;
+		return service?.ImplementationInstance;
+	}
+
+	public static TService? GetAndRemoveService<TService>(
+		this IServiceCollection self)
+		=> (TService?)GetAndRemoveService(self, typeof(TService));
+
+	public static void RemoveService(
+		this IServiceCollection self,
+		Type serviceType)
+	{
+		var service = self.FirstOrDefault(
+			s => s.ServiceType == serviceType);
+		if (service is not null)
+		{
+			self.Remove(service);
+		}
 	}
 
 	public static void RemoveService<TService>(this IServiceCollection self)
-	{
-		var service = self.FirstOrDefault(
-			s => s.ServiceType == typeof(TService));
-		if (service is not null)
-		{
-			self.Remove(service);
-		}
-	}
+		=> RemoveService(self, typeof(TService));
 
 #endregion
 

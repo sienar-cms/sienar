@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -20,7 +19,6 @@ using Sienar.Identity.Hooks;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
 using Sienar.Infrastructure.Entities;
-using Sienar.Infrastructure.Menus;
 
 namespace Sienar;
 
@@ -28,21 +26,16 @@ public static class SienarBlazorExtensions
 {
 	public static IServiceCollection AddSienarUtilities(this IServiceCollection self)
 	{
+		self.RemoveService(typeof(IHookableService<>));
+
 		self.TryAddTransient<IBotDetector, BotDetector>();
 		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
-		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
-		self.TryAddSingleton<IMenuProvider, MenuProvider>();
-		self.TryAddTransient<INotificationService, NotificationService>();
-		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient(typeof(IHookableService<>), typeof(SienarHookableService<>));
-		self
-			.AddTransient(typeof(IEntityReader<>), typeof(EntityReader<>))
-			.AddTransient(typeof(IEntityWriter<>), typeof(EntityWriter<>))
-			.AddTransient(typeof(IEntityDeleter<>), typeof(EntityDeleter<>))
+
+		return self
+			.AddTransient(typeof(IHookableService<>), typeof(SienarHookableService<>))
 			.AddTransient(typeof(IEntityStateValidator<>), typeof(ConcurrencyStampValidatorHook<>))
 			.AddTransient(typeof(IBeforeUpsert<>), typeof(ConcurrencyStampUpdateHook<>));
-
-		return self;
 	}
 
 	public static IServiceCollection AddSienarIdentity(this IServiceCollection self)
@@ -145,11 +138,7 @@ public static class SienarBlazorExtensions
 		self.TryAddTransient<IBlazorServerSignInManager>(
 			sp => (IBlazorServerSignInManager)sp.GetRequiredService<ISignInManager>());
 
-		var defaultAuthStateProvider = self.FirstOrDefault(s => s.ImplementationType == typeof(AuthenticationStateProvider));
-		if (defaultAuthStateProvider is not null)
-		{
-			self.Remove(defaultAuthStateProvider);
-		}
+		self.RemoveService<AuthenticationStateProvider>();
 
 		self.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 		self.AddScoped<AuthStateProvider>(
@@ -160,16 +149,8 @@ public static class SienarBlazorExtensions
 		var authenticationConfigurer = self.GetAndRemoveService<Action<AuthenticationOptions>>();
 
 		self
-			.AddAuthorization(
-				o =>
-				{
-					authorizationConfigurer?.Invoke(o);
-				})
-			.AddAuthentication(
-				o =>
-				{
-					authenticationConfigurer?.Invoke(o);
-				});
+			.AddAuthorization(authorizationConfigurer ?? delegate {})
+			.AddAuthentication(authenticationConfigurer ?? delegate {});
 
 		return self;
 	}
