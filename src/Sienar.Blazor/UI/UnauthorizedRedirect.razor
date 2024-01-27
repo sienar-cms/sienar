@@ -1,0 +1,35 @@
+@using System.Web
+@inject NavigationManager NavManager
+
+@if (_showMessage)
+{
+	<NarrowContainer>
+		<Heading1>Unauthorized</Heading1>
+
+		<MudText>
+			You do not have permission to perform that action.
+		</MudText>
+	</NarrowContainer>
+}
+
+@code {
+
+	[CascadingParameter]
+	private Task<AuthenticationState> AuthState { get; set; } = default!;
+
+	private bool _showMessage;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (!(await AuthState).IsAuthenticated())
+		{
+			var currentUri = NavManager.ToBaseRelativePath(NavManager.Uri);
+			currentUri = HttpUtility.UrlEncode(currentUri);
+			NavManager.NavigateTo($"{DashboardUrls.Account.Login}?returnUri=/{currentUri}");
+			return;
+		}
+
+		_showMessage = true;
+	}
+
+}

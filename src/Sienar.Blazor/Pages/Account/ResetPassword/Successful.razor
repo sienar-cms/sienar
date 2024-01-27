@@ -1,0 +1,15 @@
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.ResetPassword.Successful)]
+
+<DocTitle Title="Password reset successfully"/>
+
+
+<NarrowContainer>
+	<Heading1>
+		Password reset successfully
+	</Heading1>
+
+	<MudText>
+		Your password was reset successfully. You can now <MudLink Href="@DashboardUrls.Account.Login">log in</MudLink> with your new password.
+	</MudText>
+</NarrowContainer>

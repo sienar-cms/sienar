@@ -1,0 +1,12 @@
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Deleted)]
+
+<DocTitle Title="Account deleted"/>
+
+<NarrowContainer>
+	<Heading1>Account deleted</Heading1>
+
+	<MudText>
+		Your account has been deleted. You can't recover your personal data any longer, but you can still <MudLink Href="@DashboardUrls.Account.Register.Index">register</MudLink> any time. We hope to see you again soon!
+	</MudText>
+</NarrowContainer>

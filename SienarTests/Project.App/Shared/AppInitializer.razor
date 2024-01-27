@@ -1,0 +1,13 @@
+﻿@using Project.Data
+
+<AuthStateRefresher />
+<CascadingAuthenticationState>
+	@ChildContent
+</CascadingAuthenticationState>
+
+@code {
+
+	[Parameter]
+	public RenderFragment ChildContent { get; set; } = default!;
+
+}

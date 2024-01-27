@@ -1,0 +1,43 @@
+﻿@{
+	// False warning about SortLabel lambdas having incorrect nullability
+	#pragma warning disable CS8622
+}
+
+@inherits ActionPage<State>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.States.Index)]
+@inject IEntityReader<State> Reader
+@inject IEntityDeleter<State> Deleter
+
+<DocTitle Title="States listing"/>
+
+<TemplatedTable TableTitle="States"
+                LoadData="Reader.Get">
+	<ToolBarContent>
+		<PrimaryIconButton 
+			Link="@DashboardUrls.States.Add"
+			Icon="@Icons.Material.Filled.Add"/>
+    </ToolBarContent>
+
+	<HeaderContent>
+		<SortLabel For="(State s) => s.Name"/>
+		<SortLabel For="(State s) => s.Abbreviation"/>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+		<MudTd DataLabel="Name">@context.Name</MudTd>
+		<MudTd DataLabel="Abbreviation">@context.Abbreviation</MudTd>
+		<MudTd DataLabel="Actions">
+			<PrimaryIconButton
+				Link="@($"{DashboardUrls.States.Index}/{context.Id}")"
+				Title="@($"Edit state {context.Name}")"
+				Icon="@Icons.Material.Filled.Edit"/>
+
+			<ErrorIconButton
+				Title="@($"Delete state {context.Name}")"
+				Icon="@Icons.Material.Filled.DeleteForever"
+				OnClick="@(() => Deleter.Delete(context.Id))"/>
+		</MudTd>
+	</RowTemplate>
+</TemplatedTable>

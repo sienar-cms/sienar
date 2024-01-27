@@ -1,0 +1,43 @@
+﻿@typeparam TFormModel
+@inherits BaseForm<TFormModel>
+
+<EditForm Model="Model"
+          OnValidSubmit="HandleSubmit">
+	<DataAnnotationsValidator/>
+
+	<Card Title="@Title"
+	      ThemeColor="ThemeColor"
+	      Square="Square">
+		<CardContent>
+			@Information
+
+			@* This is currently disabled. Not sure why the error message isn't working but I'll need to figure it out and reapply in the future *@
+			@* <ErrorMessage Message="@FormErrorMessage"/> *@
+
+			@Fields
+		</CardContent>
+
+		<CardActions>
+			@if (!HideSubmit)
+			{
+				<LoadingButton
+					Color="ThemeColor"
+					IsLoading="@(Loading || IsLoading)"
+					Class="mr-4">
+					@SubmitText
+				</LoadingButton>
+			}
+
+			@if (ShowReset)
+			{
+				<SecondaryButton
+					ButtonType="ButtonType.Reset"
+					OnClick="OnReset"
+					Class="mr-3">
+					@ResetText
+				</SecondaryButton>
+			}
+			@MoreActions
+		</CardActions>
+	</Card>
+</EditForm>

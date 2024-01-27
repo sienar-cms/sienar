@@ -1,0 +1,72 @@
+@using System.Web
+@inherits FormPage<LoginRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Login)]
+@inject IHookableService<LoginRequest> Service
+
+<DocHead Description="Just another Blazor site with a login page"
+         Title="Log in"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="@Model"
+		OnSubmit="@OnSubmit"
+		SubmitText="Log in"
+		Title="Log in">
+		<Fields>
+			<MudTextField
+				@bind-Value="Model.AccountName"
+				For="() => Model.AccountName"
+				Label="Username or email address"/>
+			<MudTextField
+				@bind-Value="Model.Password"
+				For="() => Model.Password"
+				InputType="InputType.Password"
+				Label="Password"/>
+			<Honeypot @bind-Value="Model.SecretKeyField"/>
+		</Fields>
+
+		<MoreActions>
+			<SecondaryButton Link="@DashboardUrls.Account.ForgotPassword.Index">
+				I forgot my password
+			</SecondaryButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string? ReturnUri { get; set; }
+
+	[CascadingParameter]
+	public Task<AuthenticationState>? AuthState { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnParametersSetAsync()
+	{
+		if (AuthState is null) { return; }
+
+		if ((await AuthState).IsAuthenticated()) { PerformNavigation(); }
+	}
+
+	protected override async Task OnSubmit()
+	{
+		Logger.LogInformation("Submitting...");
+		SetFormCompletionTime(Model);
+
+		await SubmitRequest(() => Service.Execute(Model));
+		if (WasSuccessful) { PerformNavigation(); }
+	}
+
+	private void PerformNavigation()
+	{
+		var returnUri = string.IsNullOrEmpty(ReturnUri)
+			? DashboardUrls.Index
+			: HttpUtility.UrlDecode(ReturnUri);
+		NavManager.NavigateTo(returnUri);
+	}
+
+}

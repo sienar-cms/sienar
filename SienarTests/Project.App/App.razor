@@ -1,0 +1,24 @@
+﻿@using Sienar.Pages
+@using Sienar.Layouts
+<AppInitializer>
+	<Router AppAssembly="@typeof(App).Assembly"
+	        AdditionalAssemblies="new [] {typeof(DashboardIndex).Assembly}">
+    	<Found Context="routeData">
+		    <AuthorizeRouteView RouteData="@routeData"
+		                        DefaultLayout="@typeof(SienarLayout)">
+			    <Authorizing>
+				    Verifying your login status...
+			    </Authorizing>
+			    <NotAuthorized>
+				    <UnauthorizedRedirect/>
+			    </NotAuthorized>
+		    </AuthorizeRouteView>
+    	</Found>
+    	<NotFound>
+    		<PageTitle>Not found</PageTitle>
+    		<LayoutView Layout="@typeof(SienarLayout)">
+    			<p role="alert">Sorry, there's nothing at this address.</p>
+    		</LayoutView>
+    	</NotFound>
+    </Router>
+</AppInitializer>

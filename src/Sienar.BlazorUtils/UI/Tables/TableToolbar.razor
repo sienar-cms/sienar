@@ -1,0 +1,20 @@
+﻿<MudText Typo="Typo.h6">@Title</MudText>
+<MudSpacer />
+
+@if (!HideSearch)
+{
+	<MudTextField @bind-Value="Search"
+	              Placeholder="Search"
+	              Adornment="Adornment.Start"
+	              AdornmentIcon="@Icons.Material.Filled.Search"
+	              IconSize="Size.Medium"
+	              Class="mt-0"
+	              Immediate/>
+}
+
+@if (ChildContent != null)
+{
+	<div class="ml-5">
+		@ChildContent
+	</div>
+}

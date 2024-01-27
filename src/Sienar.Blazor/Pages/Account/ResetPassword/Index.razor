@@ -1,0 +1,69 @@
+@inherits FormPage<ResetPasswordRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.ResetPassword.Index)]
+@inject IHookableService<ResetPasswordRequest> PasswordResetService
+
+<DocHead Title="Reset Password"
+         Description="Just another Blazor site with a password reset page"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="@Model"
+		OnSubmit="OnSubmit"
+		Title="Reset password"
+		SubmitText="Reset my password">
+		<Information>
+			<MudText>
+				Please select a new password for your account. Your password should be at least 8 characters long, and it should contain a mix of lowercase and uppercase letters, numbers, and special characters.
+			</MudText>
+		</Information>
+
+		<Fields>
+			<MudTextField
+				@bind-Value="Model.NewPassword"
+				For="() => Model.NewPassword"
+				InputType="InputType.Password"
+				Label="New password"
+				Immediate/>
+
+			<MudTextField
+				@bind-Value="Model.ConfirmNewPassword"
+				For="() => Model.ConfirmNewPassword"
+				InputType="InputType.Password"
+				Label="Confirm new password"
+				Immediate/>
+
+			<Honeypot @bind-Value="Model.SecretKeyField"/>
+		</Fields>
+	</StandardForm>
+</NarrowContainer>
+
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	protected override void OnInitialized()
+	{
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+	}
+
+	protected override async Task OnSubmit()
+	{
+		SetFormCompletionTime(Model);
+
+		await SubmitRequest(() => PasswordResetService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.ResetPassword.Successful);
+		}
+	}
+
+}

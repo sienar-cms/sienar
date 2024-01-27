@@ -1,0 +1,28 @@
+@inject IOptions<SiteOptions> Options
+
+<PageTitle>
+	@ComputedTitle
+</PageTitle>
+
+@code {
+
+	private string? _subtitle;
+
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+#pragma warning disable BL0007
+	public string Subtitle
+	{
+		get => _subtitle ?? Options.Value.Name;
+		set => _subtitle = value;
+	}
+#pragma warning restore BL0007
+
+	private string ComputedTitle =>
+		string.IsNullOrEmpty(Title)
+			? Subtitle
+			: $"{Title} | {Subtitle}";
+
+}

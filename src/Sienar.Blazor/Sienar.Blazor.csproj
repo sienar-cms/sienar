@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<RootNamespace>Sienar</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0"/>
+		<PackageReference Include="MudBlazor" Version="6.11.1"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Sienar.BlazorUtils\Sienar.BlazorUtils.csproj" />
+		<ProjectReference Include="..\Sienar.Core\Sienar.Core.csproj"/>
+		<ProjectReference Include="..\Sienar.Services\Sienar.Services.csproj" />
+	</ItemGroup>
+
+</Project>

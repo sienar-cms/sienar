@@ -1,0 +1,29 @@
+@inherits ComponentBase
+@implements IDisposable
+@inject AccountStateProvider Account
+@inject IOptions<SiteOptions> Options
+
+<header class="px-4 py-3">
+	<MudText Typo="Typo.h5">@(Options.Value.Name)</MudText>
+	<AuthorizeView>
+		<Authorized>
+			Welcome, @(User?.Username)!
+		</Authorized>
+	</AuthorizeView>
+</header>
+
+@code {
+
+	private SienarUser? User => Account.User;
+
+	protected override void OnInitialized()
+	{
+		Account.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		Account.OnChange -= StateHasChanged;
+	}
+
+}

@@ -1,0 +1,45 @@
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inherits UpsertPage<State>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.States.Add)]
+@attribute [Route($"{DashboardUrls.States.Index}/{{id:guid}}")]
+
+<DocTitle Title="@Title"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="Model"
+		OnSubmit="() => OnSubmit()"
+		Title="@Title"
+		SubmitText="@SubmitText">
+		<Fields>
+			<MudTextField @bind-Value="@Model.Name"
+			              For="() => Model.Name"
+			              Label="Name"
+			              Immediate/>
+			<MudTextField @bind-Value="@Model.Abbreviation"
+			              For="() => Model.Abbreviation"
+			              Label="Abbreviation"
+			              Immediate/>
+		</Fields>
+
+		<MoreActions>
+			<SecondaryButton Link="@DashboardUrls.States.Index">
+				Back to states listing
+			</SecondaryButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	protected override string Name => Model.Name;
+
+	/// <inheritdoc />
+	protected override Task OnSuccess()
+	{
+		NavManager.NavigateTo(DashboardUrls.States.Index);
+		return Task.CompletedTask;
+	}
+
+}

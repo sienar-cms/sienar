@@ -1,0 +1,15 @@
+@typeparam TItem
+
+<MudTh>
+	<MudTableSortLabel SortBy="@For.Compile()"
+	                   SortLabel="@_sortLabel">
+		@if (ChildContent is not null)
+		{
+			@ChildContent
+		}
+		else
+		{
+			@_sortLabel
+		}
+	</MudTableSortLabel>
+</MudTh>

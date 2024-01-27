@@ -1,0 +1,50 @@
+@typeparam TItem
+
+<MudTable T="TItem"
+          ServerData="LoadDataFunc"
+          RowsPerPage="RowsPerPage"
+          Loading="_loading"
+          Elevation="10"
+          @ref="@Table">
+	<ToolBarContent>
+		<MudText Typo="Typo.h6">@TableTitle</MudText>
+        <MudSpacer />
+
+        @if (!HideSearch)
+        {
+        	<MudTextField @bind-Value="@SearchTerm"
+        	              Placeholder="Search"
+        	              Adornment="Adornment.Start"
+        	              AdornmentIcon="@Icons.Material.Filled.Search"
+        	              IconSize="Size.Medium"
+        	              Class="mt-0"
+	                      DebounceInterval="500"
+	                      Clearable/>
+        }
+
+        @if (ToolBarContent != null)
+        {
+        	<div class="@(FlexToolbarContent ? "ml-5 d-flex" : "ml-5")">
+        		@ToolBarContent
+        	</div>
+        }
+	</ToolBarContent>
+
+	<HeaderContent>
+		@HeaderContent
+	</HeaderContent>
+
+	<RowTemplate>
+		@RowTemplate.Invoke(context)
+	</RowTemplate>
+
+	<NoRecordsContent>
+		<MudText>
+			There are not currently any @TableTitle to display
+		</MudText>
+	</NoRecordsContent>
+
+	<PagerContent>
+		<MudTablePager PageSizeOptions="PageSizeOptions"/>
+	</PagerContent>
+</MudTable>

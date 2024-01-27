@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Sienar.Email</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Sienar.Services\Sienar.Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="4.1.0" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,45 @@
+@inherits ActionPage<ConfirmAccountRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Confirm.Index)]
+@inject IHookableService<ConfirmAccountRequest> Service
+
+<DocTitle Title="Confirming your account"/>
+
+<NarrowContainer>
+	<Heading1>
+		Confirming account
+	</Heading1>
+
+	@if (Loading)
+	{
+		<MudText>
+			We are confirming your account. Hold on...
+		</MudText>
+	}
+</NarrowContainer>
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+		await SubmitRequest(() => Service.Execute(Model));
+
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.Confirm.Successful);
+		}
+	}
+
+}

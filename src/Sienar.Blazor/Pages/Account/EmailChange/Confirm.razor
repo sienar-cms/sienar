@@ -1,0 +1,43 @@
+@inherits ActionPage<PerformEmailChangeRequest>
+@attribute [Route(DashboardUrls.Account.EmailChange.Confirm)]
+@inject IHookableService<PerformEmailChangeRequest> EmailChangeService
+
+<DocTitle Title="Updating your email address"/>
+
+<NarrowContainer>
+	<Heading1>Updating your email address</Heading1>
+
+	@if (Loading)
+	{
+		<MudText>
+			We are verifying your new email address. Please wait...
+		</MudText>
+	}
+</NarrowContainer>
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+		Logger.LogInformation("Codes are {userId} : {verificationCode}", UserId, Code);
+
+		await SubmitRequest(() => EmailChangeService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.EmailChange.Successful);
+		}
+	}
+
+}
