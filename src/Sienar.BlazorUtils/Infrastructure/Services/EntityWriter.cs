@@ -12,9 +12,9 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 	where TEntity : EntityBase, new()
 	where TContext : DbContext
 {
-	protected readonly IEnumerable<IEntityStateValidator<TEntity>> StateValidators;
-	protected readonly IEnumerable<IBeforeUpsert<TEntity>> BeforeUpsertHooks;
-	protected readonly IEnumerable<IAfterUpsert<TEntity>> AfterUpsertHooks;
+	private readonly IEnumerable<IEntityStateValidator<TEntity>> _stateValidators;
+	private readonly IEnumerable<IBeforeUpsert<TEntity>> _beforeUpsertHooks;
+	private readonly IEnumerable<IAfterUpsert<TEntity>> _afterUpsertHooks;
 
 	/// <inheritdoc />
 	public EntityWriter(
@@ -26,13 +26,13 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		IEnumerable<IAfterUpsert<TEntity>> afterUpsertHooks)
 		: base(contextAccessor, logger, notifier)
 	{
-		StateValidators = stateValidators;
-		BeforeUpsertHooks = beforeUpsertHooks;
-		AfterUpsertHooks = afterUpsertHooks;
+		_stateValidators = stateValidators;
+		_beforeUpsertHooks = beforeUpsertHooks;
+		_afterUpsertHooks = afterUpsertHooks;
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<Guid> Add(TEntity model)
+	public async Task<Guid> Add(TEntity model)
 	{
 		if (!await RunBeforeHooks(model, true))
 		{
@@ -63,7 +63,7 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<bool> Edit(TEntity model)
+	public async Task<bool> Edit(TEntity model)
 	{
 		if (!await RunBeforeHooks(model, false))
 		{
@@ -93,19 +93,19 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		return true;
 	}
 
-	protected async Task<bool> RunBeforeHooks(TEntity entity, bool isAdding)
+	private async Task<bool> RunBeforeHooks(TEntity entity, bool isAdding)
 	{
 		try
 		{
 			var wasSuccessful = true;
-			foreach (var validator in StateValidators)
+			foreach (var validator in _stateValidators)
 			{
 				if (!await validator.IsValid(entity, isAdding)) wasSuccessful = false;
 			}
 
 			if (!wasSuccessful) return false;
 
-			foreach (var beforeHook in BeforeUpsertHooks)
+			foreach (var beforeHook in _beforeUpsertHooks)
 			{
 				await beforeHook.Handle(entity, isAdding);
 			}
@@ -122,12 +122,12 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		return true;
 	}
 
-	protected async Task<bool> RunAfterHooks(TEntity entity, bool isAdding)
+	private async Task<bool> RunAfterHooks(TEntity entity, bool isAdding)
 	{
 		var successful = true;
 		try
 		{
-			foreach (var afterHook in AfterUpsertHooks)
+			foreach (var afterHook in _afterUpsertHooks)
 			{
 				if (await afterHook.Handle(entity, isAdding) != HookStatus.Success) successful = false;
 			}

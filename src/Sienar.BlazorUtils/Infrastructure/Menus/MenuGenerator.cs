@@ -5,27 +5,27 @@ namespace Sienar.Infrastructure.Menus;
 
 public class MenuGenerator : IMenuGenerator
 {
-	protected readonly IUserAccessor UserAccessor;
-	protected readonly IMenuProvider MenuProvider;
+	private readonly IUserAccessor _userAccessor;
+	private readonly IMenuProvider _menuProvider;
 
 	public MenuGenerator(IUserAccessor userAccessor, IMenuProvider menuProvider)
 	{
-		UserAccessor = userAccessor;
-		MenuProvider = menuProvider;
+		_userAccessor = userAccessor;
+		_menuProvider = menuProvider;
 	}
 
 	/// <inheritdoc/>
 	public List<MenuLink> CreateMenu(string menuName)
 	{
 		var orderedLinks = new List<MenuLink>();
-		foreach (var i in MenuProvider.Menus[menuName].Keys.OrderDescending())
+		foreach (var i in _menuProvider.Menus[menuName].Keys.OrderDescending())
 		{
-			orderedLinks.AddRange(MenuProvider.Menus[menuName][i]);
+			orderedLinks.AddRange(_menuProvider.Menus[menuName][i]);
 		}
 		return ProcessNavLinks(orderedLinks);
 	}
 
-	protected List<MenuLink> ProcessNavLinks(IEnumerable<MenuLink> navLinks)
+	private List<MenuLink> ProcessNavLinks(IEnumerable<MenuLink> navLinks)
 	{
 		var includedLinks = new List<MenuLink>();
 
@@ -47,15 +47,15 @@ public class MenuGenerator : IMenuGenerator
 		return includedLinks;
 	}
 
-	protected bool UserIsAuthorized(MenuLink menuLink)
+	private bool UserIsAuthorized(MenuLink menuLink)
 	{
-		if (menuLink.RequireLoggedIn && !UserAccessor.IsSignedIn()) return false;
-		if (menuLink.RequireLoggedOut && UserAccessor.IsSignedIn()) return false;
+		if (menuLink.RequireLoggedIn && !_userAccessor.IsSignedIn()) return false;
+		if (menuLink.RequireLoggedOut && _userAccessor.IsSignedIn()) return false;
 		if (menuLink.Roles is null) return true;
 
 		foreach (var role in menuLink.Roles)
 		{
-			if (UserAccessor.UserInRole(role))
+			if (_userAccessor.UserInRole(role))
 			{
 				if (menuLink.AllRolesRequired)
 				{

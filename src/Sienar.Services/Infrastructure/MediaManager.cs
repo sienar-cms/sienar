@@ -7,11 +7,11 @@ namespace Sienar.Infrastructure;
 
 public class MediaManager : IMediaManager
 {
-	protected readonly IMediaDirectoryMapper DirectoryMapper;
+	private readonly IMediaDirectoryMapper _directoryMapper;
 
 	public MediaManager(IMediaDirectoryMapper directoryMapper)
 	{
-		DirectoryMapper = directoryMapper;
+		_directoryMapper = directoryMapper;
 	}
 
 	/// <inheritdoc />
@@ -39,7 +39,7 @@ public class MediaManager : IMediaManager
 	/// <inheritdoc />
 	public string GetFilename(string? fileExtension, MediaType type)
 	{
-		var baseDir = DirectoryMapper.GetDirectoryPath(type);
+		var baseDir = _directoryMapper.GetDirectoryPath(type);
 		var id = Guid.NewGuid();
 
 		if (string.IsNullOrEmpty(fileExtension))

@@ -5,22 +5,22 @@ namespace Sienar.Identity;
 
 public class AccountUrlProvider : IAccountUrlProvider
 {
-	protected readonly EmailOptions Options;
+	private readonly EmailOptions _options;
 
 	public AccountUrlProvider(IOptions<EmailOptions> options)
 	{
-		Options = options.Value;
+		_options = options.Value;
 	}
 
 	/// <inheritdoc />
-	public virtual string ConfirmationUrl
-		=> $"{Options.ApplicationUrl}/dashboard/account/confirm";
+	public string ConfirmationUrl
+		=> $"{_options.ApplicationUrl}/dashboard/account/confirm";
 
 	/// <inheritdoc />
-	public virtual string EmailChangeUrl
-		=> $"{Options.ApplicationUrl}/dashboard/account/email/confirm";
+	public string EmailChangeUrl
+		=> $"{_options.ApplicationUrl}/dashboard/account/email/confirm";
 
 	/// <inheritdoc />
-	public virtual string ResetPasswordUrl
-		=> $"{Options.ApplicationUrl}/dashboard/account/reset-password";
+	public string ResetPasswordUrl
+		=> $"{_options.ApplicationUrl}/dashboard/account/reset-password";
 }

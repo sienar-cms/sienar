@@ -8,17 +8,17 @@ namespace Sienar.Identity;
 
 public class VerificationCodeManager : IVerificationCodeManager
 {
-	protected readonly IDbContextAccessor<DbContext> ContextAccessor;
-	protected DbContext Context => ContextAccessor.Context;
-	protected DbSet<SienarUser> UserSet => Context.Set<SienarUser>();
+	private readonly IDbContextAccessor<DbContext> _contextAccessor;
+	private DbContext Context => _contextAccessor.Context;
+	private DbSet<SienarUser> UserSet => Context.Set<SienarUser>();
 
 	public VerificationCodeManager(IDbContextAccessor<DbContext> contextAccessor)
 	{
-		ContextAccessor = contextAccessor;
+		_contextAccessor = contextAccessor;
 	}
 
 	/// <inheritdoc/>
-	public virtual async Task<VerificationCode> CreateCode(
+	public async Task<VerificationCode> CreateCode(
 		SienarUser user,
 		string type)
 	{
@@ -44,12 +44,12 @@ public class VerificationCodeManager : IVerificationCodeManager
 	}
 
 	/// <inheritdoc/>
-	public virtual Task DeleteCode(
+	public Task DeleteCode(
 		SienarUser user,
 		string type)
 		=> DeleteVerificationCode(user, type, true);
 
-	protected virtual async Task DeleteVerificationCode(
+	private async Task DeleteVerificationCode(
 		SienarUser user,
 		string type,
 		bool saveChanges)
@@ -75,7 +75,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 	}
 
 	/// <inheritdoc/>
-	public virtual async Task<VerificationCode?> GetCode(
+	public async Task<VerificationCode?> GetCode(
 		SienarUser user,
 		string type)
 	{
@@ -87,7 +87,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 		return user.VerificationCodes.FirstOrDefault(v => v.Type == type);
 	}
 
-	public virtual VerificationCodeStatus GetCodeStatus(
+	public VerificationCodeStatus GetCodeStatus(
 		VerificationCode? code,
 		Guid suppliedCode)
 	{
@@ -105,7 +105,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 		return VerificationCodeStatus.Valid;
 	}
 
-	public virtual async Task<VerificationCodeStatus> GetCodeStatus(
+	public async Task<VerificationCodeStatus> GetCodeStatus(
 		SienarUser user,
 		string type,
 		Guid suppliedCode)
@@ -114,7 +114,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 		return GetCodeStatus(code, suppliedCode);
 	}
 
-	public virtual async Task<VerificationCodeStatus> VerifyCode(
+	public async Task<VerificationCodeStatus> VerifyCode(
 		SienarUser user,
 		string type,
 		Guid suppliedCode,
@@ -130,7 +130,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 		return status;
 	}
 
-	protected virtual DateTime GetVerificationCodeExpiration(string type)
+	private DateTime GetVerificationCodeExpiration(string type)
 	{
 		return DateTime.Now.AddMinutes(30);
 	}

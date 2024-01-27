@@ -7,16 +7,16 @@ namespace Sienar.Identity;
 
 public class RoleService : IRoleService
 {
-	protected readonly IDbContextAccessor<DbContext> ContextAccessor;
+	private readonly IDbContextAccessor<DbContext> _contextAccessor;
 
 	public RoleService(IDbContextAccessor<DbContext> contextAccessor)
 	{
-		ContextAccessor = contextAccessor;
+		_contextAccessor = contextAccessor;
 	}
 
 	/// <inheritdoc />
 	public async Task<IEnumerable<SienarRole>> Get()
-		=> await ContextAccessor.Context
+		=> await _contextAccessor.Context
 			.Set<SienarRole>()
 			.ToListAsync();
 }

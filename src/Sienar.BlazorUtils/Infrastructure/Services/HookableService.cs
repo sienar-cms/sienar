@@ -8,10 +8,10 @@ namespace Sienar.Infrastructure.Services;
 
 public class HookableService<TRequest> : IHookableService<TRequest>
 {
-	protected readonly ILogger<HookableService<TRequest>> Logger;
-	protected readonly IEnumerable<IBeforeProcess<TRequest>> BeforeHooks;
-	protected readonly IEnumerable<IAfterProcess<TRequest>> AfterHooks;
-	protected readonly IProcessor<TRequest> Processor;
+	private readonly ILogger<HookableService<TRequest>> _logger;
+	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
+	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
+	private readonly IProcessor<TRequest> _processor;
 
 	public HookableService(
 		ILogger<HookableService<TRequest>> logger,
@@ -19,10 +19,10 @@ public class HookableService<TRequest> : IHookableService<TRequest>
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor)
 	{
-		Logger = logger;
-		BeforeHooks = beforeHooks;
-		AfterHooks = afterHooks;
-		Processor = processor;
+		_logger = logger;
+		_beforeHooks = beforeHooks;
+		_afterHooks = afterHooks;
+		_processor = processor;
 	}
 
 	/// <inheritdoc />
@@ -30,13 +30,13 @@ public class HookableService<TRequest> : IHookableService<TRequest>
 	{
 		if (!await RunBeforeHooks(request))
 		{
-			Processor.NotifyBeforeHookFailure();
+			_processor.NotifyBeforeHookFailure();
 			return false;
 		}
 
 		try
 		{
-			if (await Processor.Process(request) != HookStatus.Success)
+			if (await _processor.Process(request) != HookStatus.Success)
 			{
 				// Don't notify failure because the failure was calculated
 				// so the IProcessor should notify the user
@@ -45,54 +45,54 @@ public class HookableService<TRequest> : IHookableService<TRequest>
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
+			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
 
 			// Notify failure because the failure was unplanned
-			Processor.NotifyProcessFailure();
+			_processor.NotifyProcessFailure();
 			return false;
 		}
 
 		if (!await RunAfterHooks(request))
 		{
-			Processor.NotifyAfterHookFailure();
+			_processor.NotifyAfterHookFailure();
 		}
 
-		Processor.NotifySuccess();
+		_processor.NotifySuccess();
 		return true;
 	}
 
-	protected async Task<bool> RunBeforeHooks(TRequest model)
+	private async Task<bool> RunBeforeHooks(TRequest model)
 	{
 		var successful = true;
 
 		try
 		{
-			foreach (var hook in BeforeHooks)
+			foreach (var hook in _beforeHooks)
 			{
 				if (await hook.Handle(model) != HookStatus.Success) successful = false;
 			}
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, "One or more before hooks failed to run");
+			_logger.LogError(e, "One or more before hooks failed to run");
 			successful = false;
 		}
 
 		return successful;
 	}
 
-	protected async Task<bool> RunAfterHooks(TRequest model)
+	private async Task<bool> RunAfterHooks(TRequest model)
 	{
 		try
 		{
-			foreach (var hook in AfterHooks)
+			foreach (var hook in _afterHooks)
 			{
 				await hook.Handle(model);
 			}
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, "One or more after hooks failed to run");
+			_logger.LogError(e, "One or more after hooks failed to run");
 			return false;
 		}
 

@@ -8,7 +8,7 @@ namespace Sienar.Infrastructure.Services;
 
 public class SienarHookableService<TRequest> : HookableService<TRequest>
 {
-	protected readonly IBotDetector BotDetector;
+	private readonly IBotDetector _botDetector;
 
 	/// <inheritdoc />
 	public SienarHookableService(
@@ -23,13 +23,13 @@ public class SienarHookableService<TRequest> : HookableService<TRequest>
 			afterHooks, 
 			processor)
 	{
-		BotDetector = botDetector;
+		_botDetector = botDetector;
 	}
 
 	/// <inheritdoc />
 	public override Task<bool> Execute(TRequest request)
 	{
-		if (request is Honeypot honeypot && BotDetector.IsSpambot(honeypot))
+		if (request is Honeypot honeypot && _botDetector.IsSpambot(honeypot))
 		{
 			// Silently short-circuit spambots
 			return Task.FromResult(true);

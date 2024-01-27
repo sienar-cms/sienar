@@ -7,26 +7,26 @@ namespace Sienar.Infrastructure;
 
 public class BlazorUserAccessor : IUserAccessor
 {
-	protected readonly AccountStateProvider AccountState;
+	private readonly AccountStateProvider _accountState;
 
 	public BlazorUserAccessor(AccountStateProvider accountState)
 	{
-		AccountState = accountState;
+		_accountState = accountState;
 	}
 
 	/// <inheritdoc />
-	public bool IsSignedIn() => AccountState.User is not null;
+	public bool IsSignedIn() => _accountState.User is not null;
 
 	/// <inheritdoc />
-	public Guid? GetUserId() => AccountState.User?.Id;
+	public Guid? GetUserId() => _accountState.User?.Id;
 
 	/// <inheritdoc />
-	public string? GetUsername() => AccountState.User?.Username;
+	public string? GetUsername() => _accountState.User?.Username;
 
 	/// <inheritdoc />
 	public ClaimsPrincipal GetUserClaimsPrincipal() => throw new NotImplementedException();
 
 	/// <inheritdoc />
-	public bool UserInRole(string roleName) => AccountState.User?.Roles
+	public bool UserInRole(string roleName) => _accountState.User?.Roles
 		.FirstOrDefault(r => r.Name == roleName) is not null;
 }

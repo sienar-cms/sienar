@@ -21,10 +21,10 @@ public abstract partial class SienarLayoutBase : IDisposable
 	private ThemeState ThemeState { get; set; } = default!;
 
 	[Inject]
-	protected IMenuGenerator MenuGenerator { get; set; } = default!;
+	private IMenuGenerator MenuGenerator { get; set; } = default!;
 
 	[Inject]
-	protected AuthenticationStateProvider AuthState { get; set; } = default!;
+	private AuthenticationStateProvider AuthState { get; set; } = default!;
 
 	/// <inheritdoc />
 	protected override void OnInitialized()

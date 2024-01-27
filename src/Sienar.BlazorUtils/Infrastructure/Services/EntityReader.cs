@@ -15,12 +15,12 @@ public class EntityReader<TEntity, TContext>
 	where TEntity : EntityBase, new()
 	where TContext : DbContext
 {
-	protected const string BeforeReadHookErrorMessage = "One or more before read hooks failed to run";
-	protected const string AfterReadHookErrorMessage = "One or more after read hooks failed to run";
+	private const string BeforeReadHookErrorMessage = "One or more before read hooks failed to run";
+	private const string AfterReadHookErrorMessage = "One or more after read hooks failed to run";
 
-	protected readonly IFilterProcessor<TEntity> FilterProcessor;
-	protected readonly IEnumerable<IBeforeRead<TEntity>> BeforeReadHooks;
-	protected readonly IEnumerable<IAfterRead<TEntity>> AfterReadHooks;
+	private readonly IFilterProcessor<TEntity> _filterProcessor;
+	private readonly IEnumerable<IBeforeRead<TEntity>> _beforeReadHooks;
+	private readonly IEnumerable<IAfterRead<TEntity>> _afterReadHooks;
 
 	/// <inheritdoc />
 	public EntityReader(
@@ -32,13 +32,13 @@ public class EntityReader<TEntity, TContext>
 		IEnumerable<IAfterRead<TEntity>> afterReadHooks)
 		: base(contextAccessor, logger, notifier)
 	{
-		FilterProcessor = filterProcessor;
-		BeforeReadHooks = beforeReadHooks;
-		AfterReadHooks = afterReadHooks;
+		_filterProcessor = filterProcessor;
+		_beforeReadHooks = beforeReadHooks;
+		_afterReadHooks = afterReadHooks;
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<TEntity?> Get(
+	public async Task<TEntity?> Get(
 		Guid id,
 		Filter? filter = null)
 	{
@@ -54,7 +54,7 @@ public class EntityReader<TEntity, TContext>
 		{
 			entity = filter == null
 				? await EntitySet.FindAsync(id)
-				: await FilterProcessor
+				: await _filterProcessor
 					.ProcessIncludes(EntitySet, filter)
 					.FirstOrDefaultAsync(u => u.Id == id);
 		}
@@ -79,7 +79,7 @@ public class EntityReader<TEntity, TContext>
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<PagedDto<TEntity>> Get(Filter? filter = null)
+	public async Task<PagedDto<TEntity>> Get(Filter? filter = null)
 	{
 		IQueryable<TEntity> entries;
 		IQueryable<TEntity> countEntries;
@@ -98,7 +98,7 @@ public class EntityReader<TEntity, TContext>
 			if (filter is not null)
 			{
 				entries = ProcessFilter(filter);
-				countEntries = FilterProcessor.Search(EntitySet, filter);
+				countEntries = _filterProcessor.Search(EntitySet, filter);
 			}
 			else
 			{
@@ -125,7 +125,7 @@ public class EntityReader<TEntity, TContext>
 		return new (buffered, count);
 	}
 
-	protected IQueryable<TEntity> ProcessFilter(
+	private IQueryable<TEntity> ProcessFilter(
 		Filter filter,
 		Expression<Func<TEntity, bool>>? predicate = null)
 	{
@@ -135,9 +135,9 @@ public class EntityReader<TEntity, TContext>
 			result = result.Where(predicate);
 		}
 
-		result = FilterProcessor.Search(result, filter);
-		result = FilterProcessor.ProcessIncludes(result, filter);
-		var sortPredicate = FilterProcessor.GetSortPredicate(filter.SortName);
+		result = _filterProcessor.Search(result, filter);
+		result = _filterProcessor.ProcessIncludes(result, filter);
+		var sortPredicate = _filterProcessor.GetSortPredicate(filter.SortName);
 		result = filter.SortDescending ?? false
 			? result.OrderByDescending(sortPredicate)
 			: result.OrderBy(sortPredicate);
@@ -156,11 +156,11 @@ public class EntityReader<TEntity, TContext>
 		return result;
 	}
 
-	protected (bool, Filter?) RunBeforeHooks(Filter? filter, bool isSingle)
+	private (bool, Filter?) RunBeforeHooks(Filter? filter, bool isSingle)
 	{
 		try
 		{
-			foreach (var beforeReadHook in BeforeReadHooks)
+			foreach (var beforeReadHook in _beforeReadHooks)
 			{
 				filter = beforeReadHook.Handle(filter, isSingle);
 			}
@@ -174,7 +174,7 @@ public class EntityReader<TEntity, TContext>
 		return (true, filter);
 	}
 
-	protected async Task<bool> RunAfterHooks(IEnumerable<TEntity> entries, bool isSingle)
+	private async Task<bool> RunAfterHooks(IEnumerable<TEntity> entries, bool isSingle)
 	{
 		var successful = true;
 
@@ -182,7 +182,7 @@ public class EntityReader<TEntity, TContext>
 		{
 			foreach (var entry in entries)
 			{
-				foreach (var afterReadHook in AfterReadHooks)
+				foreach (var afterReadHook in _afterReadHooks)
 				{
 					if (await afterReadHook.Handle(entry, isSingle) != HookStatus.Success) successful = false;
 				}

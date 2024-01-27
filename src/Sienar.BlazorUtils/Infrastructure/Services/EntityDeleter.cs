@@ -13,8 +13,8 @@ public class EntityDeleter<TEntity, TContext>
 	where TEntity : EntityBase
 	where TContext : DbContext
 {
-	protected readonly IEnumerable<IBeforeDelete<TEntity>> BeforeDeleteHooks;
-	protected readonly IEnumerable<IAfterDelete<TEntity>> AfterDeleteHooks;
+	private readonly IEnumerable<IBeforeDelete<TEntity>> _beforeDeleteHooks;
+	private readonly IEnumerable<IAfterDelete<TEntity>> _afterDeleteHooks;
 
 	/// <inheritdoc />
 	public EntityDeleter(
@@ -25,12 +25,12 @@ public class EntityDeleter<TEntity, TContext>
 		IEnumerable<IAfterDelete<TEntity>> afterDeleteHooks)
 		: base(contextAccessor, logger, notifier)
 	{
-		BeforeDeleteHooks = beforeDeleteHooks;
-		AfterDeleteHooks = afterDeleteHooks;
+		_beforeDeleteHooks = beforeDeleteHooks;
+		_afterDeleteHooks = afterDeleteHooks;
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<bool> Delete(Guid id)
+	public async Task<bool> Delete(Guid id)
 	{
 		TEntity? entity;
 		try
@@ -52,7 +52,7 @@ public class EntityDeleter<TEntity, TContext>
 		var successful = true;
 		try
 		{
-			foreach (var beforeHook in BeforeDeleteHooks)
+			foreach (var beforeHook in _beforeDeleteHooks)
 			{
 				var status = await beforeHook.Handle(entity);
 				if (status != HookStatus.Success) successful = false;
@@ -85,7 +85,7 @@ public class EntityDeleter<TEntity, TContext>
 		successful = true;
 		try
 		{
-			foreach (var afterHook in AfterDeleteHooks)
+			foreach (var afterHook in _afterDeleteHooks)
 			{
 				if (await afterHook.Handle(entity) != HookStatus.Success) successful = false;
 			}

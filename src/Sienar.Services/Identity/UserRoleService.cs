@@ -22,7 +22,7 @@ public class UserRoleService
 	/// <inheritdoc />
 	public async Task<bool> AddUserToRole(Guid userId, Guid roleId)
 	{
-		var user = await GeSienarUserWithRoles(userId);
+		var user = await GetSienarUserWithRoles(userId);
 		if (user is null)
 		{
 			Notifier.Error(ErrorMessages.Account.NotFound);
@@ -54,7 +54,7 @@ public class UserRoleService
 	/// <inheritdoc />
 	public async Task<bool> RemoveUserFromRole(Guid userId, Guid roleId)
 	{
-		var user = await GeSienarUserWithRoles(userId);
+		var user = await GetSienarUserWithRoles(userId);
 		if (user is null)
 		{
 			Notifier.Error(ErrorMessages.Account.NotFound);
@@ -75,7 +75,7 @@ public class UserRoleService
 		return true;
 	}
 
-	protected virtual Task<SienarUser?> GeSienarUserWithRoles(Guid id)
+	private Task<SienarUser?> GetSienarUserWithRoles(Guid id)
 		=> EntitySet
 			.Include(u => u.Roles)
 			.FirstOrDefaultAsync(u => u.Id == id);

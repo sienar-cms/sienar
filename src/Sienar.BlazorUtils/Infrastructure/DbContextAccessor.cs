@@ -8,11 +8,11 @@ namespace Sienar.Infrastructure;
 public class DbContextAccessor<TContext> : IDbContextAccessor<TContext>
 	where TContext : DbContext
 {
-	protected readonly IServiceProvider ServiceProvider;
+	private readonly IServiceProvider _sp;
 
 	public DbContextAccessor(IServiceProvider sp)
 	{
-		ServiceProvider = sp;
+		_sp = sp;
 		Context = sp.GetRequiredService<TContext>();
 	}
 
@@ -24,7 +24,7 @@ public class DbContextAccessor<TContext> : IDbContextAccessor<TContext>
 		try
 		{
 			var old = Context;
-			Context = ServiceProvider.GetRequiredService<TContext>();
+			Context = _sp.GetRequiredService<TContext>();
 			old.Dispose();
 		}
 		catch (ObjectDisposedException) {}

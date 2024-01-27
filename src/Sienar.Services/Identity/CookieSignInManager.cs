@@ -10,25 +10,25 @@ namespace Sienar.Identity;
 
 public class CookieSignInManager : ISignInManager
 {
-	protected readonly HttpContext HttpContext;
-	protected readonly LoginOptions LoginOptions;
-	protected readonly IUserClaimsPrincipalFactory<SienarUser> PrincipalFactory;
+	private readonly HttpContext _httpContext;
+	private readonly LoginOptions _loginOptions;
+	private readonly IUserClaimsPrincipalFactory<SienarUser> _principalFactory;
 
 	public CookieSignInManager(
 		IHttpContextAccessor contextAccessor,
 		IOptions<LoginOptions> loginOptions,
 		IUserClaimsPrincipalFactory<SienarUser> principalFactory)
 	{
-		HttpContext = contextAccessor.HttpContext 
+		_httpContext = contextAccessor.HttpContext 
 			?? throw new ArgumentNullException(
 				nameof(contextAccessor.HttpContext),
 				"HttpContext cannot be null");
-		LoginOptions = loginOptions.Value;
-		PrincipalFactory = principalFactory;
+		_loginOptions = loginOptions.Value;
+		_principalFactory = principalFactory;
 	}
 
 	/// <inheritdoc />
-	public virtual async Task SignIn(SienarUser user, bool isPersistent)
+	public async Task SignIn(SienarUser user, bool isPersistent)
 	{
 		var authProperties = new AuthenticationProperties
 		{
@@ -37,24 +37,24 @@ public class CookieSignInManager : ISignInManager
 			IssuedUtc = DateTimeOffset.Now,
 			ExpiresUtc = GetExpiration(isPersistent)
 		};
-		var claimsPrincipal = await PrincipalFactory.CreateAsync(user);
-		await HttpContext.SignInAsync(
+		var claimsPrincipal = await _principalFactory.CreateAsync(user);
+		await _httpContext.SignInAsync(
 			CookieAuthenticationDefaults.AuthenticationScheme,
 			claimsPrincipal,
 			authProperties);
 	}
 
-	public virtual async Task SignOut()
+	public async Task SignOut()
 	{
-		await HttpContext.SignOutAsync(
+		await _httpContext.SignOutAsync(
 			CookieAuthenticationDefaults.AuthenticationScheme);
 	}
 
-	protected DateTimeOffset GetExpiration(bool isPersistent)
+	private DateTimeOffset GetExpiration(bool isPersistent)
 	{
 		var duration = isPersistent
-			? TimeSpan.FromDays(LoginOptions.PersistentLoginDuration)
-			: TimeSpan.FromHours(LoginOptions.TransientLoginDuration);
+			? TimeSpan.FromDays(_loginOptions.PersistentLoginDuration)
+			: TimeSpan.FromHours(_loginOptions.TransientLoginDuration);
 
 		return DateTimeOffset.Now + duration;
 	}

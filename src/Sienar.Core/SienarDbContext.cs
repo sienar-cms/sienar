@@ -12,13 +12,13 @@ public class SienarDbContext : DbContext, ISienarDbContext
 	public SienarDbContext(DbContextOptions options) : base(options) {}
 
 	/// <inheritdoc />
-	public virtual DbSet<SienarUser> Users { get; set; }
+	public DbSet<SienarUser> Users { get; set; }
 
 	/// <inheritdoc />
-	public virtual DbSet<SienarRole> Roles { get; set; }
+	public DbSet<SienarRole> Roles { get; set; }
 
 	/// <inheritdoc />
-	public virtual DbSet<Medium> Files { get; set; }
+	public DbSet<Medium> Files { get; set; }
 
 	/// <inheritdoc />
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

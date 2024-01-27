@@ -9,10 +9,10 @@ namespace Sienar.Identity;
 
 public class AccountEmailManager : IAccountEmailManager
 {
-	protected readonly EmailOptions Options;
-	protected readonly IdentityEmailOptions IdentityOptions;
-	protected readonly IAccountEmailMessageFactory Factory;
-	protected readonly IEmailSender Sender;
+	private readonly EmailOptions _options;
+	private readonly IdentityEmailOptions _identityOptions;
+	private readonly IAccountEmailMessageFactory _factory;
+	private readonly IEmailSender _sender;
 
 	public AccountEmailManager(
 		IOptions<EmailOptions> options,
@@ -20,14 +20,14 @@ public class AccountEmailManager : IAccountEmailManager
 		IAccountEmailMessageFactory factory,
 		IEmailSender sender)
 	{
-		Options = options.Value;
-		IdentityOptions = identityOptions.Value;
-		Factory = factory;
-		Sender = sender;
+		_options = options.Value;
+		_identityOptions = identityOptions.Value;
+		_factory = factory;
+		_sender = sender;
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<bool> SendWelcomeEmail(
+	public async Task<bool> SendWelcomeEmail(
 		string username,
 		string email,
 		Guid userId,
@@ -36,15 +36,15 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			IdentityOptions.WelcomeEmailSubject,
-			await Factory.WelcomeEmailHtml(username, userId, code),
-			await Factory.WelcomeEmailText(username, userId, code));
+			_identityOptions.WelcomeEmailSubject,
+			await _factory.WelcomeEmailHtml(username, userId, code),
+			await _factory.WelcomeEmailText(username, userId, code));
 
-		return await Sender.Send(message);
+		return await _sender.Send(message);
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<bool> SendEmailChangeConfirmationEmail(
+	public async Task<bool> SendEmailChangeConfirmationEmail(
 		string username,
 		string email,
 		Guid userId,
@@ -53,15 +53,15 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			IdentityOptions.EmailChangeSubject,
-			await Factory.ChangeEmailHtml(username, userId, code),
-			await Factory.ChangeEmailText(username, userId, code));
+			_identityOptions.EmailChangeSubject,
+			await _factory.ChangeEmailHtml(username, userId, code),
+			await _factory.ChangeEmailText(username, userId, code));
 
-		return await Sender.Send(message);
+		return await _sender.Send(message);
 	}
 
 	/// <inheritdoc />
-	public virtual async Task<bool> SendPasswordResetEmail(
+	public async Task<bool> SendPasswordResetEmail(
 		string username,
 		string email,
 		Guid userId,
@@ -70,11 +70,11 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			IdentityOptions.PasswordResetSubject,
-			await Factory.ResetPasswordHtml(username, userId, code),
-			await Factory.ResetPasswordText(username, userId, code));
+			_identityOptions.PasswordResetSubject,
+			await _factory.ResetPasswordHtml(username, userId, code),
+			await _factory.ResetPasswordText(username, userId, code));
 
-		return await Sender.Send(message);
+		return await _sender.Send(message);
 	}
 
 	/// <summary>
@@ -86,7 +86,7 @@ public class AccountEmailManager : IAccountEmailManager
 	/// <param name="htmlBody">The email's HTML version</param>
 	/// <param name="textBody">The email's text version</param>
 	/// <returns>the <see cref="MailMessage"/></returns>
-	protected virtual MailMessage CreateMessage(
+	private MailMessage CreateMessage(
 		string displayName,
 		string email,
 		string subject,
@@ -95,7 +95,7 @@ public class AccountEmailManager : IAccountEmailManager
 	{
 		var message = new MailMessage();
 		message.To.Add(new MailAddress(email, displayName));
-		message.From = new MailAddress(Options.FromAddress, Options.FromName);
+		message.From = new MailAddress(_options.FromAddress, _options.FromName);
 		message.Subject = subject;
 		message.Body = htmlBody;
 		message.IsBodyHtml = true;

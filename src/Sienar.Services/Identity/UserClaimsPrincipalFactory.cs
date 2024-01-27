@@ -8,23 +8,23 @@ namespace Sienar.Identity;
 public class UserClaimsPrincipalFactory
 	: IUserClaimsPrincipalFactory<SienarUser>
 {
-	protected readonly IUserClaimsFactory ClaimsFactory;
+	private readonly IUserClaimsFactory _claimsFactory;
 
 	public UserClaimsPrincipalFactory(IUserClaimsFactory claimsFactory)
 	{
-		ClaimsFactory = claimsFactory;
+		_claimsFactory = claimsFactory;
 	}
 
-	public virtual async Task<ClaimsPrincipal> CreateAsync(SienarUser user)
+	public async Task<ClaimsPrincipal> CreateAsync(SienarUser user)
 	{
 		var identity = await GenerateClaims(user);
 		return new ClaimsPrincipal(identity);
 	}
 
-	protected virtual Task<ClaimsIdentity> GenerateClaims(SienarUser user)
+	private Task<ClaimsIdentity> GenerateClaims(SienarUser user)
 	{
 		var identity = new ClaimsIdentity(
-			ClaimsFactory.CreateClaims(user),
+			_claimsFactory.CreateClaims(user),
 			CookieAuthenticationDefaults.AuthenticationScheme);
 		return Task.FromResult(identity);
 	}
