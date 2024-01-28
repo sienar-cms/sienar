@@ -3,7 +3,9 @@
 <MudThemeProvider
 	IsDarkMode="@ThemeState.IsDarkMode"
 	Theme="@ThemeState.Theme"/>
-<MudDialogProvider/>
+<MudDialogProvider
+	CloseOnEscapeKey="true"
+	NoHeader="true"/>
 <MudSnackbarProvider/>
 
 <MudLayout Class="min-vh-100">

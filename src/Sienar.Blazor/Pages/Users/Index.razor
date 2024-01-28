@@ -3,15 +3,14 @@
 #pragma warning disable CS8622
 }
 
-@inherits ActionPage
+@inherits TablePage<SienarUser>
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.Users.Index)]
-@inject IEntityReader<SienarUser> Reader
-@inject IEntityDeleter<SienarUser> Deleter
 
 <DocTitle Title="Users listing"/>
 
 <TemplatedTable
+	@ref="Table"
 	TableTitle="Site users"
 	LoadData="Reader.Get">
 	<ToolBarContent>
@@ -60,7 +59,7 @@
                 <ErrorIconButton
                 	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
-                	OnClick="@(() => Deleter.Delete(context.Id))"/>
+                	OnClick="@(() => DeleteEntity(context.Id))"/>
 			</div>
 		</MudTd>
 	</RowTemplate>

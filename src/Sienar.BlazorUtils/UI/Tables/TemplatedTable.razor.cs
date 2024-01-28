@@ -96,4 +96,6 @@ public partial class TemplatedTable<TItem>
 			TotalItems = result.TotalCount
 		};
 	}
+
+	public Task ReloadTable() => Table.ReloadServerData();
 }

@@ -2,15 +2,18 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MudBlazor;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Services;
+using Sienar.UI;
 
 namespace Sienar;
 
@@ -140,6 +143,35 @@ public static class SienarBlazorUtilsExtensions
 			.GetField(self.ToString())?
 			.GetCustomAttribute<HtmlValueAttribute>()
 			?.Value;
+	}
+
+#endregion
+
+#region IDialogService
+
+	public static async Task<bool> ShowConfirmationDialog(
+		this IDialogService self,
+		string title,
+		string question,
+		string confirmText = "yes",
+		string cancelText = "no",
+		Color mainColor = Color.Primary,
+		Color cancelColor = Color.Secondary)
+	{
+		var parameters = new DialogParameters<ConfirmationDialog>
+		{
+			{ d => d.Title, title },
+			{ d => d.Question, question },
+			{ d => d.ConfirmText, confirmText },
+			{ d => d.CancelText, cancelText },
+			{ d => d.MainColor, mainColor },
+			{ d => d.CancelColor, cancelColor }
+		};
+
+		var dialog = await self.ShowAsync<ConfirmationDialog>(string.Empty, parameters);
+
+		var result = await dialog.Result;
+		return !result.Canceled;
 	}
 
 #endregion
