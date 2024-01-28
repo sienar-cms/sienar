@@ -59,7 +59,7 @@
                 <ErrorIconButton
                 	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
-                	OnClick="@(() => DeleteEntity(context.Id))"/>
+                	OnClick="@(() => DeleteUser(context))"/>
 			</div>
 		</MudTd>
 	</RowTemplate>
@@ -71,5 +71,11 @@
 		=> isConfirmed
 			? Icons.Material.Filled.Check
 			: Icons.Material.Filled.Close;
+
+	private Task DeleteUser(SienarUser user)
+		=> DeleteEntity(
+			user.Id,
+			$"Delete {user.Username}'s account",
+			$"Are you sure you want to delete {user.Username}'s account? This cannot be undone!");
 
 }

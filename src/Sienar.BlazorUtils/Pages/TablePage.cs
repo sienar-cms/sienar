@@ -22,14 +22,41 @@ public class TablePage<TEntity> : SienarPage
 
 	protected TemplatedTable<TEntity> Table = default!;
 
-	protected async Task DeleteEntity(Guid id)
+	protected Task DeleteEntity(
+		Guid id,
+		string? title = null,
+		string? question = null)
 	{
 		var entityName = typeof(TEntity).GetEntityName();
-		var shouldDelete = await DialogService.ShowConfirmationDialog(
-			$"Delete {entityName}",
-			$"Are you sure you want to delete this {entityName}? This cannot be undone!");
+		title ??= $"Delete {entityName}";
+		question ??= $"Are you sure you want to delete this {entityName}? This cannot be undone!";
 
-		if (shouldDelete && await Deleter.Delete(id))
+		return ConfirmAction(
+			title,
+			question,
+			() => Deleter.Delete(id),
+			mainColor: Color.Error,
+			cancelColor: Color.Primary);
+	}
+
+	protected async Task ConfirmAction(
+		string title,
+		string question,
+		Func<Task<bool>> action,
+		string confirmText = "Yes",
+		string cancelText = "no",
+		Color mainColor = Color.Primary,
+		Color cancelColor = Color.Secondary)
+	{
+		var shouldAct = await DialogService.ShowConfirmationDialog(
+			title,
+			question,
+			confirmText,
+			cancelText,
+			mainColor,
+			cancelColor);
+
+		if (shouldAct && await action())
 		{
 			await Table.ReloadTable();
 		}
