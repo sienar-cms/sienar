@@ -16,9 +16,11 @@ using Sienar.Infrastructure;
 using Sienar.Email;
 using Sienar.Identity;
 using Sienar.Identity.Hooks;
+using Sienar.Identity.Processors;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Processors;
 
 namespace Sienar;
 
@@ -26,14 +28,14 @@ public static class SienarBlazorExtensions
 {
 	public static IServiceCollection AddSienarUtilities(this IServiceCollection self)
 	{
-		self.RemoveService(typeof(IHookableService<>));
+		self.RemoveService(typeof(IService<>));
 
 		self.TryAddTransient<IBotDetector, BotDetector>();
 		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
-		self.TryAddTransient(typeof(IHookableService<>), typeof(SienarHookableService<>));
+		self.TryAddTransient(typeof(IService<>), typeof(SienarService<>));
 
 		return self
-			.AddTransient(typeof(IHookableService<>), typeof(SienarHookableService<>))
+			.AddTransient(typeof(IService<>), typeof(SienarService<>))
 			.AddTransient(typeof(IEntityStateValidator<>), typeof(ConcurrencyStampValidatorHook<>))
 			.AddTransient(typeof(IBeforeUpsert<>), typeof(ConcurrencyStampUpdateHook<>));
 	}
@@ -54,28 +56,28 @@ public static class SienarBlazorExtensions
 			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>()
 
 			// Login
-			.AddTransient<IProcessor<LoginRequest>, LoginHook>()
-			.AddTransient<IProcessor<LogoutRequest>, LogoutHook>()
+			.AddTransient<IProcessor<LoginRequest>, LoginProcessor>()
+			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
 
 			// Registration
 			.AddTransient<IBeforeProcess<RegisterRequest>, RegistrationOpenHook>()
 			.AddTransient<IBeforeProcess<RegisterRequest>, AcceptTosHook>()
 			.AddTransient<IBeforeProcess<RegisterRequest>, EnsureAccountInfoUniqueHook>()
-			.AddTransient<IProcessor<RegisterRequest>, RegisterHook>()
+			.AddTransient<IProcessor<RegisterRequest>, RegisterProcessor>()
 
 			// Email
-			.AddTransient<IProcessor<ConfirmAccountRequest>, ConfirmAccountHook>()
-			.AddTransient<IProcessor<InitiateEmailChangeRequest>, InitiateEmailChangeHook>()
-			.AddTransient<IProcessor<PerformEmailChangeRequest>, PerformEmailChangeHook>()
+			.AddTransient<IProcessor<ConfirmAccountRequest>, ConfirmAccountProcessor>()
+			.AddTransient<IProcessor<InitiateEmailChangeRequest>, InitiateEmailChangeProcessor>()
+			.AddTransient<IProcessor<PerformEmailChangeRequest>, PerformEmailChangeProcessor>()
 
 			// Password
-			.AddTransient<IProcessor<ChangePasswordRequest>, ChangePasswordHook>()
-			.AddTransient<IProcessor<ForgotPasswordRequest>, ForgotPasswordHook>()
-			.AddTransient<IProcessor<ResetPasswordRequest>, ResetPasswordHook>()
+			.AddTransient<IProcessor<ChangePasswordRequest>, ChangePasswordProcessor>()
+			.AddTransient<IProcessor<ForgotPasswordRequest>, ForgotPasswordProcessor>()
+			.AddTransient<IProcessor<ResetPasswordRequest>, ResetPasswordProcessor>()
 
 			// Personal data
 			.AddTransient<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>()
-			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountHook>();
+			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountProcessor>();
 
 		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
 		self.TryAddTransient<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();

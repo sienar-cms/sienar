@@ -6,11 +6,12 @@ using Sienar.Configuration;
 using Sienar.Errors;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class InitiateEmailChangeHook : DbService<SienarUser>,
+public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 	IProcessor<InitiateEmailChangeRequest>
 {
 	private readonly IUserManager _userManager;
@@ -21,7 +22,7 @@ public class InitiateEmailChangeHook : DbService<SienarUser>,
 	private readonly LoginOptions _loginOptions;
 
 	/// <inheritdoc />
-	public InitiateEmailChangeHook(IDbContextAccessor<DbContext> contextAccessor, ILogger<DbService<SienarUser, DbContext>> logger,
+	public InitiateEmailChangeProcessor(IDbContextAccessor<DbContext> contextAccessor, ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
 		IUserManager userManager,
 		IVerificationCodeManager vcManager,

@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
-public class HookableService<TRequest> : IHookableService<TRequest>
+public class Service<TRequest> : IService<TRequest>
 {
-	private readonly ILogger<HookableService<TRequest>> _logger;
+	private readonly ILogger<Service<TRequest>> _logger;
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest> _processor;
 
-	public HookableService(
-		ILogger<HookableService<TRequest>> logger,
+	public Service(
+		ILogger<Service<TRequest>> logger,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor)

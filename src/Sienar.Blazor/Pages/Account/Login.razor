@@ -2,7 +2,7 @@
 @inherits FormPage<LoginRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Login)]
-@inject IHookableService<LoginRequest> Service
+@inject IService<LoginRequest> Service
 
 <DocHead Description="Just another Blazor site with a login page"
          Title="Log in"/>

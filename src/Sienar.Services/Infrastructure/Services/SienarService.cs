@@ -3,16 +3,17 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
-public class SienarHookableService<TRequest> : HookableService<TRequest>
+public class SienarService<TRequest> : Service<TRequest>
 {
 	private readonly IBotDetector _botDetector;
 
 	/// <inheritdoc />
-	public SienarHookableService(
-		ILogger<HookableService<TRequest>> logger,
+	public SienarService(
+		ILogger<Service<TRequest>> logger,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor,

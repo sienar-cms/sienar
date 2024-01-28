@@ -1,7 +1,7 @@
 @inherits FormPage<RegisterRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Register.Index)]
-@inject IHookableService<RegisterRequest> Service
+@inject IService<RegisterRequest> Service
 
 <DocHead Title="Register"
          Description="Just another Blazor site with a registration page"/>

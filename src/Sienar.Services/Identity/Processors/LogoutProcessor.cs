@@ -1,15 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class LogoutHook : IProcessor<LogoutRequest>
+public class LogoutProcessor : IProcessor<LogoutRequest>
 {
 	private readonly ISignInManager _signInManager;
 	private readonly INotificationService _notifier;
 
-	public LogoutHook(
+	public LogoutProcessor(
 		ISignInManager signInManager,
 		INotificationService notifier)
 	{

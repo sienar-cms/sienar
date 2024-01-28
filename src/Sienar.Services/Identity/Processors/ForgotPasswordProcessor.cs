@@ -3,10 +3,11 @@ using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class ForgotPasswordHook : IProcessor<ForgotPasswordRequest>
+public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest>
 {
 	private readonly IUserManager _userManager;
 	private readonly IVerificationCodeManager _vcManager;
@@ -14,7 +15,7 @@ public class ForgotPasswordHook : IProcessor<ForgotPasswordRequest>
 	private readonly INotificationService _notifier;
 	private readonly SienarOptions _options;
 
-	public ForgotPasswordHook(
+	public ForgotPasswordProcessor(
 		IUserManager userManager,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,

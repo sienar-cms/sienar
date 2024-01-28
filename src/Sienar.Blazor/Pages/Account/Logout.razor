@@ -1,7 +1,7 @@
 @inherits SienarPage
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Logout)]
-@inject IHookableService<LogoutRequest> LogoutService
+@inject IService<LogoutRequest> LogoutService
 @inject NavigationManager NavManager
 
 <DocTitle Title="Log out"/>

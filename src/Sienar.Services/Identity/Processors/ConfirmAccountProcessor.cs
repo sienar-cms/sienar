@@ -6,11 +6,12 @@ using Sienar.Configuration;
 using Sienar.Errors;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class ConfirmAccountHook : DbService<SienarUser>,
+public class ConfirmAccountProcessor : DbService<SienarUser>,
 	IProcessor<ConfirmAccountRequest>
 {
 	private readonly IUserManager _userManager;
@@ -19,7 +20,7 @@ public class ConfirmAccountHook : DbService<SienarUser>,
 	private readonly SienarOptions _options;
 
 	/// <inheritdoc />
-	public ConfirmAccountHook(
+	public ConfirmAccountProcessor(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,

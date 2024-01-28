@@ -4,31 +4,35 @@ using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class ChangePasswordHook : DbService<SienarUser>,
-	IProcessor<ChangePasswordRequest>
+public class DeleteAccountProcessor : DbService<SienarUser>,
+	IProcessor<DeleteAccountRequest>
 {
-	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
+	private readonly IUserManager _userManager;
+	private readonly ISignInManager _signInManager;
 
 	/// <inheritdoc />
-	public ChangePasswordHook(
+	public DeleteAccountProcessor(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
+		IUserAccessor userAccessor,
 		IUserManager userManager,
-		IUserAccessor userAccessor)
+		ISignInManager signInManager)
 		: base(contextAccessor, logger, notifier)
 	{
-		_userManager = userManager;
 		_userAccessor = userAccessor;
+		_userManager = userManager;
+		_signInManager = signInManager;
 	}
 
 	/// <inheritdoc />
-	public async Task<HookStatus> Process(ChangePasswordRequest request)
+	public async Task<HookStatus> Process(DeleteAccountRequest request)
 	{
 		var userId = _userAccessor.GetUserId();
 		if (!userId.HasValue)
@@ -37,20 +41,23 @@ public class ChangePasswordHook : DbService<SienarUser>,
 			return HookStatus.Unauthorized;
 		}
 
-		var user = await _userManager.GetSienarUser(userId!.Value);
+		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
 			Notifier.Error(ErrorMessages.Account.LoginRequired);
 			return HookStatus.Unauthorized;
 		}
 
-		if (!await _userManager.VerifyPassword(user, request.CurrentPassword))
+		if (!await _userManager.VerifyPassword(user, request.Password))
 		{
 			Notifier.Error(ErrorMessages.Account.LoginFailedInvalid);
 			return HookStatus.Unauthorized;
 		}
 
-		await _userManager.UpdatePassword(user, request.NewPassword);
+		EntitySet.Remove(user);
+		await Context.SaveChangesAsync();
+
+		await _signInManager.SignOut();
 
 		return HookStatus.Success;
 	}
@@ -58,24 +65,24 @@ public class ChangePasswordHook : DbService<SienarUser>,
 	/// <inheritdoc />
 	public void NotifySuccess()
 	{
-		Notifier.Success("Password changed successfully");
+		Notifier.Success("Account deleted successfully");
 	}
 
 	/// <inheritdoc />
 	public void NotifyBeforeHookFailure()
 	{
-		Notifier.Error("Unable to change password");
+		Notifier.Error("Unable to delete account");
 	}
 
 	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
-		Notifier.Error("An unknown error occurred while changing your password");
+		Notifier.Error("An unknown error occurred while deleting your account");
 	}
 
 	/// <inheritdoc />
 	public void NotifyAfterHookFailure()
 	{
-		Notifier.Warning("Your password was changed successfully, but a third party plugin failed to execute");
+		Notifier.Warning("Your account was deleted successfully, but a third party plugin failed to execute");
 	}
 }

@@ -4,10 +4,11 @@ using Sienar.Configuration;
 using Sienar.Errors;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class ResetPasswordHook : IProcessor<ResetPasswordRequest>
+public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest>
 {
 	private readonly IUserManager _userManager;
 	private readonly IVerificationCodeManager _vcManager;
@@ -15,7 +16,7 @@ public class ResetPasswordHook : IProcessor<ResetPasswordRequest>
 	private readonly INotificationService _notifier;
 	private readonly SienarOptions _options;
 
-	public ResetPasswordHook(
+	public ResetPasswordProcessor(
 		IUserManager userManager,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,

@@ -7,11 +7,12 @@ using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class RegisterHook : DbService<SienarUser>, IProcessor<RegisterRequest>
+public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterRequest>
 {
 	private readonly IVerificationCodeManager _verificationCodeManager;
 	private readonly IAccountEmailManager _emailManager;
@@ -20,7 +21,7 @@ public class RegisterHook : DbService<SienarUser>, IProcessor<RegisterRequest>
 	private readonly SienarOptions _appOptions;
 
 	/// <inheritdoc />
-	public RegisterHook(
+	public RegisterProcessor(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,

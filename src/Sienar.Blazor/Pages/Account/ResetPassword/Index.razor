@@ -1,7 +1,7 @@
 @inherits FormPage<ResetPasswordRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.ResetPassword.Index)]
-@inject IHookableService<ResetPasswordRequest> PasswordResetService
+@inject IService<ResetPasswordRequest> PasswordResetService
 
 <DocHead Title="Reset Password"
          Description="Just another Blazor site with a password reset page"/>

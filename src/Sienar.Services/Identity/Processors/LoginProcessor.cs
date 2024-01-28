@@ -7,11 +7,12 @@ using Sienar.Configuration;
 using Sienar.Errors;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.Processors;
 
-public class LoginHook : DbService<SienarUser>, 
+public class LoginProcessor : DbService<SienarUser>, 
 	IProcessor<LoginRequest>
 {
 	private readonly IUserManager _userManager;
@@ -22,7 +23,7 @@ public class LoginHook : DbService<SienarUser>,
 	private readonly SienarOptions _appOptions;
 
 	/// <inheritdoc />
-	public LoginHook(
+	public LoginProcessor(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
