@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace Sienar.Infrastructure;
 
-public class NoUserUserAccessor : IUserAccessor
+public class NullUserAccessor : IUserAccessor
 {
 	/// <inheritdoc />
 	public bool IsSignedIn() => true;
