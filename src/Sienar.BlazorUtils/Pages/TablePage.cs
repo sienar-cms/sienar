@@ -44,7 +44,7 @@ public class TablePage<TEntity> : SienarPage
 		string question,
 		Func<Task<bool>> action,
 		string confirmText = "Yes",
-		string cancelText = "no",
+		string cancelText = "No",
 		Color mainColor = Color.Primary,
 		Color cancelColor = Color.Secondary)
 	{
