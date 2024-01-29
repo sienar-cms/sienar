@@ -2,7 +2,7 @@
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route($"{DashboardUrls.Users.Index}/{{userId:guid}}/roles")]
 @inject IEntityReader<SienarUser> UserReader
-@inject IRoleService RoleReader
+@inject IEntityReader<SienarRole> RoleReader
 @inject IService<AddUsertoRoleRequest> AddRoleService
 @inject IService<RemoveUserFromRoleRequest> RemoveRoleService
 
@@ -47,8 +47,7 @@
 				_user = await UserReader.Get(UserId);
 				if (_user is null) return;
 	
-				_roles = (await RoleReader.Get())
-					.OrderBy(r => r.Name);
+				_roles = (await RoleReader.Get(new() { PageSize = 0 })).Items;
 				foreach (var role in _roles)
 				{
 					_roleMap[role.Id] = _user.Roles.Contains(role);

@@ -45,7 +45,6 @@ public static class SienarBlazorExtensions
 
 	public static IServiceCollection AddSienarIdentity(this IServiceCollection self)
 	{
-		self.TryAddTransient<IRoleService, RoleService>();
 		self.TryAddTransient<IPersonalDataService, PersonalDataService>();
 
 		// Hooks
@@ -84,6 +83,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountProcessor>();
 
 		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
+		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
 		self.TryAddTransient<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
 		self.TryAddTransient<IUserClaimsFactory, UserClaimsFactory>();
 		self.TryAddTransient<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
