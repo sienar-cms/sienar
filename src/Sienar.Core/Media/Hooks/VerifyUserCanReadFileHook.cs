@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Hooks;
 
-namespace Sienar.Infrastructure.Hooks;
+namespace Sienar.Media.Hooks;
 
-public class VerifyUserCanReadFileHook : IAfterRead<Medium>
+public class VerifyUserCanReadFileHook : IAfterRead<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
 	private readonly INotificationService _notifier;
@@ -14,7 +16,7 @@ public class VerifyUserCanReadFileHook : IAfterRead<Medium>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(Medium entity, bool isSingle)
+	public Task<HookStatus> Handle(Upload entity, bool isSingle)
 	{
 		var success = Task.FromResult(HookStatus.Success);
 

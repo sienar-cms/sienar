@@ -20,8 +20,10 @@ using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
-using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Processors;
+using Sienar.Media;
+using Sienar.Media.Hooks;
+using Sienar.Media.Processors;
 
 namespace Sienar;
 
@@ -98,16 +100,16 @@ public static class SienarBlazorExtensions
 
 	public static IServiceCollection AddSienarMedia(this IServiceCollection self)
 	{
-		self.TryAddTransient<IFilterProcessor<Medium>, MediumFilterProcessor>();
+		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
 		self.TryAddTransient<IMediaDirectoryMapper, MediaDirectoryMapper>();
 		self.TryAddTransient<IMediaManager, MediaManager>();
 
 		return self
-			.AddTransient<IAfterRead<Medium>, VerifyUserCanReadFileHook>()
-			.AddTransient<IBeforeUpsert<Medium>, AssignMediaFieldsHook>()
-			.AddTransient<IBeforeUpsert<Medium>, UploadFileHook>()
-			.AddTransient<IBeforeUpsert<Medium>, VerifyUserCanModifyFileHook>()
-			.AddTransient<IBeforeDelete<Medium>, VerifyUserCanModifyFileHook>();
+			.AddTransient<IAfterRead<Upload>, VerifyUserCanReadFileHook>()
+			.AddTransient<IBeforeUpsert<Upload>, AssignMediaFieldsHook>()
+			.AddTransient<IBeforeUpsert<Upload>, UploadFileHook>()
+			.AddTransient<IBeforeUpsert<Upload>, VerifyUserCanModifyFileHook>()
+			.AddTransient<IBeforeDelete<Upload>, VerifyUserCanModifyFileHook>();
 	}
 
 	public static IServiceCollection ConfigureSienarOptions(

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media;
 
 public class MediaDirectoryMapper : IMediaDirectoryMapper
 {

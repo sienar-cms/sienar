@@ -1,6 +1,6 @@
 ﻿using Sienar.Configuration;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media;
 
 public enum MediaType
 {

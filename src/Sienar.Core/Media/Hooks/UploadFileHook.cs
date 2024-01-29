@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Sienar.Infrastructure.Hooks;
+using Sienar.Media;
 
-namespace Sienar.Infrastructure.Hooks;
+namespace Sienar.Media.Hooks;
 
-public class UploadFileHook : IBeforeUpsert<Medium>
+public class UploadFileHook : IBeforeUpsert<Upload>
 {
 	private readonly IMediaManager _mediaManager;
 	private readonly ILogger<UploadFileHook> _logger;
@@ -17,7 +19,7 @@ public class UploadFileHook : IBeforeUpsert<Medium>
 	}
 
 	/// <inheritdoc />
-	public async Task<HookStatus> Handle(Medium entity, bool isAdding)
+	public async Task<HookStatus> Handle(Upload entity, bool isAdding)
 	{
 		// Only upload on create
 		if (!isAdding) return HookStatus.Success;

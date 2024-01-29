@@ -1,4 +1,4 @@
-﻿namespace Sienar.Infrastructure;
+﻿namespace Sienar.Media;
 
 public interface IMediaDirectoryMapper
 {

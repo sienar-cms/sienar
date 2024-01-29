@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
+using Sienar.Media;
 
 namespace Sienar.Identity;
 
@@ -98,7 +99,7 @@ public class SienarUser : EntityBase
 
 #endregion
 
-	public List<Medium> Media { get; set; } = new();
+	public List<Upload> Media { get; set; } = new();
 
 	/// <inheritdoc/>
 	public override string ToString() => Username;

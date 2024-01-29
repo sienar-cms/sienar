@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 using Sienar.Infrastructure.Entities;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media;
 
 [EntityName(Singular = "file", Plural = "files")]
-public class Medium : EntityBase
+public class Upload : EntityBase
 {
 	/// <summary>
 	/// The title of the image

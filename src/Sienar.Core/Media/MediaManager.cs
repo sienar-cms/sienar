@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media;
 
 public class MediaManager : IMediaManager
 {

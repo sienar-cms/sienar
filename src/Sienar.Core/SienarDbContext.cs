@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Sienar.Identity;
-using Sienar.Infrastructure;
+using Sienar.Media;
 
 namespace Sienar;
 
@@ -18,7 +18,7 @@ public class SienarDbContext : DbContext, ISienarDbContext
 	public DbSet<SienarRole> Roles { get; set; }
 
 	/// <inheritdoc />
-	public DbSet<Medium> Files { get; set; }
+	public DbSet<Upload> Files { get; set; }
 
 	/// <inheritdoc />
 	protected override void OnModelCreating(ModelBuilder modelBuilder)

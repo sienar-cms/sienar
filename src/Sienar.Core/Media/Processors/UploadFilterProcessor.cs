@@ -4,12 +4,12 @@ using System.Linq.Expressions;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media.Processors;
 
-public class MediumFilterProcessor : IFilterProcessor<Medium>
+public class UploadFilterProcessor : IFilterProcessor<Upload>
 {
 	/// <inheritdoc />
-	public IQueryable<Medium> Search(IQueryable<Medium> dataset, Filter filter)
+	public IQueryable<Upload> Search(IQueryable<Upload> dataset, Filter filter)
 	{
 		if (string.IsNullOrEmpty(filter.SearchTerm))
 		{
@@ -23,10 +23,10 @@ public class MediumFilterProcessor : IFilterProcessor<Medium>
 	}
 
 	/// <inheritdoc />
-	public Expression<Func<Medium, object>> GetSortPredicate(string? sortName) => sortName switch
+	public Expression<Func<Upload, object>> GetSortPredicate(string? sortName) => sortName switch
 	{
-		nameof(Medium.UploadedAt) => m => m.UploadedAt,
-		nameof(Medium.MediaType) => m => m.MediaType,
+		nameof(Upload.UploadedAt) => m => m.UploadedAt,
+		nameof(Upload.MediaType) => m => m.MediaType,
 		_ => m => m.Title
 	};
 }

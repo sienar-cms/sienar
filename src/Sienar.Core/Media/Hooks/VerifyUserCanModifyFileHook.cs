@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Hooks;
 
-namespace Sienar.Infrastructure.Hooks;
+namespace Sienar.Media.Hooks;
 
 public class VerifyUserCanModifyFileHook
-	: IBeforeUpsert<Medium>, IBeforeDelete<Medium>
+	: IBeforeUpsert<Upload>, IBeforeDelete<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
 	private readonly INotificationService _notifier;
@@ -15,7 +17,7 @@ public class VerifyUserCanModifyFileHook
 	}
 
 	/// <inheritdoc />
-	Task<HookStatus> IBeforeUpsert<Medium>.Handle(Medium entity, bool isAdding)
+	Task<HookStatus> IBeforeUpsert<Upload>.Handle(Upload entity, bool isAdding)
 	{
 		// Only verify user can edit if actually editing
 		if (isAdding) return Task.FromResult(HookStatus.Success);
@@ -23,10 +25,10 @@ public class VerifyUserCanModifyFileHook
 	}
 
 	/// <inheritdoc />
-	Task<HookStatus> IBeforeDelete<Medium>.Handle(Medium entity)
+	Task<HookStatus> IBeforeDelete<Upload>.Handle(Upload entity)
 		=> CanModifyFile(entity);
 
-	private Task<HookStatus> CanModifyFile(Medium entity)
+	private Task<HookStatus> CanModifyFile(Upload entity)
 	{
 		var success = Task.FromResult(HookStatus.Success);
 

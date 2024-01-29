@@ -8,6 +8,7 @@ using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
+using Sienar.Media;
 
 namespace Sienar.Identity.Hooks;
 
@@ -15,7 +16,7 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 	IBeforeDelete<SienarUser>,
 	IBeforeProcess<DeleteAccountRequest>
 {
-	private readonly IEntityDeleter<Medium> _mediaDeleter;
+	private readonly IEntityDeleter<Upload> _mediaDeleter;
 	private readonly IUserAccessor _userAccessor;
 
 	/// <inheritdoc />
@@ -23,7 +24,7 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
-		IEntityDeleter<Medium> mediaDeleter,
+		IEntityDeleter<Upload> mediaDeleter,
 		IUserAccessor userAccessor)
 		: base(contextAccessor, logger, notifier)
 	{

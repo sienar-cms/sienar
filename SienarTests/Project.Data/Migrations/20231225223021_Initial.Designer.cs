@@ -139,7 +139,7 @@ namespace Project.Data.Migrations
                     b.ToTable("VerificationCode");
                 });
 
-            modelBuilder.Entity("Sienar.Infrastructure.Medium", b =>
+            modelBuilder.Entity("Sienar.Infrastructure.Media", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -231,7 +231,7 @@ namespace Project.Data.Migrations
                         .HasForeignKey("AppUserId");
                 });
 
-            modelBuilder.Entity("Sienar.Infrastructure.Medium", b =>
+            modelBuilder.Entity("Sienar.Infrastructure.Media", b =>
                 {
                     b.HasOne("Project.Data.AppUser", null)
                         .WithMany("Media")

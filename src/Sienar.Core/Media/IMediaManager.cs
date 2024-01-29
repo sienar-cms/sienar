@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 // using Microsoft.AspNetCore.Http;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Media;
 
 public interface IMediaManager
 {

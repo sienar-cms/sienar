@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Hooks;
 
-namespace Sienar.Infrastructure.Hooks;
+namespace Sienar.Media.Hooks;
 
-public class AssignMediaFieldsHook : IBeforeUpsert<Medium>
+public class AssignMediaFieldsHook : IBeforeUpsert<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
 
@@ -13,7 +15,7 @@ public class AssignMediaFieldsHook : IBeforeUpsert<Medium>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(Medium entity, bool isAdding)
+	public Task<HookStatus> Handle(Upload entity, bool isAdding)
 	{
 		var success = Task.FromResult(HookStatus.Success);
 
