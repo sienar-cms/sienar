@@ -66,4 +66,11 @@ public static class DashboardUrls
 		public const string Index = Prefix;
 		public const string Add = $"{Prefix}/add";
 	}
+
+	public static class LockoutReasons
+	{
+		private const string Prefix = $"{DashboardUrls.Prefix}/lockout-reasons";
+		public const string Index = Prefix;
+		public const string Add = $"{Prefix}/add";
+	}
 }

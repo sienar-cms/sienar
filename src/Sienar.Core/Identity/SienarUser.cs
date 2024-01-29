@@ -68,9 +68,11 @@ public class SienarUser : EntityBase
 	/// <summary>
 	/// Gets or sets a list of verification codes
 	/// </summary>
-	public List<VerificationCode> VerificationCodes { get; set; } = new();
+	public List<VerificationCode> VerificationCodes { get; set; } = [];
 
-	public List<SienarRole> Roles { get; set; } = new();
+	public List<SienarRole> Roles { get; set; } = [];
+
+	public List<LockoutReason> LockoutReasons { get; set; } = [];
 
 #endregion
 
@@ -99,7 +101,7 @@ public class SienarUser : EntityBase
 
 #endregion
 
-	public List<Upload> Media { get; set; } = new();
+	public List<Upload> Media { get; set; } = [];
 
 	/// <inheritdoc/>
 	public override string ToString() => Username;

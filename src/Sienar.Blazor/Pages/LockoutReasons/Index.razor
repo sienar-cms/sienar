@@ -1,0 +1,52 @@
+﻿@inherits TablePage<LockoutReason>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.LockoutReasons.Index)]
+
+<DocTitle Title="Lockout reasons listing"/>
+
+<TemplatedTable
+	@ref="Table"
+	TableTitle="Lockout reasons"
+	LoadData="Reader.Get">
+	<ToolBarContent>
+		<PrimaryIconButton
+			Link="@DashboardUrls.LockoutReasons.Add"
+			Icon="@Icons.Material.Filled.Add"/>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<SortLabel For="(LockoutReason r) => r.Reason">Reason</SortLabel>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Actions
+			</div>
+		</MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+		<MudTd DataLabel="Reason">@context.Reason</MudTd>
+
+		<MudTd DataLabel="Actions">
+			<div class="d-flex justify-center">
+				<PrimaryIconButton
+					Link="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
+					Title="View lockout reason"
+					Icon="@Icons.Material.Filled.RemoveRedEye"/>
+				<ErrorIconButton
+					Title="Delete lockout reason"
+					Icon="@Icons.Material.Filled.DeleteForever"
+					OnClick="@(() => DeleteReason(context))"/>
+			</div>
+		</MudTd>
+	</RowTemplate>
+</TemplatedTable>
+
+@code {
+
+	private Task DeleteReason(LockoutReason reason)
+		=> DeleteEntity(
+			reason.Id,
+			"Delete lockout reason",
+			"Are you sure you want to delete this lockout reason? This cannot be undone!");
+
+}

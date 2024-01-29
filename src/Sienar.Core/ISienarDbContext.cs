@@ -11,5 +11,6 @@ public interface ISienarDbContext
 {
 	DbSet<SienarUser> Users { get; set; }
 	DbSet<SienarRole> Roles { get; set; }
+	DbSet<LockoutReason> LockoutReasons { get; set; }
 	DbSet<Upload> Files { get; set; }
 }

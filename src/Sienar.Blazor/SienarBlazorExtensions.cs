@@ -45,25 +45,34 @@ public static class SienarBlazorExtensions
 
 	public static IServiceCollection AddSienarIdentity(this IServiceCollection self)
 	{
-		// Hooks
+		/*********
+		 * Hooks *
+		 ********/
+
+		// CRUD
 		self
-			// CRUD
 			.AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
 			.AddTransient<IBeforeUpsert<SienarUser>, UserPasswordUpdateHook>()
 			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
 			.AddTransient<IBeforeDelete<SienarUser>, RemoveUserRelatedEntitiesHook>()
-			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>()
+			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>();
 
-			// Security
+		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
+		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
+		self.TryAddTransient<IFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
+
+		// Security
+		self
 			.AddTransient<IProcessor<LoginRequest>, LoginProcessor>()
 			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
 			.AddTransient<IProcessor<AddUserToRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IResultProcessor<PersonalDataResult>, PersonalDataProcessor>()
 			.AddTransient<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
-			.AddTransient<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>()
+			.AddTransient<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>();
 
-			// Registration
+		// Registration
+		self
 			.AddTransient<IBeforeProcess<RegisterRequest>, RegistrationOpenHook>()
 			.AddTransient<IBeforeProcess<RegisterRequest>, AcceptTosHook>()
 			.AddTransient<IBeforeProcess<RegisterRequest>, EnsureAccountInfoUniqueHook>()
@@ -83,8 +92,10 @@ public static class SienarBlazorExtensions
 			.AddTransient<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountProcessor>();
 
-		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
+		/*********
+		 * Other *
+		 ********/
+
 		self.TryAddTransient<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
 		self.TryAddTransient<IUserClaimsFactory, UserClaimsFactory>();
 		self.TryAddTransient<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
