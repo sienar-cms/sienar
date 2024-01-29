@@ -3,7 +3,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Requests;
 
 public class InitiateEmailChangeRequest
 {

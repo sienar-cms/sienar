@@ -3,9 +3,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Requests;
 
-public class ConfirmAccountRequest
+public class PerformEmailChangeRequest
 {
 	[Required]
 	public Guid UserId { get; set; }

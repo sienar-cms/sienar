@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Errors;
+using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;

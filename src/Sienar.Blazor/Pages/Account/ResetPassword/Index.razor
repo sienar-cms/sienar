@@ -1,4 +1,5 @@
-@inherits FormPage<ResetPasswordRequest>
+@using Sienar.Identity.Requests
+@inherits FormPage<Sienar.Identity.Requests.ResetPasswordRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.ResetPassword.Index)]
 @inject IService<ResetPasswordRequest> PasswordResetService

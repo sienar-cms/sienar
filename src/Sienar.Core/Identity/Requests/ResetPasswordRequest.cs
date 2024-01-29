@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Sienar.Validation;
 using Sienar.Infrastructure.Entities;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Requests;
 
 public class ResetPasswordRequest : Honeypot
 {

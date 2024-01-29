@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
+using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Sienar.Validation;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Requests;
 
 public class ChangePasswordRequest
 {

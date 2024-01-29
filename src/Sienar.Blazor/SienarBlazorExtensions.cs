@@ -17,6 +17,7 @@ using Sienar.Email;
 using Sienar.Identity;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
+using Sienar.Identity.Requests;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
 using Sienar.Infrastructure.Entities;

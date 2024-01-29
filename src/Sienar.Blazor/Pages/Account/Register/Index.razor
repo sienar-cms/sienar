@@ -1,4 +1,5 @@
-@inherits FormPage<RegisterRequest>
+@using Sienar.Identity.Requests
+@inherits FormPage<Sienar.Identity.Requests.RegisterRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Register.Index)]
 @inject IService<RegisterRequest> Service

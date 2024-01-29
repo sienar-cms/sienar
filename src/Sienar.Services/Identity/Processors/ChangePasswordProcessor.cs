@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Errors;
+using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
