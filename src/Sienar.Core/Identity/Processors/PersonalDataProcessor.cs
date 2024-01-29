@@ -1,24 +1,25 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Sienar.Errors;
+using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Processors;
 
-public class PersonalDataService
-	: IPersonalDataService
+public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 {
 	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
 	private readonly IEnumerable<IUserPersonalDataRetriever> _personalDataRetrievers;
 	private readonly INotificationService _notifier;
 
-	public PersonalDataService(
+	public PersonalDataProcessor(
 		IUserManager userManager,
 		IUserAccessor userAccessor,
 		IEnumerable<IUserPersonalDataRetriever> personalDataRetrievers,
@@ -30,21 +31,21 @@ public class PersonalDataService
 		_notifier = notifier;
 	}
 
-	/// <inheritdoc/>
-	public async Task<FileDto?> GetPersonalData()
+	/// <inheritdoc />
+	public async Task<(HookStatus Status, PersonalDataResult? Result)> Process()
 	{
 		var userId = _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
 			_notifier.Error(ErrorMessages.Account.LoginRequired);
-			return null;
+			return (HookStatus.Unauthorized, null);
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
 			_notifier.Error(ErrorMessages.Account.LoginRequired);
-			return null;
+			return (HookStatus.Unauthorized, null);
 		}
 
 		var file = new FileDto
@@ -57,8 +58,8 @@ public class PersonalDataService
 		var personalData = new Dictionary<string, string>();
 		var personalDataProps = user
 			.GetType()
-		    .GetProperties()
-		    .Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+			.GetProperties()
+			.Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
 
 		foreach (var p in personalDataProps)
 		{
@@ -76,6 +77,18 @@ public class PersonalDataService
 
 		file.Contents = JsonSerializer.SerializeToUtf8Bytes(personalData);
 
-		return file;
+		return (HookStatus.Success, new(file));
+	}
+
+	/// <inheritdoc />
+	public void NotifySuccess()
+	{
+		_notifier.Success("Personal data downloaded successfully");
+	}
+
+	/// <inheritdoc />
+	public void NotifyProcessFailure()
+	{
+		_notifier.Error("An unknown error occurred while downloading your personal data");
 	}
 }

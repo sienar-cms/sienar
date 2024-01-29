@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor;
@@ -34,6 +35,8 @@ public static class SienarBlazorUtilsExtensions
 		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
 		self.TryAddTransient(typeof(IEntityWriter<>), typeof(EntityWriter<>));
 		self.TryAddTransient(typeof(IEntityDeleter<>), typeof(EntityDeleter<>));
+		self.TryAddTransient(typeof(IService<>), typeof(Service<>));
+		self.TryAddTransient(typeof(IResultService<>), typeof(ResultService<>));
 
 		return self;
 	}

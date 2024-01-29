@@ -18,6 +18,7 @@ using Sienar.Identity;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
+using Sienar.Identity.Results;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
 using Sienar.Infrastructure.Processors;
@@ -35,7 +36,6 @@ public static class SienarBlazorExtensions
 
 		self.TryAddTransient<IBotDetector, BotDetector>();
 		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
-		self.TryAddTransient(typeof(IService<>), typeof(SienarService<>));
 
 		return self
 			.AddTransient(typeof(IService<>), typeof(SienarService<>))
@@ -45,8 +45,6 @@ public static class SienarBlazorExtensions
 
 	public static IServiceCollection AddSienarIdentity(this IServiceCollection self)
 	{
-		self.TryAddTransient<IPersonalDataService, PersonalDataService>();
-
 		// Hooks
 		self
 			// CRUD
@@ -61,6 +59,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
 			.AddTransient<IProcessor<AddUsertoRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
+			.AddTransient<IResultProcessor<PersonalDataResult>, PersonalDataProcessor>()
 
 			// Registration
 			.AddTransient<IBeforeProcess<RegisterRequest>, RegistrationOpenHook>()

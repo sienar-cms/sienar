@@ -1,7 +1,8 @@
 @using Microsoft.JSInterop
 @using System.IO
+@using Sienar.Identity.Results
 @attribute [Route(DashboardUrls.Account.PersonalData)]
-@inject IPersonalDataService Service
+@inject IResultService<PersonalDataResult> PersonalDataRetriever
 @inject ILogger<PersonalData> Logger
 @inject IJSRuntime Interop
 @inject IDialogService Dialog
@@ -50,13 +51,13 @@
 		Logger.LogInformation("Downloading personal data");
 
 		_isLoading = true;
-		var file = await Service.GetPersonalData();
-		if (file is null)
+		var data = await PersonalDataRetriever.Execute();
+		if (data is null || data.PersonalDataFile is null)
 		{
 			return;
 		}
 
-		using var stream = new MemoryStream(file.Contents);
+		using var stream = new MemoryStream(data.PersonalDataFile.Contents);
 		using var dataWrapper = new DotNetStreamReference(stream);
 		await Interop.InvokeVoidAsync("downloadFileFromStream", "PersonalData.json", dataWrapper);
 		_isLoading = false;
