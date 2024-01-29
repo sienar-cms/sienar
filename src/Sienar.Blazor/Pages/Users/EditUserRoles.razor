@@ -46,7 +46,7 @@
 			{
 				_user = await UserReader.Get(UserId);
 				if (_user is null) return;
-	
+
 				_roles = (await RoleReader.Get(new() { PageSize = 0 })).Items;
 				foreach (var role in _roles)
 				{
