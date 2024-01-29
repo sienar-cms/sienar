@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
+using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;

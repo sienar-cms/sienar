@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Sienar.Email;
 
-namespace Sienar.Identity;
+namespace Sienar.Email;
 
 public class AccountEmailManager : IAccountEmailManager
 {

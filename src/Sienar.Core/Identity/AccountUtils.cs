@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Sienar.Configuration;
+using Sienar.Email;
 
 namespace Sienar.Identity;
 

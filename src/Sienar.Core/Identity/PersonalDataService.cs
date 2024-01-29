@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Sienar.Errors;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity;
 

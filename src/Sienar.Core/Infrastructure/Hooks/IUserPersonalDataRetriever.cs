@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sienar.Identity;
 
-namespace Sienar.Identity;
+namespace Sienar.Infrastructure.Hooks;
 
 public interface IUserPersonalDataRetriever
 {

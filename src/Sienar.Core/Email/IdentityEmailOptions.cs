@@ -1,4 +1,4 @@
-﻿namespace Sienar.Identity;
+﻿namespace Sienar.Email;
 
 public class IdentityEmailOptions
 {
