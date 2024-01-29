@@ -10,7 +10,6 @@
 		<ProjectReference Include="..\..\src\Sienar.Blazor\Sienar.Blazor.csproj" />
 		<ProjectReference Include="..\..\src\Sienar.Core\Sienar.Core.csproj"/>
 		<ProjectReference Include="..\..\src\Sienar.MailKit\Sienar.MailKit.csproj"/>
-		<ProjectReference Include="..\..\src\Sienar.Services\Sienar.Services.csproj"/>
 		<ProjectReference Include="..\Project.Data\Project.Data.csproj"/>
 	</ItemGroup>
 

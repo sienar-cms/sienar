@@ -19,7 +19,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Sienar.BlazorUtils\Sienar.BlazorUtils.csproj" />
 		<ProjectReference Include="..\Sienar.Core\Sienar.Core.csproj"/>
-		<ProjectReference Include="..\Sienar.Services\Sienar.Services.csproj" />
 	</ItemGroup>
 
 </Project>
