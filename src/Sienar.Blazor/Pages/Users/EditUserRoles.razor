@@ -14,19 +14,21 @@
 	return;
 }
 
-<Card Title="@($"Edit {_user.Username}'s roles")">
-	<CardContent>
-		@foreach (var role in _roles)
-		{
-			<MudSwitch
-				T="bool"
-				Checked="_roleMap[role.Id]"
-				CheckedChanged="b => UpdateRoleStatus(b, role.Id)"
-				Color="Color.Primary"
-				Label="@role.Name"/>
-		}
-	</CardContent>
-</Card>
+<NarrowContainer>
+	<Card Title="@($"Edit {_user.Username}'s roles")">
+    	<CardContent>
+    		@foreach (var role in _roles)
+    		{
+    			<MudSwitch
+    				T="bool"
+    				Checked="_roleMap[role.Id]"
+    				CheckedChanged="b => UpdateRoleStatus(b, role.Id)"
+    				Color="Color.Primary"
+    				Label="@role.Name"/>
+    		}
+    	</CardContent>
+    </Card>
+</NarrowContainer>
 
 @code {
 
