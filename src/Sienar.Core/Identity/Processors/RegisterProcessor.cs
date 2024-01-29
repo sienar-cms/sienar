@@ -84,20 +84,8 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to register");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while registering");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		Notifier.Warning("You were registered successfully, but a third party plugin failed to execute");
 	}
 }

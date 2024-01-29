@@ -33,20 +33,8 @@ public class LogoutProcessor : IProcessor<LogoutRequest>
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		_notifier.Error("Unable to log out");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		_notifier.Error("An unknown error occurred while logging out");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		_notifier.Warning("You were logged out successfully, but a third party plugin failed to execute");
 	}
 }

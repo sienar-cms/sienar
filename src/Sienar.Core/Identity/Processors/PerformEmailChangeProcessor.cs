@@ -112,20 +112,8 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to change email");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your email");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		Notifier.Warning("Your email was changed successfully, but a third party plugin failed to execute");
 	}
 }

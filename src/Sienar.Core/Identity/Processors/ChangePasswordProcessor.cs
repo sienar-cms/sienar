@@ -64,20 +64,8 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to change password");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your password");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		Notifier.Warning("Your password was changed successfully, but a third party plugin failed to execute");
 	}
 }

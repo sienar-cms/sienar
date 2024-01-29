@@ -31,7 +31,7 @@ public class Service<TRequest> : IService<TRequest>
 	{
 		if (!await RunBeforeHooks(request))
 		{
-			_processor.NotifyBeforeHookFailure();
+			_processor.NotifyProcessFailure();
 			return false;
 		}
 
@@ -53,10 +53,7 @@ public class Service<TRequest> : IService<TRequest>
 			return false;
 		}
 
-		if (!await RunAfterHooks(request))
-		{
-			_processor.NotifyAfterHookFailure();
-		}
+		await RunAfterHooks(request);
 
 		_processor.NotifySuccess();
 		return true;
@@ -82,7 +79,7 @@ public class Service<TRequest> : IService<TRequest>
 		return successful;
 	}
 
-	private async Task<bool> RunAfterHooks(TRequest model)
+	private async Task RunAfterHooks(TRequest model)
 	{
 		try
 		{
@@ -94,9 +91,6 @@ public class Service<TRequest> : IService<TRequest>
 		catch (Exception e)
 		{
 			_logger.LogError(e, "One or more after hooks failed to run");
-			return false;
 		}
-
-		return true;
 	}
 }

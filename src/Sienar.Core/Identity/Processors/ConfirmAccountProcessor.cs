@@ -89,20 +89,8 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<ConfirmAccountRequest>.NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to confirm account");
-	}
-
-	/// <inheritdoc />
 	void IProcessor<ConfirmAccountRequest>.NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while confirming your account");
-	}
-
-	/// <inheritdoc />
-	void IProcessor<ConfirmAccountRequest>.NotifyAfterHookFailure()
-	{
-		Notifier.Warning("Your account was confirmed successfully, but a third party plugin failed to execute");
 	}
 }

@@ -66,21 +66,9 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<AddUsertoRoleRequest>.NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to add user to role");
-	}
-
-	/// <inheritdoc />
 	void IProcessor<AddUsertoRoleRequest>.NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while adding user to role");
-	}
-
-	/// <inheritdoc />
-	void IProcessor<AddUsertoRoleRequest>.NotifyAfterHookFailure()
-	{
-		Notifier.Warning($"User {_user?.Username} added to role {_role?.Name} successfully, but a third party plugin failed to execute");
 	}
 
 #endregion
@@ -117,21 +105,9 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<RemoveUserFromRoleRequest>.NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to remove user from role");
-	}
-
-	/// <inheritdoc />
 	void IProcessor<RemoveUserFromRoleRequest>.NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while removing user from role");
-	}
-
-	/// <inheritdoc />
-	void IProcessor<RemoveUserFromRoleRequest>.NotifyAfterHookFailure()
-	{
-		Notifier.Warning($"User {_user?.Username} removed from role {_role?.Name} successfully, but a third party plugin failed to execute");
 	}
 
 #endregion

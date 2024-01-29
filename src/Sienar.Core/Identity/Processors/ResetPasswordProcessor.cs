@@ -81,20 +81,8 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest>
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		_notifier.Error("Unable to reset password");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		_notifier.Error("An unknown error occurred while resetting your password");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		_notifier.Warning("Your password was reset successfully, but a third party plugin failed to execute");
 	}
 }

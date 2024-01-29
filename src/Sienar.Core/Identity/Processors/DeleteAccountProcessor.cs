@@ -70,20 +70,8 @@ public class DeleteAccountProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to delete account");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while deleting your account");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		Notifier.Warning("Your account was deleted successfully, but a third party plugin failed to execute");
 	}
 }

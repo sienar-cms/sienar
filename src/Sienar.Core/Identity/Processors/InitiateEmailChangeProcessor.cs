@@ -95,20 +95,8 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyBeforeHookFailure()
-	{
-		Notifier.Error("Unable to request an email change");
-	}
-
-	/// <inheritdoc />
 	public void NotifyProcessFailure()
 	{
 		Notifier.Error("An unknown error occurred while requesting an email change");
-	}
-
-	/// <inheritdoc />
-	public void NotifyAfterHookFailure()
-	{
-		Notifier.Warning("Your email change was requested successfully, but a third party plugin failed to execute");
 	}
 }
