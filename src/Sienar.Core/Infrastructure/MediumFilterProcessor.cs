@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure;
 

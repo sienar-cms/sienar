@@ -3,8 +3,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Processors;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Processors;
 
 public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 {

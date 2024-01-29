@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Sienar.Infrastructure.Entities;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Processors;
 
 public interface IFilterProcessor<TEntity>
 {

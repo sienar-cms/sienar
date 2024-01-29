@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
