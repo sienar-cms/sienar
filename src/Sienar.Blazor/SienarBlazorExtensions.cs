@@ -45,7 +45,6 @@ public static class SienarBlazorExtensions
 	{
 		self.TryAddTransient<IRoleService, RoleService>();
 		self.TryAddTransient<IPersonalDataService, PersonalDataService>();
-		self.TryAddTransient<IUserRoleService, UserRoleService>();
 
 		// Hooks
 		self
@@ -56,9 +55,11 @@ public static class SienarBlazorExtensions
 			.AddTransient<IBeforeDelete<SienarUser>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>()
 
-			// Login
+			// Security
 			.AddTransient<IProcessor<LoginRequest>, LoginProcessor>()
 			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
+			.AddTransient<IProcessor<AddUsertoRoleRequest>, UserRoleChangeProcessor>()
+			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
 
 			// Registration
 			.AddTransient<IBeforeProcess<RegisterRequest>, RegistrationOpenHook>()

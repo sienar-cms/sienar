@@ -3,7 +3,8 @@
 @attribute [Route($"{DashboardUrls.Users.Index}/{{userId:guid}}/roles")]
 @inject IEntityReader<SienarUser> UserReader
 @inject IRoleService RoleReader
-@inject IUserRoleService RoleUpdater
+@inject IService<AddUsertoRoleRequest> AddRoleService
+@inject IService<RemoveUserFromRoleRequest> RemoveRoleService
 
 <DocTitle Title="Edit user's roles"/>
 
@@ -59,11 +60,11 @@
 	{
 		if (shouldBeInRole)
 		{
-			await RoleUpdater.AddUserToRole(_user!.Id, roleId);
+			await AddRoleService.Execute(new(_user!.Id, roleId));
 		}
 		else
 		{
-			await RoleUpdater.RemoveUserFromRole(_user!.Id, roleId);
+			await RemoveRoleService.Execute(new(_user!.Id, roleId));
 		}
 
 		_roleMap[roleId] = shouldBeInRole;
