@@ -64,8 +64,13 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your password");
+	}
+
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to change your password");
 	}
 }

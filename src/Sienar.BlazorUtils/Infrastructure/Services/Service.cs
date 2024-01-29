@@ -10,17 +10,20 @@ namespace Sienar.Infrastructure.Services;
 public class Service<TRequest> : IService<TRequest>
 {
 	private readonly ILogger<Service<TRequest>> _logger;
+	private readonly IEnumerable<IAccessValidator<TRequest>> _accessValidators;
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest> _processor;
 
 	public Service(
 		ILogger<Service<TRequest>> logger,
+		IEnumerable<IAccessValidator<TRequest>> accessValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor)
 	{
 		_logger = logger;
+		_accessValidators = accessValidators;
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 		_processor = processor;
@@ -29,9 +32,15 @@ public class Service<TRequest> : IService<TRequest>
 	/// <inheritdoc />
 	public virtual async Task<bool> Execute(TRequest request)
 	{
+		if (!await ValidateAccess(request))
+		{
+			_processor.NotifyNoPermission();
+			return false;
+		}
+
 		if (!await RunBeforeHooks(request))
 		{
-			_processor.NotifyProcessFailure();
+			_processor.NotifyFailure();
 			return false;
 		}
 
@@ -49,7 +58,7 @@ public class Service<TRequest> : IService<TRequest>
 			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
 
 			// Notify failure because the failure was unplanned
-			_processor.NotifyProcessFailure();
+			_processor.NotifyFailure();
 			return false;
 		}
 
@@ -57,6 +66,28 @@ public class Service<TRequest> : IService<TRequest>
 
 		_processor.NotifySuccess();
 		return true;
+	}
+
+	private async Task<bool> ValidateAccess(TRequest request)
+	{
+		var context = new UserAccessValidationContext();
+		var anyValidators = false;
+
+		try
+		{
+			foreach (var validator in _accessValidators)
+			{
+				anyValidators = true;
+				await validator.Validate(context, request);
+			}
+		}
+		catch (Exception e)
+		{
+			_logger.LogError(e, "One or more access validators failed to run");
+			return false;
+		}
+
+		return !anyValidators || context.CanAccess;
 	}
 
 	private async Task<bool> RunBeforeHooks(TRequest model)

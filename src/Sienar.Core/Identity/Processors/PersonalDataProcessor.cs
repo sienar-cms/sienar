@@ -87,7 +87,13 @@ public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyNoPermission()
+	{
+		_notifier.Error("You don't have permission to download permission data");
+	}
+
+	/// <inheritdoc />
+	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while downloading your personal data");
 	}

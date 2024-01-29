@@ -33,8 +33,14 @@ public class LogoutProcessor : IProcessor<LogoutRequest>
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while logging out");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		_notifier.Error("You do not have permission to log out");
 	}
 }

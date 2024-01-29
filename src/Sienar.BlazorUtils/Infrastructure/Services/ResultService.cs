@@ -10,15 +10,18 @@ namespace Sienar.Infrastructure.Services;
 public class ResultService<TResult> : IResultService<TResult>
 {
 	private readonly ILogger<ResultService<TResult>> _logger;
+	private readonly IEnumerable<IAccessValidator<TResult>> _accessValidators;
 	private readonly IEnumerable<IAfterProcess<TResult>> _afterHooks;
 	private readonly IResultProcessor<TResult> _processor;
 
 	public ResultService(
 		ILogger<ResultService<TResult>> logger,
+		IEnumerable<IAccessValidator<TResult>> accessValidators,
 		IEnumerable<IAfterProcess<TResult>> afterHooks,
 		IResultProcessor<TResult> processor)
 	{
 		_logger = logger;
+		_accessValidators = accessValidators;
 		_afterHooks = afterHooks;
 		_processor = processor;
 	}
@@ -26,6 +29,13 @@ public class ResultService<TResult> : IResultService<TResult>
 	public virtual async Task<TResult?> Execute()
 	{
 		TResult? result = default;
+
+		if (!await ValidateAccess(result))
+		{
+			_processor.NotifyNoPermission();
+			return result;
+		}
+
 		try
 		{
 			(var status, result) = await _processor.Process();
@@ -35,7 +45,7 @@ public class ResultService<TResult> : IResultService<TResult>
 		{
 			_logger.LogError(e, "{type} failed to process", typeof(IResultProcessor<TResult>));
 
-			_processor.NotifyProcessFailure();
+			_processor.NotifyFailure();
 			return result;
 		}
 
@@ -46,6 +56,28 @@ public class ResultService<TResult> : IResultService<TResult>
 
 		_processor.NotifySuccess();
 		return result;
+	}
+
+	private async Task<bool> ValidateAccess(TResult? result)
+	{
+		var context = new UserAccessValidationContext();
+		var anyValidators = false;
+
+		try
+		{
+			foreach (var validator in _accessValidators)
+			{
+				anyValidators = true;
+				await validator.Validate(context, result);
+			}
+		}
+		catch (Exception e)
+		{
+			_logger.LogError(e, "One or more access validators failed to run");
+			return false;
+		}
+
+		return !anyValidators || context.CanAccess;
 	}
 
 	private async Task<bool> RunAfterHooks(TResult result)

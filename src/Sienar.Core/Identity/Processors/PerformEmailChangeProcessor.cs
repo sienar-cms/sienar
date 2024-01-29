@@ -112,8 +112,14 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your email");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to change your email");
 	}
 }

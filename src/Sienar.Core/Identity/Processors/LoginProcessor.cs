@@ -116,8 +116,14 @@ public class LoginProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while logging in");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to log in");
 	}
 }

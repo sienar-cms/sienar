@@ -54,8 +54,14 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest>
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while requesting your password reset");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		_notifier.Error("You do not have permission to reset your password");
 	}
 }

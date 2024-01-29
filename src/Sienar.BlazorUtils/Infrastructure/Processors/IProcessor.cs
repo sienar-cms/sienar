@@ -8,5 +8,6 @@ public interface IProcessor<TRequest>
 {
 	Task<HookStatus> Process(TRequest request);
 	void NotifySuccess();
-	void NotifyProcessFailure();
+	void NotifyFailure();
+	void NotifyNoPermission();
 }

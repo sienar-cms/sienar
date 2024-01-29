@@ -70,8 +70,14 @@ public class DeleteAccountProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while deleting your account");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to delete your account");
 	}
 }

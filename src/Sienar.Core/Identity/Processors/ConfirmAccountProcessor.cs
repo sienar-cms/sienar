@@ -39,7 +39,7 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	async Task<HookStatus> IProcessor<ConfirmAccountRequest>.Process(ConfirmAccountRequest request)
+	public async Task<HookStatus> Process(ConfirmAccountRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.UserId);
 		if (user is null)
@@ -83,14 +83,20 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<ConfirmAccountRequest>.NotifySuccess()
+	public void NotifySuccess()
 	{
 		Notifier.Success("Account confirmed successfully");
 	}
 
 	/// <inheritdoc />
-	void IProcessor<ConfirmAccountRequest>.NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while confirming your account");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to confirm your account");
 	}
 }

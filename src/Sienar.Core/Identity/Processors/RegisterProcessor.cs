@@ -84,8 +84,14 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while registering");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to register");
 	}
 }

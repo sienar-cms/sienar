@@ -13,7 +13,7 @@ using Sienar.Infrastructure.Services;
 namespace Sienar.Identity.Processors;
 
 public class UserRoleChangeProcessor : DbService<SienarUser>,
-	IProcessor<AddUsertoRoleRequest>,
+	IProcessor<AddUserToRoleRequest>,
 	IProcessor<RemoveUserFromRoleRequest>
 {
 	private SienarUser? _user;
@@ -29,7 +29,7 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 #region AddUserToRoleRequest
 
 	/// <inheritdoc />
-	async Task<HookStatus> IProcessor<AddUsertoRoleRequest>.Process(AddUsertoRoleRequest request)
+	async Task<HookStatus> IProcessor<AddUserToRoleRequest>.Process(AddUserToRoleRequest request)
 	{
 		_user = await GetSienarUserWithRoles(request.UserId);
 		if (_user is null)
@@ -60,15 +60,21 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<AddUsertoRoleRequest>.NotifySuccess()
+	void IProcessor<AddUserToRoleRequest>.NotifySuccess()
 	{
 		Notifier.Success($"User {_user?.Username} added to role {_role?.Name}");
 	}
 
 	/// <inheritdoc />
-	void IProcessor<AddUsertoRoleRequest>.NotifyProcessFailure()
+	void IProcessor<AddUserToRoleRequest>.NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while adding user to role");
+	}
+
+	/// <inheritdoc />
+	void IProcessor<AddUserToRoleRequest>.NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to add users to roles");
 	}
 
 #endregion
@@ -105,9 +111,15 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	void IProcessor<RemoveUserFromRoleRequest>.NotifyProcessFailure()
+	void IProcessor<RemoveUserFromRoleRequest>.NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while removing user from role");
+	}
+
+	/// <inheritdoc />
+	void IProcessor<RemoveUserFromRoleRequest>.NotifyNoPermission()
+	{
+		Notifier.Error("You do not have permission to remove users from roles");
 	}
 
 #endregion

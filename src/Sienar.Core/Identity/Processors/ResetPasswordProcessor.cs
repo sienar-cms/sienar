@@ -81,8 +81,14 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest>
 	}
 
 	/// <inheritdoc />
-	public void NotifyProcessFailure()
+	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while resetting your password");
+	}
+
+	/// <inheritdoc />
+	public void NotifyNoPermission()
+	{
+		_notifier.Error("You do not have permission to reset your password");
 	}
 }

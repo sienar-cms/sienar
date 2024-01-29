@@ -7,5 +7,6 @@ public interface IResultProcessor<TResult>
 {
 	Task<(HookStatus Status, TResult? Result)> Process();
 	void NotifySuccess();
-	void NotifyProcessFailure();
+	void NotifyFailure();
+	void NotifyNoPermission();
 }

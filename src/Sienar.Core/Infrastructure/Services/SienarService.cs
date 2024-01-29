@@ -14,12 +14,14 @@ public class SienarService<TRequest> : Service<TRequest>
 	/// <inheritdoc />
 	public SienarService(
 		ILogger<Service<TRequest>> logger,
+		IEnumerable<IAccessValidator<TRequest>> accessValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor,
 		IBotDetector botDetector)
 		: base(
 			logger,
+			accessValidators,
 			beforeHooks,
 			afterHooks, 
 			processor)
