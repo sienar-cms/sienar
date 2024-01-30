@@ -19,62 +19,70 @@
     	Title="@($"Lock {_user.Username}'s account")"
     	SubmitText="@($"Lock {_user.Username}'s account")"
     	ThemeColor="Color.Error">
-    	<Fields>
-    		<Select
-    			T="LockoutReason"
-    			Label="Select one or more reasons to lock the user out"
-    			@bind-SelectedValues="@_selectedReasons"
-    			MultiSelection>
-    			@foreach (var reason in _lockoutReasons)
-    			{
-    				<MudSelectItem
-    					T="LockoutReason"
-    					Value="reason">
-    					@reason.Reason
-    				</MudSelectItem>
-    			}
-    		</Select>
-    		<MudRadioGroup
-    			T="LockDuration"
-			    Class="mt-4"
-			    SelectedOption="_lockDuration"
-			    SelectedOptionChanged="UpdateLockDuration">
-    			<Radio
-				    T="LockDuration"
-    				Option="@LockDuration.OneDay">
-    				One day
-    			</Radio>
-    			<Radio
-    				T="LockDuration"
-    				Option="@LockDuration.OneWeek">
-    				One week
-    			</Radio>
-    			<Radio
-    				T="LockDuration"
-    				Option="@LockDuration.OneMonth">
-    				One month
-    			</Radio>
-    			<Radio
-    				T="LockDuration"
-    				Option="@LockDuration.OneYear">
-    				One year
-    			</Radio>
-    			<Radio
-    				T="LockDuration"
-    				Option="@LockDuration.Permanent">
-    				Permanently
-    			</Radio>
-			    <Radio
-				    T="LockDuration"
-				    Option="@LockDuration.Custom">
-				    <MudDatePicker
-					    Label="Select a date"
-					    @bind-Date="_lockEnd"
-					    Disabled="_lockDuration != LockDuration.Custom"/>
-			    </Radio>
-    		</MudRadioGroup>
-    	</Fields>
-    </StandardForm>
+		<Fields>
+			<Select
+				T="LockoutReason"
+				Label="Select one or more reasons to lock the user out"
+				@bind-SelectedValues="@_selectedReasons"
+				MultiSelection>
+				@foreach (var reason in _lockoutReasons)
+				{
+					<MudSelectItem
+						T="LockoutReason"
+						Value="reason">
+						@reason.Reason
+					</MudSelectItem>
+				}
+			</Select>
+			<MudRadioGroup
+				T="LockDuration"
+				Class="mt-4"
+				SelectedOption="_lockDuration"
+				SelectedOptionChanged="UpdateLockDuration">
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneDay">
+					One day
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneWeek">
+					One week
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneMonth">
+					One month
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneYear">
+					One year
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.Permanent">
+					Permanently
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.Custom">
+					<MudDatePicker
+						Label="Select a date"
+						@bind-Date="_lockEnd"
+						Disabled="_lockDuration != LockDuration.Custom"/>
+				</Radio>
+			</MudRadioGroup>
+		</Fields>
+
+		<MoreActions>
+			<PrimaryButton
+				Href="@DashboardUrls.Users.Index"
+				Variant="Variant.Outlined">
+				Back to users listing
+			</PrimaryButton>
+		</MoreActions>
+	</StandardForm>
 </NarrowContainer>
 
 @code {
@@ -125,6 +133,10 @@
 		Model.EndDate = _lockEnd.Value;
 
 		await SubmitRequest(() => LockAccountService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Users.Index);
+		}
 	}
 
 	private void UpdateLockDuration(LockDuration duration)
