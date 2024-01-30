@@ -32,12 +32,17 @@ public static class ErrorMessages
 		/// </summary>
 		/// <param name="offset">The </param>
 		/// <returns></returns>
-		public static string GetLockoutMessage(DateTimeOffset? offset)
+		public static string GetLockoutMessage(DateTime? offset)
 		{
-			return offset == DateTimeOffset.MaxValue
+			return offset == DateTime.MaxValue
 				       ? "Your account is permanently locked."
 				       : $"Your account is currently locked. The lock will end on {offset:D} at {offset:h:mm:ss tt}.";
 		}
+	}
+
+	public static class LockoutReason
+	{
+		public const string NotFound = "Unable to find lockout reason with supplied ID";
 	}
 
 	public static class Roles

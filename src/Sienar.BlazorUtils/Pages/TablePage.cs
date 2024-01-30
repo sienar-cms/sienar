@@ -18,7 +18,7 @@ public class TablePage<TEntity> : SienarPage
 	protected IEntityDeleter<TEntity> Deleter { get; set; } = default!;
 
 	[Inject]
-	private IDialogService DialogService { get; set; } = default!;
+	protected IDialogService DialogService { get; set; } = default!;
 
 	protected TemplatedTable<TEntity> Table = default!;
 

@@ -1,3 +1,4 @@
+@using Sienar.Infrastructure.Entities
 @inherits ActionPage
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route($"{DashboardUrls.Users.Index}/{{userId:guid}}/roles")]
@@ -47,7 +48,7 @@
 				_user = await UserReader.Get(UserId);
 				if (_user is null) return;
 
-				_roles = (await RoleReader.Get(new() { PageSize = 0 })).Items;
+				_roles = (await RoleReader.Get(Filter.GetAll())).Items;
 				foreach (var role in _roles)
 				{
 					_roleMap[role.Id] = _user.Roles.Contains(role);
