@@ -55,7 +55,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IBeforeUpsert<SienarUser>, UserPasswordUpdateHook>()
 			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
 			.AddTransient<IBeforeDelete<SienarUser>, RemoveUserRelatedEntitiesHook>()
-			.AddTransient<IAfterDelete<SienarUser>, DeleteOwnAccountLogoutHook>();
+			.AddTransient<IAfterDelete<SienarUser>, ForceDeletedAccountLogoutHook>();
 
 		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
 		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
@@ -163,6 +163,7 @@ public static class SienarBlazorExtensions
 		self.TryAddTransient<ISignInManager, BlazorServerSignInManager>();
 		self.TryAddTransient<IBlazorServerSignInManager>(
 			sp => (IBlazorServerSignInManager)sp.GetRequiredService<ISignInManager>());
+		self.TryAddSingleton<IForcedLogoutNotifier, BlazorForcedLogoutNotifier>();
 
 		self.RemoveService<AuthenticationStateProvider>();
 

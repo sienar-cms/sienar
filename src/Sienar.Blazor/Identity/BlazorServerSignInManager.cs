@@ -142,6 +142,16 @@ public class BlazorServerSignInManager : DbService<SienarUser>,
 		await _localStore.SetAsync(LocalLoginDataKey, newLoginData);
 	}
 
+	/// <inheritdoc />
+	public async Task ForceSignOutIfCurrentUser(Guid id)
+	{
+		if (id == _accountStateProvider.User?.Id)
+		{
+			Notifier.Error("You have been signed out by an administrator");
+			await SignOut();
+		}
+	}
+
 	private BlazorServerLoginData CreateLoginData(
 		Guid userId,
 		bool isPersistent = false,

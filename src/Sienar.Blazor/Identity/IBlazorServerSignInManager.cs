@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Sienar.Identity;
 
@@ -13,4 +14,10 @@ public interface IBlazorServerSignInManager : ISignInManager
 	/// Refreshes the current user's login status as stored in the browser storage
 	/// </summary>
 	Task RefreshUserLoginStatus();
+
+	/// <summary>
+	/// Ends the current user session if the supplied GUID matches the current user's ID
+	/// </summary>
+	/// <param name="id">The ID of the user to sign out</param>
+	Task ForceSignOutIfCurrentUser(Guid id);
 }

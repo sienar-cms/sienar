@@ -18,7 +18,16 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 	private IBlazorServerSignInManager SignInManager { get; set; } = default!;
 
 	[Inject]
+	private IForcedLogoutNotifier LogoutNotifier { get; set; } = default!;
+
+	[Inject]
 	private ILogger<AuthStateRefresher> Logger { get; set; } = default!;
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		LogoutNotifier.OnForceLogoutUser += ForceLogoutUser;
+	}
 
 	/// <inheritdoc />
 	protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -51,6 +60,11 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 			});
 	}
 
+	private async Task ForceLogoutUser(Guid id)
+	{
+		await InvokeAsync(() => SignInManager.ForceSignOutIfCurrentUser(id));
+	}
+
 	/// <inheritdoc />
 	public void Dispose()
 	{
@@ -72,6 +86,8 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 				_timer.Elapsed -= RefreshUserLogin;
 				_timer.Dispose();
 			}
+
+			LogoutNotifier.OnForceLogoutUser -= ForceLogoutUser;
 		}
 
 		_disposed = true;
