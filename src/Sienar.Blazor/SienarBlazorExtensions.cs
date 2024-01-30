@@ -68,6 +68,7 @@ public static class SienarBlazorExtensions
 			.AddTransient<IProcessor<AddUserToRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IProcessor<LockUserAccountRequest>, LockUserAccountProcessor>()
+			.AddTransient<IProcessor<UnlockUserAccountRequest>, UnlockUserAccountProcessor>()
 			.AddTransient<IResultProcessor<PersonalDataResult>, PersonalDataProcessor>()
 			.AddTransient<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
 			.AddTransient<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>();

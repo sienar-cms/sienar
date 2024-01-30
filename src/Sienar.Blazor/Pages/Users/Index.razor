@@ -1,6 +1,7 @@
 @inherits TablePage<SienarUser>
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.Users.Index)]
+@inject IService<UnlockUserAccountRequest> UnlockService
 
 <DocTitle Title="Users listing"/>
 
@@ -51,10 +52,21 @@
 					Link="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
 					Title="@($"Edit {context.Username}'s roles")"
 					Icon="@Icons.Material.Filled.AdminPanelSettings"/>
-				<WarningIconButton
-					Link="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
-					Title="@GetLockTitle(context)"
-					Icon="@GetLockIcon(context)"/>
+				@if (context.IsLockedOut())
+				{
+					<WarningIconButton
+						Title="@($"Unlock {context.Username}'s account")"
+						Icon="@Icons.Material.Filled.LockOpen"
+						OnClick="@(() => UnlockUser(context))"/>
+				}
+				else
+				{
+					<WarningIconButton
+						Link="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
+						Title="@($"Lock {context.Username}'s account")"
+						Icon="@Icons.Material.Filled.Lock"/>
+				}
+				
                 <ErrorIconButton
                 	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
@@ -71,15 +83,11 @@
 			? Icons.Material.Filled.Check
 			: Icons.Material.Filled.Close;
 
-	private static string GetLockTitle(SienarUser user)
-		=> user.IsLockedOut()
-			? $"Unlock {user.Username}'s account"
-			: $"Lock {user.Username}'s account";
-
-	private static string GetLockIcon(SienarUser user)
-		=> user.IsLockedOut()
-			? Icons.Material.Filled.LockOpen
-			: Icons.Material.Filled.Lock;
+	private Task UnlockUser(SienarUser user)
+		=> ConfirmAction(
+			$"Unblock {user.Username}'s account",
+			$"Are you sure you want to unlock {user.Username}'s account? This will take effect immediately",
+			() => UnlockService.Execute(new(user.Id)));
 
 	private Task DeleteUser(SienarUser user)
 		=> DeleteEntity(
