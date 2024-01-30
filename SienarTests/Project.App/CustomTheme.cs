@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace Project.App.Blazor;
+namespace Project.App;
 
 public class CustomTheme : MudTheme
 {

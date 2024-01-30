@@ -1,8 +1,6 @@
-﻿@using Sienar.Pages
-@using Sienar.Layouts
-<AppInitializer>
+﻿<AppInitializer>
 	<Router AppAssembly="@typeof(App).Assembly"
-	        AdditionalAssemblies="new [] {typeof(DashboardIndex).Assembly}">
+	        AdditionalAssemblies="@RoutableComponentAssemblyContainer.Assemblies">
     	<Found Context="routeData">
 		    <AuthorizeRouteView RouteData="@routeData"
 		                        DefaultLayout="@typeof(SienarLayout)">

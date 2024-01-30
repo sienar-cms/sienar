@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Project.App.Blazor</RootNamespace>
+		<RootNamespace>Project.App</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Project.App.Blazor;
+using Project.App;
 using Project.Data;
 using Sienar.Email;
 using Sienar.Infrastructure.Plugins;

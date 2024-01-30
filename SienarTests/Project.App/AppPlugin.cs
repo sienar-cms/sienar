@@ -6,7 +6,7 @@ using Project.Data;
 using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
-namespace Project.App.Blazor;
+namespace Project.App;
 
 public class AppPlugin : ISienarPlugin
 {
