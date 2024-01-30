@@ -60,7 +60,7 @@ public class LoginProcessor : DbService<SienarUser>,
 		// If user is locked out, tell them when the lockout date ends
 		if (user.IsLockedOut())
 		{
-			Notifier.Error(ErrorMessages.Account.GetLockoutMessage(user.LockoutEnd));
+			Notifier.Error(ErrorMessages.Account.LoginFailedLocked);
 			return HookStatus.Unauthorized;
 		}
 

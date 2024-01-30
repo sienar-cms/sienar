@@ -1,5 +1,3 @@
-using System;
-
 namespace Sienar.Errors;
 
 public static class ErrorMessages
@@ -15,6 +13,7 @@ public static class ErrorMessages
 		public const string LoginFailedInvalid = "Invalid credentials supplied.";
 		public const string LoginFailedNotConfirmed = "You have not confirmed your email address. Please check your email for a confirmation link and click it to confirm your email address.";
 		public const string LoginFailedNotConfirmedEmailDisabled = "You have not confirmed your email address. We cannot resend your confirmation code because the website administrator has disabled email.";
+		public const string LoginFailedLocked = "You have failed to log in too many times.";
 
 		public const string VerificationCodeInvalid = "The supplied verification code is invalid.";
 		public const string VerificationCodeExpired = "The supplied verification code is expired. A new code has been sent.";
@@ -26,18 +25,6 @@ public static class ErrorMessages
 		public const string NotFound = "Unable to find user with supplied ID.";
 		public const string AccountAlreadyInRole = "The specified user is already in the specified role.";
 		public const string AccountNotInRole = "The specified user is not in the specified role.";
-
-		/// <summary>
-		/// Returns an error message indicating the lockout status of a user's account
-		/// </summary>
-		/// <param name="offset">The </param>
-		/// <returns></returns>
-		public static string GetLockoutMessage(DateTime? offset)
-		{
-			return offset == DateTime.MaxValue
-				       ? "Your account is permanently locked."
-				       : $"Your account is currently locked. The lock will end on {offset:D} at {offset:h:mm:ss tt}.";
-		}
 	}
 
 	public static class LockoutReason

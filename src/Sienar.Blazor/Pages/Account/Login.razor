@@ -4,8 +4,9 @@
 @attribute [Route(DashboardUrls.Account.Login)]
 @inject IService<LoginRequest> Service
 
-<DocHead Description="Just another Blazor site with a login page"
-         Title="Log in"/>
+<DocHead
+	Description="Just another Blazor site with a login page"
+	Title="Log in"/>
 
 <NarrowContainer>
 	<StandardForm
@@ -41,8 +42,10 @@
 	</StandardForm>
 </NarrowContainer>
 
-
 @code {
+
+	[Inject]
+	private IUserManager UserManager { get; set; } = default!;
 
 	[Parameter]
 	[SupplyParameterFromQuery]
@@ -65,7 +68,18 @@
 		SetFormCompletionTime(Model);
 
 		await SubmitRequest(() => Service.Execute(Model));
-		if (WasSuccessful) { PerformNavigation(); }
+		if (WasSuccessful)
+		{
+			PerformNavigation();
+		}
+		else
+		{
+			var user = await UserManager.GetSienarUser(Model.AccountName);
+			if (user is not null && user.IsLockedOut())
+			{
+				NavManager.NavigateTo($"{DashboardUrls.Account.Locked}/{user.Id}");
+			}
+		}
 	}
 
 	private void PerformNavigation()
