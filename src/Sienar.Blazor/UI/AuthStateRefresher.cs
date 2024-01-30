@@ -10,7 +10,7 @@ namespace Sienar.UI;
 
 public class AuthStateRefresher : ComponentBase, IDisposable
 {
-	private const int Interval = 1 * 10 * 1000; // 10 minutes, in ms
+	private const int Interval = 60 * 10 * 1000; // 10 minutes, in ms
 	private Timer? _timer;
 	private bool _disposed;
 
