@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
+using Sienar.Errors;
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity;
 
-public class BlazorServerSignInManager : IBlazorServerSignInManager
+public class BlazorServerSignInManager : DbService<SienarUser>,
+	IBlazorServerSignInManager
 {
 	private const string LocalLoginDataKey = "Sienar.Login";
 
 	private readonly LoginOptions _loginOptions;
-	private readonly IUserManager _userManager;
 	private readonly AuthStateProvider _authStateProvider;
 	private readonly AccountStateProvider _accountStateProvider;
 	private readonly ProtectedLocalStorage _localStore;
 
 	public BlazorServerSignInManager(
+		IDbContextAccessor<DbContext> contextAccessor,
+		ILogger<BlazorServerSignInManager> logger,
+		INotificationService notifier,
 		IOptions<LoginOptions> loginOptions,
-		IUserManager userManager,
 		AuthStateProvider authStateProvider,
 		AccountStateProvider accountStateProvider,
 		ProtectedLocalStorage localStore)
+		: base(contextAccessor, logger, notifier)
 	{
 		_loginOptions = loginOptions.Value;
-		_userManager = userManager;
 		_authStateProvider = authStateProvider;
 		_accountStateProvider = accountStateProvider;
 		_localStore = localStore;
@@ -70,18 +77,25 @@ public class BlazorServerSignInManager : IBlazorServerSignInManager
 		var loginData = dataRequest.Value!;
 		if (!LoginValid(loginData))
 		{
-			await _localStore.SetAsync(LocalLoginDataKey, CreateLoginData(Guid.Empty));
-			_accountStateProvider.User = null;
+			await SignOut();
 			return;
 		}
 
-		var user = await _userManager.GetSienarUser(
-			loginData.UserId,
-			u => u.Roles);
+		var user = await EntitySet
+			.AsNoTracking()
+			.Include(u => u.Roles)
+			.FirstOrDefaultAsync(u => u.Id == loginData.UserId);
 		if (user is null)
 		{
-			await _localStore.SetAsync(LocalLoginDataKey, CreateLoginData(Guid.Empty));
-			_accountStateProvider.User = null;
+			Notifier.Error(ErrorMessages.Account.AccountDeleted);
+			await SignOut();
+			return;
+		}
+
+		if (user.IsLockedOut())
+		{
+			Notifier.Error(ErrorMessages.Account.AccountLocked);
+			await SignOut();
 			return;
 		}
 
@@ -101,6 +115,23 @@ public class BlazorServerSignInManager : IBlazorServerSignInManager
 		var loginData = dataRequest.Value!;
 		if (!LoginValid(loginData))
 		{
+			return;
+		}
+
+		var user = await EntitySet
+			.AsNoTracking()
+			.FirstOrDefaultAsync(u => u.Id == loginData.UserId);
+		if (user is null)
+		{
+			Notifier.Error(ErrorMessages.Account.AccountDeleted);
+			await SignOut();
+			return;
+		}
+
+		if (user.IsLockedOut())
+		{
+			Notifier.Error(ErrorMessages.Account.AccountLocked);
+			await SignOut();
 			return;
 		}
 

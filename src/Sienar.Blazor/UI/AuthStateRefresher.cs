@@ -4,12 +4,13 @@ using System.Timers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Sienar.Identity;
+using Sienar.Infrastructure;
 
 namespace Sienar.UI;
 
 public class AuthStateRefresher : ComponentBase, IDisposable
 {
-	private const int Interval = 60 * 10 * 1000; // 10 minutes, in ms
+	private const int Interval = 1 * 10 * 1000; // 10 minutes, in ms
 	private Timer? _timer;
 	private bool _disposed;
 
@@ -41,9 +42,13 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 
 	private async void RefreshUserLogin(object? sender, EventArgs e)
 	{
-		Logger.LogInformation("Refreshing user login");
-		await SignInManager.RefreshUserLoginStatus();
-		SetupRefreshTimer();
+		await InvokeAsync(
+			async () =>
+			{
+				Logger.LogInformation("Refreshing user login");
+				await SignInManager.RefreshUserLoginStatus();
+				SetupRefreshTimer();
+			});
 	}
 
 	/// <inheritdoc />
