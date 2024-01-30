@@ -65,15 +65,17 @@ public static class SienarBlazorExtensions
 		self
 			.AddTransient<IProcessor<LoginRequest>, LoginProcessor>()
 			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
-			.AddTransient<IProcessor<AddUserToRoleRequest>, UserRoleChangeProcessor>()
-			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
-			.AddTransient<IProcessor<LockUserAccountRequest>, LockUserAccountProcessor>()
-			.AddTransient<IProcessor<UnlockUserAccountRequest>, UnlockUserAccountProcessor>()
 			.AddTransient<IResultProcessor<PersonalDataResult>, PersonalDataProcessor>()
+			.AddTransient<IProcessor<AddUserToRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
+			.AddTransient<IProcessor<RemoveUserFromRoleRequest>, UserRoleChangeProcessor>()
 			.AddTransient<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>()
+			.AddTransient<IProcessor<LockUserAccountRequest>, LockUserAccountProcessor>()
 			.AddTransient<IAccessValidator<LockUserAccountRequest>, UserIsAdminAccessValidator<LockUserAccountRequest>>()
-			.AddTransient<IAccessValidator<UnlockUserAccountRequest>, UserIsAdminAccessValidator<UnlockUserAccountRequest>>();
+			.AddTransient<IProcessor<UnlockUserAccountRequest>, UnlockUserAccountProcessor>()
+			.AddTransient<IAccessValidator<UnlockUserAccountRequest>, UserIsAdminAccessValidator<UnlockUserAccountRequest>>()
+			.AddTransient<IProcessor<ManuallyConfirmUserAccountRequest>, ManuallyConfirmUserAccountProcessor>()
+			.AddTransient<IAccessValidator<ManuallyConfirmUserAccountRequest>, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>();
 
 		// Registration
 		self

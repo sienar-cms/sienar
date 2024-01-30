@@ -2,6 +2,7 @@
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.Users.Index)]
 @inject IService<UnlockUserAccountRequest> UnlockService
+@inject IService<ManuallyConfirmUserAccountRequest> ConfirmService
 
 <DocTitle Title="Users listing"/>
 
@@ -66,8 +67,13 @@
 						Title="@($"Lock {context.Username}'s account")"
 						Icon="@Icons.Material.Filled.Lock"/>
 				}
-				
-                <ErrorIconButton
+
+				<WarningIconButton
+					Title="@($"Confirm {context.Username}'s account")"
+					Icon="@Icons.Material.Filled.Check"
+					OnClick="@(() => ConfirmUser(context))"
+					Disabled="context.EmailConfirmed"/>
+				<ErrorIconButton
                 	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
                 	OnClick="@(() => DeleteUser(context))"/>
@@ -85,9 +91,15 @@
 
 	private Task UnlockUser(SienarUser user)
 		=> ConfirmAction(
-			$"Unblock {user.Username}'s account",
+			$"Unlock {user.Username}'s account",
 			$"Are you sure you want to unlock {user.Username}'s account? This will take effect immediately",
 			() => UnlockService.Execute(new(user.Id)));
+
+	private Task ConfirmUser(SienarUser user)
+		=> ConfirmAction(
+			$"Confirm {user.Username}'s account",
+			$"Are you sure you want to confirm {user.Username}'s account? This will take effect immediately",
+			() => ConfirmService.Execute(new(user.Id)));
 
 	private Task DeleteUser(SienarUser user)
 		=> DeleteEntity(
