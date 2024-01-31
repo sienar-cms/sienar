@@ -1,5 +1,6 @@
 ﻿@using Sienar.Infrastructure.Plugins
 @using System.Reflection
+@using Sienar.Infrastructure.Menus
 
 <AppInitializer>
 	<Router
@@ -38,6 +39,9 @@
 	private IRoutableAssemblyProvider AssemblyProvider { get; set; } = default!;
 
 	[Inject]
+	private IMenuProvider MenuProvider { get; set; } = default!;
+
+	[Inject]
 	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
 
 	private Assembly? _rootAssembly;
@@ -63,6 +67,11 @@
 		var plugin = SienarPlugins.First(p => p.PluginData.Name == name);
 		PluginProvider.Add(plugin);
 		AssemblyProvider.Add(plugin.GetType().Assembly);
+
+		if (plugin.PluginSettings.ModifiesMenus)
+		{
+			plugin.SetupMenu(MenuProvider);
+		}
 	}
 
 }

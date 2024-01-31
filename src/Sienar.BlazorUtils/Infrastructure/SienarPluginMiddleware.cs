@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;
@@ -23,6 +24,7 @@ public class SienarPluginMiddleware<TPlugin>
 		IStyleProvider styleProvider,
 		IScriptProvider scriptProvider,
 		IPluginProvider pluginProvider,
+		IMenuProvider menuProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider)
 	{
 		if (_plugin.PluginShouldExecute(ctx))
@@ -42,6 +44,11 @@ public class SienarPluginMiddleware<TPlugin>
 			if (_plugin.PluginSettings.ModifiesScripts)
 			{
 				_plugin.SetupScripts(scriptProvider);
+			}
+
+			if (_plugin.PluginSettings.ModifiesMenus)
+			{
+				_plugin.SetupMenu(menuProvider);
 			}
 		}
 

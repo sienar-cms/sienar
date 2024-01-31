@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
@@ -71,15 +70,10 @@ public class SienarWebAppBuilder
 		Builder.Services.AddSingleton(themeState);
 
 		var app = Builder.Build();
-		var menuProvider = app.Services.GetRequiredService<IMenuProvider>();
 
 		foreach (var plugin in Plugins)
 		{
 			plugin.SetupApp(app);
-			if (plugin.PluginSettings.ModifiesMenus)
-			{
-				plugin.SetupMenu(menuProvider);
-			}
 		}
 
 		foreach (var func in MiddlewareSetupFuncs) func(app);
