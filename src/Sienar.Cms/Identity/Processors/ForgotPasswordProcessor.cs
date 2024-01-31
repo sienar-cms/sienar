@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
+using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
@@ -36,10 +37,20 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest>
 	{
 		var user = await _userManager.GetSienarUser(request.AccountName);
 
+		// If the user doesn't exist, they don't need to know
+		// Just return success
+		if (user is null) return HookStatus.Success;
+
+		if (user.IsLockedOut())
+		{
+			_notifier.Error(ErrorMessages.Account.AccountLocked);
+			return HookStatus.Unauthorized;
+		}
+
 		// They don't need to know whether the user exists or not
 		// so if the user isn't null, send the email
 		// otherwise, just return Ok anyway
-		if (user != null && _options.EnableEmail)
+		if (_options.EnableEmail)
 		{
 			await user.SendPasswordResetEmail(_vcManager, _emailManager);
 		}
