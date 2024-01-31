@@ -1,7 +1,8 @@
 ﻿@using Sienar.Infrastructure.Plugins
+@using System.Reflection
 <AppInitializer>
 	<Router
-		AppAssembly="@typeof(App).Assembly"
+		AppAssembly="@_rootAssembly"
 		AdditionalAssemblies="@AssemblyProvider.GetAssemblies()">
 		<Found Context="routeData">
 			<AuthorizeRouteView
@@ -41,6 +42,8 @@
 	[Inject]
 	private ILogger<App> Logger { get; set; } = default!;
 
+	private Assembly? _rootAssembly;
+
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
@@ -51,6 +54,10 @@
 				SetupPlugin(pluginName);
 			}
 		}
+
+		var routableAssemblies = AssemblyProvider.GetAssemblies();
+		_rootAssembly = routableAssemblies[0];
+		routableAssemblies.RemoveAt(0);
 	}
 
 	private void SetupPlugin(string name)
