@@ -15,7 +15,9 @@ using Sienar.Infrastructure;
 using Sienar.Email;
 using Sienar.Identity;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Services;
+using Sienar.Layouts;
 using Sienar.Media;
 
 namespace Sienar;
@@ -28,6 +30,7 @@ public static class SienarBlazorExtensions
 
 		self.TryAddTransient<IBotDetector, BotDetector>();
 		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
+		self.TryAddScoped<IComponentProvider>(sp => new ComponentProvider(typeof(SienarLayout)));
 
 		return self
 			.AddTransient(typeof(IService<>), typeof(SienarService<>))

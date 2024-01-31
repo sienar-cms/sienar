@@ -11,7 +11,7 @@
 		<Found Context="routeData">
 			<AuthorizeRouteView
 				RouteData="@routeData"
-				DefaultLayout="@typeof(SienarLayout)">
+				DefaultLayout="@ComponentProvider.DefaultLayout">
 				<Authorizing>
 					Verifying your login status...
 				</Authorizing>
@@ -22,7 +22,7 @@
 		</Found>
 		<NotFound>
 			<PageTitle>Not found</PageTitle>
-			<LayoutView Layout="@typeof(SienarLayout)">
+			<LayoutView Layout="@ComponentProvider.DefaultLayout">
 				<p role="alert">Sorry, there's nothing at this address.</p>
 			</LayoutView>
 		</NotFound>
