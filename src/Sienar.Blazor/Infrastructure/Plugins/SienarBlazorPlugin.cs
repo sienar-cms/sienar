@@ -20,11 +20,7 @@ public class SienarBlazorPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
-	{
-		ModifiesStyles = true,
-		ModifiesScripts = true
-	};
+	public PluginSettings PluginSettings { get; } = new() { UsesProviders = true };
 
 	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder)

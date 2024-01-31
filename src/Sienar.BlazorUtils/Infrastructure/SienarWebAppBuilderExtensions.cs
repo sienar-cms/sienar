@@ -18,9 +18,7 @@ public static class SienarWebAppBuilderExtensions
 		self.Builder.Services.AddSingleton<ISienarPlugin>(plugin);
 		self.Builder.Services.AddSingleton(plugin);
 
-		if (plugin.PluginSettings.ModifiesScripts
-			|| plugin.PluginSettings.ModifiesStyles
-			|| plugin.PluginSettings.ModifiesMenus
+		if (plugin.PluginSettings.UsesProviders
 			|| plugin.PluginSettings.HasRoutableComponents)
 		{
 			self.MiddlewareSetupFuncs.Add(app => app.UsePluginMiddleware<TPlugin>());

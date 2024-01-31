@@ -24,7 +24,7 @@ public class SienarCmsPlugin : ISienarPlugin
 	public PluginSettings PluginSettings { get; } = new()
 	{
 		HasRoutableComponents = true,
-		ModifiesMenus = true
+		UsesProviders = true
 	};
 
 	/// <inheritdoc />

@@ -23,7 +23,7 @@ public class AppPlugin : ISienarPlugin
 	/// <inheritdoc />
 	public PluginSettings PluginSettings { get; } = new()
 	{
-		ModifiesStyles = true,
+		UsesProviders = true,
 		HasRoutableComponents = true
 	};
 

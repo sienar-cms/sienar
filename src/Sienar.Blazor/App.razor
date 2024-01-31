@@ -44,6 +44,9 @@
 	private IMenuProvider MenuProvider { get; set; } = default!;
 
 	[Inject]
+	private IComponentProvider ComponentProvider { get; set; } = default!;
+
+	[Inject]
 	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
 
 	private Assembly? _rootAssembly;
@@ -74,9 +77,10 @@
 			AssemblyProvider.Add(plugin.GetType().Assembly);
 		}
 
-		if (plugin.PluginSettings.ModifiesMenus)
+		if (plugin.PluginSettings.UsesProviders)
 		{
 			plugin.SetupMenu(MenuProvider);
+			plugin.SetupComponents(ComponentProvider);
 		}
 	}
 

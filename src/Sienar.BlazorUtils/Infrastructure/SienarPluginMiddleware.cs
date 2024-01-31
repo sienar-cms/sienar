@@ -25,7 +25,8 @@ public class SienarPluginMiddleware<TPlugin>
 		IScriptProvider scriptProvider,
 		IPluginProvider pluginProvider,
 		IMenuProvider menuProvider,
-		IRoutableAssemblyProvider routableAssemblyProvider)
+		IRoutableAssemblyProvider routableAssemblyProvider,
+		IComponentProvider componentProvider)
 	{
 		if (_plugin.PluginShouldExecute(ctx))
 		{
@@ -36,20 +37,10 @@ public class SienarPluginMiddleware<TPlugin>
 				routableAssemblyProvider.Add(_plugin.GetType().Assembly);
 			}
 
-			if (_plugin.PluginSettings.ModifiesStyles)
-			{
-				_plugin.SetupStyles(styleProvider);
-			}
-
-			if (_plugin.PluginSettings.ModifiesScripts)
-			{
-				_plugin.SetupScripts(scriptProvider);
-			}
-
-			if (_plugin.PluginSettings.ModifiesMenus)
-			{
-				_plugin.SetupMenu(menuProvider);
-			}
+			_plugin.SetupStyles(styleProvider);
+			_plugin.SetupScripts(scriptProvider);
+			_plugin.SetupMenu(menuProvider);
+			_plugin.SetupComponents(componentProvider);
 		}
 
 		await _next(ctx);
