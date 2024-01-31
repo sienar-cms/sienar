@@ -2,7 +2,9 @@
 @using System.Reflection
 @using Sienar.Infrastructure.Menus
 
-<AppInitializer>
+<AuthStateRefresher/>
+
+<CascadingAuthenticationState>
 	<Router
 		AppAssembly="@_rootAssembly"
 		AdditionalAssemblies="@AssemblyProvider.GetAssemblies()">
@@ -25,7 +27,7 @@
 			</LayoutView>
 		</NotFound>
 	</Router>
-</AppInitializer>
+</CascadingAuthenticationState>
 
 @code {
 
