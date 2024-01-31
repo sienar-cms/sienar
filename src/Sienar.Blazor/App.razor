@@ -1,6 +1,11 @@
 ﻿@using Sienar.Infrastructure.Plugins
 @using System.Reflection
 @using Sienar.Infrastructure.Menus
+@inject IPluginProvider PluginProvider
+@inject IRoutableAssemblyProvider AssemblyProvider
+@inject IMenuProvider MenuProvider
+@inject IComponentProvider ComponentProvider
+@inject IEnumerable<ISienarPlugin> SienarPlugins
 
 <AuthStateRefresher/>
 
@@ -33,21 +38,6 @@
 
 	[Parameter]
 	public string[] PluginNames { get; set; } = Array.Empty<string>();
-
-	[Inject]
-	private IPluginProvider PluginProvider { get; set; } = default!;
-
-	[Inject]
-	private IRoutableAssemblyProvider AssemblyProvider { get; set; } = default!;
-
-	[Inject]
-	private IMenuProvider MenuProvider { get; set; } = default!;
-
-	[Inject]
-	private IComponentProvider ComponentProvider { get; set; } = default!;
-
-	[Inject]
-	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
 
 	private Assembly? _rootAssembly;
 
