@@ -45,18 +45,24 @@
 		{
 			foreach (var pluginName in PluginNames)
 			{
-				var plugin = SienarPlugins.FirstOrDefault(p => p.PluginData.Name == pluginName);
-				if (plugin is null)
-				{
-					Logger.LogWarning(
-						"Plugin named {name} was registered by plugin middleware,"
-						+ " but no plugin with that name was found in the DI container",
-						pluginName);
-					continue;
-				}
-				PluginProvider.Add(plugin);
+				SetupPlugin(pluginName);
 			}
 		}
+	}
+
+	private void SetupPlugin(string name)
+	{
+		var plugin = SienarPlugins.FirstOrDefault(p => p.PluginData.Name == name);
+		if (plugin is null)
+		{
+			Logger.LogWarning(
+				"Plugin named {name} was registered by plugin middleware, " 
+				+ "but no plugin with that name was found in the DI container",
+				name);
+			return;
+		}
+
+		PluginProvider.Add(plugin);
 	}
 
 }
