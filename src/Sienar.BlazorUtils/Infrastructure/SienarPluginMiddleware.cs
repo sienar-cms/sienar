@@ -22,11 +22,17 @@ public class SienarPluginMiddleware<TPlugin>
 		HttpContext ctx,
 		IStyleProvider styleProvider,
 		IScriptProvider scriptProvider,
-		IPluginProvider pluginProvider)
+		IPluginProvider pluginProvider,
+		IRoutableAssemblyProvider routableAssemblyProvider)
 	{
 		if (_plugin.PluginShouldExecute(ctx))
 		{
 			pluginProvider.Add(_plugin);
+
+			if (_plugin.PluginSettings.HasRoutableComponents)
+			{
+				routableAssemblyProvider.Add(_plugin.GetType().Assembly);
+			}
 
 			if (_plugin.PluginSettings.ModifiesStyles)
 			{

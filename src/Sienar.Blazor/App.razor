@@ -2,7 +2,7 @@
 <AppInitializer>
 	<Router
 		AppAssembly="@typeof(App).Assembly"
-		AdditionalAssemblies="@RoutableComponentAssemblyContainer.Assemblies">
+		AdditionalAssemblies="@AssemblyProvider.GetAssemblies()">
 		<Found Context="routeData">
 			<AuthorizeRouteView
 				RouteData="@routeData"
@@ -31,6 +31,9 @@
 
 	[Inject]
 	private IPluginProvider PluginProvider { get; set; } = default!;
+
+	[Inject]
+	private IRoutableAssemblyProvider AssemblyProvider { get; set; } = default!;
 
 	[Inject]
 	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
@@ -63,6 +66,7 @@
 		}
 
 		PluginProvider.Add(plugin);
+		AssemblyProvider.Add(plugin.GetType().Assembly);
 	}
 
 }

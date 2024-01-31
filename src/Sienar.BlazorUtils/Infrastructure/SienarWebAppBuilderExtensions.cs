@@ -18,11 +18,6 @@ public static class SienarWebAppBuilderExtensions
 		self.Builder.Services.AddSingleton<ISienarPlugin>(plugin);
 		self.Builder.Services.AddSingleton(plugin);
 
-		if (plugin.PluginSettings.HasRoutableComponents)
-		{
-			RoutableComponentAssemblyContainer.Assemblies.Add(typeof(TPlugin).Assembly);
-		}
-
 		if (plugin.PluginSettings.ModifiesScripts
 			|| plugin.PluginSettings.ModifiesStyles)
 		{

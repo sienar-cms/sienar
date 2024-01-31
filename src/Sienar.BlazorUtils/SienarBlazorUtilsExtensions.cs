@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor;
@@ -31,6 +30,7 @@ public static class SienarBlazorUtilsExtensions
 		self.TryAddScoped<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IScriptProvider, ScriptProvider>();
 		self.TryAddScoped<IPluginProvider, PluginProvider>();
+		self.TryAddScoped<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
 		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient<INotificationService, NotificationService>();
 		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
