@@ -162,6 +162,7 @@ public static class SienarBlazorExtensions
 		self.TryAddTransient<IBlazorServerSignInManager>(
 			sp => (IBlazorServerSignInManager)sp.GetRequiredService<ISignInManager>());
 		self.TryAddSingleton<IForcedLogoutNotifier, BlazorForcedLogoutNotifier>();
+		self.TryAddTransient<IBlazorLoginDataManager, BlazorLoginDataManager>();
 
 		self.RemoveService<AuthenticationStateProvider>();
 

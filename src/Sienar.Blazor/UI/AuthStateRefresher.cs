@@ -18,6 +18,9 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 	private IBlazorServerSignInManager SignInManager { get; set; } = default!;
 
 	[Inject]
+	private IBlazorLoginDataManager LoginDataManager { get; set; } = default!;
+
+	[Inject]
 	private IForcedLogoutNotifier LogoutNotifier { get; set; } = default!;
 
 	[Inject]
@@ -30,13 +33,9 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 	}
 
 	/// <inheritdoc />
-	protected override async Task OnAfterRenderAsync(bool firstRender)
+	protected override void OnAfterRender(bool firstRender)
 	{
-		if (firstRender)
-		{
-			SetupRefreshTimer();
-			await SignInManager.LoadUserLoginStatus();
-		}
+		if (firstRender) SetupRefreshTimer();
 	}
 
 	private void SetupRefreshTimer()
@@ -55,7 +54,7 @@ public class AuthStateRefresher : ComponentBase, IDisposable
 			async () =>
 			{
 				Logger.LogInformation("Refreshing user login");
-				await SignInManager.RefreshUserLoginStatus();
+				await LoginDataManager.RefreshUserLoginStatus();
 				SetupRefreshTimer();
 			});
 	}

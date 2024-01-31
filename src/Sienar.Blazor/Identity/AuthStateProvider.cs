@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -11,17 +10,38 @@ public class AuthStateProvider : AuthenticationStateProvider
 {
 	private AuthenticationState? _authState;
 	private readonly IUserClaimsFactory _userClaimsFactory;
+	private readonly IBlazorLoginDataManager _loginDataManager;
+	private readonly AccountStateProvider _accountState;
 
 	/// <inheritdoc />
-	public AuthStateProvider(IUserClaimsFactory userClaimsFactory)
+	public AuthStateProvider(
+		IUserClaimsFactory userClaimsFactory,
+		IBlazorLoginDataManager loginDataManager,
+		AccountStateProvider accountState)
 	{
 		_userClaimsFactory = userClaimsFactory;
+		_loginDataManager = loginDataManager;
+		_accountState = accountState;
 	}
 
-	public override Task<AuthenticationState> GetAuthenticationStateAsync()
+	public override async Task<AuthenticationState> GetAuthenticationStateAsync()
 	{
-		_authState ??= CreateAuthStateFromClaims(Array.Empty<Claim>(), false);
-		return Task.FromResult(_authState);
+		if (_authState is null)
+		{
+			try
+			{
+				var user = await _loginDataManager.LoadUserLoginStatus();
+				_authState = CreateAuthState(user);
+				_accountState.User = user;
+			}
+			// JS interop not available
+			catch (InvalidOperationException)
+			{
+				_authState = CreateAuthState(null);
+			}
+		}
+
+		return _authState;
 	}
 
 	/// <summary>
@@ -30,19 +50,17 @@ public class AuthStateProvider : AuthenticationStateProvider
 	/// <param name="user">The user object describing the new authentication state. Null if the user is de-authenticated</param>
 	public void NotifyUserAuthentication(SienarUser? user)
 	{
+		_authState = CreateAuthState(user);
+		NotifyAuthenticationStateChanged(Task.FromResult(_authState));
+	}
+
+	private AuthenticationState CreateAuthState(SienarUser? user)
+	{
 		var isAuthenticated = user is not null;
 		var claims = isAuthenticated
 			? _userClaimsFactory.CreateClaims(user!)
 			: Array.Empty<Claim>();
 
-		_authState = CreateAuthStateFromClaims(claims, isAuthenticated);
-		NotifyAuthenticationStateChanged(Task.FromResult(_authState));
-	}
-
-	private static AuthenticationState CreateAuthStateFromClaims(
-		IEnumerable<Claim> claims,
-		bool isAuthenticated)
-	{
 		var identity = isAuthenticated
 			? new ClaimsIdentity(claims, "BlazorServerBrowserAuth")
 			: new ClaimsIdentity(claims);
