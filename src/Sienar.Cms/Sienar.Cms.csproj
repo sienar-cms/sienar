@@ -23,21 +23,4 @@
 		<ProjectReference Include="..\Sienar.Core\Sienar.Core.csproj"/>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="wwwroot\sienar.css" />
-	  <_ContentIncludedByDefault Remove="wwwroot\sienar.js" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="UI\Document\DocHead.razor" />
-	  <UpToDateCheckInput Remove="UI\Document\DocTitle.razor" />
-	  <UpToDateCheckInput Remove="UI\Drawers\DrawerHeader.razor" />
-	  <UpToDateCheckInput Remove="UI\Modals\DeleteAccountConfirmation.razor" />
-	  <UpToDateCheckInput Remove="UI\UnauthorizedRedirect.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="UI\Modals\DeleteAccountConfirmation.razor" />
-	</ItemGroup>
-
 </Project>

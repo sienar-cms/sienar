@@ -27,7 +27,7 @@
 		{
 			var currentUri = NavManager.ToBaseRelativePath(NavManager.Uri);
 			currentUri = HttpUtility.UrlEncode(currentUri);
-			NavManager.NavigateTo($"{DashboardUrls.Account.Login}?returnUri=/{currentUri}", true);
+			NavManager.NavigateTo($"/dashboard/account/login?returnUri=/{currentUri}", true);
 			return;
 		}
 

@@ -13,7 +13,7 @@ using Sienar.Media.Processors;
 
 namespace Sienar;
 
-public static class SienarBlazorExtensions
+public static class SienarCmsExtensions
 {
 	public static IServiceCollection AddIdentityHooks(this IServiceCollection self)
 	{
@@ -76,8 +76,6 @@ public static class SienarBlazorExtensions
 	public static IServiceCollection AddMediaHooks(this IServiceCollection self)
 	{
 		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
-		self.TryAddTransient<IMediaDirectoryMapper, MediaDirectoryMapper>();
-		self.TryAddTransient<IMediaManager, MediaManager>();
 
 		return self
 			.AddTransient<IAfterRead<Upload>, VerifyUserCanReadFileHook>()
