@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Menus;
 using Sienar.State;
 
@@ -35,8 +33,9 @@ public abstract partial class SienarLayoutBase : IDisposable
 		UpdateMenuAndRender(AuthState.GetAuthenticationStateAsync());
 	}
 
-	private void UpdateMenuAndRender(Task<AuthenticationState> s)
+	private async void UpdateMenuAndRender(Task<AuthenticationState> s)
 	{
+		await s;
 		_menus.Clear();
 		_menus = MenuNames
 			.Select(menuName => MenuGenerator.CreateMenu(menuName))
