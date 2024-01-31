@@ -1,3 +1,8 @@
 ﻿@page "/"
+@using Sienar.Infrastructure.Plugins
+@inject IPluginProvider PluginProvider
 
-<component type="typeof(App)" render-mode="ServerPrerendered" />
+<component
+	type="typeof(App)"
+	render-mode="ServerPrerendered"
+	param-PluginNames="@PluginProvider.GetPlugins().Select(p => p.PluginData.Name).ToArray()"/>

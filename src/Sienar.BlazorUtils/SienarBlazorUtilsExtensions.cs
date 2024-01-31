@@ -30,6 +30,7 @@ public static class SienarBlazorUtilsExtensions
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IScriptProvider, ScriptProvider>();
+		self.TryAddScoped<IPluginProvider, PluginProvider>();
 		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient<INotificationService, NotificationService>();
 		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));

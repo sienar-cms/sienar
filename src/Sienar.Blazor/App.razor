@@ -1,22 +1,62 @@
-﻿<AppInitializer>
-	<Router AppAssembly="@typeof(App).Assembly"
-	        AdditionalAssemblies="@RoutableComponentAssemblyContainer.Assemblies">
-    	<Found Context="routeData">
-		    <AuthorizeRouteView RouteData="@routeData"
-		                        DefaultLayout="@typeof(SienarLayout)">
-			    <Authorizing>
-				    Verifying your login status...
-			    </Authorizing>
-			    <NotAuthorized>
-				    <UnauthorizedRedirect/>
-			    </NotAuthorized>
-		    </AuthorizeRouteView>
-    	</Found>
-    	<NotFound>
-    		<PageTitle>Not found</PageTitle>
-    		<LayoutView Layout="@typeof(SienarLayout)">
-    			<p role="alert">Sorry, there's nothing at this address.</p>
-    		</LayoutView>
-    	</NotFound>
-    </Router>
+﻿@using Sienar.Infrastructure.Plugins
+<AppInitializer>
+	<Router
+		AppAssembly="@typeof(App).Assembly"
+		AdditionalAssemblies="@RoutableComponentAssemblyContainer.Assemblies">
+		<Found Context="routeData">
+			<AuthorizeRouteView
+				RouteData="@routeData"
+				DefaultLayout="@typeof(SienarLayout)">
+				<Authorizing>
+					Verifying your login status...
+				</Authorizing>
+				<NotAuthorized>
+					<UnauthorizedRedirect/>
+				</NotAuthorized>
+			</AuthorizeRouteView>
+		</Found>
+		<NotFound>
+			<PageTitle>Not found</PageTitle>
+			<LayoutView Layout="@typeof(SienarLayout)">
+				<p role="alert">Sorry, there's nothing at this address.</p>
+			</LayoutView>
+		</NotFound>
+	</Router>
 </AppInitializer>
+
+@code {
+
+	[Parameter]
+	public string[] PluginNames { get; set; } = Array.Empty<string>();
+
+	[Inject]
+	private IPluginProvider PluginProvider { get; set; } = default!;
+
+	[Inject]
+	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
+
+	[Inject]
+	private ILogger<App> Logger { get; set; } = default!;
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		if (PluginProvider.GetPlugins().Count == 0)
+		{
+			foreach (var pluginName in PluginNames)
+			{
+				var plugin = SienarPlugins.FirstOrDefault(p => p.PluginData.Name == pluginName);
+				if (plugin is null)
+				{
+					Logger.LogWarning(
+						"Plugin named {name} was registered by plugin middleware,"
+						+ " but no plugin with that name was found in the DI container",
+						pluginName);
+					continue;
+				}
+				PluginProvider.Add(plugin);
+			}
+		}
+	}
+
+}

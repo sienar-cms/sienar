@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;
@@ -23,10 +22,12 @@ public class SienarPluginMiddleware<TPlugin>
 		HttpContext ctx,
 		IStyleProvider styleProvider,
 		IScriptProvider scriptProvider,
-		IMenuProvider menuProvider)
+		IPluginProvider pluginProvider)
 	{
 		if (_plugin.PluginShouldExecute(ctx))
 		{
+			pluginProvider.Add(_plugin);
+
 			if (_plugin.PluginSettings.ModifiesStyles)
 			{
 				_plugin.SetupStyles(styleProvider);
