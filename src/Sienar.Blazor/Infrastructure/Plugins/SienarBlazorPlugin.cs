@@ -61,7 +61,7 @@ public class SienarBlazorPlugin : ISienarPlugin
 			.UseRouting()
 			.UseAuthorization();
 		app.MapBlazorHub();
-		app.MapFallbackToPage("/_Host");
+		app.MapFallbackToPage("/dashboard/{**segment}", "/_Host");
 	}
 
 	public bool PluginShouldExecute(HttpContext context)
