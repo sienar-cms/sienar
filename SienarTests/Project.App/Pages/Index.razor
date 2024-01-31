@@ -1,5 +1,7 @@
 ﻿@page "/"
+@attribute [Authorize]
+@inject AccountStateProvider AccountState
 
 <PageTitle>Index</PageTitle>
 
-<MudText>Hello, Sienar!</MudText>
+<MudText>Hello, @AccountState.User?.Username!</MudText>

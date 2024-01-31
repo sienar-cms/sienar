@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Sienar.Infrastructure.Plugins
+@inherits LayoutComponentBase
+@inject IComponentProvider ComponentProvider
 
 <MudThemeProvider
 	IsDarkMode="@ThemeState.IsDarkMode"
@@ -16,7 +18,7 @@
 		Open
 		Variant="DrawerVariant.Persistent">
 		<div class="flex-grow-1">
-			<OptionalComponent Type="@CustomizableComponents.SidebarHeaderContent"/>
+			<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
 
 			<MudNavMenu>
 				@for (var i = 0; i < _menus.Count; i++)
@@ -36,7 +38,7 @@
 
 		<div>
 			<div class="pa-4">
-				<OptionalComponent Type="@CustomizableComponents.SidebarFooterNotice"/>
+				<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
 			</div>
 		</div>
 	</MudDrawer>

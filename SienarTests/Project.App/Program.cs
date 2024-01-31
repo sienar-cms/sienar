@@ -11,6 +11,7 @@ await SienarWebAppBuilder
 		o => o.UseSienarDb(),
 		ServiceLifetime.Transient)
 	.AddPlugin(new SienarBlazorPlugin())
+	.AddPlugin(new SienarCmsPlugin())
 	.AddPlugin(new MailKitPlugin())
 	.AddPlugin(new AppPlugin())
 	.ConfigureTheme(new CustomTheme())

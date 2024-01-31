@@ -59,4 +59,7 @@ public class MailKitPlugin : ISienarPlugin
 
 	/// <inheritdoc />
 	public void SetupMenu(IMenuProvider menuProvider) {}
+
+	/// <inheritdoc />
+	public void SetupComponents(IComponentProvider componentProvider) {}
 }

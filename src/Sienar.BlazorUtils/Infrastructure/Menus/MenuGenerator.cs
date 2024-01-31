@@ -18,10 +18,14 @@ public class MenuGenerator : IMenuGenerator
 	public List<MenuLink> CreateMenu(string menuName)
 	{
 		var orderedLinks = new List<MenuLink>();
-		foreach (var i in _menuProvider.Menus[menuName].Keys.OrderDescending())
+		if (!_menuProvider.Menus.TryGetValue(menuName, out var menu))
+			return orderedLinks;
+
+		foreach (var i in menu.Keys.OrderDescending())
 		{
-			orderedLinks.AddRange(_menuProvider.Menus[menuName][i]);
+			orderedLinks.AddRange(menu[i]);
 		}
+
 		return ProcessNavLinks(orderedLinks);
 	}
 

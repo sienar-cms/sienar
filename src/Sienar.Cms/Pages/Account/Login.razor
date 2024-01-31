@@ -55,11 +55,10 @@
 	public Task<AuthenticationState>? AuthState { get; set; }
 
 	/// <inheritdoc />
-	protected override async Task OnParametersSetAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (AuthState is null) { return; }
-
-		if ((await AuthState).IsAuthenticated()) { PerformNavigation(); }
+		if (!firstRender || AuthState is null) return;
+		if ((await AuthState).IsAuthenticated()) PerformNavigation();
 	}
 
 	protected override async Task OnSubmit()
@@ -87,7 +86,8 @@
 		var returnUri = string.IsNullOrEmpty(ReturnUri)
 			? DashboardUrls.Index
 			: HttpUtility.UrlDecode(ReturnUri);
-		NavManager.NavigateTo(returnUri);
+		var forceLoad = !returnUri.StartsWith("/dashboard");
+		NavManager.NavigateTo(returnUri, forceLoad);
 	}
 
 }

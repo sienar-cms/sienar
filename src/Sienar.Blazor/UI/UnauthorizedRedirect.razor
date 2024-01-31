@@ -19,13 +19,15 @@
 
 	private bool _showMessage;
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		if (!firstRender) return;
+
 		if (!(await AuthState).IsAuthenticated())
 		{
 			var currentUri = NavManager.ToBaseRelativePath(NavManager.Uri);
 			currentUri = HttpUtility.UrlEncode(currentUri);
-			NavManager.NavigateTo($"{DashboardUrls.Account.Login}?returnUri=/{currentUri}");
+			NavManager.NavigateTo($"{DashboardUrls.Account.Login}?returnUri=/{currentUri}", true);
 			return;
 		}
 

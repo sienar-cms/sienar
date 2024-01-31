@@ -20,5 +20,7 @@ public interface ISienarPlugin
 
 	void SetupStyles(IStyleProvider styleProvider);
 
+	void SetupComponents(IComponentProvider componentProvider);
+
 	void SetupScripts(IScriptProvider scriptProvider);
 }

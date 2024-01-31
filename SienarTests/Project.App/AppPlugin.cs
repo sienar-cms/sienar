@@ -21,7 +21,11 @@ public class AppPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new() { ModifiesStyles = true };
+	public PluginSettings PluginSettings { get; } = new()
+	{
+		ModifiesStyles = true,
+		HasRoutableComponents = true
+	};
 
 	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder) {}
@@ -45,4 +49,7 @@ public class AppPlugin : ISienarPlugin
 
 	/// <inheritdoc />
 	public void SetupMenu(IMenuProvider menuProvider) {}
+
+	/// <inheritdoc />
+	public void SetupComponents(IComponentProvider componentProvider) {}
 }
