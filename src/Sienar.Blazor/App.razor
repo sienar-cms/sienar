@@ -1,5 +1,6 @@
 ﻿@using Sienar.Infrastructure.Plugins
 @using System.Reflection
+
 <AppInitializer>
 	<Router
 		AppAssembly="@_rootAssembly"
@@ -39,9 +40,6 @@
 	[Inject]
 	private IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = default!;
 
-	[Inject]
-	private ILogger<App> Logger { get; set; } = default!;
-
 	private Assembly? _rootAssembly;
 
 	/// <inheritdoc />
@@ -62,16 +60,7 @@
 
 	private void SetupPlugin(string name)
 	{
-		var plugin = SienarPlugins.FirstOrDefault(p => p.PluginData.Name == name);
-		if (plugin is null)
-		{
-			Logger.LogWarning(
-				"Plugin named {name} was registered by plugin middleware, " 
-				+ "but no plugin with that name was found in the DI container",
-				name);
-			return;
-		}
-
+		var plugin = SienarPlugins.First(p => p.PluginData.Name == name);
 		PluginProvider.Add(plugin);
 		AssemblyProvider.Add(plugin.GetType().Assembly);
 	}
