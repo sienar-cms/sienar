@@ -6,6 +6,7 @@ using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Processors;
 using Sienar.Media;
 using Sienar.Media.Hooks;
@@ -15,6 +16,13 @@ namespace Sienar;
 
 public static class SienarCmsExtensions
 {
+	public static IServiceCollection AddSienarCmsUtilities(this IServiceCollection self)
+	{
+		self.TryAddScoped<IComponentProvider>(
+			sp => new ComponentProvider(typeof(DashboardLayout)));
+		return self;
+	}
+
 	public static IServiceCollection AddIdentityHooks(this IServiceCollection self)
 	{
 		/*********

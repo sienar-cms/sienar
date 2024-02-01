@@ -30,7 +30,6 @@ public static class SienarBlazorExtensions
 
 		self.TryAddTransient<IBotDetector, BotDetector>();
 		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
-		self.TryAddScoped<IComponentProvider>(sp => new ComponentProvider(typeof(SienarLayout)));
 
 		return self
 			.AddTransient(typeof(IService<>), typeof(SienarService<>))

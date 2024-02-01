@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Menus;
 using Sienar.UI;
 
@@ -31,6 +32,7 @@ public class SienarCmsPlugin : ISienarPlugin
 	public void SetupDependencies(WebApplicationBuilder builder)
 	{
 		builder.Services
+			.AddSienarCmsUtilities()
 			.AddIdentityHooks()
 			.AddMediaHooks();
 	}
@@ -46,32 +48,30 @@ public class SienarCmsPlugin : ISienarPlugin
 
 	public void SetupMenu(IMenuProvider menuProvider)
 	{
-		CreateMainMenu(menuProvider);
-		CreateInfoMenu(menuProvider);
+		menuProvider
+			.CreateMainMenu()
+			.CreateInfoMenu();
 	}
 
 	/// <inheritdoc />
 	public void SetupDashboard(IMenuProvider dashboardProvider)
 	{
 		dashboardProvider
-			.AccessMenu(SienarMenuNames.Dashboard.MyAccount)
-			.AddMenuLink(new()
+			.AccessMenu(DashboardSectionNames.UserManagement)
+			.AddMenuLink(
+				new()
 				{
-					Text = "Email",
-					Icon = Icons.Material.Filled.Email,
-					Url = DashboardUrls.Account.EmailChange.Index
+					Text = "Users",
+					Icon = Icons.Material.Filled.SupervisorAccount,
+					Url = DashboardUrls.Users.Index,
+					Roles = [Roles.Admin]
 				})
 			.AddMenuLink(new()
 				{
-					Text = "Password",
+					Text = "Lockout reasons",
 					Icon = Icons.Material.Filled.Lock,
-					Url = DashboardUrls.Account.PasswordChange.Index
-				})
-			.AddMenuLink(new()
-				{
-					Text = "Personal data",
-					Icon = Icons.Material.Filled.Archive,
-					Url = DashboardUrls.Account.PersonalData
+					Url = DashboardUrls.LockoutReasons.Index,
+					Roles = [Roles.Admin]
 				});
 	}
 
@@ -82,85 +82,5 @@ public class SienarCmsPlugin : ISienarPlugin
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
 		componentProvider.SidebarHeader = typeof(DrawerHeader);
-	}
-
-	private static void CreateMainMenu(IMenuProvider menuProvider)
-	{
-		var accountLink = new MenuLink
-		{
-			Text = "My account",
-			Icon = Icons.Material.Filled.AccountCircle,
-			RequireLoggedIn = true,
-			Sublinks =
-			[
-				new()
-				{
-					Text = "Email",
-					Icon = Icons.Material.Filled.Email,
-					Url = DashboardUrls.Account.EmailChange.Index
-				},
-				new()
-				{
-					Text = "Password",
-					Icon = Icons.Material.Filled.Lock,
-					Url = DashboardUrls.Account.PasswordChange.Index
-				},
-				new()
-				{
-					Text = "Personal data",
-					Icon = Icons.Material.Filled.Archive,
-					Url = DashboardUrls.Account.PersonalData
-				}
-			]
-		};
-
-		menuProvider
-			.AccessMenu(SienarMenuNames.MainMenu)
-			.AddMenuLink(accountLink)
-			.AddMenuLink(
-				new()
-				{
-					Text = "Users",
-					Icon = Icons.Material.Filled.SupervisorAccount,
-					Url = DashboardUrls.Users.Index,
-					Roles = [Roles.Admin]
-				})
-			.AddMenuLink(
-				new()
-				{
-					Text = "Log out",
-					Icon = Icons.Material.Filled.Logout,
-					Url = DashboardUrls.Account.Logout,
-					RequireLoggedIn = true
-				})
-			.AddMenuLink(
-				new()
-				{
-					Text = "Register",
-					Icon = Icons.Material.Filled.Assignment,
-					Url = DashboardUrls.Account.Register.Index,
-					RequireLoggedOut = true
-				})
-			.AddMenuLink(
-				new()
-				{
-					Text = "Log in",
-					Icon = Icons.Material.Filled.Login,
-					Url = DashboardUrls.Account.Login,
-					RequireLoggedOut = true
-				});
-	}
-
-	private static void CreateInfoMenu(IMenuProvider menuProvider)
-	{
-		menuProvider
-			.AccessMenu(SienarMenuNames.InfoMenu)
-			.AddMenuLink(
-				new()
-				{
-					Text = "About",
-					Icon = Icons.Material.Outlined.Info,
-					Url = DashboardUrls.About
-				});
 	}
 }
