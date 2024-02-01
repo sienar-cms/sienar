@@ -4,9 +4,9 @@ namespace Sienar.Identity.Results;
 
 public class PersonalDataResult
 {
-	public FileDto? PersonalDataFile { get; set; }
+	public DownloadFile? PersonalDataFile { get; set; }
 
-	public PersonalDataResult(FileDto file)
+	public PersonalDataResult(DownloadFile file)
 	{
 		PersonalDataFile = file;
 	}

@@ -48,7 +48,7 @@ public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 			return (HookStatus.Unauthorized, null);
 		}
 
-		var file = new FileDto
+		var file = new DownloadFile
 		{
 			Name = "PersonalData.json"
 		};

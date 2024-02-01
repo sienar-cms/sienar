@@ -2,7 +2,7 @@
 
 namespace Sienar.Infrastructure;
 
-public class FileDto
+public class DownloadFile
 {
 	public byte[] Contents { get; set; }
 	public string Mime { get; set; }

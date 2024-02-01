@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sienar.Infrastructure.Entities;
 
-public class PagedDto<TModel>
+public class PagedQuery<TModel>
 {
 	/// <summary>
 	/// Represents the items in the current page of results
@@ -15,9 +15,9 @@ public class PagedDto<TModel>
 	/// </summary>
 	public int TotalCount { get; set; }
 
-	public PagedDto() {}
+	public PagedQuery() {}
 
-	public PagedDto(IEnumerable<TModel> items, int totalCount)
+	public PagedQuery(IEnumerable<TModel> items, int totalCount)
 	{
 		Items = items;
 		TotalCount = totalCount;

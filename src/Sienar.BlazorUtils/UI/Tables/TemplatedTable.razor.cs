@@ -43,7 +43,7 @@ public partial class TemplatedTable<TItem>
 	public RenderFragment<TItem> RowTemplate { get; set; } = default!;
 
 	[Parameter]
-	public Func<Filter?, Task<PagedDto<TItem>>> LoadData { get; set; } = default!;
+	public Func<Filter?, Task<PagedQuery<TItem>>> LoadData { get; set; } = default!;
 
 	private MudTable<TItem> Table { get; set; } = default!;
 	private bool _loading;

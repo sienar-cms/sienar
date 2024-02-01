@@ -80,7 +80,7 @@ public class EntityReader<TEntity, TContext>
 	}
 
 	/// <inheritdoc />
-	public async Task<PagedDto<TEntity>> Get(Filter? filter = null)
+	public async Task<PagedQuery<TEntity>> Get(Filter? filter = null)
 	{
 		IQueryable<TEntity> entries;
 		IQueryable<TEntity> countEntries;
