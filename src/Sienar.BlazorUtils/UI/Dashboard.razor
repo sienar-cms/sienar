@@ -8,6 +8,8 @@
 
 @foreach (var menuName in _menus.Keys)
 {
+	@if (!_menus[menuName].Any()) continue;
+
 	<MudText Typo="Typo.h5">@menuName</MudText>
 	<MudDivider Class="mt-1 mb-6"/>
 
