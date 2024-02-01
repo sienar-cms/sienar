@@ -102,8 +102,6 @@ public class BlazorLoginDataManager : DbService<SienarUser>,
 		}
 
 		return user;
-		// _accountStateProvider.User = user;
-		// _authStateProvider.NotifyUserAuthentication(user);
 	}
 
 	/// <inheritdoc />

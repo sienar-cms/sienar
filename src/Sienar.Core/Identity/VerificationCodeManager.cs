@@ -130,7 +130,7 @@ public class VerificationCodeManager : IVerificationCodeManager
 		return status;
 	}
 
-	private DateTime GetVerificationCodeExpiration(string type)
+	private static DateTime GetVerificationCodeExpiration(string type)
 	{
 		return DateTime.Now.AddMinutes(30);
 	}

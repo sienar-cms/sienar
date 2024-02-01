@@ -3,7 +3,7 @@ using Sienar.Infrastructure.Entities;
 
 namespace Sienar;
 
-public static partial class StatusMessages
+public static class StatusMessages
 {
 	public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";
 

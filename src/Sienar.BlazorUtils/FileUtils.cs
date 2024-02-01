@@ -5,7 +5,7 @@ namespace Sienar;
 
 public static class FileUtils
 {
-	public static string BaseAppFolderName = "";
+	public static string BaseAppFolderName { get; set; } = "";
 
 	public static string GetLocalAppDataDirectory()
 		=> Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

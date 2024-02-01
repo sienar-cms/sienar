@@ -2,7 +2,8 @@
 
 namespace Sienar.Infrastructure.Hooks;
 
-public interface IBeforeRead<SienarUser>
+// ReSharper disable once UnusedTypeParameter
+public interface IBeforeRead<TEntity>
 {
 	Filter? Handle(Filter? filter, bool isSingle);
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
 
 namespace Sienar.Pages;

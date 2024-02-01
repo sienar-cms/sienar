@@ -1,8 +1,9 @@
 @typeparam TItem
 
 <MudTh>
-	<MudTableSortLabel SortBy="@For.Compile()"
-	                   SortLabel="@_sortLabel">
+	<MudTableSortLabel
+		SortBy="@For.Compile()"
+		SortLabel="@_sortLabel">
 		@if (ChildContent is not null)
 		{
 			@ChildContent

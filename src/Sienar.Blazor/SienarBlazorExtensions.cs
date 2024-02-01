@@ -15,9 +15,7 @@ using Sienar.Infrastructure;
 using Sienar.Email;
 using Sienar.Identity;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Services;
-using Sienar.Layouts;
 using Sienar.Media;
 
 namespace Sienar;

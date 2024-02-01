@@ -1,3 +1,3 @@
 ﻿namespace Sienar.Identity.Requests;
 
-public class LogoutRequest {}
+public class LogoutRequest;

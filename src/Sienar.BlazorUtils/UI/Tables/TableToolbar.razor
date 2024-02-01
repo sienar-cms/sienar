@@ -3,13 +3,14 @@
 
 @if (!HideSearch)
 {
-	<MudTextField @bind-Value="Search"
-	              Placeholder="Search"
-	              Adornment="Adornment.Start"
-	              AdornmentIcon="@Icons.Material.Filled.Search"
-	              IconSize="Size.Medium"
-	              Class="mt-0"
-	              Immediate/>
+	<MudTextField
+		@bind-Value="Search"
+		Placeholder="Search"
+		Adornment="Adornment.Start"
+		AdornmentIcon="@Icons.Material.Filled.Search"
+		IconSize="Size.Medium"
+		Class="mt-0"
+		Immediate/>
 }
 
 @if (ChildContent != null)

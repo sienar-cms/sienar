@@ -10,7 +10,9 @@ public class VerifyUserCanModifyFileHook
 	private readonly IUserAccessor _userAccessor;
 	private readonly INotificationService _notifier;
 
-	public VerifyUserCanModifyFileHook(IUserAccessor userAccessor, INotificationService notifier)
+	public VerifyUserCanModifyFileHook(
+		IUserAccessor userAccessor,
+		INotificationService notifier)
 	{
 		_userAccessor = userAccessor;
 		_notifier = notifier;
@@ -20,8 +22,9 @@ public class VerifyUserCanModifyFileHook
 	Task<HookStatus> IBeforeUpsert<Upload>.Handle(Upload entity, bool isAdding)
 	{
 		// Only verify user can edit if actually editing
-		if (isAdding) return Task.FromResult(HookStatus.Success);
-		return CanModifyFile(entity);
+		return isAdding
+			? Task.FromResult(HookStatus.Success)
+			: CanModifyFile(entity);
 	}
 
 	/// <inheritdoc />
@@ -34,7 +37,7 @@ public class VerifyUserCanModifyFileHook
 
 		if (_userAccessor.UserInRole(Roles.Admin)) return success;
 		if (_userAccessor.IsSignedIn()
-		&& _userAccessor.GetUserId() == entity.UserId) return success;
+			&& _userAccessor.GetUserId() == entity.UserId) return success;
 
 		_notifier.Error("You do not have permission to modify another user's files");
 

@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Sienar.Identity;
 using Sienar.Infrastructure;
 using Sienar.Media;

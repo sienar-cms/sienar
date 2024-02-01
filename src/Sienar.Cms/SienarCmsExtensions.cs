@@ -19,7 +19,7 @@ public static class SienarCmsExtensions
 	public static IServiceCollection AddSienarCmsUtilities(this IServiceCollection self)
 	{
 		self.TryAddScoped<IComponentProvider>(
-			sp => new ComponentProvider(typeof(DashboardLayout)));
+			_ => new ComponentProvider(typeof(DashboardLayout)));
 		return self;
 	}
 

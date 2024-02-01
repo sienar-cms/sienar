@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;

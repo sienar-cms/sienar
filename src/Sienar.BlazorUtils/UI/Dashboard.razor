@@ -60,7 +60,10 @@
 		_allMenus.Clear();
 		_menus.Clear();
 
-		foreach (var menuName in Categories) { _allMenus[menuName] = MenuGenerator.CreateMenu(menuName); }
+		foreach (var menuName in Categories)
+		{
+			_allMenus[menuName] = MenuGenerator.CreateMenu(menuName);
+		}
 
 		_menus = new(_allMenus);
 	}

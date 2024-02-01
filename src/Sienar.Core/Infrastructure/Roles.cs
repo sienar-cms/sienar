@@ -1,4 +1,4 @@
-namespace Sienar;
+namespace Sienar.Infrastructure;
 
 public static class Roles
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Sienar.Email;
 using Sienar.Identity;
 
 namespace Sienar.Email;

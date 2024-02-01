@@ -38,25 +38,4 @@ public static class ErrorMessages
 	{
 		public const string NotFound = "The specified role was not found.";
 	}
-
-	public static class States
-	{
-		public const string DuplicateName = "A State with that name already exists.";
-		public const string DuplicateAbbreviation = "A State with that abbreviation already exists.";
-	}
-
-	public static class Generic
-	{
-		public const string Unknown = "An unknown error has occurred.";
-		public const string NotFound = "The requested resource was not found.";
-		public const string NotLoggedIn = "You must be logged in to perform that action.";
-		public const string NoPermission = "You do not have permission to perform that action.";
-		public const string Unprocessable = "Your request could not be processed with the provided data. Please check your data and try again.";
-		public const string DataConflict = "The data you entered is not valid. Please check your data and try again.";
-		public const string DataConcurrencyConflict = "The database record you requested has been updated since you last accessed it. Please reload the page and try again.";
-		public const string UnhandledByServiceLayer = "An exception was thrown that was unhandled by the service layer.";
-	}
-
-	public const string Database = "There was a database error.";
-	public const string ContactIt = "Please contact the IT team if your problem persists.";
 }

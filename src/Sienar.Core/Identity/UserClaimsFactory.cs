@@ -16,7 +16,7 @@ public class UserClaimsFactory : IUserClaimsFactory
 			new(ClaimTypes.Email, user.Email)
 		};
 
-		if (user.Roles.Any())
+		if (user.Roles.Count > 0)
 		{
 			claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Name)));
 		}
