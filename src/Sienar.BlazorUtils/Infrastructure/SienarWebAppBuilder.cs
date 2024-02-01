@@ -67,7 +67,7 @@ public class SienarWebAppBuilder
 			Theme = Theme,
 			IsDarkMode = IsDarkMode
 		};
-		Builder.Services.AddSingleton(themeState);
+		Builder.Services.AddScoped(sp => themeState);
 
 		var app = Builder.Build();
 
