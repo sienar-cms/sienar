@@ -6,7 +6,7 @@ public class H1 : MudText
 {
 	public H1()
 	{
-		Typo = Typo.h3;
+		Typo = Typo.h1;
 		Class = "mb-8";
 	}
 }
