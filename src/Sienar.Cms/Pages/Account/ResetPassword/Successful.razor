@@ -1,3 +1,4 @@
+@using H1 = Sienar.UI.Typography.H1
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.ResetPassword.Successful)]
 
@@ -5,9 +6,9 @@
 
 
 <NarrowContainer>
-	<Heading1>
+	<H1>
 		Password reset successfully
-	</Heading1>
+	</H1>
 
 	<MudText>
 		Your password was reset successfully. You can now <MudLink Href="@DashboardUrls.Account.Login">log in</MudLink> with your new password.

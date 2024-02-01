@@ -1,3 +1,4 @@
+@using H1 = Sienar.UI.Typography.H1
 @inherits ActionPage<ConfirmAccountRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Confirm.Index)]
@@ -6,9 +7,9 @@
 <DocTitle Title="Confirming your account"/>
 
 <NarrowContainer>
-	<Heading1>
+	<H1>
 		Confirming account
-	</Heading1>
+	</H1>
 
 	@if (Loading)
 	{

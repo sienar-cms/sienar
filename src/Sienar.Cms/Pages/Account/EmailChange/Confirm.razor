@@ -1,3 +1,4 @@
+@using H1 = Sienar.UI.Typography.H1
 @inherits ActionPage<PerformEmailChangeRequest>
 @attribute [Route(DashboardUrls.Account.EmailChange.Confirm)]
 @inject IService<PerformEmailChangeRequest> EmailChangeService
@@ -5,7 +6,7 @@
 <DocTitle Title="Updating your email address"/>
 
 <NarrowContainer>
-	<Heading1>Updating your email address</Heading1>
+	<H1>Updating your email address</H1>
 
 	@if (Loading)
 	{

@@ -1,4 +1,5 @@
-﻿@inherits ActionPage
+﻿@using H1 = Sienar.UI.Typography.H1
+@inherits ActionPage
 @attribute [AllowAnonymous]
 @attribute [Route($"{DashboardUrls.Account.Locked}/{{id:guid}}")]
 @inject IUserManager UserManager;
@@ -10,7 +11,7 @@
 }
 
 <NarrowContainer>
-	<Heading1>Account locked</Heading1>
+	<H1>Account locked</H1>
 	<MudText>
 		Your account is locked <strong>@GetLockoutEndString()</strong> for the following @GetReasonString(): 
 	</MudText>

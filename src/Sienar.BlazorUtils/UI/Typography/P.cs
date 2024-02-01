@@ -2,9 +2,9 @@
 
 namespace Sienar.UI.Typography;
 
-public class Paragraph : MudText
+public class P : MudText
 {
-	public Paragraph()
+	public P()
 	{
 		Typo = Typo.body1;
 		Class = "mb-4";

@@ -1,10 +1,11 @@
+@using H1 = Sienar.UI.Typography.H1
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Confirm.Successful)]
 
 <DocTitle Title="Account confirmed"/>
 
 <NarrowContainer>
-	<Heading1>Account confirmed</Heading1>
+	<H1>Account confirmed</H1>
 	<MudText>
 		Your account has been confirmed successfully. You can now <MudLink Href="@DashboardUrls.Account.Login">log in</MudLink>.
 	</MudText>
