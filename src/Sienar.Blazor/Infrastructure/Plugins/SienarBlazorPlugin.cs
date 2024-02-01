@@ -60,6 +60,9 @@ public class SienarBlazorPlugin : ISienarPlugin
 
 	public void SetupMenu(IMenuProvider menuProvider) {}
 
+	/// <inheritdoc />
+	public void SetupDashboard(IMenuProvider dashboardProvider) {}
+
 	public void SetupStyles(IStyleProvider styleProvider)
 	{
 		styleProvider

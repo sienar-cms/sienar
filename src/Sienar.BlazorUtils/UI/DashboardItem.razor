@@ -1,0 +1,20 @@
+﻿@using Sienar.Infrastructure.Menus
+
+<div class="d-flex flex-column align-center flex-shrink-0 mt-4" style="width:100px">
+	<MudIcon
+		Class="mb-4"
+		Icon="@Item.Icon"
+		Size="Size.Large"/>
+	<MudLink
+		Href="@Item.Url"
+		Style="text-align:center">
+		@Item.Text
+	</MudLink>
+</div>
+
+@code {
+
+	[Parameter]
+    public required MenuLink Item { get; set; }
+
+}

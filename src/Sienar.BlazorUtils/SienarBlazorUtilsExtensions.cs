@@ -25,8 +25,14 @@ public static class SienarBlazorUtilsExtensions
 	public static IServiceCollection AddSienarBlazorUtilities(
 		this IServiceCollection self)
 	{
-		self.TryAddScoped<IMenuProvider, MenuProvider>();
-		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.AddKeyedScoped<IMenuProvider, MenuProvider>(
+			SienarBlazorUtilsServiceKeys.MenuProvider);
+		self.AddKeyedScoped<IMenuProvider, MenuProvider>(
+			SienarBlazorUtilsServiceKeys.DashboardProvider);
+		self.AddKeyedScoped<IMenuGenerator, MenuGenerator>(
+			SienarBlazorUtilsServiceKeys.MenuProvider);
+		self.AddKeyedScoped<IMenuGenerator, DashboardMenuGenerator>(
+			SienarBlazorUtilsServiceKeys.DashboardProvider);
 		self.TryAddScoped<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IScriptProvider, ScriptProvider>();
 		self.TryAddScoped<IPluginProvider, PluginProvider>();

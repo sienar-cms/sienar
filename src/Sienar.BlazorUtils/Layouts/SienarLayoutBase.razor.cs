@@ -18,7 +18,7 @@ public abstract partial class SienarLayoutBase : IDisposable
 	[Inject]
 	private ThemeState ThemeState { get; set; } = default!;
 
-	[Inject]
+	[Inject(Key = SienarBlazorUtilsServiceKeys.MenuProvider)]
 	private IMenuGenerator MenuGenerator { get; set; } = default!;
 
 	[Inject]

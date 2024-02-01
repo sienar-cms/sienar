@@ -50,6 +50,31 @@ public class SienarCmsPlugin : ISienarPlugin
 		CreateInfoMenu(menuProvider);
 	}
 
+	/// <inheritdoc />
+	public void SetupDashboard(IMenuProvider dashboardProvider)
+	{
+		dashboardProvider
+			.AccessMenu(SienarMenuNames.Dashboard.MyAccount)
+			.AddMenuLink(new()
+				{
+					Text = "Email",
+					Icon = Icons.Material.Filled.Email,
+					Url = DashboardUrls.Account.EmailChange.Index
+				})
+			.AddMenuLink(new()
+				{
+					Text = "Password",
+					Icon = Icons.Material.Filled.Lock,
+					Url = DashboardUrls.Account.PasswordChange.Index
+				})
+			.AddMenuLink(new()
+				{
+					Text = "Personal data",
+					Icon = Icons.Material.Filled.Archive,
+					Url = DashboardUrls.Account.PersonalData
+				});
+	}
+
 	public void SetupStyles(IStyleProvider styleProvider) {}
 
 	public void SetupScripts(IScriptProvider scriptProvider) {}

@@ -18,9 +18,11 @@ public interface ISienarPlugin
 
 	void SetupMenu(IMenuProvider menuProvider);
 
+	void SetupDashboard(IMenuProvider dashboardProvider);
+
 	void SetupStyles(IStyleProvider styleProvider);
 
-	void SetupComponents(IComponentProvider componentProvider);
-
 	void SetupScripts(IScriptProvider scriptProvider);
+
+	void SetupComponents(IComponentProvider componentProvider);
 }

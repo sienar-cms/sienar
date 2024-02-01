@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Sienar.Infrastructure.Menus;
 
@@ -8,7 +9,9 @@ public class MenuGenerator : IMenuGenerator
 	private readonly IUserAccessor _userAccessor;
 	private readonly IMenuProvider _menuProvider;
 
-	public MenuGenerator(IUserAccessor userAccessor, IMenuProvider menuProvider)
+	public MenuGenerator(
+		IUserAccessor userAccessor,
+		[FromKeyedServices(SienarBlazorUtilsServiceKeys.MenuProvider)] IMenuProvider menuProvider)
 	{
 		_userAccessor = userAccessor;
 		_menuProvider = menuProvider;

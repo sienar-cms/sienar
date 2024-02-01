@@ -3,7 +3,6 @@
 @using Sienar.Infrastructure.Menus
 @inject IPluginProvider PluginProvider
 @inject IRoutableAssemblyProvider AssemblyProvider
-@inject IMenuProvider MenuProvider
 @inject IComponentProvider ComponentProvider
 @inject IEnumerable<ISienarPlugin> SienarPlugins
 
@@ -36,10 +35,16 @@
 
 @code {
 
+	private Assembly? _rootAssembly;
+
 	[Parameter]
 	public string[] PluginNames { get; set; } = Array.Empty<string>();
 
-	private Assembly? _rootAssembly;
+	[Inject(Key = SienarBlazorUtilsServiceKeys.MenuProvider)]
+	private IMenuProvider MenuProvider { get; set; } = default!;
+
+	[Inject(Key = SienarBlazorUtilsServiceKeys.DashboardProvider)]
+	private IMenuProvider DashboardProvider { get; set; } = default!;
 
 	/// <inheritdoc />
 	protected override void OnInitialized()
@@ -70,6 +75,7 @@
 		if (plugin.PluginSettings.UsesProviders)
 		{
 			plugin.SetupMenu(MenuProvider);
+			plugin.SetupDashboard(DashboardProvider);
 			plugin.SetupComponents(ComponentProvider);
 		}
 	}

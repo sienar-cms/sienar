@@ -1,0 +1,66 @@
+﻿@using Sienar.Infrastructure.Menus
+@using Microsoft.AspNetCore.Components.Authorization
+<MudText
+	Class="mb-8"
+	Typo="Typo.h3">
+	@Name
+</MudText>
+
+@foreach (var menuName in _menus.Keys)
+{
+	<MudText Typo="Typo.h5">@menuName</MudText>
+	<MudDivider Class="mt-1 mb-6"/>
+
+	<div class="d-flex flex-wrap">
+		@foreach (var menuItem in _menus[menuName])
+		{
+			@if (LinkTemplate is not null)
+			{
+				@LinkTemplate(menuItem)
+			}
+			else
+			{
+				<DashboardItem Item="menuItem"/>
+			}
+		}
+	</div>
+}
+
+@code {
+
+	private readonly Dictionary<string, List<MenuLink>> _allMenus = new();
+	private Dictionary<string, List<MenuLink>> _menus = new();
+
+	[Parameter]
+	public string Name { get; set; } = "Dashboard";
+
+	[Parameter]
+	public required List<string> Categories { get; set; }
+
+	[Parameter]
+	public required IMenuGenerator MenuGenerator { get; set; }
+
+	[Parameter]
+	public RenderFragment<MenuLink>? LinkTemplate { get; set; }
+
+	[Inject]
+	private AuthenticationStateProvider AuthState { get; set; } = default!;
+
+	protected override void OnInitialized()
+	{
+		AuthState.AuthenticationStateChanged += UpdateMenuAndRender;
+		UpdateMenuAndRender(AuthState.GetAuthenticationStateAsync());
+	}
+
+	private async void UpdateMenuAndRender(Task<AuthenticationState> s)
+	{
+		await s;
+		_allMenus.Clear();
+		_menus.Clear();
+
+		foreach (var menuName in Categories) { _allMenus[menuName] = MenuGenerator.CreateMenu(menuName); }
+
+		_menus = new(_allMenus);
+	}
+
+}
