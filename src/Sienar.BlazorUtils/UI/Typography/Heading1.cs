@@ -7,5 +7,6 @@ public class Heading1 : MudText
 	public Heading1()
 	{
 		Typo = Typo.h3;
+		Class = "mb-8";
 	}
 }
