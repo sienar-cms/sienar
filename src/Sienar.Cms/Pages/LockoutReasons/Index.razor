@@ -1,8 +1,18 @@
-﻿@inherits TablePage<LockoutReason>
+﻿@using H1 = Sienar.UI.Typography.H1
+@inherits TablePage<LockoutReason>
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.LockoutReasons.Index)]
 
 <DocTitle Title="Lockout reasons listing"/>
+
+<H1>Lockout reasons</H1>
+
+<P>
+	When you lock a user's account, you need to select at least one reason for locking their account. This reason will be visible to the user when they try to log in.
+</P>
+<P>
+	Sienar does not provide any reasons for locking user accounts. You should define reasons for locking use accounts based on the needs of your specific app. If you're not sure what reasons to add, you don't need to add any reasons until you need to lock a user account, so you can also add lockout reasons on an as-needed basis.
+</P>
 
 <TemplatedTable
 	@ref="Table"
