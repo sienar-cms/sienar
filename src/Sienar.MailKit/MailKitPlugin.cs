@@ -38,7 +38,7 @@ public class MailKitPlugin : ISienarPlugin
 		if (smtpConfigurer is null)
 		{
 			services.Configure<SmtpOptions>(
-				builder.Configuration.GetSection("Sienar:Smtp"));
+				builder.Configuration.GetSection("Sienar:Email:Smtp"));
 		}
 		else
 		{

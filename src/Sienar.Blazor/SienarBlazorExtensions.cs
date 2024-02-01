@@ -71,8 +71,7 @@ public static class SienarBlazorExtensions
 			.Configure<SienarOptions>(config.GetSection("Sienar:Core"))
 			.Configure<EmailOptions>(config.GetSection("Sienar:Email:Core"))
 			.Configure<IdentityEmailOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
-			.Configure<LoginOptions>(config.GetSection("Sienar:Login"))
-			.Configure<SiteOptions>(config.GetSection("Sienar:Site"));
+			.Configure<LoginOptions>(config.GetSection("Sienar:Login"));
 
 		return self;
 	}

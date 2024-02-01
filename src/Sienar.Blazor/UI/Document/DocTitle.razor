@@ -1,4 +1,4 @@
-@inject IOptions<SiteOptions> Options
+@inject IOptions<SienarOptions> Options
 
 <PageTitle>
 	@ComputedTitle
@@ -14,7 +14,7 @@
 	[Parameter]
 	public string Subtitle
 	{
-		get => _subtitle ?? Options.Value.Name;
+		get => _subtitle ?? Options.Value.SiteName;
 		set => _subtitle = value;
 	}
 

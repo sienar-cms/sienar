@@ -1,10 +1,10 @@
 @inherits ComponentBase
 @implements IDisposable
 @inject AccountStateProvider Account
-@inject IOptions<SiteOptions> Options
+@inject IOptions<SienarOptions> Options
 
 <header class="px-4 py-3">
-	<MudText Typo="Typo.h5">@(Options.Value.Name)</MudText>
+	<MudText Typo="Typo.h5">@(Options.Value.SiteName)</MudText>
 	<AuthorizeView>
 		<Authorized>
 			Welcome, @(User?.Username)!

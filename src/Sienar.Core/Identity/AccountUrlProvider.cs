@@ -1,26 +1,26 @@
 ﻿using Microsoft.Extensions.Options;
-using Sienar.Email;
+using Sienar.Configuration;
 
 namespace Sienar.Identity;
 
 public class AccountUrlProvider : IAccountUrlProvider
 {
-	private readonly EmailOptions _options;
+	private readonly SienarOptions _sienarOptions;
 
-	public AccountUrlProvider(IOptions<EmailOptions> options)
+	public AccountUrlProvider(IOptions<SienarOptions> sienarOptions)
 	{
-		_options = options.Value;
+		_sienarOptions = sienarOptions.Value;
 	}
 
 	/// <inheritdoc />
 	public string ConfirmationUrl
-		=> $"{_options.ApplicationUrl}/dashboard/account/confirm";
+		=> $"{_sienarOptions.SiteUrl}/dashboard/account/confirm";
 
 	/// <inheritdoc />
 	public string EmailChangeUrl
-		=> $"{_options.ApplicationUrl}/dashboard/account/email/confirm";
+		=> $"{_sienarOptions.SiteUrl}/dashboard/account/email/confirm";
 
 	/// <inheritdoc />
 	public string ResetPasswordUrl
-		=> $"{_options.ApplicationUrl}/dashboard/account/reset-password";
+		=> $"{_sienarOptions.SiteUrl}/dashboard/account/reset-password";
 }

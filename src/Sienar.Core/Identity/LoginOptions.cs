@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sienar.Configuration;
+namespace Sienar.Identity;
 
 public class LoginOptions
 {
@@ -28,9 +28,4 @@ public class LoginOptions
 	/// The number of login attempts to allow prior to lockout. E.g., if value is "3", then lockout will occur on the 3rd failure
 	/// </summary>
 	public int MaxFailedLoginAttempts { get; set; } = 3;
-
-	/// <summary>
-	/// The string to use as a placeholder for passwords. Any time a user DTO is returned, this will be the value used for the password. Any time an administrator edits a user, if the password equals this string (i.e., the string wasn't edited), the password will not be changed.
-	/// </summary>
-	public string PasswordPlaceholderString { get; set; } = "********";
 }

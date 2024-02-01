@@ -1,12 +1,12 @@
-@inject IOptions<SiteOptions> SiteOptions
+@inject IOptions<SienarOptions> SiteOptions
 @inject NavigationManager NavManager
 
 <DocTitle Title="@Title"
           Subtitle="@Subtitle"/>
 
 <HeadContent>
-	<meta property="og:site_name" content="@SiteOptions.Value.Name"/>
-	<meta property="og:url" content="@($"{SiteOptions.Value.Url}/{NavManager.ToBaseRelativePath(NavManager.Uri)}")"/>
+	<meta property="og:site_name" content="@SiteOptions.Value.SiteName"/>
+	<meta property="og:url" content="@($"{SiteOptions.Value.SiteUrl}/{NavManager.ToBaseRelativePath(NavManager.Uri)}")"/>
 	<meta property="og:type" content="@GenerateOgType()"/>
 
 	@if (!string.IsNullOrEmpty(Title))
@@ -21,7 +21,7 @@
 
 	@if (!string.IsNullOrEmpty(HeaderImage))
 	{
-		<meta property="og:image" content="@($"{SiteOptions.Value.Url}{HeaderImage}")"/>
+		<meta property="og:image" content="@($"{SiteOptions.Value.SiteUrl}{HeaderImage}")"/>
 		<meta property="og:image:alt" content="@ImageAlt"/>
 	}
 </HeadContent>
@@ -51,7 +51,7 @@
 	{
 		if (string.IsNullOrEmpty(ImageAlt))
 		{
-			ImageAlt = $"{SiteOptions.Value.Name} header image";
+			ImageAlt = $"{SiteOptions.Value.SiteName} header image";
 		}
 	}
 
