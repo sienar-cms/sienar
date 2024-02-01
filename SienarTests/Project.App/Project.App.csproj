@@ -14,4 +14,23 @@
 		<ProjectReference Include="..\Project.Data\Project.Data.csproj"/>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="build\appsettings.Development.json" />
+	  <_ContentIncludedByDefault Remove="build\appsettings.json" />
+	  <_ContentIncludedByDefault Remove="build\Project.App.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Project.App.runtimeconfig.json" />
+	  <_ContentIncludedByDefault Remove="build\Project.App.staticwebassets.runtime.json" />
+	  <_ContentIncludedByDefault Remove="build\Project.Data.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Project.Data.runtimeconfig.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.Blazor.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.Blazor.staticwebassets.runtime.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.BlazorUtils.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.BlazorUtils.staticwebassets.runtime.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.Cms.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.Cms.staticwebassets.runtime.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.Core.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.MailKit.deps.json" />
+	  <_ContentIncludedByDefault Remove="build\Sienar.SqliteUtils.deps.json" />
+	</ItemGroup>
+
 </Project>

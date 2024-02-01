@@ -60,14 +60,15 @@ public class SienarBlazorPlugin : ISienarPlugin
 
 	public void SetupMenu(IMenuProvider menuProvider) {}
 
-	/// <inheritdoc />
+	/// <inheritdoc /> 
 	public void SetupDashboard(IMenuProvider dashboardProvider) {}
 
 	public void SetupStyles(IStyleProvider styleProvider)
 	{
 		styleProvider
 			.Enqueue("/_content/MudBlazor/MudBlazor.min.css")
-			.Enqueue("/_content/Sienar.Blazor/sienar.css");
+			.Enqueue("/_content/Sienar.Blazor/sienar.css")
+			.Enqueue("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
 	}
 
 	public void SetupScripts(IScriptProvider scriptProvider)
