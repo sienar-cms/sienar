@@ -14,7 +14,7 @@ public abstract class UserInRoleAccessValidator<T> : IAccessValidator<T>
 
 	/// <inheritdoc />
 	public Task Validate(
-		UserAccessValidationContext context,
+		AccessValidationContext context,
 		ActionType actionType,
 		T? input)
 	{

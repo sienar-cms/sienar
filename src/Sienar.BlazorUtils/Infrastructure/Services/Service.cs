@@ -70,7 +70,7 @@ public class Service<TRequest> : IService<TRequest>
 
 	private async Task<bool> ValidateAccess(TRequest request)
 	{
-		var context = new UserAccessValidationContext();
+		var context = new AccessValidationContext();
 		var anyValidators = false;
 
 		try
@@ -101,7 +101,8 @@ public class Service<TRequest> : IService<TRequest>
 		{
 			foreach (var hook in _beforeHooks)
 			{
-				if (await hook.Handle(model) != HookStatus.Success) successful = false;
+				if (await hook.Handle(model, ActionType.Action) != HookStatus.Success)
+					successful = false;
 			}
 		}
 		catch (Exception e)
@@ -119,7 +120,7 @@ public class Service<TRequest> : IService<TRequest>
 		{
 			foreach (var hook in _afterHooks)
 			{
-				await hook.Handle(model);
+				await hook.Handle(model, ActionType.Action);
 			}
 		}
 		catch (Exception e)

@@ -60,7 +60,7 @@ public class ResultService<TResult> : IResultService<TResult>
 
 	private async Task<bool> ValidateAccess(TResult? result)
 	{
-		var context = new UserAccessValidationContext();
+		var context = new AccessValidationContext();
 		var anyValidators = false;
 
 		try
@@ -89,7 +89,7 @@ public class ResultService<TResult> : IResultService<TResult>
 		{
 			foreach (var hook in _afterHooks)
 			{
-				await hook.Handle(result);
+				await hook.Handle(result, ActionType.ResultAction);
 			}
 		}
 		catch (Exception e)

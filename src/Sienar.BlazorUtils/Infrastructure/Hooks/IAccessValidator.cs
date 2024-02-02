@@ -6,7 +6,7 @@ namespace Sienar.Infrastructure.Hooks;
 public interface IAccessValidator<T>
 {
 	Task Validate(
-		UserAccessValidationContext context,
-		ActionType actionType,
+		AccessValidationContext context,
+		ActionType action,
 		T? input);
 }

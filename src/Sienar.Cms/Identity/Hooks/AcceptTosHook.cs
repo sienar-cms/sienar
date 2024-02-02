@@ -16,7 +16,7 @@ public class AcceptTosHook : IBeforeProcess<RegisterRequest>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(RegisterRequest request)
+	public Task<HookStatus> Handle(RegisterRequest request, ActionType action)
 	{
 		if (!request.AcceptTos)
 		{

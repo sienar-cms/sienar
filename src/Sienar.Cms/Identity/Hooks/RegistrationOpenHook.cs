@@ -22,7 +22,7 @@ public class RegistrationOpenHook : IBeforeProcess<RegisterRequest>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(RegisterRequest request)
+	public Task<HookStatus> Handle(RegisterRequest request, ActionType action)
 	{
 		if (!_sienarOptions.RegistrationOpen)
 		{

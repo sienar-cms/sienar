@@ -1,6 +1,6 @@
 ﻿namespace Sienar.Infrastructure;
 
-public class UserAccessValidationContext
+public class AccessValidationContext
 {
 	public bool CanAccess { get; private set; }
 

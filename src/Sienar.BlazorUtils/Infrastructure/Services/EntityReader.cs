@@ -5,23 +5,21 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
-public class EntityReader<TEntity, TContext>
-	: DbService<TEntity, TContext>, IEntityReader<TEntity>
+public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
+	IEntityReader<TEntity>
 	where TEntity : EntityBase, new()
 	where TContext : DbContext
 {
-	private const string BeforeReadHookErrorMessage = "One or more before read hooks failed to run";
-	private const string AfterReadHookErrorMessage = "One or more after read hooks failed to run";
-
 	private readonly IFilterProcessor<TEntity> _filterProcessor;
-	private readonly IEnumerable<IBeforeRead<TEntity>> _beforeReadHooks;
-	private readonly IEnumerable<IAfterRead<TEntity>> _afterReadHooks;
+	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
+	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
 	/// <inheritdoc />
 	public EntityReader(
@@ -29,28 +27,21 @@ public class EntityReader<TEntity, TContext>
 		ILogger<EntityReader<TEntity, TContext>> logger,
 		INotificationService notifier,
 		IFilterProcessor<TEntity> filterProcessor,
-		IEnumerable<IBeforeRead<TEntity>> beforeReadHooks,
-		IEnumerable<IAfterRead<TEntity>> afterReadHooks)
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(contextAccessor, logger, notifier)
 	{
 		_filterProcessor = filterProcessor;
-		_beforeReadHooks = beforeReadHooks;
-		_afterReadHooks = afterReadHooks;
+		_accessValidators = accessValidators;
+		_afterHooks = afterHooks;
 	}
 
 	/// <inheritdoc />
-	public async Task<TEntity?> Get(
+	public async Task<TEntity?> Read(
 		Guid id,
 		Filter? filter = null)
 	{
-		(var successful, filter) = RunBeforeHooks(filter, true);
-		if (!successful)
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadSingleFailed());
-			return null;
-		}
-
-		TEntity? entity = null;
+		TEntity? entity;
 		try
 		{
 			entity = filter == null
@@ -62,6 +53,8 @@ public class EntityReader<TEntity, TContext>
 		catch (Exception e)
 		{
 			Logger.LogError(e, StatusMessages.Database.QueryFailed);
+			Notifier.Error(StatusMessages.Crud<TEntity>.ReadSingleFailed());
+			return null;
 		}
 
 		if (entity is null)
@@ -70,32 +63,27 @@ public class EntityReader<TEntity, TContext>
 			return null;
 		}
 
-		if (!await RunAfterHooks([entity], true))
+		if (!await _accessValidators.Validate(entity, ActionType.Read, Logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadSingleFailed());
+			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
 			return null;
 		}
 
+		await _afterHooks.Run(entity, ActionType.Read, Logger);
 		return entity;
 	}
 
 	/// <inheritdoc />
-	public async Task<PagedQuery<TEntity>> Get(Filter? filter = null)
+	public async Task<PagedQuery<TEntity>> Read(Filter? filter = null)
 	{
-		IQueryable<TEntity> entries;
-		IQueryable<TEntity> countEntries;
 		IEnumerable<TEntity> buffered;
 		int count;
 
-		(var successful, filter) = RunBeforeHooks(filter, false);
-		if (!successful)
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadMultipleFailed());
-			return new();
-		}
-
 		try
 		{
+			IQueryable<TEntity> entries;
+			IQueryable<TEntity> countEntries;
+
 			if (filter is not null)
 			{
 				entries = ProcessFilter(filter);
@@ -117,10 +105,10 @@ public class EntityReader<TEntity, TContext>
 			return new();
 		}
 
-		if (!await RunAfterHooks(buffered, false))
+		foreach (var entity in buffered)
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadMultipleFailed());
-			return new();
+			// TODO: run IAccessValidators and remove entities for which validation fails
+			await _afterHooks.Run(entity, ActionType.ReadAll, Logger);
 		}
 
 		return new (buffered, count);
@@ -156,47 +144,6 @@ public class EntityReader<TEntity, TContext>
 
 		return result;
 	}
-
-	private (bool, Filter?) RunBeforeHooks(Filter? filter, bool isSingle)
-	{
-		try
-		{
-			foreach (var beforeReadHook in _beforeReadHooks)
-			{
-				filter = beforeReadHook.Handle(filter, isSingle);
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(e, BeforeReadHookErrorMessage);
-			return (false, filter);
-		}
-
-		return (true, filter);
-	}
-
-	private async Task<bool> RunAfterHooks(IEnumerable<TEntity> entries, bool isSingle)
-	{
-		var successful = true;
-
-		try
-		{
-			foreach (var entry in entries)
-			{
-				foreach (var afterReadHook in _afterReadHooks)
-				{
-					if (await afterReadHook.Handle(entry, isSingle) != HookStatus.Success) successful = false;
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(e, AfterReadHookErrorMessage);
-			return false;
-		}
-
-		return successful;
-	}
 }
 
 public class EntityReader<TEntity> : EntityReader<TEntity, DbContext>
@@ -208,13 +155,13 @@ public class EntityReader<TEntity> : EntityReader<TEntity, DbContext>
 		ILogger<EntityReader<TEntity, DbContext>> logger,
 		INotificationService notifier,
 		IFilterProcessor<TEntity> filterProcessor,
-		IEnumerable<IBeforeRead<TEntity>> beforeReadHooks,
-		IEnumerable<IAfterRead<TEntity>> afterReadHooks)
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(
 			contextAccessor,
 			logger,
 			notifier,
 			filterProcessor,
-			beforeReadHooks, 
-			afterReadHooks) {}
+			accessValidators, 
+			afterHooks) {}
 }
