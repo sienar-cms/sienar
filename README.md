@@ -115,23 +115,35 @@ This method uses the `IComponentProvider`, which is a container that includes re
 
 Sienar includes a system of hooks similar to that of WordPress. However, instead of hooking into actions with string names, Sienar allows you to hook into actions with strongly-typed interfaces. Each type of hookable action supports a specific group of interfaces, so in order to hook into a specific action, you need to implement the correct interface with the correct generic model type.
 
-### Basics: Services, processors, requests, and hooks
+### Basics: Actions, requests, processors, hooks, and services
 
-Sienar uses four loose pieces of terminology in regards to its hook system.
+Sienar uses five pieces of terminology in regards to its hook system.
 
-**Requests** are classes that represent an action. Usually, these classes contain data, but they don't have to. For example, the [LoginRequest](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LoginRequest.cs) requires the user's username and password, along with an optional property indicating whether the login should persist. While the `LoginRequest` class contains data, the [LogoutRequest](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LogoutRequest.cs) class does not - it merely logs out the current user, which the app determines through other means. But even though the `LogoutRequest` doesn't have any data, the empty class is still used to strongly type the logout process in the hook system.
+**Actions** are things you want to do in your code. An example of an action would be logging in to the app. There are seven general types of actions: `Read`, `ReadAll`, `Create`, `Update`, `Delete`, `Action`, and `ResultAction`. These action types are stored in the [ActionType enum](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/ActionType.cs), and they are used by hooks to determine whether a hook should run for a particular request. Most of these action types refer to CRUD-based actions, but the `Action` and `ResultAction` types are very generalized. An `Action` is an action that just has to run, and it returns a `bool` indicating whether it succeeded. A `ResultAction` is an action that returns a result, such as a file, or `null` on failure.
 
-**Processors** are classes that use **requests** to perform an action. Each action corresponds to exactly one processor. For example, logging in to the Sienar dashboard uses the [LoginProcessor](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Processors/LoginProcessor.cs), which itself relies on the `LoginRequest` we discussed in the previous paragraph.
+**Requests** are classes that represent an **action**. Usually, these classes contain data, but they don't have to. For example, the [LoginRequest](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LoginRequest.cs) requires the user's username and password, along with an optional property indicating whether the login should persist. While the `LoginRequest` class contains data, the [LogoutRequest](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LogoutRequest.cs) class does not - it merely logs out the current user, which the app determines through other means. But even though the `LogoutRequest` doesn't have any data, the empty class is still used to strongly type the logout process in the hook system.
 
-**Hooks** are classes that run before or after **processors**. Some hooks give you the ability to short-circuit a process, while others only allow you to respond to the result of a process after it has already happened.
+**Processors** are classes that use **requests** to perform an **action**. Each action corresponds to exactly one processor. For example, logging in to the Sienar dashboard uses the [LoginProcessor](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Processors/LoginProcessor.cs), which itself relies on the `LoginRequest` we discussed in the previous paragraph.
 
-**Services** are classes that encapsulate all this behavior, from beginning to end, using hooks and processors. Most Sienar services perform a single action, although there are a couple exceptions. A service uses the type of the **request** (e.g., `LoginRequest`) to get a **processor** from the DI container (e.g., `LoginProcessor`). The service also requests **hooks** associated with the type of the **request**, if any (most hooks are requested as `IEnumerable<TRequest>`, so you can typically have as many hooks as you want).
+**Hooks** are classes that run before or after **processors**. Some hooks give you the ability to short-circuit an **action**, while others only allow you to respond to the result of an **action** after it has already happened.
 
-**NOTE**: unless you want to change the way a service works in general, you don't need to create a service class. Sienar comes with its own service class, which is fully generic and performs this pipeline for every kind of request, including custom requests you create. In order to hook into an existing Sienar action, you only need to implement the appropriate **hook** types, and in order to create a fully custom process, you only need to create the **request** type and the **processor** type. You can create **hooks** for your custom actions, but in general, it's usually a better idea to use hooks as a way for other developers to hook into your actions instead of using hooks to modify your own actions.
+**Services** are classes that encapsulate all this behavior, from beginning to end, using hooks and processors. Most Sienar services perform a single **action**, although there are a couple exceptions. A service uses the type of the **request** (e.g., `LoginRequest`) to get a **processor** from the DI container (e.g., `LoginProcessor`). The service also requests **hooks** associated with the type of the **request**, if any (hooks are requested as `IEnumerable<THook>`, so you can have as many hooks as you want, or none at all).
 
-### Two types of hooks: CRUD hooks and action hooks
+**NOTE**: unless you want to change the way a service works in general, you don't need to create a service class. Sienar comes with its own service class, which is fully generic and performs this pipeline for every kind of request, including custom requests you create. In order to hook into an existing Sienar **action**, you only need to implement the appropriate **hook** types, and in order to create a fully custom process, you only need to create the **request** type and the **processor** type. You can even create **hooks** for your custom actions.
 
-There are three main types of services that come built into Sienar: CRUD services, action services, and result services. All three of these services use hooks in slightly different ways, but we'll focus on CRUD services separately from the other two because CRUD services use different interfaces for hooks than action services and result services, which both use the same hook interfaces.
+### The four hooks
+
+There are three main types of services that come built into Sienar: action services (`ActionType.Action`), result services (`ActionType.ResultAction`), and CRUD services (which use the remaining `ActionType`s). All three of these services use hooks in slightly different ways, but they all use the same four core hooks.
+
+Some hooks return a [HookStatus](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/HookStatus.cs), which is a general indicator of whether the hook succeeded or failed and why. If a hook returns a `HookStatus`, it can be used to short-circuit an action. If a hook indicates failure, this won't stop other hooks of the same type from running, but it *will* prevent the process from moving on to the next step.
+
+#### `IBeforeProcess<TEntity>`
+
+The `IBeforeProcess<TRequest>` hook executes before the `IProcessor<TRequest>`. It receives the `TRequest` and the `ActionType` as its arguments, and it returns a `HookStatus`, so it can short-circuit a request.
+
+The `IBeforeProcess<TRequest>` hook can be used to run code on each action. For example, the [ConcurrencyStampUpdateHook](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/ConcurrencyStampUpdateHook.cs) refreshes a database entity's concurrency stamp prior to creating or updating the entity.
+
+The `IBeforeProcess<TRequest>` can also be used to verify certain 
 
 #### CRUD services
 
