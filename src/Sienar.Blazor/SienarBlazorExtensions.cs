@@ -32,7 +32,7 @@ public static class SienarBlazorExtensions
 		return self
 			.AddTransient(typeof(IService<>), typeof(SienarService<>))
 			.AddTransient(typeof(IEntityStateValidator<>), typeof(ConcurrencyStampValidatorHook<>))
-			.AddTransient(typeof(IBeforeUpsert<>), typeof(ConcurrencyStampUpdateHook<>));
+			.AddTransient(typeof(IBeforeProcess<>), typeof(ConcurrencyStampUpdateHook<>));
 	}
 
 	public static IServiceCollection AddSienarIdentity(this IServiceCollection self)

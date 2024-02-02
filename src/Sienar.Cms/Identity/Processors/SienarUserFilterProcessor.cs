@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
@@ -46,4 +47,12 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 		nameof(SienarUser.PendingEmail) => u => u.PendingEmail!,
 		_ => u => u.Username
 	};
+
+	/// <inheritdoc />
+	public Filter? ModifyFilter(Filter? filter, ActionType action)
+	{
+		if (filter is null) return new Filter { Includes = ["Roles"] };
+		if (!filter.Includes.Contains("Roles")) filter.Includes.Add("Roles");
+		return filter;
+	}
 }

@@ -4,29 +4,32 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Media.Hooks;
 
-public class VerifyUserCanReadFileHook : IAfterRead<Upload>
+public class VerifyUserCanReadFileHook : IAccessValidator<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
-	private readonly INotificationService _notifier;
 
-	public VerifyUserCanReadFileHook(IUserAccessor userAccessor, INotificationService notifier)
+	public VerifyUserCanReadFileHook(IUserAccessor userAccessor)
 	{
 		_userAccessor = userAccessor;
-		_notifier = notifier;
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(Upload entity, bool isSingle)
+	public Task Validate(
+		AccessValidationContext context,
+		ActionType action,
+		Upload? input)
 	{
-		var success = Task.FromResult(HookStatus.Success);
+		if (action is not (ActionType.Read or ActionType.ReadAll) || input is null)
+			return Task.CompletedTask;
 
-		if (entity.UserId is null) return success;
-		if (_userAccessor.UserInRole(Roles.Admin)) return success;
-		if (_userAccessor.GetUserId() == entity.UserId) return success;
-		if (!entity.IsPrivate) return success;
+		if (input.UserId is null
+			|| _userAccessor.UserInRole(Roles.Admin)
+			|| _userAccessor.IsSignedIn() && _userAccessor.GetUserId() == input.UserId
+			|| !input.IsPrivate)
+		{
+			context.Approve();
+		}
 
-		_notifier.Error($"You do not have permission to access the file {entity.Title}");
-
-		return Task.FromResult(HookStatus.Unauthorized);
+		return Task.CompletedTask;
 	}
 }

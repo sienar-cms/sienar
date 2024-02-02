@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Processors;
 
@@ -29,4 +30,12 @@ public interface IFilterProcessor<TEntity>
 	/// <param name="sortName">The name of the column to sort by</param>
 	/// <returns>the sort predicate</returns>
 	Expression<Func<TEntity, object>> GetSortPredicate(string? sortName);
+
+	/// <summary>
+	/// Performs modifications to a filter prior to accessing the database
+	/// </summary>
+	/// <param name="filter">The existing filter, if any</param>
+	/// <param name="action">The <see cref="ActionType">action type</see></param>
+	/// <returns></returns>
+	Filter? ModifyFilter(Filter? filter, ActionType action) => filter;
 }

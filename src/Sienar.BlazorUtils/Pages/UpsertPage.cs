@@ -33,7 +33,7 @@ public abstract class UpsertPage<TModel> : FormPage<TModel>
 		if (IsEditing)
 		{
 			await SubmitRequest(
-				async () => Model = await Reader.Get(Id!.Value) ?? new());
+				async () => Model = await Reader.Read(Id!.Value) ?? new());
 		}
 	}
 
@@ -41,11 +41,11 @@ public abstract class UpsertPage<TModel> : FormPage<TModel>
 	{
 		if (IsEditing)
 		{
-			await SubmitRequest(() => Writer.Edit(Model));
+			await SubmitRequest(() => Writer.Update(Model));
 		}
 		else
 		{
-			await SubmitRequest(() => Writer.Add(Model));
+			await SubmitRequest(() => Writer.Create(Model));
 		}
 
 		if (WasSuccessful)

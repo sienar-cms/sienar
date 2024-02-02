@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Hooks;
 
@@ -12,29 +13,39 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 	where TEntity : EntityBase, new()
 	where TContext : DbContext
 {
+	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
 	private readonly IEnumerable<IEntityStateValidator<TEntity>> _stateValidators;
-	private readonly IEnumerable<IBeforeUpsert<TEntity>> _beforeUpsertHooks;
-	private readonly IEnumerable<IAfterUpsert<TEntity>> _afterUpsertHooks;
+	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
+	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
 	/// <inheritdoc />
 	public EntityWriter(
 		IDbContextAccessor<TContext> contextAccessor,
 		ILogger<DbService<TEntity, TContext>> logger,
 		INotificationService notifier,
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		IEnumerable<IEntityStateValidator<TEntity>> stateValidators,
-		IEnumerable<IBeforeUpsert<TEntity>> beforeUpsertHooks,
-		IEnumerable<IAfterUpsert<TEntity>> afterUpsertHooks)
+		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(contextAccessor, logger, notifier)
 	{
+		_accessValidators = accessValidators;
 		_stateValidators = stateValidators;
-		_beforeUpsertHooks = beforeUpsertHooks;
-		_afterUpsertHooks = afterUpsertHooks;
+		_beforeHooks = beforeHooks;
+		_afterHooks = afterHooks;
 	}
 
 	/// <inheritdoc />
-	public async Task<Guid> Add(TEntity model)
+	public async Task<Guid> Create(TEntity model)
 	{
-		if (!await RunBeforeHooks(model, true))
+		if (!await _accessValidators.Validate(model, ActionType.Create, Logger))
+		{
+			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			return Guid.Empty;
+		}
+
+		if (!await _stateValidators.Run(model, true, Logger)
+		|| !await _beforeHooks.Run(model, ActionType.Create, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
 			return Guid.Empty;
@@ -52,20 +63,22 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return Guid.Empty;
 		}
 
-		if (!await RunAfterHooks(model, true))
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
-			return Guid.Empty;
-		}
-
+		await _afterHooks.Run(model, ActionType.Create, Logger);
 		Notifier.Success(StatusMessages.Crud<TEntity>.CreateSuccessful());
 		return model.Id;
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> Edit(TEntity model)
+	public async Task<bool> Update(TEntity model)
 	{
-		if (!await RunBeforeHooks(model, false))
+		if (!await _accessValidators.Validate(model, ActionType.Update, Logger))
+		{
+			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			return false;
+		}
+
+		if (!await _stateValidators.Run(model, false, Logger)
+		|| !await _beforeHooks.Run(model, ActionType.Update, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
 			return false;
@@ -83,65 +96,9 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return false;
 		}
 
-		if (!await RunAfterHooks(model, false))
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
-			return false;
-		}
-
+		await _afterHooks.Run(model, ActionType.Update, Logger);
 		Notifier.Success(StatusMessages.Crud<TEntity>.UpdateSuccessful());
 		return true;
-	}
-
-	private async Task<bool> RunBeforeHooks(TEntity entity, bool isAdding)
-	{
-		try
-		{
-			var wasSuccessful = true;
-			foreach (var validator in _stateValidators)
-			{
-				if (!await validator.IsValid(entity, isAdding)) wasSuccessful = false;
-			}
-
-			if (!wasSuccessful) return false;
-
-			foreach (var beforeHook in _beforeUpsertHooks)
-			{
-				await beforeHook.Handle(entity, isAdding);
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(
-				e,
-				"One or more before {action} hooks failed to run",
-				isAdding ? "add" : "edit");
-			return false;
-		}
-
-		return true;
-	}
-
-	private async Task<bool> RunAfterHooks(TEntity entity, bool isAdding)
-	{
-		var successful = true;
-		try
-		{
-			foreach (var afterHook in _afterUpsertHooks)
-			{
-				if (await afterHook.Handle(entity, isAdding) != HookStatus.Success) successful = false;
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(
-				e,
-				"One or more after {action} hooks failed to run",
-				isAdding ? "add" : "edit");
-			return false;
-		}
-
-		return successful;
 	}
 }
 
@@ -153,14 +110,16 @@ public class EntityWriter<TEntity> : EntityWriter<TEntity, DbContext>
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<TEntity, DbContext>> logger,
 		INotificationService notifier,
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		IEnumerable<IEntityStateValidator<TEntity>> stateValidators,
-		IEnumerable<IBeforeUpsert<TEntity>> beforeUpsertHooks,
-		IEnumerable<IAfterUpsert<TEntity>> afterUpsertHooks)
+		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(
 			contextAccessor,
 			logger,
 			notifier,
+			accessValidators,
 			stateValidators,
-			beforeUpsertHooks,
-			afterUpsertHooks) {}
+			beforeHooks,
+			afterHooks) {}
 }

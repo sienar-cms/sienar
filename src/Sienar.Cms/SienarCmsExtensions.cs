@@ -31,11 +31,12 @@ public static class SienarCmsExtensions
 
 		// CRUD
 		self
-			.AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
-			.AddTransient<IBeforeUpsert<SienarUser>, UserPasswordUpdateHook>()
+			// .AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
+			.AddTransient<IAccessValidator<SienarUser>, UserIsAdminAccessValidator<SienarUser>>()
+			.AddTransient<IBeforeProcess<SienarUser>, UserPasswordUpdateHook>()
 			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
-			.AddTransient<IBeforeDelete<SienarUser>, RemoveUserRelatedEntitiesHook>()
-			.AddTransient<IAfterDelete<SienarUser>, ForceDeletedAccountLogoutHook>();
+			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>()
+			.AddTransient<IAfterProcess<SienarUser>, ForceDeletedAccountLogoutHook>();
 
 		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
 		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
@@ -86,10 +87,10 @@ public static class SienarCmsExtensions
 		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
 
 		return self
-			.AddTransient<IAfterRead<Upload>, VerifyUserCanReadFileHook>()
-			.AddTransient<IBeforeUpsert<Upload>, AssignMediaFieldsHook>()
-			.AddTransient<IBeforeUpsert<Upload>, UploadFileHook>()
-			.AddTransient<IBeforeUpsert<Upload>, VerifyUserCanModifyFileHook>()
-			.AddTransient<IBeforeDelete<Upload>, VerifyUserCanModifyFileHook>();
+			.AddTransient<IAccessValidator<Upload>, VerifyUserCanReadFileHook>()
+			.AddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>()
+			.AddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>()
+			.AddTransient<IBeforeProcess<Upload>, AssignMediaFieldsHook>()
+			.AddTransient<IBeforeProcess<Upload>, UploadFileHook>();
 	}
 }

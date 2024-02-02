@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Hooks;
 
@@ -13,20 +14,23 @@ public class EntityDeleter<TEntity, TContext>
 	where TEntity : EntityBase
 	where TContext : DbContext
 {
-	private readonly IEnumerable<IBeforeDelete<TEntity>> _beforeDeleteHooks;
-	private readonly IEnumerable<IAfterDelete<TEntity>> _afterDeleteHooks;
+	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
+	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
+	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
 	/// <inheritdoc />
 	public EntityDeleter(
 		IDbContextAccessor<TContext> contextAccessor,
 		ILogger<DbService<TEntity, TContext>> logger,
 		INotificationService notifier,
-		IEnumerable<IBeforeDelete<TEntity>> beforeDeleteHooks,
-		IEnumerable<IAfterDelete<TEntity>> afterDeleteHooks)
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(contextAccessor, logger, notifier)
 	{
-		_beforeDeleteHooks = beforeDeleteHooks;
-		_afterDeleteHooks = afterDeleteHooks;
+		_accessValidators = accessValidators;
+		_beforeHooks = beforeHooks;
+		_afterHooks = afterHooks;
 	}
 
 	/// <inheritdoc />
@@ -49,22 +53,13 @@ public class EntityDeleter<TEntity, TContext>
 			return false;
 		}
 
-		var successful = true;
-		try
+		if (!await _accessValidators.Validate(entity, ActionType.Delete, Logger))
 		{
-			foreach (var beforeHook in _beforeDeleteHooks)
-			{
-				var status = await beforeHook.Handle(entity);
-				if (status != HookStatus.Success) successful = false;
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(e, "One or more before delete hooks failed to run");
-			successful = false;
+			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			return false;
 		}
 
-		if (!successful)
+		if (!await _beforeHooks.Run(entity, ActionType.Delete, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.DeleteFailed());
 			return false;
@@ -82,28 +77,9 @@ public class EntityDeleter<TEntity, TContext>
 			return false;
 		}
 
-		successful = true;
-		try
-		{
-			foreach (var afterHook in _afterDeleteHooks)
-			{
-				if (await afterHook.Handle(entity) != HookStatus.Success) successful = false;
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(e, "One or more after delete hooks failed to run");
-			return false;
-		}
-
-		if (!successful)
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.DeleteFailed());
-			return false;
-		}
-
+		await _afterHooks.Run(entity, ActionType.Delete, Logger);
 		Notifier.Success(StatusMessages.Crud<TEntity>.DeleteSuccessful());
-		return successful;
+		return true;
 	}
 }
 
@@ -115,12 +91,14 @@ public class EntityDeleter<TEntity> : EntityDeleter<TEntity, DbContext>
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<TEntity, DbContext>> logger,
 		INotificationService notifier,
-		IEnumerable<IBeforeDelete<TEntity>> beforeDeleteHooks,
-		IEnumerable<IAfterDelete<TEntity>> afterDeleteHooks)
+		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
+		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(
 			contextAccessor,
 			logger,
 			notifier,
-			beforeDeleteHooks,
-			afterDeleteHooks) {}
+			accessValidators,
+			beforeHooks,
+			afterHooks) {}
 }
