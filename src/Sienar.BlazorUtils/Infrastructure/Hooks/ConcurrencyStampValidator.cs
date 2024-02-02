@@ -8,12 +8,12 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Infrastructure.Hooks;
 
-public class ConcurrencyStampValidatorHook<TEntity>
+public class ConcurrencyStampValidator<TEntity>
 	: DbService<TEntity, DbContext>, IStateValidator<TEntity>
 	where TEntity : EntityBase
 {
 	/// <inheritdoc />
-	public ConcurrencyStampValidatorHook(
+	public ConcurrencyStampValidator(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<TEntity, DbContext>> logger,
 		INotificationService notifier)

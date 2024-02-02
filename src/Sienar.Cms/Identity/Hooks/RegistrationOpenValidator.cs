@@ -8,12 +8,12 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class RegistrationOpenHook : IStateValidator<RegisterRequest>
+public class RegistrationOpenValidator : IStateValidator<RegisterRequest>
 {
 	private readonly SienarOptions _sienarOptions;
 	private readonly INotificationService _notifier;
 
-	public RegistrationOpenHook(
+	public RegistrationOpenValidator(
 		IOptions<SienarOptions> sienarOptions,
 		INotificationService notifier)
 	{

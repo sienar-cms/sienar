@@ -31,7 +31,7 @@ public static class SienarBlazorExtensions
 
 		return self
 			.AddTransient(typeof(IService<>), typeof(SienarService<>))
-			.AddTransient(typeof(IStateValidator<>), typeof(ConcurrencyStampValidatorHook<>))
+			.AddTransient(typeof(IStateValidator<>), typeof(ConcurrencyStampValidator<>))
 			.AddTransient(typeof(IBeforeProcess<>), typeof(ConcurrencyStampUpdateHook<>));
 	}
 
