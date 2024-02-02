@@ -52,12 +52,7 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return Guid.Empty;
 		}
 
-		if (!await RunAfterHooks(model, true))
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
-			return Guid.Empty;
-		}
-
+		await RunAfterHooks(model, true);
 		Notifier.Success(StatusMessages.Crud<TEntity>.CreateSuccessful());
 		return model.Id;
 	}
@@ -83,12 +78,7 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return false;
 		}
 
-		if (!await RunAfterHooks(model, false))
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
-			return false;
-		}
-
+		await RunAfterHooks(model, false);
 		Notifier.Success(StatusMessages.Crud<TEntity>.UpdateSuccessful());
 		return true;
 	}
@@ -122,26 +112,22 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		return true;
 	}
 
-	private async Task<bool> RunAfterHooks(TEntity entity, bool isAdding)
+	private async Task RunAfterHooks(TEntity entity, bool isAdding)
 	{
-		var successful = true;
-		try
+		foreach (var afterHook in _afterUpsertHooks)
 		{
-			foreach (var afterHook in _afterUpsertHooks)
+			try
 			{
-				if (await afterHook.Handle(entity, isAdding) != HookStatus.Success) successful = false;
+				await afterHook.Handle(entity, isAdding);
+			}
+			catch (Exception e)
+			{
+				Logger.LogError(
+					e,
+					"One or more after {action} hooks failed to run",
+					isAdding ? "add" : "edit");
 			}
 		}
-		catch (Exception e)
-		{
-			Logger.LogError(
-				e,
-				"One or more after {action} hooks failed to run",
-				isAdding ? "add" : "edit");
-			return false;
-		}
-
-		return successful;
 	}
 }
 
