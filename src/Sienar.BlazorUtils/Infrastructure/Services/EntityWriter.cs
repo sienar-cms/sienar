@@ -44,7 +44,7 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return Guid.Empty;
 		}
 
-		if (!await _stateValidators.Run(model, ActionType.Create, Logger)
+		if (!await _stateValidators.Validate(model, ActionType.Create, Logger)
 		|| !await _beforeHooks.Run(model, ActionType.Create, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
@@ -77,7 +77,7 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 			return false;
 		}
 
-		if (!await _stateValidators.Run(model, ActionType.Update, Logger)
+		if (!await _stateValidators.Validate(model, ActionType.Update, Logger)
 		|| !await _beforeHooks.Run(model, ActionType.Update, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());

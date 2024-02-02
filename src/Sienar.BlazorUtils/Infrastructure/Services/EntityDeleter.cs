@@ -62,7 +62,7 @@ public class EntityDeleter<TEntity, TContext>
 			return false;
 		}
 
-		if (!await _stateValidators.Run(entity, ActionType.Delete, Logger)
+		if (!await _stateValidators.Validate(entity, ActionType.Delete, Logger)
 			|| !await _beforeHooks.Run(entity, ActionType.Delete, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.DeleteFailed());

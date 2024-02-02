@@ -42,7 +42,7 @@ public class Service<TRequest> : IService<TRequest>
 			return false;
 		}
 
-		if (!await _stateValidators.Run(request, ActionType.Action, _logger))
+		if (!await _stateValidators.Validate(request, ActionType.Action, _logger))
 		{
 			_processor.NotifyFailure();
 			return false;

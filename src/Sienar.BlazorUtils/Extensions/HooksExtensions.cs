@@ -56,7 +56,7 @@ public static class HooksExtensions
 		}
 	}
 
-	public static async Task<bool> Run<TEntity>(
+	public static async Task<bool> Validate<TEntity>(
 		this IEnumerable<IStateValidator<TEntity>> stateValidators,
 		TEntity entity,
 		ActionType action,
