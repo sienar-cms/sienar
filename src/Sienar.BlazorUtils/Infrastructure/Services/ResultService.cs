@@ -68,7 +68,10 @@ public class ResultService<TResult> : IResultService<TResult>
 			foreach (var validator in _accessValidators)
 			{
 				anyValidators = true;
-				await validator.Validate(context, result);
+				await validator.Validate(
+					context,
+					ActionType.ResultAction,
+					result);
 			}
 		}
 		catch (Exception e)

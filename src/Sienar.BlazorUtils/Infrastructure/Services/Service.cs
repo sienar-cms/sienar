@@ -78,7 +78,10 @@ public class Service<TRequest> : IService<TRequest>
 			foreach (var validator in _accessValidators)
 			{
 				anyValidators = true;
-				await validator.Validate(context, request);
+				await validator.Validate(
+					context,
+					ActionType.Action,
+					request);
 			}
 		}
 		catch (Exception e)
