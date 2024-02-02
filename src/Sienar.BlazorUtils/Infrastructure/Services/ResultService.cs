@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -30,7 +31,7 @@ public class ResultService<TResult> : IResultService<TResult>
 	{
 		TResult? result = default;
 
-		if (!await ValidateAccess(result))
+		if (!await _accessValidators.Validate(result, ActionType.ResultAction, _logger))
 		{
 			_processor.NotifyNoPermission();
 			return result;
@@ -49,55 +50,10 @@ public class ResultService<TResult> : IResultService<TResult>
 			return result;
 		}
 
-		if (!await RunAfterHooks(result!))
-		{
-			return default;
-		}
+		if (result == null) return default;
+		await _afterHooks.Run(result, ActionType.ResultAction, _logger);
 
 		_processor.NotifySuccess();
 		return result;
-	}
-
-	private async Task<bool> ValidateAccess(TResult? result)
-	{
-		var context = new AccessValidationContext();
-		var anyValidators = false;
-
-		try
-		{
-			foreach (var validator in _accessValidators)
-			{
-				anyValidators = true;
-				await validator.Validate(
-					context,
-					ActionType.ResultAction,
-					result);
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.LogError(e, "One or more access validators failed to run");
-			return false;
-		}
-
-		return !anyValidators || context.CanAccess;
-	}
-
-	private async Task<bool> RunAfterHooks(TResult result)
-	{
-		try
-		{
-			foreach (var hook in _afterHooks)
-			{
-				await hook.Handle(result, ActionType.ResultAction);
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.LogError(e, "One or more after hooks failed to run");
-			return false;
-		}
-
-		return true;
 	}
 }
