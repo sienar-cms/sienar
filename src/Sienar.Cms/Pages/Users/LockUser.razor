@@ -99,14 +99,14 @@
 	/// <inheritdoc />
 	protected override async Task OnInitializedAsync()
 	{
-		_user = await UserReader.Get(UserId);
+		_user = await UserReader.Read(UserId);
 		if (_user is null)
 		{
 			Notifier.Error(ErrorMessages.Account.NotFound);
 			return;
 		}
 
-		_lockoutReasons = (await LockoutReasonReader.Get(Filter.GetAll())).Items;
+		_lockoutReasons = (await LockoutReasonReader.Read(Filter.GetAll())).Items;
 	}
 
 	/// <inheritdoc />

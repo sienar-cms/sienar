@@ -5,7 +5,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Media.Hooks;
 
-public class AssignMediaFieldsHook : IBeforeUpsert<Upload>
+public class AssignMediaFieldsHook : IBeforeProcess<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
 
@@ -15,12 +15,12 @@ public class AssignMediaFieldsHook : IBeforeUpsert<Upload>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(Upload entity, bool isAdding)
+	public Task<HookStatus> Handle(Upload entity, ActionType action)
 	{
 		var success = Task.FromResult(HookStatus.Success);
 
 		// Only assign fields on create
-		if (!isAdding) return success;
+		if (action != ActionType.Create) return success;
 
 		if (!_userAccessor.UserInRole(Roles.Admin))
 		{

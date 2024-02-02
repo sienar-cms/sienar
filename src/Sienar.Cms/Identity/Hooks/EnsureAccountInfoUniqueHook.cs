@@ -30,7 +30,9 @@ public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
 			entity.Id);
 
 	/// <inheritdoc />
-	async Task<HookStatus> IBeforeProcess<RegisterRequest>.Handle(RegisterRequest request)
+	async Task<HookStatus> IBeforeProcess<RegisterRequest>.Handle(
+		RegisterRequest request,
+		ActionType action)
 	{
 		return await UserIsUnique(
 			request.Username,

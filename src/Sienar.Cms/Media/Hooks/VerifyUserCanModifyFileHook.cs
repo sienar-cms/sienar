@@ -4,43 +4,28 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Media.Hooks;
 
-public class VerifyUserCanModifyFileHook
-	: IBeforeUpsert<Upload>, IBeforeDelete<Upload>
+public class VerifyUserCanModifyFileHook : IAccessValidator<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
-	private readonly INotificationService _notifier;
 
-	public VerifyUserCanModifyFileHook(
-		IUserAccessor userAccessor,
-		INotificationService notifier)
+	public VerifyUserCanModifyFileHook(IUserAccessor userAccessor)
 	{
 		_userAccessor = userAccessor;
-		_notifier = notifier;
 	}
 
 	/// <inheritdoc />
-	Task<HookStatus> IBeforeUpsert<Upload>.Handle(Upload entity, bool isAdding)
+	public Task Validate(
+		AccessValidationContext context,
+		ActionType action,
+		Upload? input)
 	{
-		// Only verify user can edit if actually editing
-		return isAdding
-			? Task.FromResult(HookStatus.Success)
-			: CanModifyFile(entity);
-	}
+		if (action is not (ActionType.Update or ActionType.Delete))
+			return Task.CompletedTask;
 
-	/// <inheritdoc />
-	Task<HookStatus> IBeforeDelete<Upload>.Handle(Upload entity)
-		=> CanModifyFile(entity);
+		if (_userAccessor.UserInRole(Roles.Admin)
+			|| _userAccessor.IsSignedIn() && _userAccessor.GetUserId() == input?.UserId)
+			context.Approve();
 
-	private Task<HookStatus> CanModifyFile(Upload entity)
-	{
-		var success = Task.FromResult(HookStatus.Success);
-
-		if (_userAccessor.UserInRole(Roles.Admin)) return success;
-		if (_userAccessor.IsSignedIn()
-			&& _userAccessor.GetUserId() == entity.UserId) return success;
-
-		_notifier.Error("You do not have permission to modify another user's files");
-
-		return Task.FromResult(HookStatus.Unauthorized);
+		return Task.CompletedTask;
 	}
 }

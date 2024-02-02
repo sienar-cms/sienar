@@ -3,7 +3,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class ForceDeletedAccountLogoutHook : IAfterDelete<SienarUser>
+public class ForceDeletedAccountLogoutHook : IAfterProcess<SienarUser>
 {
 	private readonly IForcedLogoutNotifier _forcedLogoutNotifier;
 
@@ -13,6 +13,8 @@ public class ForceDeletedAccountLogoutHook : IAfterDelete<SienarUser>
 	}
 
 	/// <inheritdoc />
-	public Task Handle(SienarUser entity)
-		=> _forcedLogoutNotifier.ForceLogoutUser(entity.Id);
+	public Task Handle(SienarUser entity, ActionType action)
+		=> action == ActionType.Delete
+			? _forcedLogoutNotifier.ForceLogoutUser(entity.Id)
+			: Task.CompletedTask;
 }

@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Media;
 
 namespace Sienar.Media.Hooks;
 
-public class UploadFileHook : IBeforeUpsert<Upload>
+public class UploadFileHook : IBeforeProcess<Upload>
 {
 	private readonly IMediaManager _mediaManager;
 	private readonly ILogger<UploadFileHook> _logger;
@@ -19,10 +18,10 @@ public class UploadFileHook : IBeforeUpsert<Upload>
 	}
 
 	/// <inheritdoc />
-	public async Task<HookStatus> Handle(Upload entity, bool isAdding)
+	public async Task<HookStatus> Handle(Upload entity, ActionType action)
 	{
 		// Only upload on create
-		if (!isAdding) return HookStatus.Success;
+		if (action != ActionType.Create) return HookStatus.Success;
 
 		entity.Path = _mediaManager.GetFilename(
 			".txt", // TODO: find the actual file extension somehow 

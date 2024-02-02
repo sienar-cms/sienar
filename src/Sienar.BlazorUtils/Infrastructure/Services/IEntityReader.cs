@@ -12,7 +12,7 @@ public interface IEntityReader<TEntity>
 	/// <param name="id">The primary key of the entity to retrieve</param>
 	/// <param name="filter">A <see cref="Filter"/> to specify included results</param>
 	/// <returns>the requested entity</returns>
-	Task<TEntity?> Get(
+	Task<TEntity?> Read(
 		Guid id,
 		Filter? filter = null);
 
@@ -21,5 +21,5 @@ public interface IEntityReader<TEntity>
 	/// </summary>
 	/// <param name="filter">A <see cref="Filter"/> to specify included results</param>
 	/// <returns>a list of all entities in the database</returns>
-	Task<PagedQuery<TEntity>> Get(Filter? filter = null);
+	Task<PagedQuery<TEntity>> Read(Filter? filter = null);
 }

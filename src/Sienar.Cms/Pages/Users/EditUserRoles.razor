@@ -45,10 +45,10 @@
 		await SubmitRequest(
 			async () =>
 			{
-				_user = await UserReader.Get(UserId);
+				_user = await UserReader.Read(UserId);
 				if (_user is null) return;
 
-				_roles = (await RoleReader.Get(Filter.GetAll())).Items;
+				_roles = (await RoleReader.Read(Filter.GetAll())).Items;
 				foreach (var role in _roles)
 				{
 					_roleMap[role.Id] = _user.Roles.Contains(role);

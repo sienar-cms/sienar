@@ -4,7 +4,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class UserPasswordUpdateHook : IBeforeUpsert<SienarUser>
+public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
 {
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
 
@@ -14,8 +14,11 @@ public class UserPasswordUpdateHook : IBeforeUpsert<SienarUser>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(SienarUser user, bool isAdding)
+	public Task<HookStatus> Handle(SienarUser user, ActionType action)
 	{
+		var success = Task.FromResult(HookStatus.Success);
+		if (action is not (ActionType.Create or ActionType.Update)) return success;
+
 		if (user.Password != SienarConstants.PasswordPlaceholder)
 		{
 			user.PasswordHash = _passwordHasher.HashPassword(
@@ -23,6 +26,6 @@ public class UserPasswordUpdateHook : IBeforeUpsert<SienarUser>
 				user.Password);
 		}
 
-		return Task.FromResult(HookStatus.Success);
+		return success;
 	}
 }
