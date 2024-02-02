@@ -109,7 +109,6 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 
 		foreach (var entity in buffered)
 		{
-			// TODO: run IAccessValidators and remove entities for which validation fails
 			await _afterHooks.Run(entity, ActionType.ReadAll, Logger);
 		}
 
