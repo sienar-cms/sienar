@@ -82,24 +82,16 @@ public class EntityDeleter<TEntity, TContext>
 			return false;
 		}
 
-		successful = true;
-		try
+		foreach (var afterHook in _afterDeleteHooks)
 		{
-			foreach (var afterHook in _afterDeleteHooks)
+			try
 			{
-				if (await afterHook.Handle(entity) != HookStatus.Success) successful = false;
+				await afterHook.Handle(entity);
 			}
-		}
-		catch (Exception e)
-		{
-			Logger.LogError(e, "One or more after delete hooks failed to run");
-			return false;
-		}
-
-		if (!successful)
-		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.DeleteFailed());
-			return false;
+			catch (Exception e)
+			{
+				Logger.LogError(e, "One or more after delete hooks failed to run");
+			}
 		}
 
 		Notifier.Success(StatusMessages.Crud<TEntity>.DeleteSuccessful());

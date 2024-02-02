@@ -13,9 +13,6 @@ public class ForceDeletedAccountLogoutHook : IAfterDelete<SienarUser>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(SienarUser entity)
-	{
-		_forcedLogoutNotifier.ForceLogoutUser(entity.Id);
-		return Task.FromResult(HookStatus.Success);
-	}
+	public Task Handle(SienarUser entity)
+		=> _forcedLogoutNotifier.ForceLogoutUser(entity.Id);
 }
