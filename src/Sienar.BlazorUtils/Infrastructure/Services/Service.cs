@@ -12,6 +12,7 @@ public class Service<TRequest> : IService<TRequest>
 {
 	private readonly ILogger<Service<TRequest>> _logger;
 	private readonly IEnumerable<IAccessValidator<TRequest>> _accessValidators;
+	private readonly IEnumerable<IStateValidator<TRequest>> _stateValidators;
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest> _processor;
@@ -19,12 +20,14 @@ public class Service<TRequest> : IService<TRequest>
 	public Service(
 		ILogger<Service<TRequest>> logger,
 		IEnumerable<IAccessValidator<TRequest>> accessValidators,
+		IEnumerable<IStateValidator<TRequest>> stateValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor)
 	{
 		_logger = logger;
 		_accessValidators = accessValidators;
+		_stateValidators = stateValidators;
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 		_processor = processor;
@@ -36,6 +39,12 @@ public class Service<TRequest> : IService<TRequest>
 		if (!await _accessValidators.Validate(request, ActionType.Action, _logger))
 		{
 			_processor.NotifyNoPermission();
+			return false;
+		}
+
+		if (!await _stateValidators.Run(request, ActionType.Action, _logger))
+		{
+			_processor.NotifyFailure();
 			return false;
 		}
 

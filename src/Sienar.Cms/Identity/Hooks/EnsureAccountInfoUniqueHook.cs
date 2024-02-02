@@ -11,8 +11,8 @@ using Sienar.Infrastructure.Services;
 namespace Sienar.Identity.Hooks;
 
 public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
-	IEntityStateValidator<SienarUser>,
-	IBeforeProcess<RegisterRequest>
+	IStateValidator<SienarUser>,
+	IStateValidator<RegisterRequest>
 {
 	/// <inheritdoc />
 	public EnsureAccountInfoUniqueHook(
@@ -22,7 +22,7 @@ public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
 		: base(contextAccessor, logger, notifier) {}
 
 	/// <inheritdoc />
-	Task<bool> IEntityStateValidator<SienarUser>.IsValid(SienarUser entity, bool adding)
+	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser entity, ActionType type)
 		=> UserIsUnique(
 			entity.Username,
 			entity.Email,
@@ -30,18 +30,14 @@ public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
 			entity.Id);
 
 	/// <inheritdoc />
-	async Task<HookStatus> IBeforeProcess<RegisterRequest>.Handle(
+	Task<HookStatus> IStateValidator<RegisterRequest>.Validate(
 		RegisterRequest request,
 		ActionType action)
-	{
-		return await UserIsUnique(
+		=> UserIsUnique(
 			request.Username,
-			request.Email)
-			? HookStatus.Success
-			: HookStatus.Conflict;
-	}
+			request.Email);
 
-	private async Task<bool> UserIsUnique(
+	private async Task<HookStatus> UserIsUnique(
 		string username,
 		string email,
 		string? pendingEmail = null,
@@ -80,6 +76,8 @@ public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
 			valid = false;
 		}
 
-		return valid;
+		return valid
+			? HookStatus.Success
+			: HookStatus.Conflict;
 	}
 }

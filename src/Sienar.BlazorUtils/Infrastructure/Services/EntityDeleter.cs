@@ -15,6 +15,7 @@ public class EntityDeleter<TEntity, TContext>
 	where TContext : DbContext
 {
 	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
+	private readonly IEnumerable<IStateValidator<TEntity>> _stateValidators;
 	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
@@ -24,11 +25,13 @@ public class EntityDeleter<TEntity, TContext>
 		ILogger<DbService<TEntity, TContext>> logger,
 		INotificationService notifier,
 		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IStateValidator<TEntity>> stateValidators,
 		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
 		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(contextAccessor, logger, notifier)
 	{
 		_accessValidators = accessValidators;
+		_stateValidators = stateValidators;
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 	}
@@ -59,7 +62,8 @@ public class EntityDeleter<TEntity, TContext>
 			return false;
 		}
 
-		if (!await _beforeHooks.Run(entity, ActionType.Delete, Logger))
+		if (!await _stateValidators.Run(entity, ActionType.Delete, Logger)
+			|| !await _beforeHooks.Run(entity, ActionType.Delete, Logger))
 		{
 			Notifier.Error(StatusMessages.Crud<TEntity>.DeleteFailed());
 			return false;
@@ -92,6 +96,7 @@ public class EntityDeleter<TEntity> : EntityDeleter<TEntity, DbContext>
 		ILogger<DbService<TEntity, DbContext>> logger,
 		INotificationService notifier,
 		IEnumerable<IAccessValidator<TEntity>> accessValidators,
+		IEnumerable<IStateValidator<TEntity>> stateValidators,
 		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
 		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 		: base(
@@ -99,6 +104,7 @@ public class EntityDeleter<TEntity> : EntityDeleter<TEntity, DbContext>
 			logger,
 			notifier,
 			accessValidators,
+			stateValidators,
 			beforeHooks,
 			afterHooks) {}
 }

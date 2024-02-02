@@ -8,13 +8,13 @@ public class ConcurrencyStampUpdateHook<TEntity> : IBeforeProcess<TEntity>
 	where TEntity : EntityBase
 {
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(TEntity entity, ActionType action)
+	public Task Handle(TEntity entity, ActionType action)
 	{
 		if (action is ActionType.Create or ActionType.Update)
 		{
 			entity.ConcurrencyStamp = Guid.NewGuid();
 		}
 
-		return Task.FromResult(HookStatus.Success);
+		return Task.CompletedTask;
 	}
 }

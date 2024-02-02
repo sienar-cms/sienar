@@ -6,7 +6,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class AcceptTosHook : IBeforeProcess<RegisterRequest>
+public class AcceptTosHook : IStateValidator<RegisterRequest>
 {
 	private readonly INotificationService _notifier;
 
@@ -16,7 +16,7 @@ public class AcceptTosHook : IBeforeProcess<RegisterRequest>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(RegisterRequest request, ActionType action)
+	public Task<HookStatus> Validate(RegisterRequest request, ActionType action)
 	{
 		if (!request.AcceptTos)
 		{
