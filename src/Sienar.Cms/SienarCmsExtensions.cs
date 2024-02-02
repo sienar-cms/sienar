@@ -32,6 +32,7 @@ public static class SienarCmsExtensions
 		// CRUD
 		self
 			// .AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
+			.AddTransient<IAccessValidator<SienarUser>, UserIsAdminAccessValidator<SienarUser>>()
 			.AddTransient<IBeforeProcess<SienarUser>, UserPasswordUpdateHook>()
 			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
 			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>()
