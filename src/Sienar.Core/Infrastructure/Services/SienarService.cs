@@ -15,6 +15,7 @@ public class SienarService<TRequest> : Service<TRequest>
 	public SienarService(
 		ILogger<Service<TRequest>> logger,
 		IEnumerable<IAccessValidator<TRequest>> accessValidators,
+		IEnumerable<IStateValidator<TRequest>> stateValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor,
@@ -22,6 +23,7 @@ public class SienarService<TRequest> : Service<TRequest>
 		: base(
 			logger,
 			accessValidators,
+			stateValidators,
 			beforeHooks,
 			afterHooks, 
 			processor)

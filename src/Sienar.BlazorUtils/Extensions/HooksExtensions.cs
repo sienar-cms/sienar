@@ -15,13 +15,11 @@ public static class HooksExtensions
 		ActionType action,
 		ILogger logger)
 	{
-		var wasSuccessful = true;
-
 		try
 		{
 			foreach (var beforeHook in beforeHooks)
 			{
-				if (await beforeHook.Handle(entity, action) != HookStatus.Success) wasSuccessful = false;
+				await beforeHook.Handle(entity, action);
 			}
 		}
 		catch (Exception e)
@@ -33,7 +31,7 @@ public static class HooksExtensions
 			return false;
 		}
 
-		return wasSuccessful;
+		return true;
 	}
 
 	public static async Task Run<TEntity>(
@@ -58,10 +56,10 @@ public static class HooksExtensions
 		}
 	}
 
-	public static async Task<bool> Run<TEntity>(
-		this IEnumerable<IEntityStateValidator<TEntity>> stateValidators,
+	public static async Task<bool> Validate<TEntity>(
+		this IEnumerable<IStateValidator<TEntity>> stateValidators,
 		TEntity entity,
-		bool isAdding,
+		ActionType action,
 		ILogger logger)
 	{
 		try
@@ -69,7 +67,7 @@ public static class HooksExtensions
 			var wasSuccessful = true;
 			foreach (var validator in stateValidators)
 			{
-				if (!await validator.IsValid(entity, isAdding)) wasSuccessful = false;
+				if (await validator.Validate(entity, action) != HookStatus.Success) wasSuccessful = false;
 			}
 
 			return wasSuccessful;
@@ -83,7 +81,7 @@ public static class HooksExtensions
 
 	public static async Task<bool> Validate<TEntity>(
 		this IEnumerable<IAccessValidator<TEntity>> accessValidators,
-		TEntity entity,
+		TEntity? entity,
 		ActionType action,
 		ILogger logger)
 	{

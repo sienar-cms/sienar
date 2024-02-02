@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -11,6 +12,7 @@ public class Service<TRequest> : IService<TRequest>
 {
 	private readonly ILogger<Service<TRequest>> _logger;
 	private readonly IEnumerable<IAccessValidator<TRequest>> _accessValidators;
+	private readonly IEnumerable<IStateValidator<TRequest>> _stateValidators;
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest> _processor;
@@ -18,12 +20,14 @@ public class Service<TRequest> : IService<TRequest>
 	public Service(
 		ILogger<Service<TRequest>> logger,
 		IEnumerable<IAccessValidator<TRequest>> accessValidators,
+		IEnumerable<IStateValidator<TRequest>> stateValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest> processor)
 	{
 		_logger = logger;
 		_accessValidators = accessValidators;
+		_stateValidators = stateValidators;
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 		_processor = processor;
@@ -32,13 +36,19 @@ public class Service<TRequest> : IService<TRequest>
 	/// <inheritdoc />
 	public virtual async Task<bool> Execute(TRequest request)
 	{
-		if (!await ValidateAccess(request))
+		if (!await _accessValidators.Validate(request, ActionType.Action, _logger))
 		{
 			_processor.NotifyNoPermission();
 			return false;
 		}
 
-		if (!await RunBeforeHooks(request))
+		if (!await _stateValidators.Validate(request, ActionType.Action, _logger))
+		{
+			_processor.NotifyFailure();
+			return false;
+		}
+
+		if (!await _beforeHooks.Run(request, ActionType.Action, _logger))
 		{
 			_processor.NotifyFailure();
 			return false;
@@ -62,70 +72,9 @@ public class Service<TRequest> : IService<TRequest>
 			return false;
 		}
 
-		await RunAfterHooks(request);
+		await _afterHooks.Run(request, ActionType.Action, _logger);
 
 		_processor.NotifySuccess();
 		return true;
-	}
-
-	private async Task<bool> ValidateAccess(TRequest request)
-	{
-		var context = new AccessValidationContext();
-		var anyValidators = false;
-
-		try
-		{
-			foreach (var validator in _accessValidators)
-			{
-				anyValidators = true;
-				await validator.Validate(
-					context,
-					ActionType.Action,
-					request);
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.LogError(e, "One or more access validators failed to run");
-			return false;
-		}
-
-		return !anyValidators || context.CanAccess;
-	}
-
-	private async Task<bool> RunBeforeHooks(TRequest model)
-	{
-		var successful = true;
-
-		try
-		{
-			foreach (var hook in _beforeHooks)
-			{
-				if (await hook.Handle(model, ActionType.Action) != HookStatus.Success)
-					successful = false;
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.LogError(e, "One or more before hooks failed to run");
-			successful = false;
-		}
-
-		return successful;
-	}
-
-	private async Task RunAfterHooks(TRequest model)
-	{
-		try
-		{
-			foreach (var hook in _afterHooks)
-			{
-				await hook.Handle(model, ActionType.Action);
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.LogError(e, "One or more after hooks failed to run");
-		}
 	}
 }

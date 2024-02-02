@@ -34,7 +34,7 @@ public static class SienarCmsExtensions
 			// .AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
 			.AddTransient<IAccessValidator<SienarUser>, UserIsAdminAccessValidator<SienarUser>>()
 			.AddTransient<IBeforeProcess<SienarUser>, UserPasswordUpdateHook>()
-			.AddTransient<IEntityStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
+			.AddTransient<IStateValidator<SienarUser>, EnsureAccountInfoUniqueHook>()
 			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IAfterProcess<SienarUser>, ForceDeletedAccountLogoutHook>();
 
@@ -60,9 +60,9 @@ public static class SienarCmsExtensions
 
 		// Registration
 		self
-			.AddTransient<IBeforeProcess<RegisterRequest>, RegistrationOpenHook>()
-			.AddTransient<IBeforeProcess<RegisterRequest>, AcceptTosHook>()
-			.AddTransient<IBeforeProcess<RegisterRequest>, EnsureAccountInfoUniqueHook>()
+			.AddTransient<IStateValidator<RegisterRequest>, RegistrationOpenHook>()
+			.AddTransient<IStateValidator<RegisterRequest>, AcceptTosHook>()
+			.AddTransient<IStateValidator<RegisterRequest>, EnsureAccountInfoUniqueHook>()
 			.AddTransient<IProcessor<RegisterRequest>, RegisterProcessor>()
 
 			// Email

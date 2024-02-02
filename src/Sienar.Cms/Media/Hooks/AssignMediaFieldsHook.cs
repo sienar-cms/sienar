@@ -15,12 +15,10 @@ public class AssignMediaFieldsHook : IBeforeProcess<Upload>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(Upload entity, ActionType action)
+	public Task Handle(Upload entity, ActionType action)
 	{
-		var success = Task.FromResult(HookStatus.Success);
-
 		// Only assign fields on create
-		if (action != ActionType.Create) return success;
+		if (action != ActionType.Create) return Task.CompletedTask;
 
 		if (!_userAccessor.UserInRole(Roles.Admin))
 		{
@@ -29,6 +27,6 @@ public class AssignMediaFieldsHook : IBeforeProcess<Upload>
 
 		entity.UploadedAt = DateTime.Now;
 
-		return success;
+		return Task.CompletedTask;
 	}
 }
