@@ -44,6 +44,7 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 		TEntity? entity;
 		try
 		{
+			filter = _filterProcessor.ModifyFilter(filter, ActionType.Read);
 			entity = filter == null
 				? await EntitySet.FindAsync(id)
 				: await _filterProcessor
@@ -83,6 +84,7 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 		{
 			IQueryable<TEntity> entries;
 			IQueryable<TEntity> countEntries;
+			filter = _filterProcessor.ModifyFilter(filter, ActionType.ReadAll);
 
 			if (filter is not null)
 			{
