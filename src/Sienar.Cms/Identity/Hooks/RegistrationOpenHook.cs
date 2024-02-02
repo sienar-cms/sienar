@@ -8,7 +8,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class RegistrationOpenHook : IBeforeProcess<RegisterRequest>
+public class RegistrationOpenHook : IStateValidator<RegisterRequest>
 {
 	private readonly SienarOptions _sienarOptions;
 	private readonly INotificationService _notifier;
@@ -22,7 +22,7 @@ public class RegistrationOpenHook : IBeforeProcess<RegisterRequest>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(RegisterRequest request, ActionType action)
+	public Task<HookStatus> Validate(RegisterRequest request, ActionType action)
 	{
 		if (!_sienarOptions.RegistrationOpen)
 		{

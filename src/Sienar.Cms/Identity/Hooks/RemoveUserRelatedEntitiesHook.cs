@@ -33,39 +33,28 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 	}
 
 	/// <inheritdoc />
-	async Task<HookStatus> IBeforeProcess<SienarUser>.Handle(
+	Task IBeforeProcess<SienarUser>.Handle(
 		SienarUser entity,
 		ActionType action)
 	{
-		if (action != ActionType.Delete) return HookStatus.Success;
-		return await HandleCore(entity);
+		return action == ActionType.Delete
+			? HandleCore(entity)
+			: Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
-	async Task<HookStatus> IBeforeProcess<DeleteAccountRequest>.Handle(
+	async Task IBeforeProcess<DeleteAccountRequest>.Handle(
 		DeleteAccountRequest request,
 		ActionType action)
 	{
-		if (action != ActionType.Action) return HookStatus.Success;
+		if (action != ActionType.Action) return;
 
-		var userId = _userAccessor.GetUserId();
-		if (!userId.HasValue)
-		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return HookStatus.Unauthorized;
-		}
-
-		var user = await EntitySet.FindAsync(userId.Value);
-		if (user is null)
-		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return HookStatus.Unauthorized;
-		}
-
-		return await HandleCore(user);
+		var userId = _userAccessor.GetUserId()!;
+		var user = (await EntitySet.FindAsync(userId.Value))!;
+		await HandleCore(user);
 	}
 
-	private async Task<HookStatus> HandleCore(SienarUser entity)
+	private async Task HandleCore(SienarUser entity)
 	{
 		await Context
 			.Entry(entity)
@@ -101,7 +90,5 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 
 		EntitySet.Update(entity);
 		await Context.SaveChangesAsync();
-
-		return HookStatus.Success;
 	}
 }

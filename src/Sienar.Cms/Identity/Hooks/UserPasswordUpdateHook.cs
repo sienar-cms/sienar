@@ -14,10 +14,9 @@ public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Handle(SienarUser user, ActionType action)
+	public Task Handle(SienarUser user, ActionType action)
 	{
-		var success = Task.FromResult(HookStatus.Success);
-		if (action is not (ActionType.Create or ActionType.Update)) return success;
+		if (action is not (ActionType.Create or ActionType.Update)) return Task.CompletedTask;
 
 		if (user.Password != SienarConstants.PasswordPlaceholder)
 		{
@@ -26,6 +25,6 @@ public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
 				user.Password);
 		}
 
-		return success;
+		return Task.CompletedTask;
 	}
 }
