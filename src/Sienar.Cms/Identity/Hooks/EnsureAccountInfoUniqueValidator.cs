@@ -10,12 +10,12 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Hooks;
 
-public class EnsureAccountInfoUniqueHook : DbService<SienarUser>,
+public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 	IStateValidator<SienarUser>,
 	IStateValidator<RegisterRequest>
 {
 	/// <inheritdoc />
-	public EnsureAccountInfoUniqueHook(
+	public EnsureAccountInfoUniqueValidator(
 		IDbContextAccessor<DbContext> contextAccessor,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier)

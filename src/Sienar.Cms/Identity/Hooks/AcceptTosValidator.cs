@@ -6,11 +6,11 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class AcceptTosHook : IStateValidator<RegisterRequest>
+public class AcceptTosValidator : IStateValidator<RegisterRequest>
 {
 	private readonly INotificationService _notifier;
 
-	public AcceptTosHook(INotificationService notifier)
+	public AcceptTosValidator(INotificationService notifier)
 	{
 		_notifier = notifier;
 	}
