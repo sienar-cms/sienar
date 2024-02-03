@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Sienar.BlazorServerUtils\Sienar.BlazorServerUtils.csproj" />
 	  <ProjectReference Include="..\Sienar.BlazorUtils\Sienar.BlazorUtils.csproj" />
 	  <ProjectReference Include="..\Sienar.SqliteUtils\Sienar.SqliteUtils.csproj" />
 	</ItemGroup>

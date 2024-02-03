@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
@@ -47,7 +48,9 @@ public class SienarWebAppBuilder
 
 		builder.Builder.Services.Add(baseContextDefinition);
 
-		builder.Builder.Services.AddSienarBlazorUtilities();
+		builder.Builder.Services
+			.AddSienarBlazorUtilities()
+			.AddSienarBlazorServerUtilities();
 
 		return builder;
 	}
@@ -67,7 +70,7 @@ public class SienarWebAppBuilder
 			Theme = Theme,
 			IsDarkMode = IsDarkMode
 		};
-		Builder.Services.AddScoped(sp => themeState);
+		Builder.Services.AddScoped(_ => themeState);
 
 		var app = Builder.Build();
 

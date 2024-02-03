@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;

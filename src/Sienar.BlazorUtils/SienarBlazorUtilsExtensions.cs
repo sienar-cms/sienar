@@ -3,8 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor;
@@ -12,7 +10,6 @@ using Sienar.Infrastructure;
 using Sienar.Infrastructure.Entities;
 using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
-using Sienar.Infrastructure.Services;
 using Sienar.UI;
 
 namespace Sienar;
@@ -33,17 +30,8 @@ public static class SienarBlazorUtilsExtensions
 			SienarBlazorUtilsServiceKeys.MenuProvider);
 		self.AddKeyedScoped<IMenuGenerator, DashboardMenuGenerator>(
 			SienarBlazorUtilsServiceKeys.DashboardProvider);
-		self.TryAddScoped<IStyleProvider, StyleProvider>();
-		self.TryAddScoped<IScriptProvider, ScriptProvider>();
-		self.TryAddScoped<IPluginProvider, PluginProvider>();
 		self.TryAddScoped<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
-		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient<INotificationService, NotificationService>();
-		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
-		self.TryAddTransient(typeof(IEntityWriter<>), typeof(EntityWriter<>));
-		self.TryAddTransient(typeof(IEntityDeleter<>), typeof(EntityDeleter<>));
-		self.TryAddTransient(typeof(IService<>), typeof(Service<>));
-		self.TryAddTransient(typeof(IResultService<>), typeof(ResultService<>));
 
 		return self;
 	}
@@ -83,14 +71,6 @@ public static class SienarBlazorUtilsExtensions
 
 #endregion
 
-#region Middleware
-
-	public static void UsePluginMiddleware<TPlugin>(this IApplicationBuilder self)
-		where TPlugin : ISienarPlugin
-		=> self.UseMiddleware<SienarPluginMiddleware<TPlugin>>();
-
-#endregion
-
 #region Entity
 
 	public static string GetEntityName<TEntity>()
@@ -122,13 +102,6 @@ public static class SienarBlazorUtilsExtensions
 
 #endregion
 
-#region AuthenticationState
-
-	public static bool IsAuthenticated(this AuthenticationState authState)
-		=> authState.User.Identity?.IsAuthenticated ?? false;
-
-#endregion
-
 #region Enums
 
 	public static string GetDescription(this Enum self)
@@ -139,20 +112,6 @@ public static class SienarBlazorUtilsExtensions
 			.GetField(stringified)
 			?.GetCustomAttribute<DescriptionAttribute>();
 		return a?.Description ?? stringified;
-	}
-
-	/// <summary>
-	/// Gets the HTML-expected value of <see cref="ReferrerPolicy"/> and <see cref="CrossOriginMode"/> members
-	/// </summary>
-	/// <param name="self">the referrer policy or cross-origin mode to get a value for</param>
-	/// <returns>the value if the enum is not null and the value is defined, else null</returns>
-	public static string? GetHtmlValue(this Enum? self)
-	{
-		return self?
-			.GetType()
-			.GetField(self.ToString())?
-			.GetCustomAttribute<HtmlValueAttribute>()
-			?.Value;
 	}
 
 #endregion
