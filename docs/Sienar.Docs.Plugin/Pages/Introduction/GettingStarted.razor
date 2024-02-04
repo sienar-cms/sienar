@@ -1,0 +1,62 @@
+﻿@attribute [Route(Urls.Introduction.GettingStarted)]
+
+<DocTitle>Getting started</DocTitle>
+
+<H1>Getting started</H1>
+
+<P>
+	There aren't currently any templates available for Sienar. To get started developing a Sienar application, you need to create a new blank web application and include the Sienar NuGet packages manually.
+</P>
+
+<P>
+	There are three main NuGet packages you will want to install, depending on what you want to use Sienar for:
+</P>
+
+<ul>
+	<li>
+		If you want to develop a <b>desktop application</b>, install <b>Sienar.DesktopUtils</b>
+	</li>
+	<li>
+		If you want to develop a web application while providing 100% of your own UI, install <b>Sienar.Blazor</b>
+	</li>
+	<li>
+		If you want to develop a web application with an existing admin dashboard, install <b>Sienar.Cms</b>
+	</li>
+</ul>
+
+<H2>1. Create a blank web application</H2>
+
+<P>
+	Open a command prompt and navigate to the directory where you want to create your project, then run:
+</P>
+
+<pre><code>dotnet new web -o &lt;project-name&gt;</code></pre>
+
+<H2>2. Install Sienar</H2>
+
+<P>
+	<b>cd</b> into your new <b>&lt;project-name&gt;</b> directory and install the appropriate Sienar nuget package (see above)
+</P>
+
+<H2>3. Update <pre>Program.cs</pre></H2>
+
+<P>
+	Open <b>&lt;project-name&gt;/Program.cs</b> in your favorite code editor and completely delete its contents, then add the following:
+</P>
+
+<pre><code>
+await SienarServerAppBuilder
+	.Create&lt;AppDbContext&gt;(
+		args,
+		o => o.UseSienarDb(),
+		ServiceLifetime.Transient)
+	.AddPlugin(new SienarBlazorPlugin())
+	.AddPlugin(new SienarCmsPlugin())
+	.AddPlugin(new MailKitPlugin())
+	.Build()
+	.RunAsync();
+</code></pre>
+
+<P>
+	Import any missing namespaces, and you're ready to go!
+</P>
