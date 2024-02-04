@@ -7,6 +7,6 @@ namespace Sienar.Extensions;
 public static class ApplicationBuilderExtensions
 {
 	public static void UsePluginMiddleware<TPlugin>(this IApplicationBuilder self)
-		where TPlugin : ISienarPlugin
+		where TPlugin : ISienarServerPlugin
 		=> self.UseMiddleware<SienarPluginMiddleware<TPlugin>>();
 }

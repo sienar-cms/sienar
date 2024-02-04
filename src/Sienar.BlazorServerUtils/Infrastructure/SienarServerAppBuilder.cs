@@ -11,20 +11,20 @@ using Sienar.State;
 
 namespace Sienar.Infrastructure;
 
-public class SienarWebAppBuilder
+public class SienarServerAppBuilder
 {
 	public readonly WebApplicationBuilder Builder;
-	public readonly List<ISienarPlugin> Plugins = [];
+	public readonly List<ISienarServerPlugin> Plugins = [];
 	public readonly List<Action<IApplicationBuilder>> MiddlewareSetupFuncs = [];
 	public MudTheme? Theme;
 	public bool IsDarkMode;
 
-	protected SienarWebAppBuilder(WebApplicationBuilder builder)
+	protected SienarServerAppBuilder(WebApplicationBuilder builder)
 	{
 		Builder = builder;
 	}
 
-	public static SienarWebAppBuilder Create<TContext>(
+	public static SienarServerAppBuilder Create<TContext>(
 		string[] args,
 		Action<DbContextOptionsBuilder>? dbContextOptionsConfigurer = null,
 		ServiceLifetime dbContextLifetime = ServiceLifetime.Scoped,
@@ -48,17 +48,18 @@ public class SienarWebAppBuilder
 
 		builder.Builder.Services.Add(baseContextDefinition);
 
-		builder.Builder.Services
-			.AddSienarBlazorUtilities()
-			.AddSienarBlazorServerUtilities();
-
 		return builder;
 	}
 
-	public static SienarWebAppBuilder Create(string[] args)
+	public static SienarServerAppBuilder Create(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
-		return new SienarWebAppBuilder(builder);
+
+		builder.Services
+			.AddSienarBlazorUtilities()
+			.AddSienarBlazorServerUtilities();
+
+		return new SienarServerAppBuilder(builder);
 	}
 
 	public virtual WebApplication Build()

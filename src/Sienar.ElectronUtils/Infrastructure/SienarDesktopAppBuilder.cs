@@ -7,11 +7,11 @@ using Sienar.Exceptions;
 
 namespace Sienar.Infrastructure;
 
-public class SienarDesktopAppBuilder : SienarWebAppBuilder
+public class SienarDesktopAppBuilder : SienarServerAppBuilder
 {
 	public Action? ElectronConfigurer;
 
-	protected SienarDesktopAppBuilder(SienarWebAppBuilder builder)
+	protected SienarDesktopAppBuilder(SienarServerAppBuilder builder)
 		: base(builder.Builder) {}
 
 	public new static SienarDesktopAppBuilder Create<TContext>(
@@ -21,7 +21,7 @@ public class SienarDesktopAppBuilder : SienarWebAppBuilder
 		ServiceLifetime dbContextOptionsLifetime = ServiceLifetime.Scoped)
 		where TContext : DbContext
 	{
-		var builder = SienarWebAppBuilder.Create<TContext>(
+		var builder = SienarServerAppBuilder.Create<TContext>(
 			args,
 			dbContextOptionsConfigurer,
 			dbContextLifetime,
@@ -33,7 +33,7 @@ public class SienarDesktopAppBuilder : SienarWebAppBuilder
 
 	public new static SienarDesktopAppBuilder Create(string[] args)
 	{
-		var builder = SienarWebAppBuilder.Create(args);
+		var builder = SienarServerAppBuilder.Create(args);
 		builder.Builder.WebHost.UseElectron(args);
 		return new SienarDesktopAppBuilder(builder);
 	}

@@ -8,7 +8,7 @@ using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Email;
 
-public class MailKitPlugin : ISienarPlugin
+public class MailKitPlugin : ISienarServerPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

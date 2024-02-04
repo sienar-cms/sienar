@@ -8,7 +8,7 @@ using Sienar.UI;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarCmsPlugin : ISienarPlugin
+public class SienarCmsPlugin : ISienarServerPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

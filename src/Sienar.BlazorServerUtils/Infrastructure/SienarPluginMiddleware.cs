@@ -8,7 +8,7 @@ using Sienar.Infrastructure.Plugins;
 namespace Sienar.Infrastructure;
 
 public class SienarPluginMiddleware<TPlugin>
-	where TPlugin : ISienarPlugin
+	where TPlugin : ISienarServerPlugin
 {
 	private readonly RequestDelegate _next;
 	private readonly TPlugin _plugin;

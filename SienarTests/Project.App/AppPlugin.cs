@@ -8,7 +8,7 @@ using Sienar.Infrastructure.Plugins;
 
 namespace Project.App;
 
-public class AppPlugin : ISienarPlugin
+public class AppPlugin : ISienarServerPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

@@ -8,7 +8,7 @@ using Sienar.UI.Views;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarBlazorPlugin : ISienarPlugin
+public class SienarBlazorPlugin : ISienarServerPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

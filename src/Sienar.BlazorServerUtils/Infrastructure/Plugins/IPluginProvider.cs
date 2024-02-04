@@ -9,11 +9,11 @@ public interface IPluginProvider
 	/// </summary>
 	/// <param name="plugin">The plugin to add</param>
 	/// <returns>this</returns>
-	IPluginProvider Add(ISienarPlugin plugin);
+	IPluginProvider Add(ISienarServerPlugin plugin);
 
 	/// <summary>
 	/// Gets all plugins in the plugin provider
 	/// </summary>
 	/// <returns>the list of plugins</returns>
-	List<ISienarPlugin> GetPlugins();
+	List<ISienarServerPlugin> GetPlugins();
 }

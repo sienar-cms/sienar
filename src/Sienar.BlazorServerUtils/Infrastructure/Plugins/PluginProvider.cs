@@ -4,15 +4,15 @@ namespace Sienar.Infrastructure.Plugins;
 
 public class PluginProvider : IPluginProvider
 {
-	private readonly List<ISienarPlugin> _plugins = [];
+	private readonly List<ISienarServerPlugin> _plugins = [];
 
 	/// <inheritdoc />
-	public IPluginProvider Add(ISienarPlugin plugin)
+	public IPluginProvider Add(ISienarServerPlugin plugin)
 	{
 		_plugins.Add(plugin);
 		return this;
 	}
 
 	/// <inheritdoc />
-	public List<ISienarPlugin> GetPlugins() => _plugins;
+	public List<ISienarServerPlugin> GetPlugins() => _plugins;
 }

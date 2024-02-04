@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0"/>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all"/>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Sienar.BlazorUtils\Sienar.BlazorUtils.csproj" />
+	  <ProjectReference Include="..\..\src\Sienar.BlazorClientUtils\Sienar.BlazorClientUtils.csproj" />
+	  <ProjectReference Include="..\Sienar.Docs.Plugin\Sienar.Docs.Plugin.csproj" />
+	</ItemGroup>
+
+</Project>
