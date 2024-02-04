@@ -31,6 +31,7 @@ public static class SienarBlazorUtilsExtensions
 		self.AddKeyedScoped<IMenuGenerator, DashboardMenuGenerator>(
 			SienarBlazorUtilsServiceKeys.DashboardProvider);
 		self.TryAddScoped<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
+		self.TryAddScoped<IComponentProvider, ComponentProvider>();
 		self.TryAddTransient<INotificationService, NotificationService>();
 
 		return self;

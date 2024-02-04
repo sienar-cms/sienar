@@ -13,13 +13,4 @@
 		<PackageReference Include="MudBlazor" Version="6.11.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="UI\Helpers\FullWidthLoadingSpinner.razor" />
-	  <UpToDateCheckInput Remove="Layouts\SienarLayoutBase.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="Layouts\SienarLayoutBase.razor" />
-	</ItemGroup>
-
 </Project>

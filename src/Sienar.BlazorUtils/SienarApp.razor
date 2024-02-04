@@ -1,0 +1,52 @@
+﻿@using Sienar.Infrastructure.Plugins
+@using System.Reflection
+
+@foreach (var tlc in ComponentProvider.TopLevelComponents)
+{
+	<DynamicComponent Type="tlc"/>
+}
+
+<CascadingAuthenticationState>
+	<Router
+		AppAssembly="@_rootAssembly"
+		AdditionalAssemblies="@AssemblyProvider.GetAssemblies()">
+		<Found Context="routeData">
+			<AuthorizeRouteView
+				RouteData="@routeData"
+				DefaultLayout="@ComponentProvider.DefaultLayout">
+				<Authorizing>
+					<DynamicComponent Type="@ComponentProvider.AuthorizingView"/>
+				</Authorizing>
+				<NotAuthorized>
+					<DynamicComponent Type="@ComponentProvider.NotAuthorizedView"/>
+				</NotAuthorized>
+			</AuthorizeRouteView>
+		</Found>
+		<NotFound>
+			<PageTitle>Not found</PageTitle>
+			<LayoutView Layout="@ComponentProvider.DefaultLayout">
+				<p role="alert">Sorry, there's nothing at this address.</p>
+			</LayoutView>
+		</NotFound>
+	</Router>
+</CascadingAuthenticationState>
+
+@code {
+
+	private Assembly? _rootAssembly;
+
+	[Inject]
+	protected IRoutableAssemblyProvider AssemblyProvider { get; set; } = default!;
+
+	[Inject]
+	protected IComponentProvider ComponentProvider { get; set; } = default!;
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		var routableAssemblies = new List<Assembly>(AssemblyProvider.GetAssemblies());
+		_rootAssembly = routableAssemblies[0];
+		routableAssemblies.RemoveAt(0);
+	}
+
+}

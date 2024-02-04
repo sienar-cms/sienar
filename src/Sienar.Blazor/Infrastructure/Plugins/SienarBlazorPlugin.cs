@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Sienar.Infrastructure.Menus;
+using Sienar.UI;
+using Sienar.UI.Views;
 
 namespace Sienar.Infrastructure.Plugins;
 
@@ -80,5 +82,11 @@ public class SienarBlazorPlugin : ISienarPlugin
 	}
 
 	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider) {}
+	public void SetupComponents(IComponentProvider componentProvider)
+	{
+		componentProvider.AppComponent = typeof(SienarBlazorServerApp);
+		componentProvider.TopLevelComponents.Add(typeof(AuthStateRefresher));
+		componentProvider.AuthorizingView = typeof(Authorizing);
+		componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);
+	}
 }

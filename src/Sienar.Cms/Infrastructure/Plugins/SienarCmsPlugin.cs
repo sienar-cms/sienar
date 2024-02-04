@@ -81,6 +81,7 @@ public class SienarCmsPlugin : ISienarPlugin
 
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
+		componentProvider.DefaultLayout = typeof(DashboardLayout);
 		componentProvider.SidebarHeader = typeof(DrawerHeader);
 	}
 }
