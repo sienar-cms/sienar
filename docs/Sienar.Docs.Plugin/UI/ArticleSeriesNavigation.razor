@@ -27,6 +27,7 @@
 	private Article? _next;
 	private Article? _previous;
 	private bool _disposed;
+	private static bool IsInitialPageLoad = true;
 
 	[Inject]
 	private ArticleSeriesStateProvider State { get; set; } = default!;
@@ -35,6 +36,17 @@
 	protected override void OnInitialized()
 	{
 		State.OnChange += UpdateLinks;
+	}
+
+	/// <inheritdoc />
+	protected override void OnAfterRender(bool firstRender)
+	{
+		// I'm not sure if it's a race condition or just poor timing, but this component never has the correct value at first render on an initial page load. Forcing a second render fixes this
+		if (IsInitialPageLoad)
+		{
+			IsInitialPageLoad = false;
+			UpdateLinks();
+		}
 	}
 
 	private void UpdateLinks()
