@@ -1,0 +1,42 @@
+﻿@using Sienar.Infrastructure.Articles
+@inject IArticleSeriesProvider ArticleProvider
+
+<div class="d-flex flex-row justify-space-between">
+	<div>
+		@if (_previous is not null)
+		{
+			<ArticleSeriesNavigationButton
+				Descriptor="Previous"
+				Article="_previous"/>
+		}
+	</div>
+	<div>
+		@if (_next is not null)
+		{
+			<ArticleSeriesNavigationButton
+				Descriptor="Next"
+				Article="_next"/>
+		}
+	</div>
+</div>
+
+@code {
+
+	private Article? _next;
+	private Article? _previous;
+
+	[Parameter]
+    public required string Current { get; set; }
+
+	[Parameter]
+    public required string Series { get; set; }
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		var series = ArticleProvider.Access(Series);
+		_next = series.GetNextArticle(Current);
+		_previous = series.GetPreviousArticle(Current);
+	}
+
+}

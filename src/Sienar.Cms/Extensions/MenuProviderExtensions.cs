@@ -37,7 +37,7 @@ public static class MenuProviderExtensions
 		};
 
 		self
-			.AccessMenu(DashboardMenuNames.MainMenu)
+			.Access(DashboardMenuNames.MainMenu)
 			.AddMenuLink(
 				new()
 				{
@@ -78,7 +78,7 @@ public static class MenuProviderExtensions
 	public static IMenuProvider CreateInfoMenu(this IMenuProvider self)
 	{
 		self
-			.AccessMenu(DashboardMenuNames.InfoMenu)
+			.Access(DashboardMenuNames.InfoMenu)
 			.AddMenuLink(
 				new()
 				{

@@ -1,0 +1,16 @@
+﻿@using Sienar.Infrastructure.Articles
+<PrimaryButton
+	Variant="Variant.Text"
+	Href="@Article.Url">
+	@Descriptor: @Article.Name
+</PrimaryButton>
+
+@code {
+
+	[Parameter]
+	public required string Descriptor { get; set; }
+
+	[Parameter]
+    public required Article Article { get; set; }
+
+}
