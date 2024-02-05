@@ -68,6 +68,7 @@
 		if (!disposing || _disposed) return;
 
 		State.OnChange -= UpdateLinks;
+		_disposed = true;
 	}
 
 }
