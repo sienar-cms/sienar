@@ -6,4 +6,9 @@ public static class Constants
 	{
 		public const string Docs = nameof(Docs);
 	}
+
+	public static class SeriesNames
+	{
+		public const string Introduction = "Introduction";
+	}
 }

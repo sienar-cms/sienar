@@ -75,7 +75,7 @@ public class SienarDocsPlugin : ISienarClientPlugin
 	{
 		app.Services
 			.GetRequiredService<IArticleSeriesProvider>()
-			.AddIntroductionSeries();
+			.AddSeries();
 	}
 
 	/// <inheritdoc />

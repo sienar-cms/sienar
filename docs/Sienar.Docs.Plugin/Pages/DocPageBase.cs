@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Articles;
 using Sienar.State;
 
@@ -8,11 +7,10 @@ namespace Sienar.Pages;
 
 public class DocPageBase : ComponentBase
 {
-	[Inject]
-	private ArticleSeriesStateProvider ArticleState { get; set; } = default!;
+	protected string Title = string.Empty;
 
 	[Inject]
-	private ILogger<DocPageBase> Logger { get; set; } = default!;
+	private ArticleSeriesStateProvider ArticleState { get; set; } = default!;
 
 	/// <inheritdoc />
 	protected override void OnInitialized()
@@ -26,5 +24,9 @@ public class DocPageBase : ComponentBase
 			.GetCustomAttribute<SeriesAttribute>()?
 			.Series;
 		ArticleState.Unfreeze();
+
+		Title = type
+			.GetCustomAttribute<TitleAttribute>()!
+			.Title;
 	}
 }

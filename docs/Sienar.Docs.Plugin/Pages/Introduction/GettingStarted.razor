@@ -1,8 +1,11 @@
-﻿@attribute [Route(Urls.Introduction.GettingStarted)]
+﻿@inherits DocPageBase
+@attribute [Route(Urls.Introduction.GettingStarted)]
+@attribute [Series(Constants.SeriesNames.Introduction)]
+@attribute [Title("Getting started")]
 
-<DocTitle>Getting started</DocTitle>
+<DocTitle>@Title</DocTitle>
 
-<H1>Getting started</H1>
+<H1>@Title</H1>
 
 <P>
 	There aren't currently any templates available for Sienar. To get started developing a Sienar application, you need to create a new blank web application and include the Sienar NuGet packages manually.

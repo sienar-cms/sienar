@@ -8,7 +8,7 @@ public static class MenuProviderExtensions
 	public static IMenuProvider AddDocsMenu(this IMenuProvider self)
 	{
 		self
-			.AccessMenu(Constants.MenuNames.Docs)
+			.Access(Constants.MenuNames.Docs)
 			.AddMenuLink(
 				new()
 				{
@@ -28,8 +28,8 @@ public static class MenuProviderExtensions
 						},
 						new()
 						{
-							Text = "Creating an application",
-							Url = Urls.Introduction.CreatingAnApplication
+							Text = "Basics",
+							Url = Urls.Introduction.Basics
 						}
 					]
 				});
