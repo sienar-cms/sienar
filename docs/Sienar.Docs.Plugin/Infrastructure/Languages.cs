@@ -1,6 +1,6 @@
 ﻿namespace Sienar.Infrastructure;
 
-public enum CodeType
+public enum Languages
 {
 	None,
 	Csharp,

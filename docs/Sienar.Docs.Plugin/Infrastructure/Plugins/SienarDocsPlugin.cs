@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -61,6 +62,11 @@ public class SienarDocsPlugin : ISienarClientPlugin
 	public void SetupDependencies(WebAssemblyHostBuilder builder)
 	{
 		builder.Services
+			.AddScoped(_ =>
+				new HttpClient
+				{
+					BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+				})
 			.AddScoped<IUserAccessor, NullUserAccessor>()
 			.AddScoped<AuthenticationStateProvider, DefaultAuthStateProvider>()
 			.AddScoped<IArticleSeriesProvider, ArticleSeriesProvider>()

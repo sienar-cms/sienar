@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
@@ -10,12 +11,16 @@ public class Prism : ComponentBase
 {
 	private ElementReference _codeBlock;
 	private string _codeClass = default!;
+	private string? _codeContent;
 
 	[Parameter]
-	public required RenderFragment ChildContent { get; set; }
+	public RenderFragment? ChildContent { get; set; }
 
 	[Parameter]
-	public CodeType Language { get; set; } = CodeType.None;
+	public string? CodeFile { get; set; }
+
+	[Parameter]
+	public Languages Language { get; set; } = Languages.None;
 
 	[Parameter]
 	public string Class { get; set; } = "my-8";
@@ -25,6 +30,9 @@ public class Prism : ComponentBase
 
 	[Inject]
 	private IJSRuntime Js { get; set; } = default!;
+
+	[Inject]
+	private HttpClient Client { get; set; } = default!;
 
 	/// <inheritdoc />
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -44,7 +52,14 @@ public class Prism : ComponentBase
 		builder.AddElementReferenceCapture(4, el => _codeBlock = el);
 
 		// Add child content
-		builder.AddContent(5, ChildContent);
+		if (!string.IsNullOrEmpty(_codeContent))
+		{
+			builder.AddContent(5, _codeContent);
+		}
+		else
+		{
+			builder.AddContent(6, ChildContent);
+		}
 
 		// </code>
 		builder.CloseElement();
@@ -54,9 +69,13 @@ public class Prism : ComponentBase
 	}
 
 	/// <inheritdoc />
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		_codeClass = CreateCssClasses();
+		if (!string.IsNullOrEmpty(CodeFile))
+		{
+			_codeContent = await Client.GetStringAsync(CodeFile);
+		}
 	}
 
 	/// <inheritdoc />
