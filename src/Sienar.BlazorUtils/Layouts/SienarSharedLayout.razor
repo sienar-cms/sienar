@@ -1,0 +1,109 @@
+﻿@using Sienar.Infrastructure.Plugins
+@using Sienar.Infrastructure.Menus
+@inject IComponentProvider ComponentProvider
+
+<MudThemeProvider
+	IsDarkMode="@ThemeState.IsDarkMode"
+	Theme="@ThemeState.Theme"/>
+<MudDialogProvider
+	CloseOnEscapeKey="true"
+	NoHeader="true"
+	FullWidth="true"
+	MaxWidth="MaxWidth.Small"/>
+<MudSnackbarProvider/>
+
+<MudLayout Class="min-vh-100">
+	<MudDrawer
+		Elevation="1"
+		Open
+		Variant="DrawerVariant.Persistent">
+		<div class="flex-grow-1">
+			<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
+
+			<MudNavMenu>
+				@for (var i = 0; i < _menus.Count; i++)
+				{
+					if (i > 0)
+					{
+						<MudDivider Class="my-3"/>
+					}
+
+					@foreach (var link in _menus[i])
+					{
+						<NavMenuLink Link="link"/>
+					}
+				}
+			</MudNavMenu>
+		</div>
+
+		<div>
+			<div class="pa-4">
+				<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
+			</div>
+		</div>
+	</MudDrawer>
+
+	<MudMainContent Class="px-16 pb-16">
+		<MudContainer
+			Class="px-0"
+			MaxWidth="MaxWidth.False">
+			@ChildContent
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
+
+@code {
+
+	private bool _disposed;
+	private List<List<MenuLink>> _menus = [];
+
+	[Parameter]
+	public required RenderFragment ChildContent { get; set; }
+
+	[Parameter]
+    public required IEnumerable<string> MenuNames { get; set; }
+
+	[Inject]
+	private ThemeState ThemeState { get; set; } = default!;
+
+	[Inject(Key = SienarBlazorUtilsServiceKeys.MenuProvider)]
+	private IMenuGenerator MenuGenerator { get; set; } = default!;
+
+	[Inject]
+	private AuthenticationStateProvider AuthState { get; set; } = default!;
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		AuthState.AuthenticationStateChanged += UpdateMenuAndRender;
+		UpdateMenuAndRender(AuthState.GetAuthenticationStateAsync());
+	}
+
+	private async void UpdateMenuAndRender(Task<AuthenticationState> s)
+	{
+		await s;
+		_menus.Clear();
+		_menus = MenuNames
+			.Select(menuName => MenuGenerator.CreateMenu(menuName))
+			.ToList();
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	private void Dispose(bool disposing)
+	{
+		if (_disposed) return;
+		if (!disposing) return;
+
+		AuthState.AuthenticationStateChanged -= UpdateMenuAndRender;
+		_disposed = true;
+	}
+
+}

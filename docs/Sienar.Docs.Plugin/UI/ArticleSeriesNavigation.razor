@@ -1,4 +1,6 @@
 ﻿@using Sienar.Infrastructure.Articles
+@using Sienar.State
+@implements IDisposable
 @inject IArticleSeriesProvider ArticleProvider
 
 <div class="d-flex flex-row justify-space-between">
@@ -24,19 +26,36 @@
 
 	private Article? _next;
 	private Article? _previous;
+	private bool _disposed;
 
-	[Parameter]
-    public required string Current { get; set; }
-
-	[Parameter]
-    public required string Series { get; set; }
+	[Inject]
+	private ArticleSeriesStateProvider State { get; set; } = default!;
 
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
-		var series = ArticleProvider.Access(Series);
-		_next = series.GetNextArticle(Current);
-		_previous = series.GetPreviousArticle(Current);
+		State.OnChange += UpdateLinks;
+	}
+
+	private void UpdateLinks()
+	{
+		var series = ArticleProvider.Access(State.Series!);
+		_next = series.GetNextArticle(State.CurrentRoute!);
+		_previous = series.GetPreviousArticle(State.CurrentRoute!);
+		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	private void Dispose(bool disposing)
+	{
+		if (!disposing || _disposed) return;
+
+		State.OnChange -= UpdateLinks;
 	}
 
 }

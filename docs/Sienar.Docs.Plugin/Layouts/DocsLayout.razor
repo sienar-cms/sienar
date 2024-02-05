@@ -1,0 +1,16 @@
+﻿@inherits SienarLayoutBase
+
+<SienarSharedLayout MenuNames="MenuNames">
+	@Body
+	<ArticleSeriesNavigation/>
+</SienarSharedLayout>
+
+@code {
+
+	/// <inheritdoc />
+	public DocsLayout()
+	{
+		MenuNames = [Constants.MenuNames.Docs];
+	}
+
+}

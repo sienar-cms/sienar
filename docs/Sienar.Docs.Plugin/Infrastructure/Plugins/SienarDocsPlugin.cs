@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 using Sienar.Extensions;
+using Sienar.Infrastructure.Articles;
 using Sienar.Infrastructure.Menus;
 using Sienar.Layouts;
+using Sienar.State;
 using Sienar.UI.Views;
 
 namespace Sienar.Infrastructure.Plugins;
@@ -61,13 +63,20 @@ public class SienarDocsPlugin : ISienarClientPlugin
 		builder.Services
 			.AddScoped<IUserAccessor, NullUserAccessor>()
 			.AddScoped<AuthenticationStateProvider, DefaultAuthStateProvider>()
+			.AddScoped<IArticleSeriesProvider, ArticleSeriesProvider>()
+			.AddScoped<ArticleSeriesStateProvider>()
 			.AddAuthorizationCore()
 			.AddCascadingAuthenticationState()
 			.AddMudServices();
 	}
 
 	/// <inheritdoc />
-	public void SetupApp(WebAssemblyHost app) {}
+	public void SetupApp(WebAssemblyHost app)
+	{
+		app.Services
+			.GetRequiredService<IArticleSeriesProvider>()
+			.AddIntroductionSeries();
+	}
 
 	/// <inheritdoc />
 	public void SetupRootComponents(IRootComponentProvider rootComponentProvider)

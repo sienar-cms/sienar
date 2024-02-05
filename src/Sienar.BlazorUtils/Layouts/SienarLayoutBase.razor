@@ -1,53 +1,5 @@
-﻿@using Sienar.Infrastructure.Plugins
-@inherits LayoutComponentBase
-@inject IComponentProvider ComponentProvider
+﻿@inherits LayoutComponentBase
 
-<MudThemeProvider
-	IsDarkMode="@ThemeState.IsDarkMode"
-	Theme="@ThemeState.Theme"/>
-<MudDialogProvider
-	CloseOnEscapeKey="true"
-	NoHeader="true"
-	FullWidth="true"
-	MaxWidth="MaxWidth.Small"/>
-<MudSnackbarProvider/>
-
-<MudLayout Class="min-vh-100">
-	<MudDrawer
-		Elevation="1"
-		Open
-		Variant="DrawerVariant.Persistent">
-		<div class="flex-grow-1">
-			<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
-
-			<MudNavMenu>
-				@for (var i = 0; i < _menus.Count; i++)
-				{
-					if (i > 0)
-					{
-						<MudDivider Class="my-3"/>
-					}
-
-					@foreach (var link in _menus[i])
-					{
-						<NavMenuLink Link="link"/>
-					}
-				}
-			</MudNavMenu>
-		</div>
-
-		<div>
-			<div class="pa-4">
-				<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
-			</div>
-		</div>
-	</MudDrawer>
-
-	<MudMainContent Class="px-16 pb-16">
-		<MudContainer
-			Class="px-0"
-			MaxWidth="MaxWidth.False">
-			@Body
-		</MudContainer>
-	</MudMainContent>
-</MudLayout>
+<SienarSharedLayout MenuNames="MenuNames">
+	@Body
+</SienarSharedLayout>
