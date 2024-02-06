@@ -1,6 +1,5 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Components;
-using Sienar.Infrastructure.Articles;
+﻿using Microsoft.AspNetCore.Components;
+using Sienar.Extensions;
 using Sienar.State;
 
 namespace Sienar.Pages;
@@ -17,16 +16,10 @@ public class DocPageBase : ComponentBase
 	{
 		ArticleState.Freeze();
 		var type = GetType();
-		ArticleState.CurrentRoute = type
-			.GetCustomAttribute<RouteAttribute>()?
-			.Template;
-		ArticleState.Series = type
-			.GetCustomAttribute<SeriesAttribute>()?
-			.Series;
+		ArticleState.CurrentRoute = type.GetRoute();
+		ArticleState.Series = type.GetSeries();
 		ArticleState.Unfreeze();
 
-		Title = type
-			.GetCustomAttribute<TitleAttribute>()!
-			.Title;
+		Title = type.GetTitle()!;
 	}
 }
