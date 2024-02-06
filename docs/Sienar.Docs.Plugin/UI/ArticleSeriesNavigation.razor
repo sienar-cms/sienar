@@ -51,9 +51,18 @@
 
 	private void UpdateLinks()
 	{
-		var series = ArticleProvider.Access(State.Series!);
-		_next = series.GetNextArticle(State.CurrentRoute!);
-		_previous = series.GetPreviousArticle(State.CurrentRoute!);
+		if (State.Series is null || State.CurrentRoute is null)
+		{
+			_next = null;
+			_previous = null;
+		}
+		else
+		{
+			var series = ArticleProvider.Access(State.Series);
+			_next = series.GetNextArticle(State.CurrentRoute);
+			_previous = series.GetPreviousArticle(State.CurrentRoute!);
+		}
+
 		StateHasChanged();
 	}
 
