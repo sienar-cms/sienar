@@ -1,0 +1,14 @@
+﻿/// <summary>
+/// Adds a plugin to the Sienar app and registers its services in the service collection
+/// </summary>
+/// <param name="self">the Sienar app builder</param>
+/// <param name="plugin">the plugin to add to the Sienar app</param>
+/// <typeparam name="TBuilder">the type of the Sienar app builder</typeparam>
+/// <typeparam name="TPlugin">the type of the plugin</typeparam>
+/// <returns>the Sienar app builder</returns>
+public static TBuilder AddPlugin<TBuilder, TPlugin>(
+	this TBuilder self,
+	TPlugin plugin)
+	where TBuilder : SienarServerAppBuilder
+	where TPlugin : class, ISienarServerPlugin
+{/*...*/}

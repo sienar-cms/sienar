@@ -1,0 +1,6 @@
+﻿/// <summary>
+/// Builds the final <see cref="WebApplication"/> and returns it
+/// </summary>
+/// <returns>the new <see cref="WebApplication"/></returns>
+public virtual WebApplication Build()
+{/*...*/}

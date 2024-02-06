@@ -24,6 +24,15 @@ public class SienarServerAppBuilder
 		Builder = builder;
 	}
 
+	/// <summary>
+	/// Creates a new <see cref="SienarServerAppBuilder"/> and registers a <see cref="TContext"/> using the provided options
+	/// </summary>
+	/// <param name="args">the runtime arguments supplied to <c>Program.Main()</c></param>
+	/// <param name="dbContextOptionsConfigurer">an action to figure the <see cref="DbContextOptionsBuilder{TContext}"/></param>
+	/// <param name="dbContextLifetime">the service lifetime of the <see cref="TContext"/></param>
+	/// <param name="dbContextOptionsLifetime">the service lifetime of the <see cref="DbContextOptions{TContext}"/></param>
+	/// <typeparam name="TContext">the type of the <see cref="DbContext"/></typeparam>
+	/// <returns>the new <see cref="SienarServerAppBuilder"/></returns>
 	public static SienarServerAppBuilder Create<TContext>(
 		string[] args,
 		Action<DbContextOptionsBuilder>? dbContextOptionsConfigurer = null,
@@ -51,6 +60,11 @@ public class SienarServerAppBuilder
 		return builder;
 	}
 
+	/// <summary>
+	/// Creates a new <see cref="SienarServerAppBuilder"/> and registers core Sienar services on its service collection
+	/// </summary>
+	/// <param name="args">the runtime arguments supplied to <c>Program.Main()</c></param>
+	/// <returns>the new <see cref="SienarServerAppBuilder"/></returns>
 	public static SienarServerAppBuilder Create(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
@@ -62,6 +76,10 @@ public class SienarServerAppBuilder
 		return new SienarServerAppBuilder(builder);
 	}
 
+	/// <summary>
+	/// Builds the final <see cref="WebApplication"/> and returns it
+	/// </summary>
+	/// <returns>the new <see cref="WebApplication"/></returns>
 	public virtual WebApplication Build()
 	{
 		// Set up remaining services on the IServiceCollection

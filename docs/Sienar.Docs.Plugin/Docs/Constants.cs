@@ -9,6 +9,7 @@ public static class Constants
 
 	public static class SeriesNames
 	{
+		public const string Api = "API";
 		public const string Introduction = "Introduction";
 	}
 }

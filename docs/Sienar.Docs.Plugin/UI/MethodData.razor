@@ -1,0 +1,30 @@
+﻿@using Sienar.Infrastructure
+<H3>@Title</H3>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@CodeFile"
+	Block/>
+
+@ChildContent
+
+@if (!HideDivider)
+{
+	<MudDivider Class="my-4"/>
+}
+
+@code {
+
+	[Parameter]
+	public required string Title { get; set; }
+
+	[Parameter]
+	public required string CodeFile { get; set; }
+
+	[Parameter]
+    public bool HideDivider { get; set; }
+
+	[Parameter]
+	public required RenderFragment ChildContent { get; set; }
+
+}

@@ -32,6 +32,19 @@ public static class MenuProviderExtensions
 							Url = Urls.Introduction.Basics
 						}
 					]
+				})
+			.AddMenuLink(
+				new()
+				{
+					Text = "API",
+					Sublinks =
+					[
+						new()
+						{
+							Text = "SienarServerAppBuilder",
+							Url = Urls.Api.SienarServerAppBuilder
+						}
+					]
 				});
 
 		return self;

@@ -1,0 +1,78 @@
+﻿@using Sienar.Infrastructure
+@inherits DocPageBase
+@attribute [Route(Urls.Introduction.Basics)]
+@attribute [Series(Constants.SeriesNames.Introduction)]
+@attribute [Title("Sienar basics")]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	Sienar is designed to make creating pluggable apps easier. For that reason, the boilerplate for a Sienar app looks quite a bit different from a traditional ASP.NET app. The standard boilerplate looks about like this:
+</P>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@Examples.Introduction.StandardBoilerplate"
+	Block/>
+
+<P>
+	This boilerplate shows how to initialize a Sienar app, complete with login, account management, user moderation, SMTP email, and more. The core functionality for building a Sienar application is defined by <MudLink Href="@Urls.Api.SienarServerAppBuilder">SienarServerAppBuilder</MudLink> and its extension methods.
+</P>
+
+<P>
+	The <Prism>SienarBlazorPlugin</Prism> adds core Sienar functionality to the application. With it, you can use data readers and writers to manage Sienar entities from code without a UI or other out-of-the-box functionality like login. You can set up code to use Sienar-provided classes like <Prism>ISignInManager</Prism> to implement your own log in rules if you want. Use the <Prism>SienarBlazorPlugin</Prism> alone if you want to create your own UI.
+</P>
+
+<P>
+	The <Prism>SienarCmsPlugin</Prism> adds the out-of-the-box functionality you would expect from a CMS. By adding this plugin, you get a full UI to manage your own user account, moderate other users, and other functionality like logging in, password reset, and more.
+</P>
+
+<P>
+	The <Prism>MailKitPlugin</Prism> adds SMTP mailing capabilities to your app. By default, Sienar doesn't know how to send emails to users, so you can either disable email entirely in <Prism>appsettings.json</Prism>, or you can enable mailing by using <Prism>MailKitPlugin</Prism>. You can also create your own mailing plugin using the guide at the end of this README, under <Prism>Customization > Creating your own mail sending plugin</Prism>
+</P>
+
+<H2>Overview of boilerplate</H2>
+
+<H3>SienarWebAppBuilder.Create()</H3>
+
+<P>
+	This static method creates a new <Prism>SienarWebAppBuilder</Prism>. This uses a similar pattern to ASP.NET with the <Prism>WebApplication.CreateBuilder()</Prism> method (in fact, Sienar uses this internally). There are two overloads to the <Prism>Create()</Prism> method: one that accepts the <Prism>string[] args</Prism> argument to <Prism>Program.Main()</Prism>, and one that accepts additional arguments that configure a <Prism>DbContext</Prism>. The second <Prism>Create()</Prism> overload accepts the same arguments as <Prism>IServiceCollection.AddDbContext&lt;TContext&gt;()</Prism> after the <Prism>string[] args</Prism> argument (because, again, Sienar uses this internally to register your DbContext). Sienar itself avoids a lot of generic code by requesting the base type <Prism>DbContext</Prism> from the DI container, so one thing that <Prism>Create&lt;TContext&gt;>()</Prism> does is re-registers your <Prism>TContext</Prism> as a <Prism>DbContext</Prism> so it can be used directly by Sienar without needing to know the implementation type.
+</P>
+
+<P>
+	The example code creates an app with a <Prism>CustomDbContext</Prism> that has a transient lifetime. This is recommended for Sienar applications that use the Blazor UI because a scoped <Prism>DbContext</Prism> is too long a lifetime in Blazor Server. Microsoft has [several workarounds](https://learn.microsoft.com/en-us/aspnet/core/blazor/blazor-ef-core?view=aspnetcore-8.0) for the service lifetime problem, but I find these to be too shallow for Sienar's needs. Internally, Sienar uses a *scoped* service to access the current <Prism>DbContext</Prism>, but refreshes the <Prism>DbContext</Prism> on page navigations by using a base page class - so even though the <Prism>DbContext</Prism> itself is transient, it is accessed via a scoped service that keeps it around for the proper duration (one page visit = one <Prism>DbContext</Prism>). This system is similar to how Microsoft solved Blazor scope issues with <Prism>OwningComponentBase</Prism>, but that class requires direct usage of <Prism>IServiceProvider</Prism>, or else limits you to a single component-scoped service.
+</P>
+
+<H3>SienarWebAppBuilder.AddPlugin()</H3>
+
+<P>
+	This extension method tells Sienar that you want to use a plugin. Your plugin is registered as a singleton in the DI container, and Sienar needs an instance of your plugin from step 1, so instead of messing with intermediate DI containers or requiring default constructors for plugins, Sienar just asks for an instance. It's up to you to provide that instance.
+</P>
+
+<P>
+	Plugins must implement the <Prism>ISienarPlugin</Prism> interface, which is discussed later. For now, suffice it to say that plugins have the ability to register services in the DI container, configure the <Prism>IApplicationBuilder</Prism> with middleware, and hook directly into core Sienar functionality, like adding menu items to the account dashboard or overriding certain components in the UI.
+</P>
+
+<H3>SienarWebAppBuilder.AddServices()</H3>
+
+<P>
+	This extension method (not shown here) allows you to add arbitrary services to the <Prism>IServiceCollection</Prism>. This can be useful for overriding Sienar services (most of which are added to DI conditionally with <Prism>IServiceCollection.TryAdd____()</Prism>) or else just adding a few items to DI without creating a full plugin. It accepts a single argument, an <Prism>Action&lt;IServiceCollection&gt;</Prism>.
+</P>
+
+<H3>SienarWebAppBuilder.ConfigureTheme()</H3>
+
+<P>
+	This extension method allows you to override the default <Prism>MudTheme</Prism> used by MudBlazor - if you don't care about the theme, or you're just prototyping for now, you can skip this method call and the default <Prism>MudTheme</Prism> will be used. You can also pass an optional <Prism>bool isDarkMode</Prism> as the second argument, which tells MudBlazor that your app should use dark mode. Both of these values end up stored in a scoped state provider, <Prism>ThemeState</Prism>.
+</P>
+
+<H3>SienarWebAppBuilder.Build()</H3>
+
+<P>
+	This method performs the final step of the Sienar building process. It performs internal tasks such as setting up the MudBlazor theme and configuring plugins and middleware. The return result is a regular ASP.NET <Prism>WebApplication</Prism>, so if you want to do any final tasks outside the Sienar scope like adding final middleware, you can do that before calling <Prism>WebApplication.RunAsync()</Prism>
+</P>
+
+<P>
+	You can read more in the <MudLink Href="@Urls.Api.SienarServerAppBuilder">SienarWebAppBuilder documentation</MudLink>.
+</P>

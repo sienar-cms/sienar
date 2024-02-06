@@ -1,0 +1,12 @@
+﻿/// <summary>
+/// Allows developers to add arbitrary services to the service collection without creating a plugin
+/// </summary>
+/// <param name="self">the Sienar app builder</param>
+/// <param name="action">an action that receives the service collection as its only argument</param>
+/// <typeparam name="TBuilder">the type of the Sienar app builder</typeparam>
+/// <returns>the Sienar app builder</returns>
+public static TBuilder AddServices<TBuilder>(
+	this TBuilder self,
+	Action<IServiceCollection> action)
+	where TBuilder : SienarServerAppBuilder
+{/*...*/}
