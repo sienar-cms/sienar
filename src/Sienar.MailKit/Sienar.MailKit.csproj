@@ -4,14 +4,37 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Sienar.Email</RootNamespace>
+
+		<PackageId>Sienar.MailKit</PackageId>
+		<Title>Sienar.MailKit</Title>
+		<PackageVersion>0.1.0</PackageVersion>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>Christian LeVesque</Authors>
+		<Description>A Sienar plugin to facilitate sending SMTP email via MailKit</Description>
+		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
+		<PackageProjectUrl>https://sienar.levesque.dev</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/christianlevesque/sienar</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>cms utilities email mailkit</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MailKit" Version="4.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Sienar.Core\Sienar.Core.csproj" />
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Core\Sienar.Core.csproj"/>
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Core" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>
