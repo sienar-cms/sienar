@@ -47,13 +47,10 @@ public class SienarServerAppBuilder
 			dbContextLifetime,
 			dbContextOptionsLifetime);
 
-		var contextServiceDefinition = builder.Builder.Services.First(
-			s => s.ImplementationType == typeof(TContext));
-
 		var baseContextDefinition = new ServiceDescriptor(
 			typeof(DbContext),
 			sp => sp.GetRequiredService<TContext>(),
-			contextServiceDefinition.Lifetime);
+			dbContextLifetime);
 
 		builder.Builder.Services.Add(baseContextDefinition);
 
