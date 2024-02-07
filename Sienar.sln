@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.BlazorUtils", "src\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Blazor", "src\Sienar.Blazor\Sienar.Blazor.csproj", "{89C317BB-02A9-4581-9204-B9E5405A71CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.ElectronUtils", "src\Sienar.ElectronUtils\Sienar.ElectronUtils.csproj", "{DD9D28A5-7E97-43C5-B762-31D7E62B5A68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.DesktopUtils", "src\Sienar.DesktopUtils\Sienar.DesktopUtils.csproj", "{DD9D28A5-7E97-43C5-B762-31D7E62B5A68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.MailKit", "src\Sienar.MailKit\Sienar.MailKit.csproj", "{21466D12-17B0-4CAB-BBDE-A0163C3FA717}"
 EndProject
