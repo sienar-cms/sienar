@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Configures scripts to be loaded with the current user session
+/// </summary>
+/// <param name="scriptProvider">the <see cref="IScriptProvider"/></param>
+void SetupScripts(IScriptProvider scriptProvider);

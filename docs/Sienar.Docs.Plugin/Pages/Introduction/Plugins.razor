@@ -1,0 +1,70 @@
+﻿@inherits DocPageBase
+@attribute [Route(Urls.Introduction.Plugins)]
+@attribute [Series(Constants.SeriesNames.Introduction)]
+@attribute [Title("Plugins")]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	Sienar offers plugin-like functionality via the <MudLink Href="@Urls.Api.ISienarServerPlugin">ISienarServerPlugin</MudLink> interface. This interface defines a number of methods and properties that Sienar uses to let your plugin tap into specific parts of Sienar's functionality.
+</P>
+
+<P Color="Color.Info">
+	Blazor Server-based plugins use the <Prism>ISienarServerPlugin</Prism>, which inherits from <MudLink Href="@Urls.Api.ISienarPlugin">ISienarPlugin</MudLink>. Most of the plugin methods discussed here come from this base plugin interface. The owning interface is referenced for each method so there's no confusion about which interface defines a method.
+</P>
+
+<H2>Plugins on app startup</H2>
+
+<P>
+	Some of a Sienar plugin's methods are called only once, on application startup.
+</P>
+
+<P>
+	<Prism>ISienarServerPlugin.SetupDependencies()</Prism> is called immediately when a plugin is registered, and is used primarily to register services in the DI container. It receives an instance of <Prism>WebApplicationBuilder</Prism> as its only argument, so you can register services, add configuration, or do anything else you can do with a <Prism>WebApplicationBuilder</Prism>.
+</P>
+
+<P>
+	<Prism>ISienarServerPlugin.SetupApp()</Prism> is called after the <Prism>WebApplicationBuilder</Prism> is built. It receives the <Prism>WebApplication</Prism> as its only argument. Each plugin's implementation of this method is called in the order the plugin was registered, so if you apply middleware to the <Prism>WebApplication</Prism>, you need to be aware of the order you're adding your plugins.
+</P>
+
+<H2>Plugins on request execution</H2>
+
+<P>
+	Sienar plugins have the option to execute on each request if they choose. If a plugin only adds services and/or middleware, it doesn't need to execute on each request because service registration and middleware execution are set up at application startup, just like a normal ASP.NET app. Plugins executing in middleware can be controlled by the <Prism>PluginSettings.HasRoutableComponents</Prism> and <Prism>PluginSettings.UsesProviders</Prism> properties: If either of these boolean properties is <Prism>true</Prism>, then the plugin will be added to the middleware pipeline. If both are <Prism>false</Prism>, then the plugin will only be executed once at startup.
+</P>
+
+<P>
+	On each request, for each plugin included in Sienar's middleware pipeline, Sienar will call the plugin's <Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> method, which determines if the plugin actually executes on a request. This allows plugins to decide if they want to only execute on certain requests, which allows for the creation of "sub-apps" that execute at different endpoints. For example, the <Prism>SienarBlazorPlugin</Prism> executes on every single request because it adds core CSS/JS files for Sienar and MudBlazor, while the <Prism>SienarCmsPlugin</Prism> only executes if the current request URI starts with <Prism>/dashboard</Prism>, which effectively creates a sub-app at the <Prism>/dashboard</Prism> URI.
+</P>
+
+<H2>Plugin methods</H2>
+
+<P>
+	Because Sienar uses Blazor Server, executing a plugin on each "request" actually executes the plugin for the duration of a single user session (a single page load). For this reason, the remaining plugin methods are used to set up scoped services that provide core Sienar functionality. These services are scoped to enable Sienar's goal of supporting sub-apps at different URIs within your app.
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupComponents()</Prism> is used to configure replaceable parts of the Sienar UI. This method receives an <Prism>IComponentProvider</Prism> as its only argument. The <Prism>IComponentProvider</Prism> has properties that represent these replaceable parts of the Sienar UI. For example, <Prism>IComponentProvider.AppComponent</Prism> is used to define that application's top-level <Prism>&lt;App&gt;</Prism> component. In Sienar apps, this component is provided for you automatically, but if you want to use your own, you can.
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupDashboard()</Prism> is used to set up named dashboard categories with a series of links in each category, similar to the cPanel dashboard. This method receives an <Prism>IMenuProvider</Prism> as its only argument, which is used to set up different dashboard categories and add links to those categories. <Span Color="Color.Info">The <Prism>IMenuProvider</Prism> used here is a keyed service that is separate from the <Prism>IMenuProvider</Prism> supplied to <Prism>ISienarPlugin.SetupMenu()</Prism>, so you can safely use the same category and menu names with different links if you choose.</Span>
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupMenu()</Prism> is used to set up named menus with a series of links in each menu. This method receives an <Prism>IMenuProvider</Prism> as its only argument, which is used to set up different named menus and add links to those named menus. <Span Color="Color.Info">The <Prism>IMenuProvider</Prism> used here is a keyed service that is separate from the <Prism>IMenuProvider</Prism> supplied to <Prism>ISienarPlugin.SetupDashboard()</Prism>, so you can safely use the same category and menu names with different links if you choose.</Span>
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupScripts()</Prism> is used to enqueue Javascript files needed by your plugin. Currently, all Javascript files are supplied at the end of the HTML document, regardless of configuration. However, in the future, this may change. The <Prism>IScriptProvider</Prism>, which is this method's only argument, supports enqueueing Javascript files with a number of different configuration options, including whether the file should be a regular Javascript file or an ES module, whether the file should be <Prism>async</Prism> or <Prism>defer</Prism>, etc.
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupStyles()</Prism> is used to enqueue CSS files needed by your plugin. It works much the same way as <Prism>ISienarPlugin.SetupScripts()</Prism>, but because CSS and JS files support slightly different configurations, these are separate providers.
+</P>
+
+<P>
+	You can read more in the <MudLink Href="@Urls.Api.ISienarServerPlugin">ISienarServerPlugin documentation</MudLink>.
+</P>

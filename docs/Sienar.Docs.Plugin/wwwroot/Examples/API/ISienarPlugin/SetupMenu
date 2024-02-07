@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Configures menu items to be registered for the current user session
+/// </summary>
+/// <param name="menuProvider">the <see cref="IMenuProvider"/> containing menu item definitions</param>
+void SetupMenu(IMenuProvider menuProvider);

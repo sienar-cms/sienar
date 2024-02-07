@@ -30,6 +30,11 @@ public static class MenuProviderExtensions
 						{
 							Text = "Basics",
 							Url = Urls.Introduction.Basics
+						},
+						new()
+						{
+							Text = "Plugins",
+							Url = Urls.Introduction.Plugins
 						}
 					]
 				})
@@ -39,6 +44,16 @@ public static class MenuProviderExtensions
 					Text = "API",
 					Sublinks =
 					[
+						new()
+						{
+							Text = "ISienarPlugin",
+							Url = Urls.Api.ISienarPlugin
+						},
+						new()
+						{
+							Text = "ISienarServerPlugin",
+							Url = Urls.Api.ISienarServerPlugin
+						},
 						new()
 						{
 							Text = "SienarServerAppBuilder",

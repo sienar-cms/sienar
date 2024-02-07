@@ -12,6 +12,9 @@ public static class ArticleSeriesProviderExtensions
 		=> self
 			.AddArticlePage<GettingStarted>()
 			.AddArticlePage<Basics>()
+			.AddArticlePage<Plugins>()
+			.AddArticlePage<ISienarPlugin>()
+			.AddArticlePage<ISienarServerPlugin>()
 			.AddArticlePage<SienarServerAppBuilder>();
 
 	public static IArticleSeriesProvider AddArticlePage<TPage>(

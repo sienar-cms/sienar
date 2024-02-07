@@ -1,0 +1,69 @@
+﻿@inherits DocPageBase
+@attribute [Route(Urls.Api.ISienarPlugin)]
+@attribute [Series(Constants.SeriesNames.Api)]
+@attribute [Title(nameof(ISienarPlugin))]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	<Prism>ISienarPlugin</Prism> isn't used directly by Sienar. Instead, it serves as a base interface for other plugin interfaces that Sienar does use.
+</P>
+
+<H2>Instance methods</H2>
+
+<MethodData
+	Title="SetupComponents"
+	CodeFile="@Examples.Api.ISienarPlugin.SetupComponents">
+	<P>
+		This method uses the <Prism>IComponentProvider</Prism>, which is a container that includes references to components that should be used in various parts of the Sienar UI. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IComponentProvider</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="SetupDashboard"
+	CodeFile="@Examples.Api.ISienarPlugin.SetupDashboard">
+	<P>
+		This method uses a version of the <Prism>IMenuProvider</Prism> keyed to provide dashboard items instead of menu items. <Prism>SetupDashboard()</Prism> supports adding links to a series of sections, similar to the cPanel UI. Dashboards support a limited set of features compared to menus. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IMenuProvider</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="SetupMenu"
+	CodeFile="@Examples.Api.ISienarPlugin.SetupMenu">
+	<P>
+		This method uses a version of the <Prism>IMenuProvider</Prism> keyed to provide menu itmes. This method allows your plugin to add items to various named menus of different pages in an app. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IMenuProvider</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="SetupScripts"
+	CodeFile="@Examples.Api.ISienarPlugin.SetupScripts">
+	<P>
+		This method uses the <Prism>IScriptProvider</Prism> to provide JavaScript inclusion on webpages. The <Prism>IScriptProvider</Prism> supports most scenarios for including JavaScript on a webpage, including whether the script should be <Prism>async</Prism>, whether the script should <Prism>defer</Prism>, whether the script is a module or a regular JavaScript file, etc. Simply omit any value you don't need, and it won't appear in the HTML. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IScriptProvider</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="SetupStyles"
+	CodeFile="@Examples.Api.ISienarPlugin.SetupStyles"
+	HideDivider>
+	<P>
+		This method uses the <Prism>IStyleProvider</Prism> to provide CSS inclusion on webpages. For example, the <Prism>SienarBlazorPlugin</Prism> uses the <Prism>IStyleProvider</Prism> to load MudBlazor's CSS on every page of a Sienar app. The <Prism>IStyleProvider</Prism> has support for HTML features of including CSS files, including things like the <Prism>crossorigin</Prism> and <Prism>integrity</Prism> attributes. Simply omit any value you don't need, and it won't appear in the HTML. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IStyleProvider</Prism>.
+	</P>
+</MethodData>
+
+<H2>Instance properties</H2>
+
+<MethodData
+	Title="PluginData"
+	CodeFile="@Examples.Api.ISienarPlugin.PluginData">
+	This property contains an instance of the <MudLink>PluginData</MudLink> class, which provides users with information about the plugin, such as the name of the plugin, the name of the author, the plugin's website, and more.
+</MethodData>
+
+<MethodData
+	Title="PluginSettings"
+	CodeFile="@Examples.Api.ISienarPlugin.PluginSettings">
+	This property contains an instance of the <MudLink>PluginSettings</MudLink> class, which tells Sienar which basic Sienar features the plugin uses.
+</MethodData>

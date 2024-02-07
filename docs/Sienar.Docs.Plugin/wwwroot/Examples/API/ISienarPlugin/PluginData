@@ -1,0 +1,4 @@
+﻿/// <summary>
+/// Plugin data for the current plugin
+/// </summary>
+PluginData PluginData { get; }

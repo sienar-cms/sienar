@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Configures stylesheets to be loaded with the current user session
+/// </summary>
+/// <param name="styleProvider">the <see cref="IStyleProvider"/></param>
+void SetupStyles(IStyleProvider styleProvider);

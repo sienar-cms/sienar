@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Performs operations against the application's <see cref="WebApplicationBuilder"/>
+/// </summary>
+/// <param name="builder">the application's underlying <see cref="WebApplicationBuilder"/></param>
+void SetupDependencies(WebApplicationBuilder builder);

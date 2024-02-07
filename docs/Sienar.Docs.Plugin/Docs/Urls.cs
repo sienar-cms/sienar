@@ -1,4 +1,5 @@
-﻿namespace Sienar.Docs;
+﻿// ReSharper disable InconsistentNaming
+namespace Sienar.Docs;
 
 public static class Urls
 {
@@ -9,6 +10,8 @@ public static class Urls
 	{
 		private const string Base = "/api";
 		public const string SienarServerAppBuilder = $"{Base}/{nameof(SienarServerAppBuilder)}";
+		public const string ISienarPlugin = $"{Base}/{nameof(ISienarPlugin)}";
+		public const string ISienarServerPlugin = $"{Base}/{nameof(ISienarServerPlugin)}";
 	}
 
 	public static class Introduction
@@ -16,5 +19,6 @@ public static class Urls
 		private const string Base = "/introduction";
 		public const string GettingStarted = $"{Base}/getting-started";
 		public const string Basics = $"{Base}/basics";
+		public const string Plugins = $"{Base}/plugins";
 	}
 }

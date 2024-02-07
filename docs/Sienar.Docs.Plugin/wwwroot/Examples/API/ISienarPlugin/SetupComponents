@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Configures various components to replace specific parts of the Sienar UI
+/// </summary>
+/// <param name="componentProvider">the <see cref="IComponentProvider"/></param>
+void SetupComponents(IComponentProvider componentProvider);
