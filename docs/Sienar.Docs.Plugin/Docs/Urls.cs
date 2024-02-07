@@ -20,5 +20,6 @@ public static class Urls
 		public const string GettingStarted = $"{Base}/getting-started";
 		public const string Basics = $"{Base}/basics";
 		public const string Plugins = $"{Base}/plugins";
+		public const string Hooks = $"{Base}/hooks";
 	}
 }

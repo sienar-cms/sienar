@@ -10,9 +10,13 @@ public static class ArticleSeriesProviderExtensions
 {
 	public static IArticleSeriesProvider AddSeries(this IArticleSeriesProvider self)
 		=> self
+			// Introduction articles
 			.AddArticlePage<GettingStarted>()
 			.AddArticlePage<Basics>()
 			.AddArticlePage<Plugins>()
+			.AddArticlePage<Hooks>()
+
+			// API documentation articles
 			.AddArticlePage<ISienarPlugin>()
 			.AddArticlePage<ISienarServerPlugin>()
 			.AddArticlePage<SienarServerAppBuilder>();

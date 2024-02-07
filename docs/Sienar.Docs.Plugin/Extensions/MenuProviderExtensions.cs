@@ -35,6 +35,11 @@ public static class MenuProviderExtensions
 						{
 							Text = "Plugins",
 							Url = Urls.Introduction.Plugins
+						},
+						new()
+						{
+							Text = "Hooks",
+							Url = Urls.Introduction.Hooks
 						}
 					]
 				})

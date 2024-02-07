@@ -1,0 +1,296 @@
+﻿@inherits DocPageBase
+@attribute [Route(Urls.Introduction.Hooks)]
+@attribute [Series(Constants.SeriesNames.Introduction)]
+@attribute [Title("Hooks")]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	Sienar includes a system of hooks similar to that of WordPress. However, instead of hooking into actions with magic strings, Sienar allows you to hook into actions with strongly-typed interfaces. Each type of hookable action supports a specific group of interfaces, so in order to hook into a specific action, you need to implement the correct interface with the correct generic model type.
+</P>
+
+<H2>Basics: Actions, requests, processors, hooks, and services</H2>
+
+<P>
+	Sienar uses five pieces of terminology in regards to its hook system.
+</P>
+
+<P>
+	<strong>Actions</strong> are things you want to do in your code. An example of an action would be logging in to the app. There are seven general types of actions: <Prism>Read</Prism>, <Prism>ReadAll</Prism>, <Prism>Create</Prism>, <Prism>Update</Prism>, <Prism>Delete</Prism>, <Prism>Action</Prism>, and <Prism>ResultAction</Prism>. These action types are stored in the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/ActionType.cs">ActionType enum</ExternalLink>, and they are used by hooks to determine whether a hook should run for a particular request. Most of these action types refer to CRUD-based actions, but the <Prism>Action</Prism> and <Prism>ResultAction</Prism> types are very generalized. An <Prism>Action</Prism> is an action that just has to run, and it returns a <Prism>bool</Prism> indicating whether it succeeded. A <Prism>ResultAction</Prism> is an action that returns a result, such as a file, or <Prism>null</Prism> on failure.
+</P>
+
+<P>
+	<strong>Requests</strong> are POCOs that represent an <strong>action</strong>. Usually, these classes contain data, but they don't have to. For example, the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LoginRequest.cs">LoginRequest</ExternalLink> requires the user's username and password, along with an optional property indicating whether the login should persist. While the <Prism>LoginRequest</Prism> class contains data, the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Requests/LogoutRequest.cs">LogoutRequest</ExternalLink> class does not - it merely logs out the current user, which the app determines through other means. But even though the <Prism>LogoutRequest</Prism> doesn't have any data, the empty class is still used to strongly type the logout process in the hook system.
+</P>
+
+<P>
+	<strong>Processors</strong> are methods that use <strong>requests</strong> to perform an <strong>action</strong>. Each action corresponds to exactly one processor. For example, logging in to the Sienar dashboard uses the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Processors/LoginProcessor.cs">LoginProcessor</ExternalLink>, which itself relies on the <Prism>LoginRequest</Prism> we discussed in the previous paragraph.
+</P>
+
+<P>
+	<strong>Hooks</strong> are methods that run before or after <strong>processors</strong>. Some hooks give you the ability to short-circuit an <strong>action</strong>, while others only allow you to respond to data.
+</P>
+
+<P>
+	<strong>Services</strong> are classes that encapsulate all this behavior, from beginning to end, using hooks and processors. Most Sienar services perform a single <strong>action</strong>, although there are a couple exceptions. A service uses the type of the <strong>request</strong> (e.g., <Prism>LoginRequest</Prism>) to get a <strong>processor</strong> from the DI container (e.g., <Prism>LoginProcessor</Prism>). The service also requests <strong>hooks</strong> associated with the type of the <strong>request</strong>, if any (hooks are requested as <Prism>IEnumerable&lt;THook&gt;</Prism>, so you can have as many hooks as you want, or none at all).
+</P>
+
+<H2>The three service types</H2>
+
+<P>
+	There are three main types of services that come built into Sienar: action services (<Prism>ActionType.Action</Prism>), result services (<Prism>ActionType.ResultAction</Prism>), and CRUD services (which use the remaining <Prism>ActionType</Prism> values). All three of these services use hooks in slightly different ways, but they all use the same core hooks.
+</P>
+
+<H3>Action services</H3>
+
+<P>
+	An action service wraps around an <Prism>IProcessor&lt;T&gt;</Prism>, which has a handful of methods. <Prism>NotifySuccess()</Prism>, <Prism>NotifyFailure()</Prism>, and <Prism>NotifyNoPermission()</Prism> methods allow the processor to inform the user of various statuses, while the <Prism>Process()</Prism> method accepts a <Prism>T</Prism> and returns a <Prism>HookStatus</Prism>. You can request an action service by requesting an <Prism>IService&lt;T&gt;</Prism> from DI. The only thing you absolutely need in order to crease your own action service is to implement <Prism>IProcessor&lt;T&gt;</Prism> and add it to the DI container (probably as a transient), where <Prism>T</Prism> is the data type that your action needs. Sienar provides the <Prism>IService&lt;T&gt;</Prism> implementation - all you need is your <Prism>T</Prism> and your <Prism>IProcessor&lt;T&gt;</Prism>.
+</P>
+
+<P>
+	The previously-mentioned <Prism>LoginProcessor</Prism> is used to perform a login operation. In order to actually perform that login operation, you need to request an <Prism>IService&lt;LoginRequest&gt;</Prism> from DI and call its <Prism>Execute()</Prism> method, which expects a single argument of type <Prism>LoginRequest</Prism> and returns a <Prism>Task&lt;bool&gt;</Prism> indicating the success status of the action. Sienar does the heavy lifting, like executing hooks, performing error handling, and notifying the user of any problems (or successes). You can see <Prism>IService&lt;LoginRequest&gt;</Prism> in action on the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Pages/Account/Login.razor">Sienar login page</ExternalLink>.
+</P>
+
+<H3>Result services</H3>
+
+<P>
+	A result service wraps around an <Prism>IResultProcessor&lt;T&gt;</Prism>, which has the same methods as <Prism>IProcessor&lt;T&gt;</Prism>. The only difference is that <Prism>IResultProcessor&lt;T&gt;.Process()</Prism> has no arguments and returns a tuple of <Prism>(HookStatus, T?)</Prism>. Result services are used to perform actions that don't require input but do produce output. You can request a result service by requesting an <Prism>IResultService&lt;T&gt;</Prism> from DI. As with <Prism>IService&lt;T&gt;</Prism>, the only thing you must provide is an <Prism>IResultProcessor&lt;T&gt;</Prism> in the DI container, where <Prism>T</Prism> is the data type you expect to return. After that, you can request an <Prism>IResultService&lt;T&gt;</Prism> and use its <Prism>Execute()</Prism> method, which accepts no arguments and returns a <Prism>Task&lt;T?&gt;</Prism>.
+</P>
+
+<P>
+	An example of an <Prism>IResultProcessor&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Processors/PersonalDataProcessor.cs">PersonalDataProcessor</ExternalLink>, which is called by Sienar when the user asks to download their personal data on the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Pages/Account/PersonalData.razor">personal data page</ExternalLink>.
+</P>
+
+<H3>CRUD services</H3>
+
+<P>
+	CRUD services are a little different than action services and result services because they don't really use processors, per se. CRUD services perform CRUD operations on database entities directly, so instead of using general processors, they directly implement the functionality they need.
+</P>
+
+<P>
+	<Prism>IEntityReader&lt;T&gt;</Prism> is used to read entities from the database. It has two overloads both named <Prism>Read()</Prism>: one which requires a <Prism>Guid</Prism> and accepts an optional <Prism>Filter?</Prism>, and one which only accepts an optional <Prism>Filter?</Prism>. The overload which requires a <Prism>Guid</Prism> returns a single <Prism>T?</Prism>, while the other overload returns a <Prism>PagedQuery&lt;T&gt;</Prism>. The <Prism>Filter</Prism> can be used to do things like page through results and include relations in the EntityFramework query.
+</P>
+
+<P>
+	<Prism>IEntityWriter&lt;T&gt;</Prism> is used to write entities to the database. It has two methods: <Prism>Create()</Prism>, which accepts a <Prism>T</Prism> as its only argument and returns a <Prism>Guid</Prism> representing the ID of the entity in the database; and <Prism>Update()</Prism>, which accepts a <Prism>T</Prism> as its only argument and returns a <Prism>bool</Prism> representing whether the update operation was successful.
+</P>
+
+<P>
+	<Prism>IEntityDeleter&lt;T&gt;</Prism> is used to delete entities from the database. It has a single method: <Prism>Delete()</Prism>, which accepts a <Prism>Guid</Prism> as its only argument and returns a <Prism>bool</Prism> representing whether the delete operation was successful.
+</P>
+
+<P>
+	CRUD services are grouped together largely for semantic purposes. <Prism>IEntityReader&lt;T&gt;</Prism> has two methods that use the same hooks in the same way, and the same is true of <Prism>IEntityWriter&lt;T&gt;</Prism>. <Prism>IEntityDeleter&lt;T&gt;</Prism> doesn't use its hooks the same way as either of the other two services, so it exists on its own.
+</P>
+
+<H2>The four hooks</H2>
+
+<P>
+	Now that we understand what services are and what they do, we can dig into the four hooks that Sienar provides for modifying the behavior of services.
+</P>
+
+<H3>IAccessValidator&lt;T&gt;</H3>
+
+<P>
+	The <Prism>IAccessValidator&lt;T&gt;</Prism> hook determines whether access should be granted to a particular action. Similar to data annotations, <Prism>IAccessValidator&lt;T&gt;</Prism> relies on a validation context in order to grant access - in other words, if no <Prism>IAccessValidator&lt;T&gt;</Prism> explicitly grants access on a request, access will be <strong>denied</strong> by default. The only exception to this rule is if there are no <Prism>IAccessValidator&lt;T&gt;</Prism> hooks at all for a request, in which case access will still be granted. The <Prism>IAccessValidator&lt;T&gt;</Prism> hooks are run before any other hook, so they can be used to short-circuit an action by failing to grant explicit access.
+</P>
+
+<P>
+	An example of an <Prism>IAccessValidator&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/UserInRoleAccessValidator.cs">UserInRoleAccessValidator</ExternalLink>, which verifies that a user is in a particular role before approving access.
+</P>
+
+<H3>IStateValidator&lt;T&gt;</H3>
+
+<P>
+	The <Prism>IStateValidator&lt;T&gt;</Prism> hook is used to determine whether the state of <Prism>T</Prism> is valid compared to the state of the application. This can be as simple as verifying that a property has the correct value or as complex as querying the database to check deep application state. <Prism>IStateValidator&lt;T&gt;</Prism> returns a <Prism>HookStatus</Prism>, so it can be used to short-circuit an action by returning a failing value.
+</P>
+
+<P>
+	An example of a simple <Prism>IStateValidator&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Hooks/RegistrationOpenValidator.cs">RegistrationOpenValidator</ExternalLink>, which verifies that the site administrator has activated registration in <Prism>appsettings.json</Prism> before allowing a user to register.
+</P>
+
+<P>
+	An example of a more complex <Prism>IStateValidator&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Hooks/EnsureAccountInfoUniqueValidator.cs">EnsureAccountInfoUniqueValidator</ExternalLink>, which checks the database for an existing entity using a particular username or email address before creating a user account. <Prism>EnsureAccountInfoUniqueValidator</Prism> is also an example of a single class being used for two different hooks, which is unusual but occasionally appropriate. In this case, the hook runs before a regular user tries to register <em>and</em> before an administrator tries to create or modify a user account in the admin UI. Because the logic is indentical in either case, the hook uses a core <Prism>UserIsUnique()</Prism> method that is called from both hook methods.
+</P>
+
+<H3>IBeforeProcess&lt;T&gt;</H3>
+
+<P>
+	The <Prism>IBeforeProcess&lt;T&gt;</Prism> hook runs immediately before the action processor. It's used to do things like modify the state of <Prism>T</Prism> prior to processing. This hook only returns a <Prism>Task</Prism>, so it can't directly be used to short-circuit an action. However, if an exception is thrown while an <Prism>IBeforeProcess&lt;T&gt;</Prism> is executing, it will still short-circuit because each <Prism>IBeforeProcess&lt;T&gt;</Prism> is guaranteed to run before any non-read action - so if an <Prism>IBeforeProcess&lt;T&gt;</Prism> fails to execute, the action will end early.
+</P>
+
+<P>
+	An example of an <Prism>IBeforeProcess&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Hooks/ConcurrencyStampUpdateHook.cs">ConcurrencyStampUpdateHook</ExternalLink>, which refreshes an entity's concurrency stamp on create or update actions.
+</P>
+
+<H3>IAfterProcess&lt;T&gt;</H3>
+
+<P>
+	The <Prism>IAfterProcess&lt;T&gt;</Prism> hook runs after the action processor. It's used to do things in response to the result of an action. This hook only returns a <Prism>Task</Prism>, so it can't be used to prevent the rest of the action from continuing. Unlike other hook types, if an <Prism>IAfterProcess&lt;T&gt;</Prism> throws an exception, other <Prism>IAfterProcess&lt;T&gt;</Prism> hooks will still be executed and the result of the operation will still be returned. If an <Prism>IAfterProcess&lt;T&gt;</Prism> fails, it's up to the developer to notify the user of any consequences of failure.
+</P>
+
+<P>
+	An example of an <Prism>IAfterProcess&lt;T&gt;</Prism> is the <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.Cms/Identity/Hooks/ForceDeletedAccountLogoutHook.cs">ForceDeletedAccountLogoutHook</ExternalLink>, which checks for an active user session when an account is deleted, and if one is found, ends the user session immediately.
+</P>
+
+<H2>How services use hooks</H2>
+
+<P>
+	As alluded before, different types of services use hooks in slightly different ways. Here, we'll discuss how each of the services use hooks.
+</P>
+
+<H3>Action service</H3>
+
+<P>
+	The action service is the prototypical service in the documentation, so anytime the docs discuss how services work <em>in general</em>, they're probably talking about action services. That said, action services operate roughly as described right here in the docs when discussing hooks.
+</P>
+
+<List Ordered>
+	<li>
+		All <Prism>IAccessValidator&lt;T&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IStateValidator&lt;T&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IBeforeProcess&lt;T&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		<Prism>IProcessor&lt;T&gt;</Prism> is executed. If it throws or indicates failure, the action service returns <Prism>false</Prism>
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;T&gt;</Prism> hooks are executed
+	</li>
+</List>
+
+<H3>Result service</H3>
+
+<P>
+	Because the result service is intended to generate output instead of accept input, it uses hooks differently than the general action service.
+</P>
+
+<List Ordered>
+	<li>
+		All <Prism>IAccessValidator&lt;T&gt;</Prism> hooks are executed, with <Prism>default(T)</Prism> passed as the value to the <Prism>input</Prism> argument (since no action has been taken, <Prism>T</Prism> doesn't exist yet. Access validation needs to define access rules that don't depend on <Prism>T</Prism>)
+	</li>
+	<li>
+		<Prism>IResultProcessor&lt;T&gt;</Prism> is executed. If it a) throws, b) indicates failure, or c) returns <Prism>null</Prism>, the result action service returns <Prism>default(T)</Prism>
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;T&gt;</Prism> hooks are executed with the result of the process, which is guaranteed not to be <Prism>null</Prism>
+	</li>
+</List>
+
+<P>
+	Two hooks don't run with result services at all: The <Prism>IStateValidator&lt;T&gt;</Prism> doesn't execute because there's no input state to validate, and <Prism>IBeforeProcess&lt;T&gt;</Prism> doesn't execute because there's no input to act against.
+</P>
+
+<H3>CRUD services</H3>
+
+<P>
+	Each CRUD service also uses hooks differently, both from other service types and from each other CRUD service. We'll treat each CRUD service separately.
+</P>
+
+<P Color="Color.Info">
+	CRUD services don't use processors as such. Instead, CRUD services operate on entities directly in the database using Entity Framework.
+</P>
+
+<H4>Entity reader service</H4>
+
+<P>
+	Much like a result service, the entity reader service generates output. However, the entity reader service accepts a <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Entities/Filter.cs">Filter?</ExternalLink> as input, which provides filtering, sorting, and related entity loading data to the entity reader.
+</P>
+
+<P Color="Color.Info">
+	Filters are converted into Entity Framework LINQ method calls by an <ExternalLink Href="https://github.com/christianlevesque/sienar/blob/main/src/Sienar.BlazorUtils/Infrastructure/Processors/IFilterProcessor.cs">IFilterProcessor&lt;TEntity&gt;</ExternalLink>, which is used only by the entity reader service. This <Prism>IFilterProcessor&lt;TEntity&gt;</Prism> is not considered a hook because only a single instance is requested. While it's not a hook, it can still be overridden on a per-entity basis because each entity registers its <Prism>IFilterProcessor&lt;TEntity&gt;</Prism> with <Prism>IServiceCollection.TryAddTransient()</Prism>.
+</P>
+
+<P>
+	For single read operations (<Prism>Read(Guid, Filter?)</Prism>):
+</P>
+
+<List Ordered>
+	<li>
+		The entity is fetched from the database. If it was not found, the read action returns <Prism>null</Prism>
+	</li>
+	<li>
+		All <Prism>IAccessValidator&lt;TEntity&gt;</Prism> hooks are executed with the <Prism>TEntity</Prism> passed as the <Prism>input</Prism> argument
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+</List>
+
+<P>
+	For multiple read operations (<Prism>Read(Filter?)</Prism>):
+</P>
+
+<List Ordered>
+	<li>
+		The entities are fetched from the database and buffered into memory (for large entity sets, you should be paging results using the <Prism>Filter</Prism>)
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+</List>
+
+<P>
+	Because the entity is being read, no state changes will take place, so <Prism>IStateValidator&lt;TEntity&gt;</Prism> and <Prism>IBeforeProcess&lt;TEntity&gt;</Prism> are not used.
+</P>
+
+<P>
+	Furthermore, on multiple-read actions, <Prism>IAccessValidator&lt;TEntity&gt;</Prism> is not executed either. This is a design decision that was made to avoid the complexities of paging through results while accounting for entities that a user doesn't have permission to view. Instead of using an access validator to validate access permission after the fact, developers should opt to use the <Prism>IFilterProcessor&lt;TEntity&gt;</Prism> to ensure that unallowed results aren't returned in the first place (for example, add a call to <Prism>Where(entity => entity.UserId == &lt;user-id&gt;)</Prism> to ensure a user only receives their own results).
+</P>
+
+<H4>Entity writer service</H4>
+
+<P>
+	The entity writer service methods both accept a <Prism>TEntity</Prism> as input. However, the <Prism>Create(TEntity)</Prism> method returns a <Prism>Guid</Prism> representing the ID of the newly-created entity, while the <Prism>Update(TEntity)</Prism> method returns a <Prism>bool</Prism> representing the success of the update. Both methods follow the standard order of operations for action services.
+</P>
+
+<List Ordered>
+	<li>
+		All <Prism>IAccessValidator&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IStateValidator&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IBeforeProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		The <Prism>TEntity</Prism> is either inserted or updated in the database. If this process throws, the entity writer returns either <Prism>Guid.Empty</Prism> or <Prism>false</Prism>
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+</List>
+
+<H4>Entity deleter service</H4>
+
+<P>
+	The entity deleter service is similar to the standard action service in that it accepts an input and returns a <Prism>bool</Prism> to indicate the success. For that reason, it also runs hooks in the standard order of operations. Its only method is <Prism>Delete(Guid)</Prism>
+</P>
+
+<List Ordered>
+	<li>
+		The entity is fetched from the database using the supplied ID. If the entity is not found, the operation returns <Prism>false</Prism>
+	</li>
+	<li>
+		All <Prism>IAccessValidator&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IStateValidator&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		All <Prism>IBeforeProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+	<li>
+		The entity is deleted from the database. If this throws, the operation returns <Prism>false</Prism>
+	</li>
+	<li>
+		All <Prism>IAfterProcess&lt;TEntity&gt;</Prism> hooks are executed
+	</li>
+</List>
