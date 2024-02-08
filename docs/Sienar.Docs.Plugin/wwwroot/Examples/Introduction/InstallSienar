@@ -1,0 +1,4 @@
+cd SienarExample
+dotnet add package Sienar.Cms
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite # feel free to change this for your app - this is just an example. Sienar only uses EF for queries, so nothing will break
+dotnet add package Microsoft.EntityFrameworkCore.Design # necessary for ef-tools

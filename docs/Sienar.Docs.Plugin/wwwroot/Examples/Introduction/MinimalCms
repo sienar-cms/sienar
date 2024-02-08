@@ -1,0 +1,12 @@
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Plugins;
+using SienarExample;
+
+await SienarServerAppBuilder
+	.Create<AppDbContext>
+		args,
+		dbContextLifetime: ServiceLifetime.Transient)
+	.AddPlugin(new SienarBlazorPlugin())
+	.AddPlugin(new SienarCmsPlugin())
+	.Build()
+	.RunAsync();

@@ -9,6 +9,11 @@ public static class Examples
 	public static class Introduction
 	{
 		private const string Root = $"{Examples.Root}/Introduction";
+		public const string NewBlankProjectForSienar = $"{Root}/NewBlankProjectForSienar";
+		public const string InstallSienar = $"{Root}/InstallSienar";
+		public const string AddDbContext = $"{Root}/AddDbContext";
+		public const string UpdateDatabase = $"{Root}/UpdateDatabase";
+		public const string MinimalCms = $"{Root}/MinimalCms";
 		public const string StandardBoilerplate = $"{Root}/StandardBoilerplate";
 	}
 
