@@ -9,7 +9,7 @@
 <CascadingAuthenticationState>
 	<Router
 		AppAssembly="@_rootAssembly"
-		AdditionalAssemblies="@AssemblyProvider.GetAssemblies()">
+		AdditionalAssemblies="@AssemblyProvider.Items">
 		<Found Context="routeData">
 			<AuthorizeRouteView
 				RouteData="@routeData"
@@ -44,7 +44,7 @@
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
-		var routableAssemblies = new List<Assembly>(AssemblyProvider.GetAssemblies());
+		var routableAssemblies = new List<Assembly>(AssemblyProvider.Items);
 		_rootAssembly = routableAssemblies[0];
 		routableAssemblies.RemoveAt(0);
 	}

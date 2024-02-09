@@ -45,7 +45,7 @@ public class AppPlugin : ISienarServerPlugin
 	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider)
 	{
-		styleProvider.Enqueue("/css/site.css");
+		styleProvider.Add("/css/site.css");
 	}
 
 	/// <inheritdoc />

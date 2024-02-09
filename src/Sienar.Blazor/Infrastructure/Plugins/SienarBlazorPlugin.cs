@@ -67,17 +67,17 @@ public class SienarBlazorPlugin : ISienarServerPlugin
 	public void SetupStyles(IStyleProvider styleProvider)
 	{
 		styleProvider
-			.Enqueue("/_content/MudBlazor/MudBlazor.min.css")
-			.Enqueue("/_content/Sienar.Blazor/sienar.css")
-			.Enqueue("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
+			.Add("/_content/MudBlazor/MudBlazor.min.css")
+			.Add("/_content/Sienar.Blazor/sienar.css")
+			.Add("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
 	}
 
 	public void SetupScripts(IScriptProvider scriptProvider)
 	{
 		scriptProvider
-			.Enqueue("/_framework/blazor.server.js")
-			.Enqueue("/_content/MudBlazor/MudBlazor.min.js")
-			.Enqueue("/_content/Sienar.Blazor/sienar.js");
+			.Add("/_framework/blazor.server.js")
+			.Add("/_content/MudBlazor/MudBlazor.min.js")
+			.Add("/_content/Sienar.Blazor/sienar.js");
 	}
 
 	/// <inheritdoc />

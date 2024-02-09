@@ -8,7 +8,7 @@ public class ScriptResource
 	/// <remarks>
 	/// The URL provided here should either be absolute (e.g., to a CDN link) or root-relative (e.g., <c>/_content/My.Plugin.Assembly/main.js</c>).
 	/// </remarks>
-	public required string Url { get; init; }
+	public required string Src { get; init; }
 
 	/// <summary>
 	/// Whether the script resource should be included as a <b>module</b>
@@ -40,10 +40,13 @@ public class ScriptResource
 	/// </summary>
 	public string? Integrity { get; init; }
 
-	public string GetScriptType()
+	public string? GetScriptType()
 	{
 		return IsModule
 			? "module"
-			: "text/javascript";
+			: null;
 	}
+
+	public static implicit operator ScriptResource(string source)
+		=> new() { Src = source };
 }

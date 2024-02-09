@@ -16,10 +16,10 @@
 	      type="image/png"
 	      href="/favicon.png"/>
 
-	@foreach (var stylesheet in StyleProvider.GetStylesheets())
+	@foreach (var stylesheet in StyleProvider.Items)
 	{
 		<link
-			href="@stylesheet.Url"
+			href="@stylesheet.Href"
 			crossorigin="@stylesheet.Mode.GetHtmlValue()"
 			referrerpolicy="@stylesheet.Referrer.GetHtmlValue()"
 			integrity="@stylesheet.Integrity"
@@ -43,11 +43,11 @@
         <a class="dismiss">🗙</a>
     </div>
 
-@foreach (var script in ScriptProvider.GetScripts())
+@foreach (var script in ScriptProvider.Items)
 {
 	<script
 		type="@script.GetScriptType()"
-		src="@script.Url"
+		src="@script.Src"
 		crossorigin="@script.Mode.GetHtmlValue()"
 		referrerpolicy="@script.Referrer.GetHtmlValue()"
 		integrity="@script.Integrity"

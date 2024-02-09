@@ -8,7 +8,7 @@ public class StyleResource
 	/// <remarks>
 	/// The URL provided here should either be absolute (e.g., to a CDN link) or root-relative (e.g., <c>/_content/My.Plugin.Assembly/main.js</c>).
 	/// </remarks>
-	public required string Url { get; init; }
+	public required string Href { get; init; }
 
 	/// <summary>
 	/// The value to use for the <c>crossorigin</c> attribute
@@ -24,4 +24,7 @@ public class StyleResource
 	/// The expected hash of the resource
 	/// </summary>
 	public string? Integrity { get; init; }
+
+	public static implicit operator StyleResource(string source)
+		=> new() { Href = source };
 }
