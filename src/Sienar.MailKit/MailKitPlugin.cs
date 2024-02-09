@@ -3,6 +3,7 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
@@ -31,16 +32,8 @@ public class MailKitPlugin : ISienarServerPlugin
 		services.RemoveService<IEmailSender>();
 		services.AddScoped<IEmailSender, MailKitSender>();
 
-		var smtpConfigurer = services.GetAndRemoveService<Action<SmtpOptions>>();
-		if (smtpConfigurer is null)
-		{
-			services.Configure<SmtpOptions>(
-				builder.Configuration.GetSection("Sienar:Email:Smtp"));
-		}
-		else
-		{
-			services.Configure(smtpConfigurer);
-		}
+		services.ApplyDefaultConfiguration<SmtpOptions>(
+			builder.Configuration.GetSection("Sienar:Email:Smtp"));
 	}
 
 	/// <inheritdoc />
