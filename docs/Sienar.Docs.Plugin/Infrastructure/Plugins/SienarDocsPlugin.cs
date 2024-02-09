@@ -28,13 +28,6 @@ public class SienarDocsPlugin : ISienarClientPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
-	{
-		HasRoutableComponents = true,
-		UsesProviders = true
-	};
-
-	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider) {}
 
 	/// <inheritdoc />
@@ -90,5 +83,11 @@ public class SienarDocsPlugin : ISienarClientPlugin
 		rootComponentProvider
 			.AddRootComponent("#app", typeof(SienarApp))
 			.AddRootComponent("head::after", typeof(HeadOutlet));
+	}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
+	{
+		routableAssemblyProvider.Add(typeof(SienarDocsPlugin).Assembly);
 	}
 }

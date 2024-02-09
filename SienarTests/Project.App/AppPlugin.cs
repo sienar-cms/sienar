@@ -21,13 +21,6 @@ public class AppPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
-	{
-		UsesProviders = true,
-		HasRoutableComponents = true
-	};
-
-	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder) {}
 
 	/// <inheritdoc />
@@ -36,7 +29,18 @@ public class AppPlugin : ISienarServerPlugin
 		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
 	}
 
-	public bool PluginShouldExecute(HttpContext context) => true;
+	public bool PluginShouldExecute(
+		HttpContext context,
+		IPluginExecutionTracker executionTracker)
+	{
+		if (!executionTracker.SubAppHasExecuted)
+		{
+			executionTracker.ClaimExecution();
+			return true;
+		}
+
+		return false;
+	}
 
 	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider)
@@ -55,4 +59,10 @@ public class AppPlugin : ISienarServerPlugin
 
 	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider) {}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
+	{
+		routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
+	}
 }

@@ -21,9 +21,6 @@ public static class SienarClientAppBuilderExtensions
 		self.Builder.Services.AddSingleton(plugin);
 		plugin.SetupRootComponents(self.RootComponentProvider);
 
-		if (plugin.PluginSettings.HasRoutableComponents)
-			self.RoutableAssemblyProvider.Add(plugin.GetType().Assembly);
-
 		return self;
 	}
 

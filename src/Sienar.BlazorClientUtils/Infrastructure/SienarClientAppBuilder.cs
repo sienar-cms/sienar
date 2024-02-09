@@ -54,6 +54,7 @@ public class SienarClientAppBuilder
 		var dashboardProvider = app.Services.GetRequiredKeyedService<IMenuProvider>(
 			SienarBlazorUtilsServiceKeys.DashboardProvider);
 		var componentProvider = app.Services.GetRequiredService<IComponentProvider>();
+		var routableAssemblyProvider = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
 
 		foreach (var plugin in Plugins)
 		{
@@ -61,6 +62,7 @@ public class SienarClientAppBuilder
 			plugin.SetupMenu(menuProvider);
 			plugin.SetupDashboard(dashboardProvider);
 			plugin.SetupComponents(componentProvider);
+			plugin.SetupRoutableAssemblies(routableAssemblyProvider);
 		}
 
 		return app;

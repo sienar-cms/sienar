@@ -22,9 +22,6 @@ public class MailKitPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new();
-
-	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder)
 	{
 		var services = builder.Services;
@@ -49,7 +46,9 @@ public class MailKitPlugin : ISienarServerPlugin
 	/// <inheritdoc />
 	public void SetupApp(WebApplication app) {}
 
-	public bool PluginShouldExecute(HttpContext context) => false;
+	public bool PluginShouldExecute(
+		HttpContext context,
+		IPluginExecutionTracker executionTracker) => false;
 
 	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider) {}
@@ -65,4 +64,7 @@ public class MailKitPlugin : ISienarServerPlugin
 
 	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider) {}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider) {}
 }

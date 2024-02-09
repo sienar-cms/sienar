@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
@@ -22,13 +23,6 @@ public class SienarCmsPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
-	{
-		HasRoutableComponents = true,
-		UsesProviders = true
-	};
-
-	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder)
 	{
 		builder.Services
@@ -43,8 +37,19 @@ public class SienarCmsPlugin : ISienarServerPlugin
 		app.MapFallbackToPage("/dashboard/{**segment}", "/_Host");
 	}
 
-	public bool PluginShouldExecute(HttpContext context)
-		=> context.Request.Path.StartsWithSegments("/dashboard");
+	public bool PluginShouldExecute(
+		HttpContext context,
+		IPluginExecutionTracker executionTracker)
+	{
+		if (executionTracker.SubAppHasExecuted) return false;
+		if (context.Request.Path.StartsWithSegments("/dashboard"))
+		{
+			executionTracker.ClaimExecution();
+			return true;
+		}
+
+		return false;
+	}
 
 	public void SetupMenu(IMenuProvider menuProvider)
 	{
@@ -83,5 +88,11 @@ public class SienarCmsPlugin : ISienarServerPlugin
 	{
 		componentProvider.DefaultLayout = typeof(DashboardLayout);
 		componentProvider.SidebarHeader = typeof(DrawerHeader);
+	}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
+	{
+		routableAssemblyProvider.Add(typeof(SienarCmsPlugin).Assembly);
 	}
 }

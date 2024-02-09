@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,22 +8,22 @@ using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;
 
-public class SienarPluginMiddleware<TPlugin>
-	where TPlugin : ISienarServerPlugin
+public class SienarPluginMiddleware
 {
 	private readonly RequestDelegate _next;
-	private readonly TPlugin _plugin;
+	private readonly IEnumerable<ISienarServerPlugin> _plugins;
 
 	public SienarPluginMiddleware(
 		RequestDelegate next,
-		TPlugin plugin)
+		IEnumerable<ISienarServerPlugin> plugins)
 	{
 		_next = next;
-		_plugin = plugin;
+		_plugins = plugins;
 	}
 
 	public async Task InvokeAsync(
 		HttpContext ctx,
+		IPluginExecutionTracker executionTracker,
 		IStyleProvider styleProvider,
 		IScriptProvider scriptProvider,
 		IPluginProvider pluginProvider,
@@ -30,25 +31,24 @@ public class SienarPluginMiddleware<TPlugin>
 		IComponentProvider componentProvider,
 		IServiceProvider serviceProvider)
 	{
-		if (_plugin.PluginShouldExecute(ctx))
+		foreach (var plugin in _plugins)
 		{
-			pluginProvider.Add(_plugin);
-
-			if (_plugin.PluginSettings.HasRoutableComponents)
+			if (plugin.PluginShouldExecute(ctx, executionTracker))
 			{
-				routableAssemblyProvider.Add(_plugin.GetType().Assembly);
+				pluginProvider.Add(plugin);
+
+				var menuProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
+					SienarBlazorUtilsServiceKeys.MenuProvider);
+				var dashboardProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
+					SienarBlazorUtilsServiceKeys.DashboardProvider);
+
+				plugin.SetupStyles(styleProvider);
+				plugin.SetupScripts(scriptProvider);
+				plugin.SetupMenu(menuProvider);
+				plugin.SetupDashboard(dashboardProvider);
+				plugin.SetupComponents(componentProvider);
+				plugin.SetupRoutableAssemblies(routableAssemblyProvider);
 			}
-
-			var menuProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
-				SienarBlazorUtilsServiceKeys.MenuProvider);
-			var dashboardProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
-				SienarBlazorUtilsServiceKeys.DashboardProvider);
-
-			_plugin.SetupStyles(styleProvider);
-			_plugin.SetupScripts(scriptProvider);
-			_plugin.SetupMenu(menuProvider);
-			_plugin.SetupDashboard(dashboardProvider);
-			_plugin.SetupComponents(componentProvider);
 		}
 
 		await _next(ctx);

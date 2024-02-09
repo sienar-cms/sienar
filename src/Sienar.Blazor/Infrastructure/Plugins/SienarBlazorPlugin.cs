@@ -22,9 +22,6 @@ public class SienarBlazorPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new() { UsesProviders = true };
-
-	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder)
 	{
 		SienarUtils.SetupBaseDirectory();
@@ -58,7 +55,9 @@ public class SienarBlazorPlugin : ISienarServerPlugin
 		app.MapBlazorHub();
 	}
 
-	public bool PluginShouldExecute(HttpContext context) => true;
+	public bool PluginShouldExecute(
+		HttpContext context,
+		IPluginExecutionTracker executionTracker) => true;
 
 	public void SetupMenu(IMenuProvider menuProvider) {}
 
@@ -89,4 +88,7 @@ public class SienarBlazorPlugin : ISienarServerPlugin
 		componentProvider.AuthorizingView = typeof(Authorizing);
 		componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);
 	}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider) {}
 }

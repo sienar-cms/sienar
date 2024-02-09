@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
 		self.TryAddScoped<IPluginProvider, PluginProvider>();
 		self.TryAddScoped<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IScriptProvider, ScriptProvider>();
+		self.TryAddScoped<IPluginExecutionTracker, PluginExecutionTracker>();
 		self.TryAddScoped(typeof(IDbContextAccessor<>), typeof(DbContextAccessor<>));
 		self.TryAddTransient(typeof(IEntityReader<>), typeof(EntityReader<>));
 		self.TryAddTransient(typeof(IEntityWriter<>), typeof(EntityWriter<>));

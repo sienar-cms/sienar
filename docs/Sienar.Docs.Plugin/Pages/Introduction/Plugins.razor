@@ -32,11 +32,11 @@
 <H2>Plugins on request execution</H2>
 
 <P>
-	Sienar plugins have the option to execute on each request if they choose. If a plugin only adds services and/or middleware, it doesn't need to execute on each request because service registration and middleware execution are set up at application startup, just like a normal ASP.NET app. Plugins executing in middleware can be controlled by the <Prism>PluginSettings.HasRoutableComponents</Prism> and <Prism>PluginSettings.UsesProviders</Prism> properties: If either of these boolean properties is <Prism>true</Prism>, then the plugin will be added to the middleware pipeline. If both are <Prism>false</Prism>, then the plugin will only be executed once at startup.
+	On each request, Sienar will call each plugin's <Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> method, which determines if the plugin actually executes on a request. This allows plugins to decide if they want to only execute on certain requests, which allows for the creation of "sub-apps" that execute at different endpoints. For example, the <Prism>SienarBlazorPlugin</Prism> executes on every single request because it adds core CSS/JS files for Sienar and MudBlazor, while the <Prism>SienarCmsPlugin</Prism> only executes if the current request URL starts with <Prism>/dashboard</Prism>, which effectively creates a sub-app at the <Prism>/dashboard</Prism> URL.
 </P>
 
 <P>
-	On each request, for each plugin included in Sienar's middleware pipeline, Sienar will call the plugin's <Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> method, which determines if the plugin actually executes on a request. This allows plugins to decide if they want to only execute on certain requests, which allows for the creation of "sub-apps" that execute at different endpoints. For example, the <Prism>SienarBlazorPlugin</Prism> executes on every single request because it adds core CSS/JS files for Sienar and MudBlazor, while the <Prism>SienarCmsPlugin</Prism> only executes if the current request URI starts with <Prism>/dashboard</Prism>, which effectively creates a sub-app at the <Prism>/dashboard</Prism> URI.
+	<Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> receives two arguments. The first is the <Prism>HttpContext</Prism> of the current request, which plugins can use to determine if the URL matches a specific route before executing (see above discussion of <Prism>SienarCmsPlugin</Prism> only executing on <Prism>/dashboard</Prism> routes). The second is a scoped instance of the <Prism>IPluginExecutionTracker</Prism> service, which indicates whether a sub-app has executed yet or not. Developers can use <Prism>IPluginExecutionTracker</Prism> to create a default app that should execute if no other apps have executed. Sub-apps are discussed in greater detail in a later article.
 </P>
 
 <H2>Plugin methods</H2>
@@ -55,6 +55,10 @@
 
 <P>
 	<Prism>ISienarPlugin.SetupMenu()</Prism> is used to set up named menus with a series of links in each menu. This method receives an <Prism>IMenuProvider</Prism> as its only argument, which is used to set up different named menus and add links to those named menus. <Span Color="Color.Info">The <Prism>IMenuProvider</Prism> used here is a keyed service that is separate from the <Prism>IMenuProvider</Prism> supplied to <Prism>ISienarPlugin.SetupDashboard()</Prism>, so you can safely use the same category and menu names with different links if you choose.</Span>
+</P>
+
+<P>
+	<Prism>ISienarPlugin.SetupRoutableComponents()</Prism> is used to let Sienar know that assemblies contain routable components. The assemblies registered here are supplied to the Blazor <Prism>&lt;Router&gt;</Prism> component.
 </P>
 
 <P>

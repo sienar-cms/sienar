@@ -1,0 +1,5 @@
+/// <summary>
+/// Configures routable assemblies
+/// </summary>
+/// <param name="routableAssemblyProvider">the <see cref="IRoutableAssemblyProvider"/></param>
+void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider);

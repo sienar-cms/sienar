@@ -43,16 +43,9 @@ public class SienarBlazorServerApp : SienarApp
 		var plugin = SienarPlugins.First(p => p.PluginData.Name == name);
 		PluginProvider.Add(plugin);
 
-		if (plugin.PluginSettings.HasRoutableComponents)
-		{
-			AssemblyProvider.Add(plugin.GetType().Assembly);
-		}
-
-		if (plugin.PluginSettings.UsesProviders)
-		{
-			plugin.SetupMenu(MenuProvider);
-			plugin.SetupDashboard(DashboardProvider);
-			plugin.SetupComponents(ComponentProvider);
-		}
+		plugin.SetupMenu(MenuProvider);
+		plugin.SetupDashboard(DashboardProvider);
+		plugin.SetupComponents(ComponentProvider);
+		plugin.SetupRoutableAssemblies(AssemblyProvider);
 	}
 }

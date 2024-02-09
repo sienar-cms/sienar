@@ -1,4 +1,0 @@
-﻿/// <summary>
-/// Plugin settings for the current plugin
-/// </summary>
-PluginSettings PluginSettings { get; }

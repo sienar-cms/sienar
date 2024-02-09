@@ -10,11 +10,6 @@ public interface ISienarPlugin
 	PluginData PluginData { get; }
 
 	/// <summary>
-	/// Plugin settings for the current plugin
-	/// </summary>
-	PluginSettings PluginSettings { get; }
-
-	/// <summary>
 	/// Configures stylesheets to be loaded with the current user session
 	/// </summary>
 	/// <param name="styleProvider">the <see cref="IStyleProvider"/></param>
@@ -43,4 +38,10 @@ public interface ISienarPlugin
 	/// </summary>
 	/// <param name="componentProvider">the <see cref="IComponentProvider"/></param>
 	void SetupComponents(IComponentProvider componentProvider);
+
+	/// <summary>
+	/// Configures routable assemblies
+	/// </summary>
+	/// <param name="routableAssemblyProvider">the <see cref="IRoutableAssemblyProvider"/></param>
+	void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider);
 }

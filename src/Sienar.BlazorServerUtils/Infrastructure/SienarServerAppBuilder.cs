@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +14,6 @@ public class SienarServerAppBuilder
 {
 	public readonly WebApplicationBuilder Builder;
 	public readonly List<ISienarServerPlugin> Plugins = [];
-	public readonly List<Action<IApplicationBuilder>> MiddlewareSetupFuncs = [];
 	public MudTheme? Theme;
 	public bool IsDarkMode;
 
@@ -95,7 +93,7 @@ public class SienarServerAppBuilder
 			plugin.SetupApp(app);
 		}
 
-		foreach (var func in MiddlewareSetupFuncs) func(app);
+		app.UseMiddleware<SienarPluginMiddleware>();
 
 		return app;
 	}

@@ -17,7 +17,11 @@
 	Title="PluginShouldExecute"
 	CodeFile="@Examples.Api.ISienarServerPlugin.PluginShouldExecute">
 	<P>
-		This method is used by Sienar middleware to determine if the plugin should execute on each request. (Because Blazor Server treats each "request" as an entire user session, this method will only run on each full page load.) It accepts an <Prism>HttpContext</Prism> as its only argument, so you can use that context to decide whether the application should execute. For example, <Prism>SienarBlazorPlugin</Prism> does work that is needed on every request to a Sienar application, so its implementation simply returns <Prism>true</Prism>, while <Prism>SienarCmsPlugin</Prism> should only execute if the user is trying to access the dashboard, so it returns <Prism>context.Request.Path.StartsWithSegments("/dashboard")</Prism> to only perform plugin actions on dashboard pages.
+		This method is used by Sienar middleware to determine if the plugin should execute on each request. (Because Blazor Server treats each "request" as an entire user session, this method will only run on each full page load.) It accepts an <Prism>HttpContext</Prism> as its first argument, so you can use that context to decide whether the application should execute. For example, <Prism>SienarBlazorPlugin</Prism> does work that is needed on every request to a Sienar application, so its implementation simply returns <Prism>true</Prism>, while <Prism>SienarCmsPlugin</Prism> should only execute if the user is trying to access the dashboard, so it returns <Prism>context.Request.Path.StartsWithSegments("/dashboard")</Prism> to only perform plugin actions on dashboard pages.
+	</P>
+
+	<P>
+		As its second argument, this method receives a scoped instance of <Prism>IPluginExecutionTracker</Prism>, which is a special service used to indicate to subapps that another subapp has already executed. For example, since <Prism>SienarCmsPlugin</Prism> executes on <Prism>/dashboard</Prism> requests, it's considered a subapp. Once a single subapp has decided to execute, other subapps should refrain from executing (by checking <Prism>IPluginExecutionTracker.SubAppHasExecuted</Prism>). This system allows developers to create a distinct subapp that executes at the top level of an app (i.e., <Prism>yourapp.com/</Prism> - you can register your app's plugin last, and if no other subapp has executed, your app's plugin should execute.
 	</P>
 </MethodData>
 

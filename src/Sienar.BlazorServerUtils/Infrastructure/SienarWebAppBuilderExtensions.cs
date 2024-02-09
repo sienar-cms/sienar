@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
-using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
@@ -27,12 +26,6 @@ public static class SienarWebAppBuilderExtensions
 		plugin.SetupDependencies(self.Builder);
 		self.Builder.Services.AddSingleton<ISienarServerPlugin>(plugin);
 		self.Builder.Services.AddSingleton(plugin);
-
-		if (plugin.PluginSettings.UsesProviders
-			|| plugin.PluginSettings.HasRoutableComponents)
-		{
-			self.MiddlewareSetupFuncs.Add(app => app.UsePluginMiddleware<TPlugin>());
-		}
 
 		return self;
 	}
