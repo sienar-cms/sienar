@@ -46,6 +46,19 @@ public static class MenuProviderExtensions
 			.AddMenuLink(
 				new()
 				{
+					Text = "Guides",
+					Sublinks =
+					[
+						new()
+						{
+							Text = "Sub-apps",
+							Url = Urls.Guides.SubApps
+						}
+					]
+				})
+			.AddMenuLink(
+				new()
+				{
 					Text = "API",
 					Sublinks =
 					[

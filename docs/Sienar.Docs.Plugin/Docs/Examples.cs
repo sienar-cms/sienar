@@ -52,4 +52,18 @@ public static class Examples
 			public const string ConfigureTheme = $"{Root}/ConfigureTheme";
 		}
 	}
+
+	public static class Guides
+	{
+		private const string Root = $"{Examples.Root}/Guides";
+
+		public static class SubApps
+		{
+			private const string Root = $"{Guides.Root}/SubApps";
+			public const string SimpleRouteLimitation = $"{Root}/SimpleRouteLimitation";
+			public const string AlmostSubApp = $"{Root}/AlmostSubApp";
+			public const string SimpleSubApp = $"{Root}/SimpleSubApp";
+			public const string ExecuteAsSubApp = $"{Root}/ExecuteAsSubApp";
+		}
+	}
 }

@@ -1,0 +1,10 @@
+using Sienar.Extensions;
+
+// ...
+
+public bool PluginShouldExecute(
+	HttpContext context,
+	IPluginExecutionTracker executionTracker)
+	=> executionTracker.ExecuteAsSubApp(
+		context,
+		"/dashboard");

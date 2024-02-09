@@ -1,0 +1,13 @@
+public bool PluginShouldExecute(
+	HttpContext context,
+	IPluginExecutionTracker executionTracker)
+{
+	if (executionTracker.SubAppHasExecuted) return false;
+	if (context.Request.Path.StartsWithSegments("/dashboard"))
+	{
+		executionTracker.ClaimExecution();
+		return true;
+	}
+
+	return false;
+}

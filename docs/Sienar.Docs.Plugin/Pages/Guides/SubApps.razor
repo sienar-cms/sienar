@@ -1,0 +1,81 @@
+﻿@using Sienar.Infrastructure
+@inherits DocPageBase
+@attribute [Route(Urls.Guides.SubApps)]
+@attribute [Series(Constants.SeriesNames.Guides)]
+@attribute [Title("Sub-apps")]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	Sienar is designed to allow different plugins to execute at different endpoints if they choose. Used in conjunction with the <Prism>IPLuginExecutionTracker</Prism>, developers can create sub-apps that execute exclusively at specific endpoints.
+</P>
+
+<P>
+	For Sienar's purposes, consider a sub-app any plugin that executes at an endpoint while excluding other plugins from executing at that endpoint. If a plugin executes on <Prism>/dashboard</Prism> routes, it is a sub-app <strong>if and only if</strong> it prevents other plugins from also executing on <Prism>/dashboard</Prism>.
+</P>
+
+<H2>A simple sub-app</H2>
+
+<H3>Limiting a plugin to a specific route</H3>
+
+<P>
+	The <Prism>SienarCmsPlugin</Prism> only executes on the <Prism>/dashboard</Prism> endpoint. A straightforward way to achieve this is to check if the current request starts with <Prism>/dashboard</Prism>:
+</P>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@Examples.Guides.SubApps.SimpleRouteLimitation"
+	Block/>
+
+<P>
+	As you can see, any request starting with <Prism>/dashboard</Prism> will cause this plugin to execute. This may be all you need for your plugin. For example, if you want to add pages to the <Prism>/dashboard</Prism> for users or administrators to interact with your plugin, this is the easiest way to ensure that your plugin executes <em>alongside</em> other plugins that run on <Prism>/dashboard</Prism>. But just executing on a specific route doesn't make a plugin a sub-app.
+</P>
+
+<H3>Creating a sub-app</H3>
+
+<P>
+	The previous example isn't a sub-app in the Sienar sense because it doesn't disallow other sub-apps from executing. In order to do that, it has to use the <Prism>IPluginExecutionTracker</Prism>.
+</P>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@Examples.Guides.SubApps.AlmostSubApp"
+	Block/>
+
+<P>
+	By adding a call to <Prism>IPluginExecutionTracker.ClaimExecution()</Prism>, your plugin informs other plugins that it has executed (or "claimed execution"), so they should not execute even if they otherwise might wish to. This is <em>almost</em> a sub-app, and technically, it works as a sub-app in the sense that it prevents other sub-apps from executing. However, your sub-app will still execute even if another sub-app has already executed. To change this, you need to first check the <Prism>IPluginExecutionTracker.SubAppHasExecuted</Prism> property:
+</P>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@Examples.Guides.SubApps.SimpleSubApp"
+	Block/>
+
+<P>
+	Now, your plugin is executing like a sub-app. Because you first check if any other sub-app has executed, you won't step on any other plugin's toes, and because you let other sub-apps know that your sub-app is executing, other plugins know to stay out of your way.
+</P>
+
+<P>
+	The reason you should check if another sub-app has executed is in case another sub-app wants to use the same route as you. For example, the <Prism>SienarCmsPlugin</Prism> uses <Prism>/dashboard</Prism> as its base route, but your plugin might want to use <Prism>/dashboard/&lt;your-plugin-name&gt;</Prism> as its base route. As long as your plugin is registered before <Prism>SienarCmsPlugin</Prism>, this will work as expected, and in general, your plugin shouldn't care what another plugin uses as its base route.
+</P>
+
+<P>
+	Because this logic represents a common pattern, it has been implemented as an extension method, <Prism>IPluginExecutionTracker.ExecuteAsSubApp()</Prism>, which accepts the <Prism>HttpContext</Prism> as its first argument and the sub-app route string as its second argument. You can refactor your plugin to use this extension method:
+</P>
+
+<Prism
+	Language="Languages.Csharp"
+	CodeFile="@Examples.Guides.SubApps.ExecuteAsSubApp"
+	Block/>
+
+<H2>Limitations</H2>
+
+<P>
+	As you can see, this system is very useful for limiting your app to executing only when other sub-apps haven't already executed. However, the biggest limitation of this system is that it isn't enforceable.
+</P>
+
+<P>
+	The sub-app examples above show that in order for a sub-app to skip execution if another sub-app has already executed, it has to manually exclude <em>itself</em>. There's no true way to prevent another plugin from executing if it wants to, which is by design. It's perfectly valid for multiple plugins to execute at a specific route. For example, you might want to add your plugin's configuration and administration pages to the <Prism>/dashboard</Prism> app. This is fine to do, so the <Prism>SienarCmsPlugin</Prism> can't prevent your plugin from executing on the <Prism>/dashboard</Prism> route. The system is unenforceable and opt-in, which provides flexibility to developers to create systems that they want to create.
+</P>

@@ -14,6 +14,12 @@ public static class Urls
 		public const string ISienarServerPlugin = $"{Base}/{nameof(ISienarServerPlugin)}";
 	}
 
+	public static class Guides
+	{
+		private const string Base = "/guides";
+		public const string SubApps = $"{Base}/sub-apps";
+	}
+
 	public static class Introduction
 	{
 		private const string Base = "/introduction";

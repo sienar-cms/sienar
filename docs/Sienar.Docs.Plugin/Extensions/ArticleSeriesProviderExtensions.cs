@@ -2,6 +2,7 @@
 using Sienar.Infrastructure.Articles;
 using Sienar.Pages;
 using Sienar.Pages.API;
+using Sienar.Pages.Guides;
 using Sienar.Pages.Introduction;
 
 namespace Sienar.Extensions;
@@ -19,7 +20,10 @@ public static class ArticleSeriesProviderExtensions
 			// API documentation articles
 			.AddArticlePage<ISienarPlugin>()
 			.AddArticlePage<ISienarServerPlugin>()
-			.AddArticlePage<SienarServerAppBuilder>();
+			.AddArticlePage<SienarServerAppBuilder>()
+
+			// Guides
+			.AddArticlePage<SubApps>();
 
 	public static IArticleSeriesProvider AddArticlePage<TPage>(
 		this IArticleSeriesProvider self)

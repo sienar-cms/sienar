@@ -1,0 +1,4 @@
+public bool PluginShouldExecute(
+	HttpContext context,
+	IPluginExecutionTracker executionTracker)
+	=> context.Request.Path.StartsWithSegments("/dashboard");

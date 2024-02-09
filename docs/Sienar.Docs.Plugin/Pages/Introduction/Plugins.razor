@@ -36,7 +36,7 @@
 </P>
 
 <P>
-	<Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> receives two arguments. The first is the <Prism>HttpContext</Prism> of the current request, which plugins can use to determine if the URL matches a specific route before executing (see above discussion of <Prism>SienarCmsPlugin</Prism> only executing on <Prism>/dashboard</Prism> routes). The second is a scoped instance of the <Prism>IPluginExecutionTracker</Prism> service, which indicates whether a sub-app has executed yet or not. Developers can use <Prism>IPluginExecutionTracker</Prism> to create a default app that should execute if no other apps have executed. Sub-apps are discussed in greater detail in a later article.
+	<Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> receives two arguments. The first is the <Prism>HttpContext</Prism> of the current request, which plugins can use to determine if the URL matches a specific route before executing (see above discussion of <Prism>SienarCmsPlugin</Prism> only executing on <Prism>/dashboard</Prism> routes). The second is a scoped instance of the <Prism>IPluginExecutionTracker</Prism> service, which indicates whether a sub-app has executed yet or not. Developers can use <Prism>IPluginExecutionTracker</Prism> to create a default app that should execute if no other apps have executed. Sub-apps are discussed in greater detail in a later article. For more information on how this works, see the <MudLink Href="@Urls.Guides.SubApps">sub-app guide</MudLink>.
 </P>
 
 <H2>Plugin methods</H2>

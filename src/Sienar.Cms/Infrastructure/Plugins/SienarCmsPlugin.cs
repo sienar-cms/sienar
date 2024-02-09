@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
@@ -40,16 +39,9 @@ public class SienarCmsPlugin : ISienarServerPlugin
 	public bool PluginShouldExecute(
 		HttpContext context,
 		IPluginExecutionTracker executionTracker)
-	{
-		if (executionTracker.SubAppHasExecuted) return false;
-		if (context.Request.Path.StartsWithSegments("/dashboard"))
-		{
-			executionTracker.ClaimExecution();
-			return true;
-		}
-
-		return false;
-	}
+		=> executionTracker.ExecuteAsSubApp(
+			context,
+			"/dashboard");
 
 	public void SetupMenu(IMenuProvider menuProvider)
 	{

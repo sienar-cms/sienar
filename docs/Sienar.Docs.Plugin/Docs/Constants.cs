@@ -11,5 +11,6 @@ public static class Constants
 	{
 		public const string Api = "API";
 		public const string Introduction = "Introduction";
+		public const string Guides = "Guides";
 	}
 }
