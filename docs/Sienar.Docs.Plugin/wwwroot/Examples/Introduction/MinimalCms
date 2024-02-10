@@ -1,9 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Plugins;
 using SienarExample;
 
 await SienarServerAppBuilder
-	.Create<AppDbContext>
+	.Create<AppDbContext>(
 		args,
 		dbContextLifetime: ServiceLifetime.Transient)
 	.AddPlugin<SienarBlazorPlugin>()
