@@ -63,20 +63,6 @@ public static class SienarServerAppBuilderExtensions
 	}
 
 	/// <summary>
-	/// Allows developers to add arbitrary services to the service collection without creating a plugin
-	/// </summary>
-	/// <param name="self">the Sienar app builder</param>
-	/// <param name="action">an action that receives the service collection as its only argument</param>
-	/// <returns>the Sienar app builder</returns>
-	public static SienarServerAppBuilder AddServices(
-		this SienarServerAppBuilder self,
-		Action<IServiceCollection> action)
-	{
-		action(self.Builder.Services);
-		return self;
-	}
-
-	/// <summary>
 	/// Registers a custom <see cref="MudTheme"/> for use in Sienar's <see cref="ThemeState"/>
 	/// </summary>
 	/// <param name="self">the Sienar app builder</param>

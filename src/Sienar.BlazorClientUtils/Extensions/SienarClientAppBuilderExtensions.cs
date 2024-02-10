@@ -25,14 +25,6 @@ public static class SienarClientAppBuilderExtensions
 		return self;
 	}
 
-	public static SienarClientAppBuilder AddServices(
-		this SienarClientAppBuilder self,
-		Action<IServiceCollection> action)
-	{
-		action(self.Builder.Services);
-		return self;
-	}
-
 	public static SienarClientAppBuilder ConfigureTheme(
 		this SienarClientAppBuilder self,
 		MudTheme theme,

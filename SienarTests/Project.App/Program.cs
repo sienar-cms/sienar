@@ -5,7 +5,7 @@ using Sienar.Email;
 using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure;
 
-await SienarServerAppBuilder
+ await SienarServerAppBuilder
 	.Create<AppDbContext>(
 		args,
 		o => o.UseSienarDb(),

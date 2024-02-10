@@ -4,7 +4,7 @@ This plugin configures your Sienar application to send email via SMTP through th
 
 ## Configuration
 
-You need to configure the MailKit plugin with your SMTP information in order to send mail. You can do this in one of two ways: via `appsettings.json` and via an `Action<SmtpOptions>`. All configuration is stored on the [SmtpOptions class](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.MailKit/SmtpOptions.cs).
+You need to configure the MailKit plugin with your SMTP information in order to send mail. You can do this in one of two ways: via `appsettings.json` or directly on the `IServiceCollection` like normal. If you apply your own configuration, Sienar will detect an existing configuration and skip adding its own. All configuration is stored on the [SmtpOptions class](https://github.com/christianlevesque/sienar/blob/main/src/Sienar.MailKit/SmtpOptions.cs).
 
 ### `appsettings.json` configuration
 
@@ -30,25 +30,29 @@ Replace these values with the appropriate values for your SMTP host. We recommen
 
 **NOTE:** The `SecureSocketOptions` value is an `int` between 0 and 4, and it represents a member of the [MailKit.Security.SecureSocketOptions](https://github.com/jstedfast/MailKit/blob/master/MailKit/Security/SecureSocketOptions.cs) enum.
 
-### `Action<SmtpOptions>` configuration
+### Standard configuration
 
-If you want to configure your SMTP info via an `Action<SmtpOptions>`, you need to register an `Action<SmtpOptions>` as a singleton in the DI container before adding the `MailKitPlugin` to the Sienar app.
+If you want to configure your SMTP info directly on `IServiceCollection` yourself, you must do so before adding the `MailKitPlugin` to the Sienar app. You can access the `IServicecollection` directly by storing the result of the fluent calls anytime after `SienarServerAppBuilder.Create()` and accessing `SienarServerAppBuilder.Builder.Services` (`SienarServerAppBuilder.Builder` is the `WebApplicationBuilder`, which is public).
 
 ```csharp
-await SienarServerAppBuilder
-    .Create(args)
-    // Other Sienar calls and plugins
-    .AddServices(sp =>
+var builder = SienarServerAppBuilder.Create(args);
+
+// Configure SmtpOptions with an IConfiguration...
+builder.Builder.Services.Configure<SmtpOptions>(
+    builder.Builder.Configuration.GetSection("Your:Custom:Config"));
+
+// ...or use an Action<SmtpOptions>
+builder.Builder.Services.Configure<SmtpOptions>(o =>
     {
-        sp.AddSingleton<Action<SmtpOptions>>(o =>
-        {
-           o.Host = "your-smtp-host.dev";
-           o.Port = 587;
-           o.SecureSocketOptions = SecureSocketOptions.StartTls;
-           o.Username = "your-smtp-username";
-           o.Password = "your-smtp-password"; 
-        });
-    })
+        o.Host = "your-smtp-host.dev";
+        o.Port = 587;
+        o.SecureSocketOptions = SecureSocketOptions.StartTls;
+        o.Username = "your-smtp-username";
+        o.Password = "your-smtp-password";
+    });
+
+// Don't forget to run the app
+await builder
     .AddPlugin(new MailKitPlugin())
     .Build()
     .RunAsync();

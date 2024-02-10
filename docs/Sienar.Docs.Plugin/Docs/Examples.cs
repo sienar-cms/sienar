@@ -51,7 +51,6 @@ public static class Examples
 			public const string AddPlugin = $"{Root}/AddPlugin";
 			public const string AddStartupPlugin = $"{Root}/{nameof(AddStartupPlugin)}";
 			public const string AddStartupPluginGeneric = $"{Root}/{nameof(AddStartupPlugin)}_Generic";
-			public const string AddServices = $"{Root}/AddServices";
 			public const string ConfigureTheme = $"{Root}/ConfigureTheme";
 			public const string ConfigureThemeGeneric = $"{Root}/{nameof(ConfigureTheme)}_Generic";
 		}

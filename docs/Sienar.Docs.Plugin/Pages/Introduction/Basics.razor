@@ -55,12 +55,6 @@
 	Plugins must implement the <Prism>ISienarPlugin</Prism> interface, which is discussed later. For now, suffice it to say that plugins have the ability to register services in the DI container, configure the <Prism>IApplicationBuilder</Prism> with middleware, and hook directly into core Sienar functionality, like adding menu items to the account dashboard or overriding certain components in the UI.
 </P>
 
-<H3>SienarWebAppBuilder.AddServices()</H3>
-
-<P>
-	This extension method (not shown here) allows you to add arbitrary services to the <Prism>IServiceCollection</Prism>. This can be useful for overriding Sienar services (most of which are added to DI conditionally with <Prism>IServiceCollection.TryAdd____()</Prism>) or else just adding a few items to DI without creating a full plugin. It accepts a single argument, an <Prism>Action&lt;IServiceCollection&gt;</Prism>.
-</P>
-
 <H3>SienarWebAppBuilder.ConfigureTheme()</H3>
 
 <P>
