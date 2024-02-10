@@ -9,35 +9,34 @@ namespace Sienar.Extensions;
 
 public static class SienarClientAppBuilderExtensions
 {
-	public static TBuilder AddPlugin<TBuilder, TPlugin>(
-		this TBuilder self,
-		TPlugin plugin)
-		where TBuilder : SienarClientAppBuilder
-		where TPlugin : class, ISienarClientPlugin
+	public static SienarClientAppBuilder AddPlugin<TPlugin>(
+		this SienarClientAppBuilder self)
+		where TPlugin : class, ISienarPlugin
 	{
-		self.Plugins.Add(plugin);
-		plugin.SetupDependencies(self.Builder);
-		self.Builder.Services.AddSingleton<ISienarClientPlugin>(plugin);
-		self.Builder.Services.AddSingleton(plugin);
-		plugin.SetupRootComponents(self.RootComponentProvider);
+		self.Builder.Services.AddScoped(typeof(ISienarPlugin), typeof(TPlugin));
+
+		if (TPlugin.StartupPlugin is not null)
+		{
+			var startupPlugin = (Activator.CreateInstance(TPlugin.StartupPlugin) as ISienarClientStartupPlugin)!;
+			startupPlugin.SetupDependencies(self.Builder);
+			self.StartupPlugins.Add(startupPlugin);
+		}
 
 		return self;
 	}
 
-	public static TBuilder AddServices<TBuilder>(
-		this TBuilder self,
+	public static SienarClientAppBuilder AddServices(
+		this SienarClientAppBuilder self,
 		Action<IServiceCollection> action)
-		where TBuilder : SienarClientAppBuilder
 	{
 		action(self.Builder.Services);
 		return self;
 	}
 
-	public static TBuilder ConfigureTheme<TBuilder>(
-		this TBuilder self,
+	public static SienarClientAppBuilder ConfigureTheme(
+		this SienarClientAppBuilder self,
 		MudTheme theme,
 		bool isDarkMode = false)
-		where TBuilder : SienarClientAppBuilder
 	{
 		self.Theme = theme;
 		self.IsDarkMode = isDarkMode;

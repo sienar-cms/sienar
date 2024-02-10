@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Sienar.Extensions;
@@ -8,8 +7,22 @@ using Sienar.UI;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarCmsPlugin : ISienarServerPlugin
+public class SienarCmsPlugin : ISienarPlugin
 {
+	private readonly IHttpContextAccessor _contextAccessor;
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public SienarCmsPlugin(
+		IHttpContextAccessor contextAccessor,
+		IPluginExecutionTracker executionTracker)
+	{
+		_contextAccessor = contextAccessor;
+		_executionTracker = executionTracker;
+	}
+
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(SienarCmsStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -22,27 +35,12 @@ public class SienarCmsPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder)
-	{
-		builder.Services
-			.AddSienarCmsUtilities()
-			.AddIdentityHooks()
-			.AddMediaHooks();
-	}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
-	{
-		app.MapFallbackToPage("/dashboard/{**segment}", "/_Host");
-	}
-
-	public bool PluginShouldExecute(
-		HttpContext context,
-		IPluginExecutionTracker executionTracker)
-		=> executionTracker.ExecuteAsSubApp(
-			context,
+	public bool ShouldExecute()
+		=> _executionTracker.ExecuteAsSubApp(
+			_contextAccessor.HttpContext!,
 			"/dashboard");
 
+	/// <inheritdoc />
 	public void SetupMenu(IMenuProvider menuProvider)
 	{
 		menuProvider
@@ -72,10 +70,7 @@ public class SienarCmsPlugin : ISienarServerPlugin
 				});
 	}
 
-	public void SetupStyles(IStyleProvider styleProvider) {}
-
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
+	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
 		componentProvider.DefaultLayout = typeof(DashboardLayout);

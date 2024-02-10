@@ -1,0 +1,40 @@
+﻿@inherits DocPageBase
+@attribute [Route(Urls.Api.ISienarServerStartupPlugin)]
+@attribute [Series(Constants.SeriesNames.Api)]
+@attribute [Title(nameof(ISienarServerStartupPlugin))]
+
+<DocTitle>@Title</DocTitle>
+
+<H1>@Title</H1>
+
+<P>
+	Some plugins don't need to execute on each request, but do need to either add services to the DI container or add middleware to the app. Such plugins should implement <Prism>@nameof(ISienarServerStartupPlugin)</Prism>. This interface is also used by <Prism>@nameof(ISienarPlugin)</Prism> implementations to add services or middleware to the app.
+</P>
+
+<H2>Instance methods</H2>
+
+<MethodData
+	Title="SetupApp"
+	CodeFile="@Examples.Api.ISienarServerStartupPlugin.SetupApp">
+	<P>
+		This method is used by plugins to configure the middleware pipeline. Most plugins probably won't have to do anything here, so a stub implementation should do fine. If your plugin defines a URL slug there a whole new application should be served, you should call <Prism>IEndpointRouteBuilder.MapFallbackToPage()</Prism> here. For example, <Prism>SienarCmsPlugin</Prism> only serves its pages from <Prism>/dashboard</Prism>, so it calls <Prism>app.MapFallbackToPage("/dashboard/{**segment}", "/_Host")</Prism>. You can either set up your own fallback page in your app, or if you want to rely on the Sienar system, you can fall back to <Prism>/_Host</Prism>, which comes with Sienar and includes all the regular Sienar page-level functionality right out of the box.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="SetupDependencies"
+	CodeFile="@Examples.Api.ISienarServerStartupPlugin.SetupDependencies">
+	<P>
+		This method is used by plugins to do any initial setup, such as adding services to the DI container. This method accepts the ASP.NET <Prism>WebApplicationBuilder</Prism> as its only argument, so if you can do it in plain ASP.NET, you can do it here. Don't build the builder though! Sienar handles the build process, so just add your plugin's configuration here and let Sienar do the rest.
+	</P>
+</MethodData>
+
+<H2>Instance properties</H2>
+
+<MethodData
+	Title="PluginData"
+	CodeFile="@Examples.Api.ISienarPlugin.PluginData">
+	<P>
+		This property is used by Sienar to add a <Prism>PluginData</Prism> to the plugin container if a plugin implements <Prism>@nameof(ISienarServerStartupPlugin)</Prism> <em>instead of</em> <Prism>@nameof(ISienarPlugin)</Prism>. If an instance of <Prism>@nameof(ISienarServerStartupPlugin)</Prism> is registered through an associated <Prism>@nameof(ISienarPlugin)</Prism>, then its <Prism>PluginData</Prism> value will not be used.
+	</P>
+</MethodData>

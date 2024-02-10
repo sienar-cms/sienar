@@ -19,7 +19,7 @@ public static class ArticleSeriesProviderExtensions
 
 			// API documentation articles
 			.AddArticlePage<ISienarPlugin>()
-			.AddArticlePage<ISienarServerPlugin>()
+			.AddArticlePage<ISienarServerStartupPlugin>()
 			.AddArticlePage<SienarServerAppBuilder>()
 
 			// Guides

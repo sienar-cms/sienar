@@ -1,0 +1,4 @@
+/// <summary>
+/// Provides the <see cref="Type"/> of the startup plugin to use for this plugin, if any
+/// </summary>
+static virtual Type? StartupPlugin => null;

@@ -1,10 +1,25 @@
+using Microsoft.AspNetCore.Http;
 using Sienar.Extensions;
+using Sienar.Infrastructure.Plugins;
 
-// ...
+namespace Example;
 
-public bool PluginShouldExecute(
-	HttpContext context,
-	IPluginExecutionTracker executionTracker)
-	=> executionTracker.ExecuteAsSubApp(
-		context,
-		"/dashboard");
+public class CustomPlugin : ISienarPlugin
+{
+	private readonly IHttpContextAccessor _contextAccessor;
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public CustomPlugin(
+		IHttpContextAccessor contextAccessor,
+		IPluginExecutionTracker executionTracker)
+	{
+		_contextAccessor = contextAccessor;
+		_executionTracker = executionTracker;
+	}
+
+	/// <inheritdoc />
+	public bool ShouldExecute()
+		=> _executionTracker.ExecuteAsSubApp(
+			_contextAccessor.HttpContext!,
+			"/dashboard");
+}

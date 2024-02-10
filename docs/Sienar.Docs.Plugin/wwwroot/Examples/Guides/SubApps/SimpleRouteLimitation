@@ -1,4 +1,18 @@
-public bool PluginShouldExecute(
-	HttpContext context,
-	IPluginExecutionTracker executionTracker)
-	=> context.Request.Path.StartsWithSegments("/dashboard");
+using Microsoft.AspNetCore.Http;
+using Sienar.Infrastructure.Plugins;
+
+namespace Example;
+
+public class CustomPlugin : ISienarPlugin
+{
+	private readonly IHttpContextAccessor _contextAccessor;
+
+	public CustomPlugin(IHttpContextAccessor contextAccessor)
+	{
+		_contextAccessor = contextAccessor;
+	}
+
+	/// <inheritdoc />
+	public bool ShouldExecute()
+		=> _contextAccessor.HttpContext!.Request.Path.StartsWithSegments("/dashboard");
+}

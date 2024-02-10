@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddSienarBlazorServerUtilities(
 		this IServiceCollection self)
 	{
+		self.AddHttpContextAccessor();
 		self.TryAddScoped<IPluginProvider, PluginProvider>();
 		self.TryAddScoped<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IScriptProvider, ScriptProvider>();

@@ -8,35 +8,39 @@
 <H1>@Title</H1>
 
 <P>
-	Sienar offers plugin-like functionality via the <MudLink Href="@Urls.Api.ISienarServerPlugin">ISienarServerPlugin</MudLink> interface. This interface defines a number of methods and properties that Sienar uses to let your plugin tap into specific parts of Sienar's functionality.
+	Sienar offers plugin-like functionality via the <MudLink Href="@Urls.Api.ISienarServerStartupPlugin">ISienarPlugin</MudLink> interface. This interface defines a number of methods and properties that Sienar uses to let your plugin tap into specific parts of Sienar's functionality.
 </P>
 
-<P Color="Color.Info">
-	Blazor Server-based plugins use the <Prism>ISienarServerPlugin</Prism>, which inherits from <MudLink Href="@Urls.Api.ISienarPlugin">ISienarPlugin</MudLink>. Most of the plugin methods discussed here come from this base plugin interface. The owning interface is referenced for each method so there's no confusion about which interface defines a method.
+<P>
+	There are two interfaces that plugins can implement, depending on what the plugin needs to do. Plugins that need to add services to the DI container or set up middleware should implement <Prism>ISienarServerStartupPlugin</Prism>. Plugins that need to add pages to the app should implement <Prism>ISienarPlugin</Prism>.
 </P>
 
 <H2>Plugins on app startup</H2>
 
 <P>
-	Some of a Sienar plugin's methods are called only once, on application startup.
+	The <Prism>ISienarServerStartupPlugin</Prism> interface is used to control the application startup process. An <Prism>ISienarServerStartupPlugin</Prism> can be registered directly to the app with the <Prism>SienarServerAppBuilder.AddStartupPlugin()</Prism> extension method. An <Prism>ISienarPlugin</Prism> can assign a <Prism>Type</Prism> to its <Prism>ISienarPlugin.StartupPlugin</Prism> property; if assigned, that <Prism>Type</Prism> should be a class implementing <Prism>ISienarServerStartupPlugin</Prism>.
 </P>
 
 <P>
-	<Prism>ISienarServerPlugin.SetupDependencies()</Prism> is called immediately when a plugin is registered, and is used primarily to register services in the DI container. It receives an instance of <Prism>WebApplicationBuilder</Prism> as its only argument, so you can register services, add configuration, or do anything else you can do with a <Prism>WebApplicationBuilder</Prism>.
+	<Prism>ISienarServerStartupPlugin.SetupDependencies()</Prism> is called immediately when a startup plugin is registered, and is used primarily to register services in the DI container. It receives an instance of <Prism>WebApplicationBuilder</Prism> as its only argument, so you can register services, add configuration, or do anything else you can do with a <Prism>WebApplicationBuilder</Prism>.
 </P>
 
 <P>
-	<Prism>ISienarServerPlugin.SetupApp()</Prism> is called after the <Prism>WebApplicationBuilder</Prism> is built. It receives the <Prism>WebApplication</Prism> as its only argument. Each plugin's implementation of this method is called in the order the plugin was registered, so if you apply middleware to the <Prism>WebApplication</Prism>, you need to be aware of the order you're adding your plugins.
+	<Prism>ISienarServerStartupPlugin.SetupApp()</Prism> is called after the <Prism>WebApplicationBuilder</Prism> is built. It receives the <Prism>WebApplication</Prism> as its only argument. Each plugin's implementation of this method is called in the order the plugin was registered, so if you apply middleware to the <Prism>WebApplication</Prism>, you need to be aware of the order you're adding your plugins.
 </P>
 
 <H2>Plugins on request execution</H2>
 
 <P>
-	On each request, Sienar will call each plugin's <Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> method, which determines if the plugin actually executes on a request. This allows plugins to decide if they want to only execute on certain requests, which allows for the creation of "sub-apps" that execute at different endpoints. For example, the <Prism>SienarBlazorPlugin</Prism> executes on every single request because it adds core CSS/JS files for Sienar and MudBlazor, while the <Prism>SienarCmsPlugin</Prism> only executes if the current request URL starts with <Prism>/dashboard</Prism>, which effectively creates a sub-app at the <Prism>/dashboard</Prism> URL.
+	The <Prism>ISienarPlugin</Prism> interface is used to control page registration and other Sienar providers like menu items. It's added to the DI container as a scoped service, so a new instance is created on each page load.
 </P>
 
 <P>
-	<Prism>ISienarServerPlugin.PluginShouldExecute()</Prism> receives two arguments. The first is the <Prism>HttpContext</Prism> of the current request, which plugins can use to determine if the URL matches a specific route before executing (see above discussion of <Prism>SienarCmsPlugin</Prism> only executing on <Prism>/dashboard</Prism> routes). The second is a scoped instance of the <Prism>IPluginExecutionTracker</Prism> service, which indicates whether a sub-app has executed yet or not. Developers can use <Prism>IPluginExecutionTracker</Prism> to create a default app that should execute if no other apps have executed. Sub-apps are discussed in greater detail in a later article. For more information on how this works, see the <MudLink Href="@Urls.Guides.SubApps">sub-app guide</MudLink>.
+	On each request, Sienar will call each plugin's <Prism>ISienarPlugin.ShouldExecute()</Prism> method, which determines if the plugin actually executes on a request. This allows plugins to decide if they want to only execute on certain requests, which allows for the creation of "sub-apps" that execute at different endpoints. For example, the <Prism>SienarBlazorPlugin</Prism> executes on every single request because it adds core CSS/JS files for Sienar and MudBlazor, while the <Prism>SienarCmsPlugin</Prism> only executes if the current request URL starts with <Prism>/dashboard</Prism>, which effectively creates a sub-app at the <Prism>/dashboard</Prism> URL.
+</P>
+
+<P>
+	<Prism>ISienarPlugin.ShouldExecute()</Prism> doesn't receive any arguments. Instead, developers should request services from the DI container to decide whether the plugin should execute. Generally, plugins can use a combination of the <Prism>HttpContext</Prism> and the <Prism>IPluginExecutionTracker</Prism> to decide whether a plugin should execute. Developers can also use <Prism>IPluginExecutionTracker</Prism> to create a default app that should execute if no other sup-apps have executed. Sub-apps are discussed in greater detail in a later article. For more information on how this works, see the <MudLink Href="@Urls.Guides.SubApps">sub-app guide</MudLink>.
 </P>
 
 <H2>Plugin methods</H2>
@@ -70,5 +74,5 @@
 </P>
 
 <P>
-	You can read more in the <MudLink Href="@Urls.Api.ISienarServerPlugin">ISienarServerPlugin documentation</MudLink>.
+	You can read more in the <MudLink Href="@Urls.Api.ISienarPlugin">ISienarPlugin documentation</MudLink>.
 </P>

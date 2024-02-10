@@ -6,7 +6,7 @@ await SienarServerAppBuilder
 	.Create<AppDbContext>
 		args,
 		dbContextLifetime: ServiceLifetime.Transient)
-	.AddPlugin(new SienarBlazorPlugin())
-	.AddPlugin(new SienarCmsPlugin())
+	.AddPlugin<SienarBlazorPlugin>()
+	.AddPlugin<SienarCmsPlugin>()
 	.Build()
 	.RunAsync();

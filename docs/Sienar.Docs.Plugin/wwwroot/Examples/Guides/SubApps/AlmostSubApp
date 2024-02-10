@@ -1,12 +1,30 @@
-public bool PluginShouldExecute(
-	HttpContext context,
-	IPluginExecutionTracker executionTracker)
+using Microsoft.AspNetCore.Http;
+using Sienar.Infrastructure.Plugins;
+
+namespace Example;
+
+public class CustomPlugin : ISienarPlugin
 {
-	if (context.Request.Path.StartsWithSegments("/dashboard"))
+	private readonly IHttpContextAccessor _contextAccessor;
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public CustomPlugin(
+		IHttpContextAccessor contextAccessor,
+		IPluginExecutionTracker executionTracker)
 	{
-		executionTracker.ClaimExecution();
-		return true;
+		_contextAccessor = contextAccessor;
+		_executionTracker = executionTracker;
 	}
 
-	return false;
+	/// <inheritdoc />
+	public bool ShouldExecute()
+	{
+		if (_contextAccessor.HttpContext!.Request.Path.StartsWithSegments("/dashboard"))
+		{
+			_executionTracker.ClaimExecution();
+			return true;
+		}
+
+		return false;
+	}
 }

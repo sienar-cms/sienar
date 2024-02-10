@@ -1,5 +1,4 @@
-﻿@using Sienar.Infrastructure
-@inherits DocPageBase
+﻿@inherits DocPageBase
 @attribute [Route(Urls.Api.SienarServerAppBuilder)]
 @attribute [Series(Constants.SeriesNames.Api)]
 @attribute [Title("SienarServerAppBuilder")]
@@ -9,7 +8,7 @@
 <H1>@Title</H1>
 
 <P>
-	A Sienar app begins with <Prism>SienarServerAppBuilder</Prism> in <Prism>Program.cs</Prism>. Because <Prism>SienarServerAppBuilder</Prism> uses a fluent API, most of its methods are extension methods; this allows derived classes to use these base methods without the need to create overrides.
+	A Sienar app begins with <Prism>SienarServerAppBuilder</Prism> in <Prism>Program.cs</Prism>.
 </P>
 
 <H2>Static methods</H2>
@@ -48,7 +47,23 @@
 	Title="AddPlugin"
 	CodeFile="@Examples.Api.SienarServerAppBuilder.AddPlugin">
 	<P>
-		This method is used to add plugins to the Sienar app. It adds the plugin to the service collection as a singleton, both as a <Prism>TPlugin</Prism> and as an <Prism>ISienarServerPlugin</Prism>. It also registers the plugin to be used in conjunction with Sienar middleware if the plugin has routable components or modifies scoped data providers such as <Prism>IScriptProvider</Prism>. 
+		This method is used to add plugins to the Sienar app. It adds the plugin to the service collection as a scoped service as a <Prism>ISienarPlugin</Prism>. It also registers any services or middleware if <Prism>ISienarPlugin.StartupPlugin</Prism> returns a <Prism>Type</Prism> that implements <Prism>ISienarServerStartupPlugin</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="AddStartupPlugin"
+	CodeFile="@Examples.Api.SienarServerAppBuilder.AddStartupPlugin">
+	<P>
+		This overload accepts an instance of <Prism>ISienarServerStartupPlugin</Prism> and adds its services and middlewares to the Sienar app. If <Prism>ISienarServerStartupPlugin.PluginData</Prism> is not <Prism>null</Prism>, it is added to the plugin data provider.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="AddStartupPlugin"
+	CodeFile="@Examples.Api.SienarServerAppBuilder.AddStartupPluginGeneric">
+	<P>
+		This overload accepts a type parameter indicating the type of the <Prism>ISienarServerStartupPlugin</Prism> and calls the non-generic overload of this method with a new instance of the type indicated. In order to use this overload, your <Prism>ISienarServerStartupPlugin</Prism> must provide a default constructor.
 	</P>
 </MethodData>
 
@@ -62,9 +77,17 @@
 
 <MethodData
 	Title="ConfigureTheme"
-	CodeFile="@Examples.Api.SienarServerAppBuilder.ConfigureTheme"
+	CodeFile="@Examples.Api.SienarServerAppBuilder.ConfigureTheme">
+	<P>
+		This overload is used to tell Sienar to use a specific instance of a custom <Prism>MudTheme</Prism>. Sienar uses a <Prism>ThemeState</Prism> state provider, and the theme provided here is used to construct the <Prism>ThemeState</Prism>. If no custom theme is configured, Sienar uses a new blank <Prism>MudTheme</Prism> with no special configuration.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="ConfigureTheme"
+	CodeFile="@Examples.Api.SienarServerAppBuilder.ConfigureThemeGeneric"
 	HideDivider>
 	<P>
-		This method is used to tell Sienar to use a custom <Prism>MudTheme</Prism>. Sienar uses a <Prism>ThemeState</Prism> state provider, and the theme provided here is used to construct the <Prism>ThemeState</Prism>. If no custom theme is configured, Sienar uses a new blank <Prism>MudTheme</Prism> with no special configuration.
+		This overload accepts a type parameter indicating the type of the theme to register. It creates a new instance of the theme and calls the first overload of this method with the theme instance. In order to use this overload, your <Prism>MudTheme</Prism> class must provide a default constructor. 
 	</P>
 </MethodData>

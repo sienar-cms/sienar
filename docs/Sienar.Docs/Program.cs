@@ -5,7 +5,7 @@ using Sienar.Infrastructure.Plugins;
 
 await SienarClientAppBuilder
 	.Create(args)
-	.AddPlugin(new SienarDocsPlugin())
+	.AddPlugin<SienarDocsPlugin>()
 	.ConfigureTheme(new MudTheme())
 	.Build()
 	.RunAsync();

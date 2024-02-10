@@ -11,19 +11,15 @@ namespace Sienar.Infrastructure;
 public class SienarPluginMiddleware
 {
 	private readonly RequestDelegate _next;
-	private readonly IEnumerable<ISienarServerPlugin> _plugins;
 
-	public SienarPluginMiddleware(
-		RequestDelegate next,
-		IEnumerable<ISienarServerPlugin> plugins)
+	public SienarPluginMiddleware(RequestDelegate next)
 	{
 		_next = next;
-		_plugins = plugins;
 	}
 
 	public async Task InvokeAsync(
 		HttpContext ctx,
-		IPluginExecutionTracker executionTracker,
+		IEnumerable<ISienarPlugin> plugins,
 		IStyleProvider styleProvider,
 		IScriptProvider scriptProvider,
 		IPluginProvider pluginProvider,
@@ -31,9 +27,9 @@ public class SienarPluginMiddleware
 		IComponentProvider componentProvider,
 		IServiceProvider serviceProvider)
 	{
-		foreach (var plugin in _plugins)
+		foreach (var plugin in plugins)
 		{
-			if (plugin.PluginShouldExecute(ctx, executionTracker))
+			if (plugin.ShouldExecute())
 			{
 				pluginProvider.Add(plugin);
 

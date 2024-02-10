@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Identity;
 using Sienar.Identity.Hooks;
@@ -6,29 +7,26 @@ using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Processors;
 using Sienar.Media;
 using Sienar.Media.Hooks;
 using Sienar.Media.Processors;
 
-namespace Sienar;
+namespace Sienar.Infrastructure.Plugins;
 
-public static class SienarCmsExtensions
+internal class SienarCmsStartupPlugin : ISienarServerStartupPlugin
 {
-	public static IServiceCollection AddSienarCmsUtilities(this IServiceCollection self)
+	/// <inheritdoc />
+	public void SetupDependencies(WebApplicationBuilder builder)
 	{
-		return self;
-	}
+		var services = builder.Services;
 
-	public static IServiceCollection AddIdentityHooks(this IServiceCollection self)
-	{
-		/*********
-		 * Hooks *
-		 ********/
+		/************
+		 * Identity *
+		 ***********/
 
 		// CRUD
-		self
+		services
 			// .AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
 			.AddTransient<IAccessValidator<SienarUser>, UserIsAdminAccessValidator<SienarUser>>()
 			.AddTransient<IBeforeProcess<SienarUser>, UserPasswordUpdateHook>()
@@ -36,12 +34,12 @@ public static class SienarCmsExtensions
 			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IAfterProcess<SienarUser>, ForceDeletedAccountLogoutHook>();
 
-		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
+		services.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
+		services.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
+		services.TryAddTransient<IFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
 
 		// Security
-		self
+		services
 			.AddTransient<IProcessor<LoginRequest>, LoginProcessor>()
 			.AddTransient<IProcessor<LogoutRequest>, LogoutProcessor>()
 			.AddTransient<IResultProcessor<PersonalDataResult>, PersonalDataProcessor>()
@@ -57,7 +55,7 @@ public static class SienarCmsExtensions
 			.AddTransient<IAccessValidator<ManuallyConfirmUserAccountRequest>, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>();
 
 		// Registration
-		self
+		services
 			.AddTransient<IStateValidator<RegisterRequest>, RegistrationOpenValidator>()
 			.AddTransient<IStateValidator<RegisterRequest>, AcceptTosValidator>()
 			.AddTransient<IStateValidator<RegisterRequest>, EnsureAccountInfoUniqueValidator>()
@@ -77,18 +75,23 @@ public static class SienarCmsExtensions
 			.AddTransient<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>()
 			.AddTransient<IProcessor<DeleteAccountRequest>, DeleteAccountProcessor>();
 
-		return self;
-	}
+		/*********
+		 * Media *
+		 ********/
 
-	public static IServiceCollection AddMediaHooks(this IServiceCollection self)
-	{
-		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
+		services.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
 
-		return self
+		services
 			.AddTransient<IAccessValidator<Upload>, VerifyUserCanReadFileHook>()
 			.AddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>()
 			.AddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>()
 			.AddTransient<IBeforeProcess<Upload>, AssignMediaFieldsHook>()
 			.AddTransient<IBeforeProcess<Upload>, UploadFileHook>();
+	}
+
+	/// <inheritdoc />
+	public void SetupApp(WebApplication app)
+	{
+		app.MapFallbackToPage("/dashboard/{**segment}", "/_Host");
 	}
 }

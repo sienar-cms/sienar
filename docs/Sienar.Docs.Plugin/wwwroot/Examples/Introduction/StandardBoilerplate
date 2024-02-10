@@ -12,9 +12,9 @@ await SienarServerAppBuilder
 		args,
 		o => o.UseSienarDb(),
 		ServiceLifetime.Transient)
-	.AddPlugin(new SienarBlazorPlugin())
-	.AddPlugin(new SienarCmsPlugin())
-	.AddPlugin(new MailKitPlugin())
-	.ConfigureTheme(new CustomTheme())
+	.AddPlugin<SienarBlazorPlugin>()
+	.AddPlugin<SienarCmsPlugin>()
+	.AddStartupPlugin<MailKitPlugin>()
+	.ConfigureTheme<CustomTheme>()
 	.Build()
 	.RunAsync();

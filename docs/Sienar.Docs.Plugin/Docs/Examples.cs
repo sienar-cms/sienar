@@ -31,12 +31,13 @@ public static class Examples
 			public const string SetupRoutableAssemblies = $"{Root}/{nameof(SetupRoutableAssemblies)}";
 			public const string SetupScripts = $"{Root}/{nameof(SetupScripts)}";
 			public const string SetupStyles = $"{Root}/{nameof(SetupStyles)}";
+			public const string ShouldExecute = $"{Root}/{nameof(ShouldExecute)}";
+			public const string StartupPlugin = $"{Root}/{nameof(StartupPlugin)}";
 		}
 
-		public static class ISienarServerPlugin
+		public static class ISienarServerStartupPlugin
 		{
-			private const string Root = $"{Api.Root}/{nameof(ISienarServerPlugin)}";
-			public const string PluginShouldExecute = $"{Root}/{nameof(PluginShouldExecute)}";
+			private const string Root = $"{Api.Root}/{nameof(ISienarServerStartupPlugin)}";
 			public const string SetupApp = $"{Root}/{nameof(SetupApp)}";
 			public const string SetupDependencies = $"{Root}/{nameof(SetupDependencies)}";
 		}
@@ -48,8 +49,11 @@ public static class Examples
 			public const string CreateWithDbContext = $"{Root}/CreateWithDbContext";
 			public const string Build = $"{Root}/Build";
 			public const string AddPlugin = $"{Root}/AddPlugin";
+			public const string AddStartupPlugin = $"{Root}/{nameof(AddStartupPlugin)}";
+			public const string AddStartupPluginGeneric = $"{Root}/{nameof(AddStartupPlugin)}_Generic";
 			public const string AddServices = $"{Root}/AddServices";
 			public const string ConfigureTheme = $"{Root}/ConfigureTheme";
+			public const string ConfigureThemeGeneric = $"{Root}/{nameof(ConfigureTheme)}_Generic";
 		}
 	}
 

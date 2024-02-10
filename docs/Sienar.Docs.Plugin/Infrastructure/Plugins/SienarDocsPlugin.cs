@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Net.Http;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using MudBlazor.Services;
 using Sienar.Extensions;
-using Sienar.Infrastructure.Articles;
 using Sienar.Infrastructure.Menus;
 using Sienar.Layouts;
-using Sienar.State;
 using Sienar.UI.Views;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarDocsPlugin : ISienarClientPlugin
+public class SienarDocsPlugin : ISienarPlugin
 {
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(SienarDocsStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -28,12 +23,6 @@ public class SienarDocsPlugin : ISienarClientPlugin
 	};
 
 	/// <inheritdoc />
-	public void SetupStyles(IStyleProvider styleProvider) {}
-
-	/// <inheritdoc />
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
-	/// <inheritdoc />
 	public void SetupMenu(IMenuProvider menuProvider)
 	{
 		menuProvider
@@ -41,48 +30,11 @@ public class SienarDocsPlugin : ISienarClientPlugin
 	}
 
 	/// <inheritdoc />
-	public void SetupDashboard(IMenuProvider dashboardProvider) {}
-
-	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
 		componentProvider.DefaultLayout = typeof(DocsLayout);
 		componentProvider.AuthorizingView = typeof(EmptyView);
 		componentProvider.NotAuthorizedView = typeof(EmptyView);
-	}
-
-	/// <inheritdoc />
-	public void SetupDependencies(WebAssemblyHostBuilder builder)
-	{
-		builder.Services
-			.AddScoped(_ =>
-				new HttpClient
-				{
-					BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-				})
-			.AddScoped<IUserAccessor, NullUserAccessor>()
-			.AddScoped<AuthenticationStateProvider, DefaultAuthStateProvider>()
-			.AddScoped<IArticleSeriesProvider, ArticleSeriesProvider>()
-			.AddScoped<ArticleSeriesStateProvider>()
-			.AddAuthorizationCore()
-			.AddCascadingAuthenticationState()
-			.AddMudServices();
-	}
-
-	/// <inheritdoc />
-	public void SetupApp(WebAssemblyHost app)
-	{
-		app.Services
-			.GetRequiredService<IArticleSeriesProvider>()
-			.AddSeries();
-	}
-
-	/// <inheritdoc />
-	public void SetupRootComponents(IRootComponentProvider rootComponentProvider)
-	{
-		rootComponentProvider
-			.AddRootComponent("#app", typeof(SienarApp))
-			.AddRootComponent("head::after", typeof(HeadOutlet));
 	}
 
 	/// <inheritdoc />

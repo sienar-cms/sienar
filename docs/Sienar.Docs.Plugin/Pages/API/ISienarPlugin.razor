@@ -8,7 +8,11 @@
 <H1>@Title</H1>
 
 <P>
-	<Prism>ISienarPlugin</Prism> isn't used directly by Sienar. Instead, it serves as a base interface for other plugin interfaces that Sienar does use.
+	<Prism>ISienarPlugin</Prism> is used directly by Sienar to encapsulate behaviors that need to be repeated on each full page load. These behaviors use various data providers, but they should also generally execute either together or not at all, so they are grouped together on a single interface.
+</P>
+
+<P>
+	Each instance method has a default implementation that does nothing (with the exception of <Prism>ISienarPlugin.ShouldExecute()</Prism>, which returns <Prism>true</Prism> by default). This allows developers to only implement the behavior they need without needing to worry about adding several empty methods just to satisfy the compiler.
 </P>
 
 <H2>Instance methods</H2>
@@ -55,10 +59,18 @@
 
 <MethodData
 	Title="SetupStyles"
-	CodeFile="@Examples.Api.ISienarPlugin.SetupStyles"
-	HideDivider>
+	CodeFile="@Examples.Api.ISienarPlugin.SetupStyles">
 	<P>
 		This method uses the <Prism>IStyleProvider</Prism> to provide CSS inclusion on webpages. For example, the <Prism>SienarBlazorPlugin</Prism> uses the <Prism>IStyleProvider</Prism> to load MudBlazor's CSS on every page of a Sienar app. The <Prism>IStyleProvider</Prism> has support for HTML features of including CSS files, including things like the <Prism>crossorigin</Prism> and <Prism>integrity</Prism> attributes. Simply omit any value you don't need, and it won't appear in the HTML. More information is available in the guide at the end of this README, under <Prism>Customization > Using configuration providers > IStyleProvider</Prism>.
+	</P>
+</MethodData>
+
+<MethodData
+	Title="ShouldExecute"
+	CodeFile="@Examples.Api.ISienarPlugin.ShouldExecute"
+	HideDivider>
+	<P>
+		This method is used by Sienar middleware to determine if the plugin should execute on each request. (Because Blazor Server treats each "request" as an entire user session, this method will only run on each full page load.) It doesn't accept any arguments, but because plugins are scoped, your plugin can request any services from DI via constructor injection like usual.
 	</P>
 </MethodData>
 
@@ -66,6 +78,20 @@
 
 <MethodData
 	Title="PluginData"
-	CodeFile="@Examples.Api.ISienarPlugin.PluginData">
-	This property contains an instance of the <MudLink>PluginData</MudLink> class, which provides users with information about the plugin, such as the name of the plugin, the name of the author, the plugin's website, and more.
+	CodeFile="@Examples.Api.ISienarPlugin.PluginData"
+	HideDivider>
+	<P>
+		This property contains an instance of the <MudLink>PluginData</MudLink> class, which provides users with information about the plugin, such as the name of the plugin, the name of the author, the plugin's website, and more.
+	</P>
+</MethodData>
+
+<H2>Static properties</H2>
+
+<MethodData
+	Title="StartupPlugin"
+	CodeFile="@Examples.Api.ISienarPlugin.StartupPlugin"
+	HideDivider>
+	<P>
+		This property constains a static reference to the <Prism>Type</Prism> that should be used to set up this plugin's services and middleware. This property is optional and its default value is <Prism>null</Prism>, but if you do supply a <Prism>Type</Prism>, it needs to implement <Prism>ISienarServerStartupPlugin</Prism>.
+	</P>
 </MethodData>

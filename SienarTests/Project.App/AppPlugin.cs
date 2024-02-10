@@ -1,15 +1,20 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Project.Data;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Project.App;
 
-public class AppPlugin : ISienarServerPlugin
+public class AppPlugin : ISienarPlugin
 {
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public AppPlugin(IPluginExecutionTracker executionTracker)
+	{
+		_executionTracker = executionTracker;
+	}
+
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(AppStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -21,21 +26,11 @@ public class AppPlugin : ISienarServerPlugin
 	};
 
 	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder) {}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
+	public bool ShouldExecute()
 	{
-		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
-	}
-
-	public bool PluginShouldExecute(
-		HttpContext context,
-		IPluginExecutionTracker executionTracker)
-	{
-		if (!executionTracker.SubAppHasExecuted)
+		if (!_executionTracker.SubAppHasExecuted)
 		{
-			executionTracker.ClaimExecution();
+			_executionTracker.ClaimExecution();
 			return true;
 		}
 
@@ -44,25 +39,10 @@ public class AppPlugin : ISienarServerPlugin
 
 	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider)
-	{
-		styleProvider.Add("/css/site.css");
-	}
+		=> styleProvider.Add("/css/site.css");
 
 	/// <inheritdoc />
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
-	/// <inheritdoc />
-	public void SetupMenu(IMenuProvider menuProvider) {}
-
-	/// <inheritdoc />
-	public void SetupDashboard(IMenuProvider dashboardProvider) {}
-
-	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider) {}
-
-	/// <inheritdoc />
-	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
-	{
-		routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
-	}
+	public void SetupRoutableAssemblies(
+		IRoutableAssemblyProvider routableAssemblyProvider)
+		=> routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
 }

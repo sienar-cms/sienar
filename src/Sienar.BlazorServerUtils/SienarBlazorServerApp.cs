@@ -22,7 +22,7 @@ public class SienarBlazorServerApp : SienarApp
 	protected IMenuProvider DashboardProvider { get; set; } = default!;
 
 	[Inject]
-	protected IEnumerable<ISienarServerPlugin> SienarPlugins { get; set; } = Array.Empty<ISienarServerPlugin>();
+	protected IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = Array.Empty<ISienarPlugin>();
 
 	/// <inheritdoc />
 	protected override void OnInitialized()

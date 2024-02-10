@@ -12,8 +12,7 @@ namespace Sienar.Infrastructure;
 public class SienarClientAppBuilder
 {
 	public readonly WebAssemblyHostBuilder Builder;
-	public readonly IList<ISienarClientPlugin> Plugins = [];
-	public readonly IRootComponentProvider RootComponentProvider = new RootComponentProvider();
+	public readonly IList<ISienarClientStartupPlugin> StartupPlugins = [];
 	public readonly IRoutableAssemblyProvider RoutableAssemblyProvider = new RoutableAssemblyProvider();
 	public MudTheme? Theme;
 	public bool IsDarkMode;
@@ -42,12 +41,12 @@ public class SienarClientAppBuilder
 		Builder.Services.AddSingleton(themeState);
 		Builder.Services.AddSingleton(RoutableAssemblyProvider);
 
-		foreach (var selector in RootComponentProvider.RootComponents)
-		{
-			Builder.RootComponents.Add(selector.Value, selector.Key);
-		}
-
 		var app = Builder.Build();
+
+		foreach (var plugin in StartupPlugins)
+		{
+			plugin.SetupApp(app);
+		}
 
 		var menuProvider = app.Services.GetRequiredKeyedService<IMenuProvider>(
 			SienarBlazorUtilsServiceKeys.MenuProvider);
@@ -55,10 +54,10 @@ public class SienarClientAppBuilder
 			SienarBlazorUtilsServiceKeys.DashboardProvider);
 		var componentProvider = app.Services.GetRequiredService<IComponentProvider>();
 		var routableAssemblyProvider = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
+		var sienarPlugins = app.Services.GetRequiredService<IEnumerable<ISienarPlugin>>();
 
-		foreach (var plugin in Plugins)
+		foreach (var plugin in sienarPlugins)
 		{
-			plugin.SetupApp(app);
 			plugin.SetupMenu(menuProvider);
 			plugin.SetupDashboard(dashboardProvider);
 			plugin.SetupComponents(componentProvider);

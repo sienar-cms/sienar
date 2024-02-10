@@ -69,8 +69,8 @@ public static class MenuProviderExtensions
 						},
 						new()
 						{
-							Text = "ISienarServerPlugin",
-							Url = Urls.Api.ISienarServerPlugin
+							Text = "ISienarServerStartupPlugin",
+							Url = Urls.Api.ISienarServerStartupPlugin
 						},
 						new()
 						{

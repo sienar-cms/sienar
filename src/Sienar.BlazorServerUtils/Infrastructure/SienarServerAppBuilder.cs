@@ -10,14 +10,17 @@ using Sienar.State;
 
 namespace Sienar.Infrastructure;
 
-public class SienarServerAppBuilder
+public sealed class SienarServerAppBuilder
 {
 	public readonly WebApplicationBuilder Builder;
-	public readonly List<ISienarServerPlugin> Plugins = [];
+	public readonly List<ISienarServerStartupPlugin> StartupPlugins = [];
+	public readonly Dictionary<string, object> CustomItems = new();
+	public readonly IPluginDataProvider PluginDataProvider = new PluginDataProvider();
+	public string[] StartupArgs = Array.Empty<string>();
 	public MudTheme? Theme;
 	public bool IsDarkMode;
 
-	protected SienarServerAppBuilder(WebApplicationBuilder builder)
+	private SienarServerAppBuilder(WebApplicationBuilder builder)
 	{
 		Builder = builder;
 	}
@@ -68,14 +71,14 @@ public class SienarServerAppBuilder
 			.AddSienarBlazorUtilities()
 			.AddSienarBlazorServerUtilities();
 
-		return new SienarServerAppBuilder(builder);
+		return new SienarServerAppBuilder(builder) { StartupArgs = args };
 	}
 
 	/// <summary>
 	/// Builds the final <see cref="WebApplication"/> and returns it
 	/// </summary>
 	/// <returns>the new <see cref="WebApplication"/></returns>
-	public virtual WebApplication Build()
+	public WebApplication Build()
 	{
 		// Set up remaining services on the IServiceCollection
 		Theme ??= new MudTheme();
@@ -85,15 +88,23 @@ public class SienarServerAppBuilder
 			IsDarkMode = IsDarkMode
 		};
 		Builder.Services.AddScoped(_ => themeState);
+		Builder.Services.AddSingleton(PluginDataProvider);
 
 		var app = Builder.Build();
 
-		foreach (var plugin in Plugins)
+		foreach (var plugin in StartupPlugins)
 		{
 			plugin.SetupApp(app);
 		}
 
 		app.UseMiddleware<SienarPluginMiddleware>();
+
+		using var scope = app.Services.CreateScope();
+		var plugins = scope.ServiceProvider.GetRequiredService<IEnumerable<ISienarPlugin>>();
+		foreach (var plugin in plugins)
+		{
+			PluginDataProvider.Add(plugin.PluginData);
+		}
 
 		return app;
 	}
