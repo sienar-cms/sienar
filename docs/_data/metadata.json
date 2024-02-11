@@ -1,0 +1,14 @@
+{
+	"title": "Sienar developer docs",
+	"links": [
+		{
+			"name": "Home",
+			"href": "/"
+		},
+		{
+			"name": "Developers",
+			"href": "/devs"
+		}
+	],
+	"siteUrl": "https://sienar.levesque.dev"
+}

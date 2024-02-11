@@ -1,9 +1,0 @@
-/// <summary>
-/// Adds an <see cref="ISienarServerStartupPlugin"/> to the Sienar app
-/// </summary>
-/// <param name="self">the Sienar app builder</param>
-/// <typeparam name="TPlugin">the type of the plugin to add</typeparam>
-/// <returns>the Sienar app builder</returns>
-public static SienarServerAppBuilder AddStartupPlugin<TPlugin>(
-	this SienarServerAppBuilder self)
-	where TPlugin : ISienarServerStartupPlugin, new();

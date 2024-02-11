@@ -1,1 +1,0 @@
-dotnet new web -o SienarExample # or whatever you want your project called

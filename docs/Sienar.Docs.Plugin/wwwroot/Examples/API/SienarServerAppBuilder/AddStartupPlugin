@@ -1,9 +1,0 @@
-/// <summary>
-/// Adds an instance of <see cref="ISienarServerStartupPlugin"/> to the Sienar app
-/// </summary>
-/// <param name="self">the Sienar app builder</param>
-/// <param name="plugin">an instance of the plugin to add</param>
-/// <returns>the Sienar app builder</returns>
-public static SienarServerAppBuilder AddStartupPlugin(
-	this SienarServerAppBuilder self,
-	ISienarServerStartupPlugin plugin)

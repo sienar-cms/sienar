@@ -1,7 +1,0 @@
-﻿/// <summary>
-/// Creates a new <see cref="SienarServerAppBuilder"/> and registers core Sienar services on its service collection
-/// </summary>
-/// <param name="args">the runtime arguments supplied to <c>Program.Main()</c></param>
-/// <returns>the new <see cref="SienarServerAppBuilder"/></returns>
-public static SienarServerAppBuilder Create(string[] args)
-{/*...*/}

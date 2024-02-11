@@ -1,9 +1,0 @@
-﻿/// <summary>
-/// Determines whether the plugin should execute for the current request
-/// </summary>
-/// <param name="context">the <see cref="HttpContext"/> of the current request</param>
-/// <param name="executionTracker">a tracker indicating whether another subapp plugin has elected to execute</param>
-/// <returns>whether the plugin should execute</returns>
-bool PluginShouldExecute(
-	HttpContext context,
-	IPluginExecutionTracker executionTracker);
