@@ -1,3 +1,17 @@
 ﻿{
-	"layout": "docs-layout.hbs"
+	"layout": "docs-layout.hbs",
+	"sidebarCategories": [
+		{
+			"collectionName": "introductionSorted",
+			"displayName": "Introduction"
+		},
+		{
+			"collectionName": "guidesSorted",
+			"displayName": "Guides"
+		},
+		{
+			"collectionName": "apiSorted",
+			"displayName": "API"
+		}
+	]
 }

@@ -1,23 +1,23 @@
 <div class="accordion-item">
 	<p
 		class="accordion-header"
-		id="{{ collectionName }}Label">
+		id="{{ idify displayName }}-label">
 		<button
 			class="accordion-button"
 			type="button"
 			data-bs-toggle="collapse"
-			data-bs-target="#{{ collectionName }}"
+			data-bs-target="#{{ idify displayName }}"
 			aria-expanded="true"
 			aria-controls="collapseOne">
 			{{ displayName }}
 		</button>
 	</p>
 	<div
-		id="{{ collectionName }}"
+		id="{{ idify displayName }}"
 		class="accordion-collapse collapse show"
-		aria-labelledby="{{ collectionName }}Label">
+		aria-labelledby="{{ idify displayName }}-label">
 		<div class="accordion-body">
-			{{# each (lookup collections collectionName) }}
+			{{# each collection }}
 				<a
 					href="{{ this.url }}"
 					class="d-block">

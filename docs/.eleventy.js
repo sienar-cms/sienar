@@ -31,6 +31,12 @@ module.exports = function (eleventyConfig) {
 		}
 		return "";
 	});
+	eleventyConfig.addHandlebarsHelper("idify", function(input) {
+		return input
+			.toLowerCase()
+			.replaceAll(" ", "-")
+			.replace(/[^\w-]/g, "")
+	});
 	eleventyConfig.addHandlebarsHelper("encodeURIComponent", function (baseUri, appendedUri) {
 		return encodeURIComponent(`${baseUri}${appendedUri}`);
 	});

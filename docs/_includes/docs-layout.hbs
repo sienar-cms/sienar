@@ -13,9 +13,9 @@
 	<div class="row">
 		<div class="col-3">
 			<section class="accordion position-sticky docs-sidebar">
-				{{> widgets/docs/sidebarCategoryLinks collections=collections collectionName="introductionSorted" displayName="Introduction" }}
-				{{> widgets/docs/sidebarCategoryLinks collections=collections collectionName="guidesSorted" displayName="Guides" }}
-				{{> widgets/docs/sidebarCategoryLinks collections=collections collectionName="apiSorted" displayName="API" }}
+				{{# each sidebarCategories }}
+					{{> widgets/docs/sidebarCategoryLinks collection=(lookup ../collections this.collectionName) displayName=this.displayName }}
+				{{/each}}
 			</section>
 		</div>
 		<div class="col-9 ps-5">
