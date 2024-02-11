@@ -27,7 +27,7 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addHandlebarsHelper("mainMenuActiveClass", function (linkHref, pageUrl) {
 		if (linkHref === "/" && pageUrl === "/"
 			|| linkHref !== "/" && pageUrl.startsWith(linkHref)) {
-			return "navbar__item--active";
+			return "active fw-bold";
 		}
 		return "";
 	});
