@@ -13,5 +13,8 @@
 			"collectionName": "apiSorted",
 			"displayName": "API"
 		}
-	]
+	],
+	"backLink": {
+		"text": "Back to dev documentation"
+	}
 }
