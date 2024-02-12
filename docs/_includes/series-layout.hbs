@@ -19,13 +19,21 @@
 					<i class="fas fa-arrow-left pe-2"></i>
 					{{ backLink.text }}
 				</a>
-				{{# each (lookup collections collectionName) }}
-					<a
-						href="{{ this.url }}"
-						class="d-block">
-						{{ this.data.pageTitle }}
-					</a>
-				{{/each}}
+				<ol>
+					{{# each (lookup collections collectionName) }}
+						<li>
+							{{#if (eq ../page.url this.url)}}
+								{{ this.data.pageTitle }}
+							{{else}}
+								<a
+									href="{{ this.url }}"
+									class="d-block">
+									{{ this.data.pageTitle }}
+								</a>
+							{{/if}}
+						</li>
+					{{/each}}
+				</ol>
 			</section>
 		</div>
 		<div class="col-9 ps-5">
