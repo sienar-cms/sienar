@@ -32,6 +32,9 @@ module.exports = function (eleventyConfig) {
 		}
 		return "";
 	});
+	eleventyConfig.addHandlebarsHelper("returnValueConditional", function(isTrue, trueClassName, falseClassName) {
+		return isTrue ? trueClassName : (falseClassName || "");
+	});
 	eleventyConfig.addHandlebarsHelper("idify", function(input) {
 		return input
 			.toLowerCase()
@@ -41,22 +44,18 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addHandlebarsHelper("encodeURIComponent", function (baseUri, appendedUri) {
 		return encodeURIComponent(`${baseUri}${appendedUri}`);
 	});
-	eleventyConfig.addHandlebarsHelper("courseIsInCategory", function (courses, category, url) {
-		return findCourseIndex(courses, category, url) > -1;
+	eleventyConfig.addHandlebarsHelper("articleIsInCategory", function (articles, url) {
+		return articles.findIndex(c => c.url === url) > -1;
 	});
-	eleventyConfig.addHandlebarsHelper("findPreviousCourse", function (courses, category, url) {
-		const i = findCourseIndex(courses, category, url);
-		return courses[category][i - 1];
-	});
-	eleventyConfig.addHandlebarsHelper("findNextCourse", function (courses, category, url) {
-		const i = findCourseIndex(courses, category, url);
-		return courses[category][i + 1];
-	});
+	// eleventyConfig.addHandlebarsHelper("findPreviousCourse", function (courses, category, url) {
+	// 	const i = findCourseIndex(courses, category, url);
+	// 	return courses[category][i - 1];
+	// });
+	// eleventyConfig.addHandlebarsHelper("findNextCourse", function (courses, category, url) {
+	// 	const i = findCourseIndex(courses, category, url);
+	// 	return courses[category][i + 1];
+	// });
 };
-
-function findCourseIndex(courses, category, url) {
-	return courses[category].findIndex(c => c.url === url);
-}
 
 function sortByPageNumber(category) {
 	return function (collections) {
