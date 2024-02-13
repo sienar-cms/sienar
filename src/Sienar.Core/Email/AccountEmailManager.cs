@@ -9,19 +9,19 @@ namespace Sienar.Email;
 
 public class AccountEmailManager : IAccountEmailManager
 {
-	private readonly EmailOptions _options;
-	private readonly IdentityEmailOptions _identityOptions;
+	private readonly EmailSenderOptions _senderOptions;
+	private readonly IdentityEmailSubjectOptions _identitySubjectOptions;
 	private readonly IAccountEmailMessageFactory _factory;
 	private readonly IEmailSender _sender;
 
 	public AccountEmailManager(
-		IOptions<EmailOptions> options,
-		IOptions<IdentityEmailOptions> identityOptions,
+		IOptions<EmailSenderOptions> options,
+		IOptions<IdentityEmailSubjectOptions> identityOptions,
 		IAccountEmailMessageFactory factory,
 		IEmailSender sender)
 	{
-		_options = options.Value;
-		_identityOptions = identityOptions.Value;
+		_senderOptions = options.Value;
+		_identitySubjectOptions = identityOptions.Value;
 		_factory = factory;
 		_sender = sender;
 	}
@@ -36,7 +36,7 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			_identityOptions.WelcomeEmailSubject,
+			_identitySubjectOptions.WelcomeEmail,
 			await _factory.WelcomeEmailHtml(username, userId, code),
 			await _factory.WelcomeEmailText(username, userId, code));
 
@@ -53,7 +53,7 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			_identityOptions.EmailChangeSubject,
+			_identitySubjectOptions.EmailChange,
 			await _factory.ChangeEmailHtml(username, userId, code),
 			await _factory.ChangeEmailText(username, userId, code));
 
@@ -70,7 +70,7 @@ public class AccountEmailManager : IAccountEmailManager
 		var message = CreateMessage(
 			username,
 			email,
-			_identityOptions.PasswordResetSubject,
+			_identitySubjectOptions.PasswordReset,
 			await _factory.ResetPasswordHtml(username, userId, code),
 			await _factory.ResetPasswordText(username, userId, code));
 
@@ -95,7 +95,7 @@ public class AccountEmailManager : IAccountEmailManager
 	{
 		var message = new MailMessage();
 		message.To.Add(new MailAddress(email, displayName));
-		message.From = new MailAddress(_options.FromAddress, _options.FromName);
+		message.From = new MailAddress(_senderOptions.FromAddress, _senderOptions.FromName);
 		message.Subject = subject;
 		message.Body = htmlBody;
 		message.IsBodyHtml = true;

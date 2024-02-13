@@ -15,6 +15,7 @@
 		}
 	],
 	"backLink": {
-		"text": "Back to dev documentation"
+		"text": "Back to dev documentation",
+		"url": "/devs"
 	}
 }

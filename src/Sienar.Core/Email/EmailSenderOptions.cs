@@ -2,7 +2,7 @@
 
 namespace Sienar.Email;
 
-public class EmailOptions
+public class EmailSenderOptions
 {
 	/// <summary>
 	/// The email address from which to send application email

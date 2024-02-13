@@ -1,19 +1,19 @@
 ﻿namespace Sienar.Email;
 
-public class IdentityEmailOptions
+public class IdentityEmailSubjectOptions
 {
 	/// <summary>
 	/// The subject of the user's welcome email
 	/// </summary>
-	public string WelcomeEmailSubject { get; set; } = "Welcome to our app!";
+	public string WelcomeEmail { get; set; } = "Please confirm your account";
 
 	/// <summary>
 	/// The subject of the user's email change verification email
 	/// </summary>
-	public string EmailChangeSubject { get; set; } = "Confirm your new email address";
+	public string EmailChange { get; set; } = "Confirm your new email address";
 
 	/// <summary>
 	/// The subject of the user's password reset verification email
 	/// </summary>
-	public string PasswordResetSubject { get; set; } = "Password reset";
+	public string PasswordReset { get; set; } = "Password reset";
 }

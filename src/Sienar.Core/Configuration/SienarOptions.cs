@@ -5,12 +5,12 @@ public class SienarOptions
 	/// <summary>
 	/// Whether Sienar should send email notifications or not
 	/// </summary>
-	public bool EnableEmail { get; set; } = true;
+	public bool EnableEmail { get; set; }
 
 	/// <summary>
 	/// Whether Sienar should allow the registration of new users or not
 	/// </summary>
-	public bool RegistrationOpen { get; set; } = true;
+	public bool RegistrationOpen { get; set; }
 
 	/// <summary>
 	/// The name of the Sienar application

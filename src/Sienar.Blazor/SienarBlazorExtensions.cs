@@ -70,8 +70,8 @@ public static class SienarBlazorExtensions
 	{
 		self
 			.ApplyDefaultConfiguration<SienarOptions>(config.GetSection("Sienar:Core"))
-			.ApplyDefaultConfiguration<EmailOptions>(config.GetSection("Sienar:Email:Core"))
-			.ApplyDefaultConfiguration<IdentityEmailOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
+			.ApplyDefaultConfiguration<EmailSenderOptions>(config.GetSection("Sienar:Email:Sender"))
+			.ApplyDefaultConfiguration<IdentityEmailSubjectOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
 			.ApplyDefaultConfiguration<LoginOptions>(config.GetSection("Sienar:Login"));
 
 		return self;
