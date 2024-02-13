@@ -15,7 +15,7 @@ The `SienarOptions` class is used to provide core Sienar configuration values. I
 
 A `bool` property indicating whether email should be enabled for the application. Defaults to `false`.
 
-**NOTE**: If you enable email, you will need to register an `IEmailSender` that can actually send email, or else your application will not work properly. The [MailKit plugin](/devs/plugins/mailkit)
+**NOTE**: If you enable email, you will need to register an `IEmailSender` that can actually send email, or else your application will not work properly. The [MailKit plugin](/devs/plugins/mailkit) enables your application to send SMTP email via the MailKit library.
 
 ### RegistrationOpen
 

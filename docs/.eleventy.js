@@ -15,6 +15,7 @@ module.exports = function (eleventyConfig) {
 	// Collections
 	eleventyConfig.addCollection("introductionSorted", sortByPageNumber("introduction"));
 	eleventyConfig.addCollection("guidesSorted", sortByPageNumber("guides"));
+	eleventyConfig.addCollection("pluginsSorted", sortByTitle("plugins"));
 	eleventyConfig.addCollection("apiSorted", sortByTitle("api"));
 
 	// Template helpers

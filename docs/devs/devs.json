@@ -10,6 +10,10 @@
 			"displayName": "Guides"
 		},
 		{
+			"collectionName": "pluginsSorted",
+			"displayName": "Plugins"
+		},
+		{
 			"collectionName": "apiSorted",
 			"displayName": "API"
 		}
