@@ -39,6 +39,17 @@
 		</div>
 		<div class="col-9 ps-5">
 			{{{ content }}}
+
+			<hr class="mt-5"/>
+			<div class="row">
+				<div class="col-md-6 text-md-end order-md-2">
+					{{> widgets/seriesNavLink article=(findNextArticle (lookup collections collectionName) page.url) next=true }}
+				</div>
+
+				<div class="col-md-6 order-md-1">
+					{{> widgets/seriesNavLink article=(findPreviousArticle (lookup collections collectionName) page.url) next=false }}
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
