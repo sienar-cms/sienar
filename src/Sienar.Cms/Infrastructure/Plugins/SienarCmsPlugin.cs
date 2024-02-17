@@ -52,7 +52,7 @@ public class SienarCmsPlugin : ISienarPlugin
 	public void SetupDashboard(IMenuProvider dashboardProvider)
 	{
 		dashboardProvider
-			.Access(DashboardSectionNames.UserManagement)
+			.Access(DashboardMenuNames.Dashboards.UserManagement)
 			.AddMenuLink(
 				new()
 				{
