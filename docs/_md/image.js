@@ -1,7 +1,8 @@
 ﻿module.exports = function (tokens, idx) {
 	// Get the token
 	const token  = tokens[idx];
-	const src = token.attrIndex("src")[1];
+	const srcIndex = token.attrIndex("src");
+	const src = token.attrs[srcIndex][1];
 	const description = token.children[0].content;
 
 	// Return the render
