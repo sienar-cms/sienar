@@ -20,8 +20,8 @@
 	{
 		<link
 			href="@stylesheet.Href"
-			crossorigin="@stylesheet.Mode.GetHtmlValue()"
-			referrerpolicy="@stylesheet.Referrer.GetHtmlValue()"
+			crossorigin="@stylesheet.CrossOriginMode.GetHtmlValue()"
+			referrerpolicy="@stylesheet.ReferrerPolicy.GetHtmlValue()"
 			integrity="@stylesheet.Integrity"
 			rel="stylesheet"/>
 	}
@@ -48,8 +48,8 @@
 	<script
 		type="@script.GetScriptType()"
 		src="@script.Src"
-		crossorigin="@script.Mode.GetHtmlValue()"
-		referrerpolicy="@script.Referrer.GetHtmlValue()"
+		crossorigin="@script.CrossOriginMode.GetHtmlValue()"
+		referrerpolicy="@script.ReferrerPolicy.GetHtmlValue()"
 		integrity="@script.Integrity"
 		async="@script.IsAsync"
 		defer="@script.ShouldDefer"></script>

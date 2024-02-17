@@ -13,12 +13,12 @@ public class StyleResource
 	/// <summary>
 	/// The value to use for the <c>crossorigin</c> attribute
 	/// </summary>
-	public CrossOriginMode? Mode { get; init; }
+	public CrossOriginMode? CrossOriginMode { get; init; }
 
 	/// <summary>
 	/// The value to u se for the <c>referrerpolicy</c> attribute
 	/// </summary>
-	public ReferrerPolicy? Referrer { get; init; }
+	public ReferrerPolicy? ReferrerPolicy { get; init; }
 
 	/// <summary>
 	/// The expected hash of the resource
