@@ -10,6 +10,9 @@ module.exports = function (eleventyConfig) {
 			index: "index.html"
 		}
 	});
+	eleventyConfig.setLibrary("md", md);
+
+	// File copying
 	eleventyConfig.addPassthroughCopy("docs.css");
 
 	// Collections
