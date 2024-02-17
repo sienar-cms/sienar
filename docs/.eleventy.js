@@ -50,14 +50,18 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addHandlebarsHelper("articleIsInCategory", function (articles, url) {
 		return articles.findIndex(c => c.url === url) > -1;
 	});
-	// eleventyConfig.addHandlebarsHelper("findPreviousCourse", function (courses, category, url) {
-	// 	const i = findCourseIndex(courses, category, url);
-	// 	return courses[category][i - 1];
-	// });
-	// eleventyConfig.addHandlebarsHelper("findNextCourse", function (courses, category, url) {
-	// 	const i = findCourseIndex(courses, category, url);
-	// 	return courses[category][i + 1];
-	// });
+	eleventyConfig.addHandlebarsHelper("findPreviousArticle", function (articles, url) {
+		const i = articles.findIndex(c => c.url === url);
+		return i === 0
+			? null
+		 	: articles[i - 1];
+	});
+	eleventyConfig.addHandlebarsHelper("findNextArticle", function (articles, url) {
+		const i = articles.findIndex(c => c.url === url);
+		return i === articles.length - 1
+			? null
+			: articles[i + 1];
+	});
 };
 
 function sortByPageNumber(category) {
