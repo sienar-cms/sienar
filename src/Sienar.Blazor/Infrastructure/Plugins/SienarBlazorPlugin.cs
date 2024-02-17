@@ -37,7 +37,7 @@ public class SienarBlazorPlugin : ISienarPlugin
 	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
-		componentProvider.AppComponent = typeof(SienarBlazorServerApp);
+		componentProvider.App = typeof(SienarBlazorServerApp);
 		componentProvider.TopLevelComponents.Add(typeof(AuthStateRefresher));
 		componentProvider.AuthorizingView = typeof(Authorizing);
 		componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);

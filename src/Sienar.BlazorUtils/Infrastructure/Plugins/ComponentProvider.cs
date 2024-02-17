@@ -6,7 +6,7 @@ namespace Sienar.Infrastructure.Plugins;
 public class ComponentProvider : IComponentProvider
 {
 	/// <inheritdoc />
-	public Type AppComponent { get; set; } = default!;
+	public Type App { get; set; } = default!;
 
 	/// <inheritdoc />
 	public Type DefaultLayout { get; set; } = default!;

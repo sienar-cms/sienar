@@ -3,6 +3,6 @@
 @inject IPluginProvider PluginProvider
 
 <component
-	type="@ComponentProvider.AppComponent"
+	type="@ComponentProvider.App"
 	render-mode="ServerPrerendered"
 	param-PluginNames="@PluginProvider.GetPlugins().Select(p => p.PluginData.Name).ToArray()"/>
