@@ -38,7 +38,7 @@ public static class MenuProviderExtensions
 
 		self
 			.Access(DashboardMenuNames.MainMenu)
-			.AddMenuLink(
+			.AddLink(
 				new()
 				{
 					Text = "Dashboard",
@@ -46,8 +46,8 @@ public static class MenuProviderExtensions
 					Url = DashboardUrls.Index,
 					RequireLoggedIn = true
 				})
-			.AddMenuLink(accountLink)
-			.AddMenuLink(
+			.AddLink(accountLink)
+			.AddLink(
 				new()
 				{
 					Text = "Log out",
@@ -56,7 +56,7 @@ public static class MenuProviderExtensions
 					RequireLoggedIn = true
 				},
 				MenuPriority.Lowest)
-			.AddMenuLink(
+			.AddLink(
 				new()
 				{
 					Text = "Register",
@@ -65,7 +65,7 @@ public static class MenuProviderExtensions
 					RequireLoggedOut = true
 				},
 				MenuPriority.Lowest)
-			.AddMenuLink(
+			.AddLink(
 				new()
 				{
 					Text = "Log in",
@@ -82,7 +82,7 @@ public static class MenuProviderExtensions
 	{
 		self
 			.Access(DashboardMenuNames.InfoMenu)
-			.AddMenuLink(
+			.AddLink(
 				new()
 				{
 					Text = "About",

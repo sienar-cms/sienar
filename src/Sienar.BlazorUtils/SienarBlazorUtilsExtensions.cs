@@ -22,14 +22,10 @@ public static class SienarBlazorUtilsExtensions
 	public static IServiceCollection AddSienarBlazorUtilities(
 		this IServiceCollection self)
 	{
-		self.AddKeyedScoped<IMenuProvider, MenuProvider>(
-			SienarBlazorUtilsServiceKeys.MenuProvider);
-		self.AddKeyedScoped<IMenuProvider, MenuProvider>(
-			SienarBlazorUtilsServiceKeys.DashboardProvider);
-		self.AddKeyedScoped<IMenuGenerator, MenuGenerator>(
-			SienarBlazorUtilsServiceKeys.MenuProvider);
-		self.AddKeyedScoped<IMenuGenerator, DashboardMenuGenerator>(
-			SienarBlazorUtilsServiceKeys.DashboardProvider);
+		self.TryAddScoped<IMenuProvider, MenuProvider>();
+		self.TryAddScoped<IDashboardProvider, DashboardProvider>();
+		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.TryAddScoped<IDashboardGenerator, DashboardGenerator>();
 		self.TryAddScoped<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
 		self.TryAddScoped<IComponentProvider, ComponentProvider>();
 		self.TryAddTransient<INotificationService, NotificationService>();

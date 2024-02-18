@@ -1,5 +1,8 @@
 ﻿@using Sienar.Infrastructure.Menus
 @using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthState
+@inject IDashboardGenerator DashboardGenerator
+
 <MudText
 	Class="mb-8"
 	Typo="Typo.h3">
@@ -30,8 +33,8 @@
 
 @code {
 
-	private readonly Dictionary<string, List<MenuLink>> _allMenus = new();
-	private Dictionary<string, List<MenuLink>> _menus = new();
+	private readonly Dictionary<string, List<DashboardLink>> _allMenus = new();
+	private Dictionary<string, List<DashboardLink>> _menus = new();
 
 	[Parameter]
 	public string Name { get; set; } = "Dashboard";
@@ -40,13 +43,7 @@
 	public required List<string> Categories { get; set; }
 
 	[Parameter]
-	public required IMenuGenerator MenuGenerator { get; set; }
-
-	[Parameter]
-	public RenderFragment<MenuLink>? LinkTemplate { get; set; }
-
-	[Inject]
-	private AuthenticationStateProvider AuthState { get; set; } = default!;
+	public RenderFragment<DashboardLink>? LinkTemplate { get; set; }
 
 	protected override void OnInitialized()
 	{
@@ -62,7 +59,7 @@
 
 		foreach (var menuName in Categories)
 		{
-			_allMenus[menuName] = MenuGenerator.CreateMenu(menuName);
+			_allMenus[menuName] = DashboardGenerator.Create(menuName);
 		}
 
 		_menus = new(_allMenus);

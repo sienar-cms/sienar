@@ -1,6 +1,9 @@
 ﻿@using Sienar.Infrastructure.Plugins
 @using Sienar.Infrastructure.Menus
 @inject IComponentProvider ComponentProvider
+@inject ThemeState ThemeState
+@inject IMenuGenerator MenuGenerator
+@inject AuthenticationStateProvider AuthState
 
 <MudThemeProvider
 	IsDarkMode="@ThemeState.IsDarkMode"
@@ -63,15 +66,6 @@
 	[Parameter]
     public required IEnumerable<string> MenuNames { get; set; }
 
-	[Inject]
-	private ThemeState ThemeState { get; set; } = default!;
-
-	[Inject(Key = SienarBlazorUtilsServiceKeys.MenuProvider)]
-	private IMenuGenerator MenuGenerator { get; set; } = default!;
-
-	[Inject]
-	private AuthenticationStateProvider AuthState { get; set; } = default!;
-
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
@@ -86,7 +80,7 @@
 		await s;
 		_menus.Clear();
 		_menus = MenuNames
-			.Select(menuName => MenuGenerator.CreateMenu(menuName))
+			.Select(menuName => MenuGenerator.Create(menuName))
 			.ToList();
 		StateHasChanged();
 	}

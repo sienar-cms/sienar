@@ -24,8 +24,8 @@ public interface ISienarPlugin
 	/// <summary>
 	/// Configures dashboard items to be registered for the current user session
 	/// </summary>
-	/// <param name="dashboardProvider">the <see cref="IMenuProvider"/> containing dashboard item definitions</param>
-	void SetupDashboard(IMenuProvider dashboardProvider) {}
+	/// <param name="dashboardProvider">the <see cref="IDashboardProvider"/> containing dashboard item definitions</param>
+	void SetupDashboard(IDashboardProvider dashboardProvider) {}
 
 	/// <summary>
 	/// Configures menu items to be registered for the current user session
