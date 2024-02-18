@@ -10,13 +10,16 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.setLibrary("md", md);
 
 	// File copying
+	eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
 	eleventyConfig.addPassthroughCopy("assets");
+	eleventyConfig.addPassthroughCopy("**/*.jpg");
 
 	// Collections
 	eleventyConfig.addCollection("introductionSorted", sortByPageNumber("introduction"));
 	eleventyConfig.addCollection("guidesSorted", sortByPageNumber("guides"));
 	eleventyConfig.addCollection("pluginsSorted", sortByTitle("plugins"));
 	eleventyConfig.addCollection("apiSorted", sortByTitle("api"));
+	eleventyConfig.addCollection("plugin-providers-sorted", sortByPageNumber("plugin-providers"));
 
 	// Template helpers
 	eleventyConfig.addHandlebarsHelper("eq", function (a, b) {
