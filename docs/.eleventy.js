@@ -13,7 +13,7 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.setLibrary("md", md);
 
 	// File copying
-	eleventyConfig.addPassthroughCopy("docs.css");
+	eleventyConfig.addPassthroughCopy("assets");
 
 	// Collections
 	eleventyConfig.addCollection("introductionSorted", sortByPageNumber("introduction"));
