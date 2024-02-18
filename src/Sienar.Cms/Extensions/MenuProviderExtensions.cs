@@ -37,7 +37,7 @@ public static class MenuProviderExtensions
 		};
 
 		self
-			.AccessMenu(DashboardMenuNames.MainMenu)
+			.Access(DashboardMenuNames.MainMenu)
 			.AddMenuLink(
 				new()
 				{
@@ -54,7 +54,8 @@ public static class MenuProviderExtensions
 					Icon = Icons.Material.Filled.Logout,
 					Url = DashboardUrls.Account.Logout,
 					RequireLoggedIn = true
-				})
+				},
+				MenuPriority.Lowest)
 			.AddMenuLink(
 				new()
 				{
@@ -62,7 +63,8 @@ public static class MenuProviderExtensions
 					Icon = Icons.Material.Filled.Assignment,
 					Url = DashboardUrls.Account.Register.Index,
 					RequireLoggedOut = true
-				})
+				},
+				MenuPriority.Lowest)
 			.AddMenuLink(
 				new()
 				{
@@ -70,7 +72,8 @@ public static class MenuProviderExtensions
 					Icon = Icons.Material.Filled.Login,
 					Url = DashboardUrls.Account.Login,
 					RequireLoggedOut = true
-				});
+				},
+				MenuPriority.Lowest);
 
 		return self;
 	}
@@ -78,7 +81,7 @@ public static class MenuProviderExtensions
 	public static IMenuProvider CreateInfoMenu(this IMenuProvider self)
 	{
 		self
-			.AccessMenu(DashboardMenuNames.InfoMenu)
+			.Access(DashboardMenuNames.InfoMenu)
 			.AddMenuLink(
 				new()
 				{

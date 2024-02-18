@@ -1,14 +1,13 @@
 ﻿using System;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Infrastructure.Menus;
+using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Email;
 
-public class MailKitPlugin : ISienarPlugin
+public class MailKitPlugin : ISienarServerStartupPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
@@ -22,47 +21,15 @@ public class MailKitPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new();
-
-	/// <inheritdoc />
 	public void SetupDependencies(WebApplicationBuilder builder)
 	{
 		var services = builder.Services;
 
-		services.AddScoped<ISmtpClient>(delegate { return new SmtpClient(); });
-
 		services.RemoveService<IEmailSender>();
 		services.AddScoped<IEmailSender, MailKitSender>();
+		services.AddScoped<ISmtpClient, SmtpClient>();
 
-		var smtpConfigurer = services.GetAndRemoveService<Action<SmtpOptions>>();
-		if (smtpConfigurer is null)
-		{
-			services.Configure<SmtpOptions>(
-				builder.Configuration.GetSection("Sienar:Email:Smtp"));
-		}
-		else
-		{
-			services.Configure(smtpConfigurer);
-		}
+		services.ApplyDefaultConfiguration<SmtpOptions>(
+			builder.Configuration.GetSection("Sienar:Email:Smtp"));
 	}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app) {}
-
-	public bool PluginShouldExecute(HttpContext context) => false;
-
-	/// <inheritdoc />
-	public void SetupStyles(IStyleProvider styleProvider) {}
-
-	/// <inheritdoc />
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
-	/// <inheritdoc />
-	public void SetupMenu(IMenuProvider menuProvider) {}
-
-	/// <inheritdoc />
-	public void SetupDashboard(IMenuProvider dashboardProvider) {}
-
-	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider) {}
 }

@@ -1,0 +1,25 @@
+﻿{
+	"layout": "docs-layout.hbs",
+	"sidebarCategories": [
+		{
+			"collectionName": "introductionSorted",
+			"displayName": "Introduction"
+		},
+		{
+			"collectionName": "guidesSorted",
+			"displayName": "Guides"
+		},
+		{
+			"collectionName": "pluginsSorted",
+			"displayName": "Plugins"
+		},
+		{
+			"collectionName": "apiSorted",
+			"displayName": "API"
+		}
+	],
+	"backLink": {
+		"text": "Back to dev documentation",
+		"url": "/devs"
+	}
+}

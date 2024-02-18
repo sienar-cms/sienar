@@ -1,15 +1,20 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Project.Data;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Project.App;
 
 public class AppPlugin : ISienarPlugin
 {
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public AppPlugin(IPluginExecutionTracker executionTracker)
+	{
+		_executionTracker = executionTracker;
+	}
+
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(AppStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -21,38 +26,23 @@ public class AppPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
+	public bool ShouldExecute()
 	{
-		UsesProviders = true,
-		HasRoutableComponents = true
-	};
+		if (!_executionTracker.SubAppHasExecuted)
+		{
+			_executionTracker.ClaimExecution();
+			return true;
+		}
 
-	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder) {}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
-	{
-		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
+		return false;
 	}
-
-	public bool PluginShouldExecute(HttpContext context) => true;
 
 	/// <inheritdoc />
 	public void SetupStyles(IStyleProvider styleProvider)
-	{
-		styleProvider.Enqueue("/css/site.css");
-	}
+		=> styleProvider.Add("/css/site.css");
 
 	/// <inheritdoc />
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
-	/// <inheritdoc />
-	public void SetupMenu(IMenuProvider menuProvider) {}
-
-	/// <inheritdoc />
-	public void SetupDashboard(IMenuProvider dashboardProvider) {}
-
-	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider) {}
+	public void SetupRoutableAssemblies(
+		IRoutableAssemblyProvider routableAssemblyProvider)
+		=> routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
 }

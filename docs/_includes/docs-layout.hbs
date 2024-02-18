@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html
+	class="d-flex flex-column min-vh-100"
+	lang="en">
+<head>
+	{{> ui/head blurb=blurb pageTitle=pageTitle siteTitle=metadata.title }}
+</head>
+<body class="flex-grow-1 d-flex flex-column">
+
+{{> ui/nav uri=page.url links=metadata.links }}
+
+<div class="container flex-grow-1 pt-5">
+	<div class="row">
+		<div class="col-3">
+			<section class="accordion position-sticky docs-sidebar">
+				{{# each sidebarCategories }}
+					<div class="accordion-item">
+						<p
+							class="accordion-header"
+							id="{{ idify this.displayName }}-label">
+							<button
+								class="accordion-button {{ returnValueConditional (articleIsInCategory (lookup ../collections this.collectionName) ../page.url) "" "collapsed" }}"
+								type="button"
+								data-bs-toggle="collapse"
+								data-bs-target="#{{ idify this.displayName }}"
+								aria-expanded="{{ returnValueConditional (articleIsInCategory (lookup ../collections this.collectionName) ../page.url) "true" "false" }}"
+								aria-controls="collapseOne">
+								{{ this.displayName }}
+							</button>
+						</p>
+						<div
+							id="{{ idify this.displayName }}"
+							class="accordion-collapse collapse {{ returnValueConditional (articleIsInCategory (lookup ../collections this.collectionName) ../page.url) "show" "hide" }}"
+							aria-labelledby="{{ idify this.displayName }}-label">
+							<div class="accordion-body">
+								{{# each (lookup ../collections this.collectionName) }}
+									<a
+										href="{{ this.url }}"
+										class="d-block">
+										{{ this.data.pageTitle }}
+									</a>
+								{{/each}}
+							</div>
+						</div>
+					</div>
+				{{/each}}
+			</section>
+		</div>
+		<div class="col-9 ps-5">
+			{{{ content }}}
+		</div>
+	</div>
+</div>
+
+{{> ui/footer }}
+
+</body>
+</html>

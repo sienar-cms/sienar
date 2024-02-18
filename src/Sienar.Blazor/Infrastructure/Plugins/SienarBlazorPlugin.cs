@@ -1,13 +1,14 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Sienar.Infrastructure.Menus;
+using Sienar.UI;
+using Sienar.UI.Views;
 
 namespace Sienar.Infrastructure.Plugins;
 
 public class SienarBlazorPlugin : ISienarPlugin
 {
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(SienarBlazorStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -20,65 +21,25 @@ public class SienarBlazorPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new() { UsesProviders = true };
-
-	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder)
-	{
-		SienarUtils.SetupBaseDirectory();
-
-		var services = builder.Services;
-		var config = builder.Configuration;
-
-		services
-			.AddSienarUtilities()
-			.AddSienarIdentity()
-			.AddSienarMedia()
-			.ConfigureSienarOptions(config)
-			.ConfigureSienarBlazor()
-			.ConfigureSienarBlazorAuth();
-	}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
-	{
-		if (!app.Environment.IsDevelopment())
-		{
-			app
-				.UseExceptionHandler("/Error")
-				.UseHsts();
-		}
-
-		app
-			.UseStaticFiles()
-			.UseRouting()
-			.UseAuthorization();
-		app.MapBlazorHub();
-	}
-
-	public bool PluginShouldExecute(HttpContext context) => true;
-
-	public void SetupMenu(IMenuProvider menuProvider) {}
-
-	/// <inheritdoc /> 
-	public void SetupDashboard(IMenuProvider dashboardProvider) {}
-
 	public void SetupStyles(IStyleProvider styleProvider)
-	{
-		styleProvider
-			.Enqueue("/_content/MudBlazor/MudBlazor.min.css")
-			.Enqueue("/_content/Sienar.Blazor/sienar.css")
-			.Enqueue("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
-	}
-
-	public void SetupScripts(IScriptProvider scriptProvider)
-	{
-		scriptProvider
-			.Enqueue("/_framework/blazor.server.js")
-			.Enqueue("/_content/MudBlazor/MudBlazor.min.js")
-			.Enqueue("/_content/Sienar.Blazor/sienar.js");
-	}
+		=> styleProvider
+			.Add("/_content/MudBlazor/MudBlazor.min.css")
+			.Add("/_content/Sienar.Blazor/sienar.css")
+			.Add("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
 
 	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider) {}
+	public void SetupScripts(IScriptProvider scriptProvider)
+		=> scriptProvider
+			.Add("/_framework/blazor.server.js")
+			.Add("/_content/MudBlazor/MudBlazor.min.js")
+			.Add("/_content/Sienar.Blazor/sienar.js");
+
+	/// <inheritdoc />
+	public void SetupComponents(IComponentProvider componentProvider)
+	{
+		componentProvider.App = typeof(SienarBlazorServerApp);
+		componentProvider.TopLevelComponents.Add(typeof(AuthStateRefresher));
+		componentProvider.AuthorizingView = typeof(Authorizing);
+		componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);
+	}
 }

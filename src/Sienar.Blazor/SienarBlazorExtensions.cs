@@ -13,6 +13,7 @@ using MudBlazor.Services;
 using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Email;
+using Sienar.Extensions;
 using Sienar.Identity;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
@@ -68,10 +69,10 @@ public static class SienarBlazorExtensions
 		IConfiguration config)
 	{
 		self
-			.Configure<SienarOptions>(config.GetSection("Sienar:Core"))
-			.Configure<EmailOptions>(config.GetSection("Sienar:Email:Core"))
-			.Configure<IdentityEmailOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
-			.Configure<LoginOptions>(config.GetSection("Sienar:Login"));
+			.ApplyDefaultConfiguration<SienarOptions>(config.GetSection("Sienar:Core"))
+			.ApplyDefaultConfiguration<EmailSenderOptions>(config.GetSection("Sienar:Email:Sender"))
+			.ApplyDefaultConfiguration<IdentityEmailSubjectOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
+			.ApplyDefaultConfiguration<LoginOptions>(config.GetSection("Sienar:Login"));
 
 		return self;
 	}

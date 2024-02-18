@@ -1,6 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
-@using Sienar
-@using Sienar.Infrastructure.Plugins
 @namespace Sienar.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -18,12 +16,12 @@
 	      type="image/png"
 	      href="/favicon.png"/>
 
-	@foreach (var stylesheet in StyleProvider.GetStylesheets())
+	@foreach (var stylesheet in StyleProvider.Items)
 	{
 		<link
-			href="@stylesheet.Url"
-			crossorigin="@stylesheet.Mode.GetHtmlValue()"
-			referrerpolicy="@stylesheet.Referrer.GetHtmlValue()"
+			href="@stylesheet.Href"
+			crossorigin="@stylesheet.CrossOriginMode.GetHtmlValue()"
+			referrerpolicy="@stylesheet.ReferrerPolicy.GetHtmlValue()"
 			integrity="@stylesheet.Integrity"
 			rel="stylesheet"/>
 	}
@@ -45,13 +43,13 @@
         <a class="dismiss">🗙</a>
     </div>
 
-@foreach (var script in ScriptProvider.GetScripts())
+@foreach (var script in ScriptProvider.Items)
 {
 	<script
 		type="@script.GetScriptType()"
-		src="@script.Url"
-		crossorigin="@script.Mode.GetHtmlValue()"
-		referrerpolicy="@script.Referrer.GetHtmlValue()"
+		src="@script.Src"
+		crossorigin="@script.CrossOriginMode.GetHtmlValue()"
+		referrerpolicy="@script.ReferrerPolicy.GetHtmlValue()"
 		integrity="@script.Integrity"
 		async="@script.IsAsync"
 		defer="@script.ShouldDefer"></script>

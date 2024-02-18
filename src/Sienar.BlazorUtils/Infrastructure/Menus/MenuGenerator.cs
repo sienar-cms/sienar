@@ -21,8 +21,7 @@ public class MenuGenerator : IMenuGenerator
 	public List<MenuLink> CreateMenu(string menuName)
 	{
 		var orderedLinks = new List<MenuLink>();
-		if (!_menuProvider.Menus.TryGetValue(menuName, out var menu))
-			return orderedLinks;
+		var menu = _menuProvider.Access(menuName);
 
 		foreach (var i in menu.Keys.OrderDescending())
 		{

@@ -1,4 +1,5 @@
 ﻿#nullable disable
+// ReSharper disable NotNullOrRequiredMemberIsNotInitialized
 
 using Microsoft.EntityFrameworkCore;
 using Sienar.Identity;
@@ -8,6 +9,9 @@ namespace Sienar;
 
 public class SienarDbContext : DbContext, ISienarDbContext
 {
+	/// <inheritdoc />
+	public SienarDbContext() {}
+
 	/// <inheritdoc />
 	public SienarDbContext(DbContextOptions options) : base(options) {}
 

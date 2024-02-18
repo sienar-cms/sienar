@@ -8,7 +8,7 @@ public class ScriptResource
 	/// <remarks>
 	/// The URL provided here should either be absolute (e.g., to a CDN link) or root-relative (e.g., <c>/_content/My.Plugin.Assembly/main.js</c>).
 	/// </remarks>
-	public required string Url { get; init; }
+	public required string Src { get; init; }
 
 	/// <summary>
 	/// Whether the script resource should be included as a <b>module</b>
@@ -28,22 +28,28 @@ public class ScriptResource
 	/// <summary>
 	/// The value to use for the <c>crossorigin</c> attribute
 	/// </summary>
-	public CrossOriginMode? Mode { get; init; }
+	public CrossOriginMode? CrossOriginMode { get; init; }
 
 	/// <summary>
-	/// The value to u se for the <c>referrerpolicy</c> attribute
+	/// The value to use for the <c>referrerpolicy</c> attribute
 	/// </summary>
-	public ReferrerPolicy? Referrer { get; init; }
+	public ReferrerPolicy? ReferrerPolicy { get; init; }
 
 	/// <summary>
 	/// The expected hash of the resource
 	/// </summary>
 	public string? Integrity { get; init; }
 
-	public string GetScriptType()
+	/// <summary>
+	/// Returns <c>"module"</c> if the script is an ES module, otherwise <c>null</c>
+	/// </summary>
+	public string? GetScriptType()
 	{
 		return IsModule
 			? "module"
-			: "text/javascript";
+			: null;
 	}
+
+	public static implicit operator ScriptResource(string source)
+		=> new() { Src = source };
 }

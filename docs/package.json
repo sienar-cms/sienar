@@ -1,0 +1,11 @@
+{
+	"private": true,
+	"scripts": {
+		"build": "npx @11ty/eleventy --output=build --formats=md,hbs",
+		"serve": "npx @11ty/eleventy --serve --output=build --formats=md,hbs"
+	},
+	"devDependencies": {
+		"@11ty/eleventy": "^2.0.1",
+		"markdown-it": "^12.3.2"
+	}
+}

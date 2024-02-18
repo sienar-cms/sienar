@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using Sienar.Extensions;
@@ -10,6 +9,20 @@ namespace Sienar.Infrastructure.Plugins;
 
 public class SienarCmsPlugin : ISienarPlugin
 {
+	private readonly IHttpContextAccessor _contextAccessor;
+	private readonly IPluginExecutionTracker _executionTracker;
+
+	public SienarCmsPlugin(
+		IHttpContextAccessor contextAccessor,
+		IPluginExecutionTracker executionTracker)
+	{
+		_contextAccessor = contextAccessor;
+		_executionTracker = executionTracker;
+	}
+
+	/// <inheritdoc />
+	public static Type StartupPlugin => typeof(SienarCmsStartupPlugin);
+
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
 	{
@@ -22,30 +35,12 @@ public class SienarCmsPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public PluginSettings PluginSettings { get; } = new()
-	{
-		HasRoutableComponents = true,
-		UsesProviders = true
-	};
+	public bool ShouldExecute()
+		=> _executionTracker.ExecuteAsSubApp(
+			_contextAccessor.HttpContext!,
+			"/dashboard");
 
 	/// <inheritdoc />
-	public void SetupDependencies(WebApplicationBuilder builder)
-	{
-		builder.Services
-			.AddSienarCmsUtilities()
-			.AddIdentityHooks()
-			.AddMediaHooks();
-	}
-
-	/// <inheritdoc />
-	public void SetupApp(WebApplication app)
-	{
-		app.MapFallbackToPage("/dashboard/{**segment}", "/_Host");
-	}
-
-	public bool PluginShouldExecute(HttpContext context)
-		=> context.Request.Path.StartsWithSegments("/dashboard");
-
 	public void SetupMenu(IMenuProvider menuProvider)
 	{
 		menuProvider
@@ -57,7 +52,7 @@ public class SienarCmsPlugin : ISienarPlugin
 	public void SetupDashboard(IMenuProvider dashboardProvider)
 	{
 		dashboardProvider
-			.AccessMenu(DashboardSectionNames.UserManagement)
+			.Access(DashboardMenuNames.Dashboards.UserManagement)
 			.AddMenuLink(
 				new()
 				{
@@ -75,12 +70,16 @@ public class SienarCmsPlugin : ISienarPlugin
 				});
 	}
 
-	public void SetupStyles(IStyleProvider styleProvider) {}
-
-	public void SetupScripts(IScriptProvider scriptProvider) {}
-
+	/// <inheritdoc />
 	public void SetupComponents(IComponentProvider componentProvider)
 	{
+		componentProvider.DefaultLayout = typeof(DashboardLayout);
 		componentProvider.SidebarHeader = typeof(DrawerHeader);
+	}
+
+	/// <inheritdoc />
+	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
+	{
+		routableAssemblyProvider.Add(typeof(SienarCmsPlugin).Assembly);
 	}
 }

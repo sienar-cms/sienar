@@ -8,20 +8,23 @@ public class StyleResource
 	/// <remarks>
 	/// The URL provided here should either be absolute (e.g., to a CDN link) or root-relative (e.g., <c>/_content/My.Plugin.Assembly/main.js</c>).
 	/// </remarks>
-	public required string Url { get; init; }
+	public required string Href { get; init; }
 
 	/// <summary>
 	/// The value to use for the <c>crossorigin</c> attribute
 	/// </summary>
-	public CrossOriginMode? Mode { get; init; }
+	public CrossOriginMode? CrossOriginMode { get; init; }
 
 	/// <summary>
 	/// The value to u se for the <c>referrerpolicy</c> attribute
 	/// </summary>
-	public ReferrerPolicy? Referrer { get; init; }
+	public ReferrerPolicy? ReferrerPolicy { get; init; }
 
 	/// <summary>
 	/// The expected hash of the resource
 	/// </summary>
 	public string? Integrity { get; init; }
+
+	public static implicit operator StyleResource(string source)
+		=> new() { Href = source };
 }

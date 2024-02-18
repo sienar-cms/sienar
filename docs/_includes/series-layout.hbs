@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html
+	class="d-flex flex-column min-vh-100"
+	lang="en">
+<head>
+	{{> ui/head blurb=blurb pageTitle=pageTitle siteTitle=metadata.title }}
+</head>
+<body class="flex-grow-1 d-flex flex-column">
+
+{{> ui/nav uri=page.url links=metadata.links }}
+
+<div class="container flex-grow-1 pt-5">
+	<div class="row">
+		<div class="col-3">
+			<section class="position-sticky docs-sidebar">
+				<h2 class="h4 mb-4">{{ seriesName }}</h2>
+				<a
+					href="{{ backLink.url }}"
+					class="d-block text-decoration-none mb-4">
+					<i class="fas fa-arrow-left pe-2"></i>
+					{{ backLink.text }}
+				</a>
+				<ol>
+					{{# each (lookup collections collectionName) }}
+						<li>
+							{{#if (eq ../page.url this.url)}}
+								{{ this.data.pageTitle }}
+							{{else}}
+								<a
+									href="{{ this.url }}"
+									class="d-block">
+									{{ this.data.pageTitle }}
+								</a>
+							{{/if}}
+						</li>
+					{{/each}}
+				</ol>
+			</section>
+		</div>
+		<div class="col-9 ps-5">
+			{{{ content }}}
+
+			<hr class="mt-5"/>
+			<div class="row">
+				<div class="col-md-6 text-md-end order-md-2">
+					{{> widgets/seriesNavLink article=(findNextArticle (lookup collections collectionName) page.url) next=true }}
+				</div>
+
+				<div class="col-md-6 order-md-1">
+					{{> widgets/seriesNavLink article=(findPreviousArticle (lookup collections collectionName) page.url) next=false }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{> ui/footer }}
+
+</body>
+</html>

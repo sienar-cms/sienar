@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.BlazorUtils", "src\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Blazor", "src\Sienar.Blazor\Sienar.Blazor.csproj", "{89C317BB-02A9-4581-9204-B9E5405A71CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.ElectronUtils", "src\Sienar.ElectronUtils\Sienar.ElectronUtils.csproj", "{DD9D28A5-7E97-43C5-B762-31D7E62B5A68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.DesktopUtils", "src\Sienar.DesktopUtils\Sienar.DesktopUtils.csproj", "{DD9D28A5-7E97-43C5-B762-31D7E62B5A68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.MailKit", "src\Sienar.MailKit\Sienar.MailKit.csproj", "{21466D12-17B0-4CAB-BBDE-A0163C3FA717}"
 EndProject
@@ -24,6 +24,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.App", "SienarTests\Project.App\Project.App.csproj", "{ABE750F6-26FE-4778-8EB6-82B58A286CBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Cms", "src\Sienar.Cms\Sienar.Cms.csproj", "{D47F66C5-1043-4586-BB18-4C7B9D3E05A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.BlazorServerUtils", "src\Sienar.BlazorServerUtils\Sienar.BlazorServerUtils.csproj", "{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.BlazorClientUtils", "src\Sienar.BlazorClientUtils\Sienar.BlazorClientUtils.csproj", "{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +74,14 @@ Global
 		{D47F66C5-1043-4586-BB18-4C7B9D3E05A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D47F66C5-1043-4586-BB18-4C7B9D3E05A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D47F66C5-1043-4586-BB18-4C7B9D3E05A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{52A79843-D9E0-41D0-B28E-4DDA07B00EBE} = {77DB66F3-F1ED-43CB-93DA-1E876B44ABA7}
@@ -81,5 +93,7 @@ Global
 		{E6FB60CA-E092-4FD0-95D5-13C6EB5DD2AE} = {5239807A-4103-4944-ABCB-E6ED0BD07602}
 		{ABE750F6-26FE-4778-8EB6-82B58A286CBA} = {5239807A-4103-4944-ABCB-E6ED0BD07602}
 		{D47F66C5-1043-4586-BB18-4C7B9D3E05A8} = {77DB66F3-F1ED-43CB-93DA-1E876B44ABA7}
+		{224A5DE9-FF3E-4B1E-BC3D-35D1E8927E8C} = {77DB66F3-F1ED-43CB-93DA-1E876B44ABA7}
+		{0A73C7DF-F4E2-47E0-AC78-0A52E9B057CB} = {77DB66F3-F1ED-43CB-93DA-1E876B44ABA7}
 	EndGlobalSection
 EndGlobal
