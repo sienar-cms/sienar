@@ -5,10 +5,17 @@ namespace Project.App;
 
 public class AppPlugin : ISienarPlugin
 {
+	private readonly IStyleProvider _styleProvider;
+	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly IPluginExecutionTracker _executionTracker;
 
-	public AppPlugin(IPluginExecutionTracker executionTracker)
+	public AppPlugin(
+		IStyleProvider styleProvider,
+		IRoutableAssemblyProvider routableAssemblyProvider,
+		IPluginExecutionTracker executionTracker)
 	{
+		_styleProvider = styleProvider;
+		_routableAssemblyProvider = routableAssemblyProvider;
 		_executionTracker = executionTracker;
 	}
 
@@ -26,6 +33,13 @@ public class AppPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
+	public void Execute()
+	{
+		SetupStyles();
+		SetupRoutableAssemblies();
+	}
+
+	/// <inheritdoc />
 	public bool ShouldExecute()
 	{
 		if (!_executionTracker.SubAppHasExecuted)
@@ -37,12 +51,9 @@ public class AppPlugin : ISienarPlugin
 		return false;
 	}
 
-	/// <inheritdoc />
-	public void SetupStyles(IStyleProvider styleProvider)
-		=> styleProvider.Add("/css/site.css");
+	private void SetupStyles()
+		=> _styleProvider.Add("/css/site.css");
 
-	/// <inheritdoc />
-	public void SetupRoutableAssemblies(
-		IRoutableAssemblyProvider routableAssemblyProvider)
-		=> routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
+	private void SetupRoutableAssemblies()
+		=> _routableAssemblyProvider.Add(typeof(AppPlugin).Assembly);
 }

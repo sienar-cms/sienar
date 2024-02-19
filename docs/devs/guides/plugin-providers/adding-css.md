@@ -10,8 +10,6 @@ tags:
 
 Sienar enables developers to add CSS for their plugins with the `IStyleProvider` interface. This provider contains references to `StyleResource` objects, which are rendered in the order they were registered in the provider.
 
-**NOTE**: While it's possible to configure the `IStyleProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IStyleProvider` via the `ISienarPlugin.SetupStyles()` method.
-
 ## Overview
 
 ### `IStyleProvider`
@@ -33,13 +31,13 @@ It is also worth noting that `StyleResource` has an implicit cast operator from 
 Adding a stylesheet from your app's `wwwroot` directory is as simple as adding a `StyleResource` with the URL of the stylesheet as its `Href` property. If your stylesheet is at `/wwwroot/css/myStyle.css`, your code will look like this:
 
 ```csharp
-public void SetupStyles(IStyleProvider styleProvider)
+public void Execute()
 {
 	// Explicit ScriptResource
-	styleProvider.Add(new StyleResource { Href = "/css/myStyle.css");
+	_provider.Add(new StyleResource { Href = "/css/myStyle.css");
 
 	// Implicit cast from string
-	styleProvider.Add("/css/myStyle.css");
+	_provider.Add("/css/myStyle.css");
 }
 ```
 
@@ -54,13 +52,13 @@ The generated link tag will look like this:
 Adding a stylesheet from your plugin's `wwwroot` directory is similar to adding a stylesheet from your app's `wwwroot` directory, but you need to prepend `/_content/<plugin-assembly>` to the path. If your stylesheet is at `<plugin-root>/wwwroot/css/myStyle.css` and your plugin's assembly name is `CustomPlugin`, your code will look like this:
 
 ```csharp
-public void SetupStyles(IStyleProvider styleProvider)
+public void Execute()
 {
 	// Explicit ScriptResource
-	styleProvider.Add(new StyleResource { Href = "/_content/CustomPlugin/css/myStyle.css");
+	_provider.Add(new StyleResource { Href = "/_content/CustomPlugin/css/myStyle.css");
 
 	// Implicit cast from string
-	styleProvider.Add("/_content/CustomPlugin/css/myStyle.css");
+	_provider.Add("/_content/CustomPlugin/css/myStyle.css");
 }
 ```
 
@@ -75,10 +73,10 @@ The generated link tag will look like this:
 This is a more complete example that shows you how to use multiple properties together to create a complex link tag. We want to include Bootstrap from CDNJS for security reasons because it serves Bootstrap via HTTPS and includes a file hash to ensure no one has tampered with our file en route. To include Bootstrap v5.3.2 from CDNJS, your code will look like this:
 
 ```csharp
-public void SetupStyles(IStyleProvider styleProvider)
+public void Execute()
 {
 	// Explicit ScriptResource
-	styleProvider.Add(
+	_provider.Add(
 		new StyleResource
 		{
 			Href = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css",

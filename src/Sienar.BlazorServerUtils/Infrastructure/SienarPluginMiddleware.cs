@@ -33,13 +33,7 @@ public class SienarPluginMiddleware
 			if (plugin.ShouldExecute())
 			{
 				pluginProvider.Add(plugin);
-
-				plugin.SetupStyles(styleProvider);
-				plugin.SetupScripts(scriptProvider);
-				plugin.SetupMenu(menuProvider);
-				plugin.SetupDashboard(dashboardProvider);
-				plugin.SetupComponents(componentProvider);
-				plugin.SetupRoutableAssemblies(routableAssemblyProvider);
+				plugin.Execute();
 			}
 		}
 

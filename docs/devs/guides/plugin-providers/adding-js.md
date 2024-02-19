@@ -10,8 +10,6 @@ tags:
 
 Sienar enables developers to add JavaScript for their plugins with the `IScriptProvider` interface. This provider contains references to `ScriptResource` objects, which are rendered in the order they were registered in the provider.
 
-**NOTE**: While it's possible to configure the `IScriptProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IScriptProvider` via the `ISienarPlugin.SetupScripts()` method.
-
 ## Overview
 
 As a Blazor app, Sienar removes most of your need for JavaScript. However, you may wish to include JavaScript in certain circumstances, such as using an existing JavaScript library instead of reproducing the functionality in C# or handling edge cases where Blazor still requires JavaScript.
@@ -35,13 +33,13 @@ It is also worth noting that `ScriptResource` has an implicit cast operator from
 Adding a script from your app's `wwwroot` directory is as simple as adding a `ScriptResource` with the URL of the script as its `Src` property. If your script is at `/wwwroot/js/myScript.js`, your code will look like this:
 
 ```csharp
-public void SetupScripts(IScriptProvider scriptProvider)
+public void Execute()
 {
 	// Explicit ScriptResource
-	scriptProvider.Add(new ScriptResource { Src = "/js/myScript.js");
+	_provider.Add(new ScriptResource { Src = "/js/myScript.js");
 
 	// Implicit cast from string
-	scriptProvider.Add("/js/myScript.js");
+	_provider.Add("/js/myScript.js");
 }
 ```
 
@@ -56,13 +54,13 @@ The generated script tag will look like this:
 Adding a script from your plugin's `wwwroot` directory is similar to adding a script from your app's `wwwroot` directory, but you need to prepend `/_content/<plugin-assembly>` to the path. If your script is at `<plugin-root>/wwwroot/js/myScript.js` and your plugin's assembly name is `CustomPlugin`, your code will look like this:
 
 ```csharp
-public void SetupScripts(IScriptProvider scriptProvider)
+public void Execute()
 {
 	// Explicit ScriptResource
-	scriptProvider.Add(new ScriptResource { Src = "/_content/CustomPlugin/js/myScript.js");
+	_provider.Add(new ScriptResource { Src = "/_content/CustomPlugin/js/myScript.js");
 
 	// Implicit cast from string
-	scriptProvider.Add("/_content/CustomPlugin/js/myScript.js");
+	_provider.Add("/_content/CustomPlugin/js/myScript.js");
 }
 ```
 
@@ -77,11 +75,11 @@ The generated script tag will look like this:
 Google Analytics is included in your webpage by adding a `<script>` to your HTML. The official docs installation shows the `gtag` script being included as `async`. To do that:
 
 ```csharp
-public void SetupScripts(IScriptProvider scriptProvider)
+public void Execute()
 {
     var gtagId = "my-gtag-id";
 
-	scriptProvider.Add(
+	_provider.Add(
 		new ScriptResource
 		{
 			Src = $"https://www.googletagmanager.com/gtag/js?id={gtagId}",
@@ -103,9 +101,9 @@ The generated script tag will look like this:
 This is a more complete example that shows you how to use multiple properties together to create a complex script tag. We want to include Bootstrap from CDNJS for security reasons because it serves Bootstrap via HTTPS and includes a file hash to ensure no one has tampered with our file en route. To include Bootstrap v5.3.2 from CDNJS, your code will look like this:
 
 ```csharp
-public void SetupScripts(IScriptProvider scriptProvider)
+public void Execute()
 {
-	scriptProvider.Add(
+	_provider.Add(
 		new ScriptResource
 		{
 			Src = "https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js",

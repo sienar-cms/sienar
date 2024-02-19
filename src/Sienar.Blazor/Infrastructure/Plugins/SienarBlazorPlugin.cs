@@ -6,6 +6,18 @@ namespace Sienar.Infrastructure.Plugins;
 
 public class SienarBlazorPlugin : ISienarPlugin
 {
+	private readonly IStyleProvider _styleProvider;
+	private readonly IScriptProvider _scriptProvider;
+	private readonly IComponentProvider _componentProvider;
+
+	public SienarBlazorPlugin(IStyleProvider styleProvider, IScriptProvider scriptProvider,
+		IComponentProvider componentProvider)
+	{
+		_styleProvider = styleProvider;
+		_scriptProvider = scriptProvider;
+		_componentProvider = componentProvider;
+	}
+
 	/// <inheritdoc />
 	public static Type StartupPlugin => typeof(SienarBlazorStartupPlugin);
 
@@ -21,25 +33,30 @@ public class SienarBlazorPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
-	public void SetupStyles(IStyleProvider styleProvider)
-		=> styleProvider
+	public void Execute()
+	{
+		SetupStyles();
+		SetupScripts();
+		SetupComponents();
+	}
+
+	private void SetupStyles()
+		=> _styleProvider
 			.Add("/_content/MudBlazor/MudBlazor.min.css")
 			.Add("/_content/Sienar.Blazor/sienar.css")
 			.Add("/_content/Sienar.BlazorUtils/Sienar.BlazorUtils.bundle.scp.css");
 
-	/// <inheritdoc />
-	public void SetupScripts(IScriptProvider scriptProvider)
-		=> scriptProvider
+	private void SetupScripts()
+		=> _scriptProvider
 			.Add("/_framework/blazor.server.js")
 			.Add("/_content/MudBlazor/MudBlazor.min.js")
 			.Add("/_content/Sienar.Blazor/sienar.js");
 
-	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider)
+	private void SetupComponents()
 	{
-		componentProvider.App = typeof(SienarBlazorServerApp);
-		componentProvider.TopLevelComponents.Add(typeof(AuthStateRefresher));
-		componentProvider.AuthorizingView = typeof(Authorizing);
-		componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);
+		_componentProvider.App = typeof(SienarBlazorServerApp);
+		_componentProvider.TopLevelComponents.Add(typeof(AuthStateRefresher));
+		_componentProvider.AuthorizingView = typeof(Authorizing);
+		_componentProvider.NotAuthorizedView = typeof(UnauthorizedRedirect);
 	}
 }

@@ -13,79 +13,18 @@ Each instance method has a default implementation that does nothing (with the ex
 
 ## Instance methods
 
-### SetupComponents
+### `Execute()`
 
 ```csharp
 /// <summary>
-/// Configures various components to replace specific parts of the Sienar UI
+/// Executes a plugin for the current request
 /// </summary>
-/// <param name="componentProvider">the <see cref="IComponentProvider"/></param>
-void SetupComponents(IComponentProvider componentProvider);
+void Execute();
 ```
 
-This method uses the `IComponentProvider`, which is a container that includes references to components that should be used in various parts of the Sienar UI. More information is available in the guide at the end of this README, under `Customization > Using configuration providers > IComponentProvider`.
+This method is used by Sienar middleware to execute a plugin. This method will actually be run twice for Blazor Server apps with prerendering enabled - once via middleware on the initial request, and again in the `<App>` component once the circuit has been initialized.
 
-### SetupDashboard
-
-```csharp
-/// <summary>
-/// Configures dashboard items to be registered for the current user session
-/// </summary>
-/// <param name="dashboardProvider">the <see cref="IDashboardProvider"/> containing dashboard item definitions</param>
-void SetupDashboard(IDashboardProvider dashboardProvider);
-```
-
-This method uses the `IDashboardProvider`, which is a container for named dashboard sections. `SetupDashboard()` supports adding links to a series of sections, similar to the cPanel UI. Dashboards support a limited set of features compared to menus. More information is available in the [dashboards guide](/devs/guides/plugin-providers/adding-dashboard-items).
-
-### SetupMenu
-
-```csharp
-/// <summary>
-/// Configures menu items to be registered for the current user session
-/// </summary>
-/// <param name="menuProvider">the <see cref="IMenuProvider"/> containing menu item definitions</param>
-void SetupMenu(IMenuProvider menuProvider);
-```
-
-This method uses the `IMenuProvider`, which is a container for named menus. This method allows your plugin to add items to various named menus of different pages in an app. More information is available in the [menus guide](/devs/guides/plugin-providers/adding-menu-items).
-
-### SetupRoutableAssemblies
-
-```csharp
-/// <summary>
-/// Configures routable assemblies
-/// </summary>
-/// <param name="routableAssemblyProvider">the <see cref="IRoutableAssemblyProvider"/></param>
-void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider);
-```
-
-This method uses the `IRoutableAssemblyProvider` to register assemblies that contain routable Blazor components. The assemblies registered here are supplied to the Blazor router.
-
-### SetupScripts
-
-```csharp
-/// <summary>
-/// Configures scripts to be loaded with the current user session
-/// </summary>
-/// <param name="scriptProvider">the <see cref="IScriptProvider"/></param>
-void SetupScripts(IScriptProvider scriptProvider);
-```
-
-This method uses the `IScriptProvider` to provide JavaScript inclusion on webpages. The `IScriptProvider` supports most scenarios for including JavaScript on a webpage, including whether the script should be `async`, whether the script should `defer`, whether the script is a module or a regular JavaScript file, etc. Simply omit any value you don't need, and it won't appear in the HTML. More information is available in the guide at the end of this README, under `Customization > Using configuration providers > IScriptProvider`.
-
-### SetupStyles
-
-```csharp
-/// <summary>
-/// Configures stylesheets to be loaded with the current user session
-/// </summary>
-/// <param name="styleProvider">the <see cref="IStyleProvider"/></param>
-void SetupStyles(IStyleProvider styleProvider);
-```
-
-This method uses the `IStyleProvider` to provide CSS inclusion on webpages. For example, the `SienarBlazorPlugin` uses the `IStyleProvider` to load MudBlazor's CSS on every page of a Sienar app. The `IStyleProvider` has support for HTML features of including CSS files, including things like the `crossorigin` and `integrity` attributes. Simply omit any value you don't need, and it won't appear in the HTML. More information is available in the guide at the end of this README, under `Customization > Using configuration providers > IStyleProvider`.
-
-### ShouldExecute
+### `ShouldExecute()`
 
 ```csharp
 /// <summary>

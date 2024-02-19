@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Components;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 
 namespace Sienar;
@@ -14,12 +13,6 @@ public class SienarBlazorServerApp : SienarApp
 
 	[Inject]
 	protected IPluginProvider PluginProvider { get; set; } = default!;
-
-	[Inject]
-	protected IMenuProvider MenuProvider { get; set; } = default!;
-
-	[Inject]
-	protected IDashboardProvider DashboardProvider { get; set; } = default!;
 
 	[Inject]
 	protected IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = Array.Empty<ISienarPlugin>();
@@ -42,10 +35,6 @@ public class SienarBlazorServerApp : SienarApp
 	{
 		var plugin = SienarPlugins.First(p => p.PluginData.Name == name);
 		PluginProvider.Add(plugin);
-
-		plugin.SetupMenu(MenuProvider);
-		plugin.SetupDashboard(DashboardProvider);
-		plugin.SetupComponents(ComponentProvider);
-		plugin.SetupRoutableAssemblies(AssemblyProvider);
+		plugin.Execute();
 	}
 }
