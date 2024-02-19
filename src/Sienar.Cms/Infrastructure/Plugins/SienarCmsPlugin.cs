@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
-using MudBlazor;
 using Sienar.Extensions;
 using Sienar.Infrastructure.Menus;
 using Sienar.UI;
@@ -10,13 +9,25 @@ namespace Sienar.Infrastructure.Plugins;
 public class SienarCmsPlugin : ISienarPlugin
 {
 	private readonly IHttpContextAccessor _contextAccessor;
+	private readonly IMenuProvider _menuProvider;
+	private readonly IDashboardProvider _dashboardProvider;
+	private readonly IComponentProvider _componentProvider;
+	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly IPluginExecutionTracker _executionTracker;
 
 	public SienarCmsPlugin(
 		IHttpContextAccessor contextAccessor,
+		IMenuProvider menuProvider,
+		IDashboardProvider dashboardProvider,
+		IComponentProvider componentProvider,
+		IRoutableAssemblyProvider routableAssemblyProvider,
 		IPluginExecutionTracker executionTracker)
 	{
 		_contextAccessor = contextAccessor;
+		_menuProvider = menuProvider;
+		_dashboardProvider = dashboardProvider;
+		_componentProvider = componentProvider;
+		_routableAssemblyProvider = routableAssemblyProvider;
 		_executionTracker = executionTracker;
 	}
 
@@ -35,52 +46,34 @@ public class SienarCmsPlugin : ISienarPlugin
 	};
 
 	/// <inheritdoc />
+	public void Execute()
+	{
+		SetupMenu();
+		SetupDashboard();
+		SetupComponents();
+		SetupRoutableAssemblies();
+	}
+
+	/// <inheritdoc />
 	public bool ShouldExecute()
 		=> _executionTracker.ExecuteAsSubApp(
 			_contextAccessor.HttpContext!,
 			"/dashboard");
 
-	/// <inheritdoc />
-	public void SetupMenu(IMenuProvider menuProvider)
-	{
-		menuProvider
+	private void SetupMenu()
+		=> _menuProvider
 			.CreateMainMenu()
 			.CreateInfoMenu();
+
+	private void SetupDashboard()
+		=> _dashboardProvider.CreateUserManagementDashboard();
+
+	private void SetupComponents()
+	{
+		_componentProvider.DefaultLayout = typeof(DashboardLayout);
+		_componentProvider.SidebarHeader = typeof(DrawerHeader);
 	}
 
-	/// <inheritdoc />
-	public void SetupDashboard(IDashboardProvider dashboardProvider)
-	{
-		dashboardProvider
-			.Access(DashboardMenuNames.Dashboards.UserManagement)
-			.AddLink(
-				new()
-				{
-					Text = "Users",
-					Icon = Icons.Material.Filled.SupervisorAccount,
-					Url = DashboardUrls.Users.Index,
-					Roles = [Roles.Admin]
-				})
-			.AddLink(
-				new()
-				{
-					Text = "Lockout reasons",
-					Icon = Icons.Material.Filled.Lock,
-					Url = DashboardUrls.LockoutReasons.Index,
-					Roles = [Roles.Admin]
-				});
-	}
-
-	/// <inheritdoc />
-	public void SetupComponents(IComponentProvider componentProvider)
-	{
-		componentProvider.DefaultLayout = typeof(DashboardLayout);
-		componentProvider.SidebarHeader = typeof(DrawerHeader);
-	}
-
-	/// <inheritdoc />
-	public void SetupRoutableAssemblies(IRoutableAssemblyProvider routableAssemblyProvider)
-	{
-		routableAssemblyProvider.Add(typeof(SienarCmsPlugin).Assembly);
-	}
+	private void SetupRoutableAssemblies()
+		=> _routableAssemblyProvider.Add(typeof(SienarCmsPlugin).Assembly);
 }

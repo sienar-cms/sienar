@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using Sienar.Extensions;
-using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
@@ -46,20 +45,6 @@ public class SienarClientAppBuilder
 		foreach (var plugin in StartupPlugins)
 		{
 			plugin.SetupApp(app);
-		}
-
-		var menuProvider = app.Services.GetRequiredService<IMenuProvider>();
-		var dashboardProvider = app.Services.GetRequiredService<IDashboardProvider>();
-		var componentProvider = app.Services.GetRequiredService<IComponentProvider>();
-		var routableAssemblyProvider = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
-		var sienarPlugins = app.Services.GetRequiredService<IEnumerable<ISienarPlugin>>();
-
-		foreach (var plugin in sienarPlugins)
-		{
-			plugin.SetupMenu(menuProvider);
-			plugin.SetupDashboard(dashboardProvider);
-			plugin.SetupComponents(componentProvider);
-			plugin.SetupRoutableAssemblies(routableAssemblyProvider);
 		}
 
 		return app;
