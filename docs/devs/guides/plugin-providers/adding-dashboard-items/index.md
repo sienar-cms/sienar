@@ -10,8 +10,6 @@ tags:
 
 Sienar enables deverlopers to create dashboards for their plugins (or alter dashboards for other plugins) with the `IDashboardProvider` interface.
 
-**NOTE**: While it's possible to configure the `IDashboardProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IMenuProvider` via the `ISienarPlugin.SetupDashboard()` method.
-
 **NOTE**: A lot of the information contained in this guide assumes knowledge of several menu-related classes discussed in the previous section. If you haven't already, please read our guide on [adding menu items](/devs/guides/plugin-providers/adding-menu-items) before continuing.
 
 ## Overview
@@ -59,9 +57,9 @@ using MudBlazor; // Import MudBlazor's Icons class
 
 // ...
 
-public void SetupDashboard(IDashboardProvider dashboardProvider)
+public void Execute()
 {
-	dashboardProvider
+	_provider
     	.Access(DashboardMenuNames.Dashboards.UserManagement)
     	.AddLink(
 			new DashboardLink

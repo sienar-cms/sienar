@@ -10,8 +10,6 @@ tags:
 
 Sienar enables developers to create menus for their plugins (or alter menus for other plugins) with the `IMenuProvider` interface.
 
-**NOTE**: While it's possible to configure the `IMenuProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IMenuProvider` via the `ISienarPlugin.SetupMenu()` method.
-
 ## Overview
 
 In Sienar, a "menu" is semantically identical to a website navigation menu. It may appear horizontally across the top of a page or vertically within a sidebar. Each menu has a unique string name, which can be used to access that menu from different plugins or even from Blazor components.
@@ -56,9 +54,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -87,9 +85,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -155,9 +153,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -202,9 +200,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -233,9 +231,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -268,9 +266,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -296,9 +294,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()
@@ -325,9 +323,9 @@ using MudBlazor; // Imports Icons class
 
 // ...
 
-public void SetupMenu(IMenuProvider menuProvider)
+public void Execute()
 {
-	menuProvider
+	_provider
 		.Access(DashboardMenuNames.MainMenu)
 		.AddLink(
 			new MenuLink()

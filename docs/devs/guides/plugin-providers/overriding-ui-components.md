@@ -10,8 +10,6 @@ tags:
 
 Sienar does most of the base layout work for you with the `SienarLayoutBase` component. You can use your own layout class if you want. You can even override the default layout (more on that in a moment). But if you want to continue using `SienarLayoutBase` and its derived components, you can still customize parts of the layout using the `IComponentProvider`.
 
-**NOTE**: While it's possible to configure the `IComponentProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IComponentProvider` via the `ISienarPlugin.SetupComponents()` method.
-
 ## Overriding the root `<App>` component
 
 ### Background
@@ -31,9 +29,9 @@ One benefit of providing your own `<App>` component is that you won't need to us
 After you have a base `<App>` component, you can tell Sienar to use it by setting the `App` property on `IComponentProvider`:
 
 ```csharp
-public void SetupComponents(IComponentProvider componentProvider)
+public void Execute()
 {
-    componentProvider.App = typeof(YourAppComponent);
+    _provider.App = typeof(YourAppComponent);
 }
 ```
 
@@ -50,9 +48,9 @@ Blazor allows you to set an app's default layout on the `AuthorizeRouteView.Defa
 After creating your own default layout, you can register it by setting the `DefaultLayout` property on `IComponentProvider`:
 
 ```csharp
-public void SetupComponents(IComponentProvider componentProvider)
+public void Execute()
 {
-    componentProvider.DefaultLayout = typeof(YourDefaultLayout);
+    _provider.DefaultLayout = typeof(YourDefaultLayout);
 }
 ```
 
@@ -69,9 +67,9 @@ You can add just about anything you want in your root `<App>` component. For exa
 After creating a component you want at the top level of the app, you can register it by adding it to the `IComponentProvider.TopLevelComponents` list:
 
 ```csharp
-public void SetupComponents(IComponentProvider componentProvider)
+public void Execute()
 {
-    componentProvider.TopLevelComponents.Add(typeof(YourTopLevelComponent));
+    _provider.TopLevelComponents.Add(typeof(YourTopLevelComponent));
 }
 ```
 
@@ -96,13 +94,13 @@ In Blazor apps that use authorization, it's standard to use an `<AuthorizeRouteV
 To override the default values for these components, you should set their corresponding properties on the `IComponentProvider`:
 
 ```csharp
-public void SetupComponents(IComponentProvider componentProvider)
+public void Execute()
 {
 	// Change <AuthorizingView>
-    componentProvider.AuthorizingView = typeof(YourAuthorizingView);
+    _provider.AuthorizingView = typeof(YourAuthorizingView);
 
     // Change <NotAuthorizedView>
-    componentProvider.NotAuthorizedView = typeof(YourNotAuthorizedView);
+    _provider.NotAuthorizedView = typeof(YourNotAuthorizedView);
 }
 ```
 
@@ -119,13 +117,13 @@ In Sienar, the `SienarLayoutBase` layout has a sidebar on the left side of the p
 To override the default values for these components, set their corresponding properties on the `IComponentProvider`:
 
 ```csharp
-public void SetupComponents(IComponentProvider componentProvider)
+public void Execute()
 {
 	// Change the sidebar header
-    componentProvider.SidebarHeader = typeof(YourSidebarHeader);
+    _provider.SidebarHeader = typeof(YourSidebarHeader);
 
     // Change the sidebar footer
-    componentProvider.SidebarFooter = typeof(YourSidebarFooter);
+    _provider.SidebarFooter = typeof(YourSidebarFooter);
 }
 ```
 
