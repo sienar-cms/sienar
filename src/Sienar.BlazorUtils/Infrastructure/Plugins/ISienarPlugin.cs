@@ -12,6 +12,9 @@ public interface ISienarPlugin
 	/// <summary>
 	/// Plugin data for the current plugin
 	/// </summary>
+	/// <remarks>
+	/// This property is an instance property because in <c>Sienar.Blazor/Pages/_Host.cshtml</c>, it is accessed via an instance. Therefore, this property can't be a <c>static virtual</c> member, so stop trying, Christian!
+	/// </remarks>
 	PluginData PluginData { get; }
 
 	/// <summary>
