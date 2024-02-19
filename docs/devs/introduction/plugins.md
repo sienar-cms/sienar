@@ -32,16 +32,16 @@ On each request, Sienar will call each plugin's `ISienarPlugin.ShouldExecute()` 
 
 Because Sienar uses Blazor Server, executing a plugin on each "request" actually executes the plugin for the duration of a single user session (a single page load). For this reason, the remaining plugin methods are used to set up scoped services that provide core Sienar functionality. These services are scoped to enable Sienar's goal of supporting sub-apps at different URIs within your app.
 
-`ISienarPlugin.SetupComponents()` is used to configure replaceable parts of the Sienar UI. This method receives an `IComponentProvider` as its only argument. The `IComponentProvider` has properties that represent these replaceable parts of the Sienar UI. For example, `IComponentProvider.AppComponent` is used to define that application's top-level `&lt;App&gt;` component. In Sienar apps, this component is provided for you automatically, but if you want to use your own, you can.
+`ISienarPlugin.SetupComponents()` is used to configure replaceable parts of the Sienar UI. This method receives an `IComponentProvider` as its only argument. The `IComponentProvider` has properties that represent these replaceable parts of the Sienar UI. For example, `IComponentProvider.AppComponent` is used to define that application's top-level `<App>` component. In Sienar apps, this component is provided for you automatically, but if you want to use your own, you can.
 
-`ISienarPlugin.SetupDashboard()` is used to set up named dashboard categories with a series of links in each category, similar to the cPanel dashboard. This method receives an `IMenuProvider` as its only argument, which is used to set up different dashboard categories and add links to those categories. The `IMenuProvider` used here is a keyed service that is separate from the `IMenuProvider` supplied to `ISienarPlugin.SetupMenu()`, so you can safely use the same category and menu names with different links if you choose.
+`ISienarPlugin.SetupDashboard()` is used to set up named dashboard categories with a series of links in each category, similar to the cPanel dashboard. This method receives an `IDashboardProvider` as its only argument, which is used to set up different dashboard categories and add links to those categories.
 
-`ISienarPlugin.SetupMenu()` is used to set up named menus with a series of links in each menu. This method receives an `IMenuProvider` as its only argument, which is used to set up different named menus and add links to those named menus. The `IMenuProvider` used here is a keyed service that is separate from the `IMenuProvider` supplied to `ISienarPlugin.SetupDashboard()`, so you can safely use the same category and menu names with different links if you choose.
+`ISienarPlugin.SetupMenu()` is used to set up named menus with a series of links in each menu. This method receives an `IMenuProvider` as its only argument, which is used to set up different named menus and add links to those named menus.
 
-`ISienarPlugin.SetupRoutableComponents()` is used to let Sienar know that assemblies contain routable components. The assemblies registered here are supplied to the Blazor `&lt;Router&gt;` component.
+`ISienarPlugin.SetupRoutableComponents()` is used to let Sienar know that assemblies contain routable components. The assemblies registered here are supplied to the Blazor `<Router>` component.
 
 `ISienarPlugin.SetupScripts()` is used to enqueue Javascript files needed by your plugin. Currently, all Javascript files are supplied at the end of the HTML document, regardless of configuration. However, in the future, this may change. The `IScriptProvider`, which is this method's only argument, supports enqueueing Javascript files with a number of different configuration options, including whether the file should be a regular Javascript file or an ES module, whether the file should be `async` or `defer`, etc.
 
 `ISienarPlugin.SetupStyles()` is used to enqueue CSS files needed by your plugin. It works much the same way as `ISienarPlugin.SetupScripts()`, but because CSS and JS files support slightly different configurations, these are separate providers.
 
-You can read more in the <MudLink Href="@Urls.Api.ISienarPlugin">ISienarPlugin documentation</MudLink>.
+You can read more in the [ISienarPlugin documentation](/devs/api/ISienarPlugin).

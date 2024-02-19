@@ -31,11 +31,11 @@ This method uses the `IComponentProvider`, which is a container that includes re
 /// <summary>
 /// Configures dashboard items to be registered for the current user session
 /// </summary>
-/// <param name="dashboardProvider">the <see cref="IMenuProvider"/> containing dashboard item definitions</param>
-void SetupDashboard(IMenuProvider dashboardProvider);
+/// <param name="dashboardProvider">the <see cref="IDashboardProvider"/> containing dashboard item definitions</param>
+void SetupDashboard(IDashboardProvider dashboardProvider);
 ```
 
-This method uses a version of the `IMenuProvider` keyed to provide dashboard items instead of menu items. `SetupDashboard()` supports adding links to a series of sections, similar to the cPanel UI. Dashboards support a limited set of features compared to menus. More information is available in the guide at the end of this README, under `Customization > Using configuration providers > IMenuProvider`.
+This method uses the `IDashboardProvider`, which is a container for named dashboard sections. `SetupDashboard()` supports adding links to a series of sections, similar to the cPanel UI. Dashboards support a limited set of features compared to menus. More information is available in the [dashboards guide](/devs/guides/plugin-providers/adding-dashboard-items).
 
 ### SetupMenu
 
@@ -47,7 +47,7 @@ This method uses a version of the `IMenuProvider` keyed to provide dashboard ite
 void SetupMenu(IMenuProvider menuProvider);
 ```
 
-This method uses a version of the `IMenuProvider` keyed to provide menu itmes. This method allows your plugin to add items to various named menus of different pages in an app. More information is available in the guide at the end of this README, under `Customization > Using configuration providers > IMenuProvider`.
+This method uses the `IMenuProvider`, which is a container for named menus. This method allows your plugin to add items to various named menus of different pages in an app. More information is available in the [menus guide](/devs/guides/plugin-providers/adding-menu-items).
 
 ### SetupRoutableAssemblies
 

@@ -8,7 +8,7 @@ tags:
 
 # Adding menu items with `IMenuProvider`
 
-Sienar enables developers to create menus for their plugins (or alter menus for other plugins) with the `IMenuProvider` interface. This interface is used to add items to menus *and* to add dashboard items to dashboards. This guide covers menus, while the next guide covers dashboards.
+Sienar enables developers to create menus for their plugins (or alter menus for other plugins) with the `IMenuProvider` interface.
 
 **NOTE**: While it's possible to configure the `IMenuProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IMenuProvider` via the `ISienarPlugin.SetupMenu()` method.
 
@@ -20,11 +20,11 @@ A menu is typically appropriate when you have a limited number of items to displ
 
 ### `IMenuProvider`
 
-The `IMenuProvider` acts as a container for named menus. It's backed by a `Dictionary<string, Menu>` and has a single public method, `Menu Access(string)`. The `Access()` method's string argument is the unique name of the menu you're trying to modify. Calling `Access(menuName)` will create a `Menu` for that name if it doesn't exist, then return the `Menu`.
+The `IMenuProvider` acts as a container for named menus. It's backed by a `Dictionary<string, LinkDictionary<MenuLink>>` and has a single public method, `Access(string)`. The `Access()` method's string argument is the unique name of the menu you're trying to modify. Calling `Access(menuName)` will create a `LinkDictionary<MenuLink>` for that name if it doesn't exist, then return the `LinkDictionary<MenuLink>`.
 
-### `Menu`
+### `LinkDictionary<MenuLink>`
 
-The `Menu` class extends `Dictionary<MenuPriority, List<MenuLink>>` and adds a single public method of its own, `Menu AddMenuLink(MenuLink, MenuPriority)`. Like the `IMenuProvider`, this method checks if the dictionary contains a key for that `MenuPriority`, and if it doesn't, creates a new `List<MenuLink>` in the dictionary at that `MenuPriority` before adding the specified `MenuLink` to the list. The `AddMenuLink()` method is fluent, so you can chain multiple calls.
+The `LinkDictionary<MenuLink>` class extends `Dictionary<MenuPriority, List<MenuLink>>` and adds a single public method of its own, `Menu AddLink(MenuLink, MenuPriority)`. Like the `IMenuProvider`, this method checks if the dictionary contains a key for that `MenuPriority`, and if it doesn't, creates a new `List<MenuLink>` in the dictionary at that `MenuPriority` before adding the specified `MenuLink` to the list. The `AddLink()` method is fluent, so you can chain multiple calls.
 
 ### `MenuPriority`
 
@@ -32,7 +32,7 @@ The `MenuPriority` enum is a way to let Sienar know the render priority you want
 
 ### `MenuLink`
 
-The `MenuLink` class contains the data for each menu link to be rendered, including an `IEnumerable<MenuLink> Sublinks` property which contains nested links. Nested links are rendered in an accordion-style component, with the parent `MenuLink` being rendered as the activator of the accordion. For more information on the `MenuLink` class, see its [API documentation](/devs/api/MenuLink).
+The `MenuLink` class contains the data for each menu link to be rendered, including a `List<MenuLink> Sublinks` property which contains nested links. Nested links are rendered in an accordion-style component, with the parent `MenuLink` being rendered as the activator of the accordion. For more information on the `MenuLink` class, see its [API documentation](/devs/api/MenuLink).
 
 ## Examples
 
@@ -60,7 +60,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Go home",
@@ -91,7 +91,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Orders",
@@ -123,7 +123,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 
 That's a lot of code, so let's break it down.
 
-First, notice that we only actually called `AddMenuLink()` once, with the parent link. That's because the other links are added as sublinks of the parent `Orders` link since we want the `Orders` link to serve as a dropdown that contains the other links.
+First, notice that we only actually called `AddLink()` once, with the parent link. That's because the other links are added as sublinks of the parent `Orders` link since we want the `Orders` link to serve as a dropdown that contains the other links.
 
 Second, notice that each sublink is just an instance of `MenuLink`. There's nothing special about these instances, except that they're stored on the `Sublinks` property of the parent link.
 
@@ -139,7 +139,7 @@ And you would notice that you can expand that menu to reveal the three sublinks 
 
 !["Orders" menu expanded to show sublinks](main-menu-with-orders-expanded.jpg)
 
-The reason the `Orders` menu renders before the `Logout` button is that Sienar adds the `Logout` button with `MenuPriority.Lowest`, so you can render your items before the `Logout` button by setting any priority other than `MenuPriority.Lowest` (if you don't supply a priority as the second argument of `IMenuProvider.AddMenuLink()`, `MenuPriority.Mid` is the default).
+The reason the `Orders` menu renders before the `Logout` button is that Sienar adds the `Logout` button with `MenuPriority.Lowest`, so you can render your items before the `Logout` button by setting any priority other than `MenuPriority.Lowest` (if you don't supply a priority as the second argument of `IMenuProvider.AddLink()`, `MenuPriority.Mid` is the default).
 
 It's all looking good so far! There's just one problem with this menu: it displays *even if you're logged out*.
 
@@ -159,7 +159,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Orders",
@@ -206,7 +206,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Signup offers",
@@ -237,7 +237,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Order fulfillment",
@@ -272,7 +272,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Order fulfillment",
@@ -300,7 +300,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Order fulfillment",
@@ -329,7 +329,7 @@ public void SetupMenu(IMenuProvider menuProvider)
 {
 	menuProvider
 		.Access(DashboardMenuNames.MainMenu)
-		.AddMenuLink(
+		.AddLink(
 			new MenuLink()
 			{
 				Text = "Orders",

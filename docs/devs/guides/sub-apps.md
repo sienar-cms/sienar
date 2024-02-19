@@ -116,7 +116,7 @@ public class CustomPlugin : ISienarPlugin
 
 Now, your plugin is executing like a sub-app. Because you first check if any other sub-app has executed, you won't step on any other plugin's toes, and because you let other sub-apps know that your sub-app is executing, other plugins know to stay out of your way.
 
-The reason you should check if another sub-app has executed is in case another sub-app wants to use the same route as you. For example, the `SienarCmsPlugin` uses `/dashboard` as its base route, but your plugin might want to use `/dashboard/&lt;your-plugin-name&gt;` as its base route. As long as your plugin is registered before `SienarCmsPlugin`, this will work as expected, and in general, your plugin shouldn't care what another plugin uses as its base route.
+The reason you should check if another sub-app has executed is in case another sub-app wants to use the same route as you. For example, the `SienarCmsPlugin` uses `/dashboard` as its base route, but your plugin might want to use `/dashboard/<your-plugin-name>` as its base route. As long as your plugin is registered before `SienarCmsPlugin`, this will work as expected, and in general, your plugin shouldn't care what another plugin uses as its base route.
 
 Because this logic represents a common pattern, it has been implemented as an extension method, `IPluginExecutionTracker.ExecuteAsSubApp()`, which accepts the `HttpContext` as its first argument and the sub-app route string as its second argument. You can refactor your plugin to use this extension method:
 
