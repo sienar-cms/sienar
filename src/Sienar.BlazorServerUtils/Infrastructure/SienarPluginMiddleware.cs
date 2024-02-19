@@ -25,18 +25,14 @@ public class SienarPluginMiddleware
 		IPluginProvider pluginProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider,
 		IComponentProvider componentProvider,
-		IServiceProvider serviceProvider)
+		IDashboardProvider dashboardProvider,
+		IMenuProvider menuProvider)
 	{
 		foreach (var plugin in plugins)
 		{
 			if (plugin.ShouldExecute())
 			{
 				pluginProvider.Add(plugin);
-
-				var menuProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
-					SienarBlazorUtilsServiceKeys.MenuProvider);
-				var dashboardProvider = serviceProvider.GetRequiredKeyedService<IMenuProvider>(
-					SienarBlazorUtilsServiceKeys.DashboardProvider);
 
 				plugin.SetupStyles(styleProvider);
 				plugin.SetupScripts(scriptProvider);

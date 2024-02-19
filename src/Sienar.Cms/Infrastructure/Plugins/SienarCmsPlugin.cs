@@ -49,11 +49,11 @@ public class SienarCmsPlugin : ISienarPlugin
 	}
 
 	/// <inheritdoc />
-	public void SetupDashboard(IMenuProvider dashboardProvider)
+	public void SetupDashboard(IDashboardProvider dashboardProvider)
 	{
 		dashboardProvider
 			.Access(DashboardMenuNames.Dashboards.UserManagement)
-			.AddMenuLink(
+			.AddLink(
 				new()
 				{
 					Text = "Users",
@@ -61,7 +61,8 @@ public class SienarCmsPlugin : ISienarPlugin
 					Url = DashboardUrls.Users.Index,
 					Roles = [Roles.Admin]
 				})
-			.AddMenuLink(new()
+			.AddLink(
+				new()
 				{
 					Text = "Lockout reasons",
 					Icon = Icons.Material.Filled.Lock,

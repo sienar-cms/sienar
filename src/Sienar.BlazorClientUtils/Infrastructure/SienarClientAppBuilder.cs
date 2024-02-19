@@ -48,10 +48,8 @@ public class SienarClientAppBuilder
 			plugin.SetupApp(app);
 		}
 
-		var menuProvider = app.Services.GetRequiredKeyedService<IMenuProvider>(
-			SienarBlazorUtilsServiceKeys.MenuProvider);
-		var dashboardProvider = app.Services.GetRequiredKeyedService<IMenuProvider>(
-			SienarBlazorUtilsServiceKeys.DashboardProvider);
+		var menuProvider = app.Services.GetRequiredService<IMenuProvider>();
+		var dashboardProvider = app.Services.GetRequiredService<IDashboardProvider>();
 		var componentProvider = app.Services.GetRequiredService<IComponentProvider>();
 		var routableAssemblyProvider = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
 		var sienarPlugins = app.Services.GetRequiredService<IEnumerable<ISienarPlugin>>();

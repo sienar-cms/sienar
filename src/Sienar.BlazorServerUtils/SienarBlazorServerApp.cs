@@ -15,11 +15,11 @@ public class SienarBlazorServerApp : SienarApp
 	[Inject]
 	protected IPluginProvider PluginProvider { get; set; } = default!;
 
-	[Inject(Key = SienarBlazorUtilsServiceKeys.MenuProvider)]
+	[Inject]
 	protected IMenuProvider MenuProvider { get; set; } = default!;
 
-	[Inject(Key = SienarBlazorUtilsServiceKeys.DashboardProvider)]
-	protected IMenuProvider DashboardProvider { get; set; } = default!;
+	[Inject]
+	protected IDashboardProvider DashboardProvider { get; set; } = default!;
 
 	[Inject]
 	protected IEnumerable<ISienarPlugin> SienarPlugins { get; set; } = Array.Empty<ISienarPlugin>();

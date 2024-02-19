@@ -1,6 +1,6 @@
 ---
 pageTitle: "Adding dashboard items"
-blurb: "A guide to adding dashboard items with IMenuProvider"
+blurb: "A guide to adding dashboard items with IDashboardProvider"
 pageNumber: 4
 tags:
   - plugin-providers
@@ -8,9 +8,9 @@ tags:
 
 # Adding dashboard items
 
-Sienar enables deverlopers to create dashboards for their plugins (or alter dashboards for other plugins) with the `IMenuProvider` interface. This interface is used to add items to menus *and* to add dashboard items to dashboards. This guide covers dashboards, while the previous guide covers menus.
+Sienar enables deverlopers to create dashboards for their plugins (or alter dashboards for other plugins) with the `IDashboardProvider` interface.
 
-**NOTE**: While it's possible to configure the `IMenuProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IMenuProvider` via the `ISienarPlugin.SetupDashboard()` method.
+**NOTE**: While it's possible to configure the `IDashboardProvider` anywhere, it's only intended to be configured via a plugin. The behavior of configuring plugin providers outside a plugin is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the `IMenuProvider` via the `ISienarPlugin.SetupDashboard()` method.
 
 **NOTE**: A lot of the information contained in this guide assumes knowledge of several menu-related classes discussed in the previous section. If you haven't already, please read our guide on [adding menu items](/devs/guides/plugin-providers/adding-menu-items) before continuing.
 
@@ -20,32 +20,30 @@ In Sienar, a "dashboard" is similar to a navigation menu. However, instead of di
 
 A dashboard is more appropriate when you have a large number of items to display because dashboards have the entire page width to render, plus unlimited vertical space.
 
-### `IMenuProvider`
+### `IDashboardProvider`
 
-The `IMenuProvider` is used to configure menus as well as dashboards. However, the primary difference in how the `IMenuProvider` is used for dashboards is that instead of accessing named *menus*, each call to `IMenuProvider.Access()` accesses a named *dashboard section*. When displaying dashboards using the `<Dashboard>` component, you need to provide a `List<string>` to the `Dashboard.Categories` parameter, which renders each given named dashboard section in definition order.
+The `IDashboardProvider` is used to configure dashboards. It's very similar to the `IMenuProvider` used to configure menus - in fact, both implementations are identical, just with different generic parameters (`DashboardLink` for dashboards, `MenuLink` for menus). The primary difference in dashboard usage is that instead of accessing named *menus*, each call to the `Access()` accesses a named *dashboard section*. When displaying dashboards using the `<Dashboard>` component, you need to provide a `List<string>` to the `Dashboard.Categories` parameter, which renders each given named dashboard section in definition order.
 
-The `IMenuProvider` used to configure dashboards is a different instance than the one used to configure menus. This means you can have dashboards and menus with the same name but different contents. If you need to request the `IMenuProvider` for dashboards from the DI container, use the key `"DashboardProvider"`, which can be accessed using the `SienarBlazorUtilsServiceKeys.DashboardProvider` constant.
+### `LinkDictionary<DashboardLink>`
 
-### `Menu`
-
-The `Menu` is used identically in both menus and dashboards.
+This is the same `LinkDictionary<T>` class used in menus, with the exception that the generic parameter is a `DashboardLink` instead of a `MenuLink`.
 
 ### `MenuPriority`
 
-Just like with menus, the `MenuPriority` enum lets Sienar know what order to render your dashboard links in. Because sections are named based on the string provided to `IMenuProvider.Access()`, sections are sorted by changing the order of dashboard section names passed to the `Dashboard.Categories` parameter.
+Just like with menus, the `MenuPriority` enum lets Sienar know what order to render your dashboard links in. Because sections are named based on the string provided to `IDashboardProvider.Access()`, sections are sorted by changing the order of dashboard section names passed to the `Dashboard.Categories` parameter.
 
-### `MenuLink`
+### `DashboardLink`
 
-The `MenuLink` class works nearly identically in both menus and dashboards. The only difference is that dashboards don't support the `Sublinks` property, which is ignored.
+The `DashboardLink` class is the base class for the `MenuLink` used in menus. It works nearly identically in both menus and dashboards. The only difference is that `DashboardLink` doesn't have the `Sublinks` property.
 
 ## Examples
 
-The core functionality of adding menu links and dashboard links is almost identical. The only real differences are:
+The core functionality of adding menu links and dashboard links is almost identical - different interfaces are used, but the classes implementing those interfaces are essentially identical. The `DashboardLink` class is even the base class of the `MenuLink` class. The only real usage differences are:
 
 - instead of adding links to named menus, you add links to named dashboard sections
-- the `MenuLink.Sublinks` property is ignored when using dashboards
+- the `DashboardLink` class doesn't have a `Sublinks` property
 
-For this reason, we're only going to show a single example that demonstrates the differences between usages in menus and dashboards. For more complete coverage of the `IMenuProvider` API, see the article on menus.
+Because the API is almost identical, we're only going to show a single example that demonstrates the differences between usages in menus and dashboards. See the previous article for more complete coverage of the API.
 
 ### Example 1: Adding a dashboard item
 
@@ -61,12 +59,12 @@ using MudBlazor; // Import MudBlazor's Icons class
 
 // ...
 
-public void SetupDashboard(IMenuProvider dashboardProvider)
+public void SetupDashboard(IDashboardProvider dashboardProvider)
 {
 	dashboardProvider
     	.Access(DashboardMenuNames.Dashboards.UserManagement)
-    	.AddMenuLink(
-			new MenuLink
+    	.AddLink(
+			new DashboardLink
     		{
                 Text = "Banned users", // Display text
                 Icon = Icons.Material.Filled.LockPerson, // Link icon

@@ -15,7 +15,9 @@ Sienar provides plugins with a number of "providers", which are scoped services 
 
 Use `IComponentProvider` to [override parts of the Sienar UI](/devs/guides/plugin-providers/overriding-ui-components).
 
-Use `IMenuProvider` to [add menu items](/devs/guides/plugin-providers/adding-menu-items) to an app or sub-app. You also use `IMenuProvider` to [add dashboard items](/devs/guides/plugin-providers/adding-dashboard-items) to an app or sub-app.
+Use `IMenuProvider` to [add menu items](/devs/guides/plugin-providers/adding-menu-items) to an app or sub-app.
+
+Use `IDashboardProvider` to [add dashboard items](/devs/guides/plugin-providers/adding-dashboard-items) to an app or sub-app.
 
 Use `IRoutableAssemblyProvider` to [add routable pages](/devs/guides/plugin-providers/adding-routable-pages) to an app or sub-app.
 

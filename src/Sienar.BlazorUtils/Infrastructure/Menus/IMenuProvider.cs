@@ -1,3 +1,3 @@
 ﻿namespace Sienar.Infrastructure.Menus;
 
-public interface IMenuProvider : IDictionaryProvider<Menu>;
+public interface IMenuProvider : IDictionaryProvider<LinkDictionary<MenuLink>>;

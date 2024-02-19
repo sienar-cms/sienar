@@ -1,20 +1,6 @@
-@using Sienar.Infrastructure.Menus
 @inherits SienarPage
 @attribute [Route(DashboardUrls.Index)]
 
 <DocTitle Title="Dashboard"/>
 
-<Dashboard
-	Categories="_menuNames"
-	MenuGenerator="MenuGenerator"/>
-
-@code {
-
-	private readonly List<string> _menuNames = [
-		DashboardMenuNames.Dashboards.UserManagement
-	];
-
-	[Inject(Key = SienarBlazorUtilsServiceKeys.DashboardProvider)]
-	private IMenuGenerator MenuGenerator { get; set; } = default!;
-
-}
+<Dashboard Categories="@([DashboardMenuNames.Dashboards.UserManagement])"/>
