@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "working", "working", "{FF2B78AC-8F35-4D0B-AFE6-49D9014B13E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{7F97E459-6C2F-491E-8360-9EABEE7CE6EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SienarWebApp", "working\content\SienarWebApp\SienarWebApp.csproj", "{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F97E459-6C2F-491E-8360-9EABEE7CE6EE} = {FF2B78AC-8F35-4D0B-AFE6-49D9014B13E2}
+		{F7A2BD2E-8961-48BB-B8F6-F4520E287EB6} = {7F97E459-6C2F-491E-8360-9EABEE7CE6EE}
+	EndGlobalSection
+EndGlobal

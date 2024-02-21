@@ -1,0 +1,19 @@
+﻿{
+	"$schema": "http://json.schemastore.org/template",
+	"author": "Christian LeVesque",
+	"classifications": [ "Web" ],
+	"identity": "sienarweb",
+	"name": "Sienar web app",
+	"shortName": "sienarweb",
+	"sourceName":"SienarWeb",
+	"tags": {
+		"language": "C#",
+		"type": "project"
+	},
+	"guids": [
+		"FAE04EC0-301F-11D3-BF4B-00C04F79EFBC",
+		"9467BBDF-7141-4974-8D27-61D792A424F3",
+		"B8889B3C-1A61-4EE1-89CD-40B6CDEEFCAB",
+		"355F2719-420E-4CCF-94FA-6E01EAA1F1C8"
+	]
+}

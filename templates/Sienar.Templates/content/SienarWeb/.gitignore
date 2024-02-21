@@ -1,0 +1,22 @@
+# IDE
+.idea/
+*.iml
+*.sln.ide
+_ReSharper.*
+*.user
+*.suo
+.vs/
+.vscode/
+
+# .NET
+[Oo]bj/
+[Bb]in/
+[Bb]uild/
+.nuget/
+*.log
+
+# Docker
+.env
+
+# Sienar
+SienarFiles/

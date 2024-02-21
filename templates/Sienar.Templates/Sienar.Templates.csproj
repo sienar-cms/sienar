@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Sienar.Templates</PackageId>
+		<PackageVersion>0.1.0</PackageVersion>
+		<Title>Sienar Templates</Title>
+		<Authors>Christian LeVesque</Authors>
+		<Description>Provides templates for use with Sienar</Description>
+		<PackageTags>dotnet-new;template;sienar</PackageTags>
+		<PackageProjectUrl>https://sienar.levesque.dev</PackageProjectUrl>
+		<PackageType>Template</PackageType>
+		<TargetFramework>net8.0</TargetFramework>
+		<IncludeContentInPack>true</IncludeContentInPack>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<ContentTargetFolders>content</ContentTargetFolders>
+		<NoWarn>$(NoWarn);NU5128</NoWarn>
+		<NoDefaultExcludes>true</NoDefaultExcludes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<LocalizeTemplates>false</LocalizeTemplates>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.TemplateEngine.Tasks" Version="*" PrivateAssets="all" IsImplicitlyDefined="true"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="content\**\*" Exclude="content\**\bin\**;content\**\obj\**;content\**\SienarFiles\**;content\**\.idea\**;content\**\.vs\**;content\**\.vscode\**"/>
+		<Compile Remove="**\*"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath=""/>
+	</ItemGroup>
+
+</Project>
