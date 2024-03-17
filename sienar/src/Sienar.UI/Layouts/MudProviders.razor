@@ -1,0 +1,11 @@
+﻿@inject ThemeState ThemeState
+
+<MudThemeProvider
+	IsDarkMode="@ThemeState.IsDarkMode"
+	Theme="@ThemeState.Theme"/>
+<MudDialogProvider
+	CloseOnEscapeKey="true"
+	NoHeader="true"
+	FullWidth="true"
+	MaxWidth="MaxWidth.Small"/>
+<MudSnackbarProvider/>

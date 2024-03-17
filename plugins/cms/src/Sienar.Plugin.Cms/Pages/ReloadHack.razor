@@ -1,0 +1,35 @@
+﻿@page "/reload-hack"
+@using Microsoft.JSInterop
+@rendermode RenderMode
+@attribute [AllowAnonymous]
+@inject NavigationManager NavManager
+@inject ILogger<ReloadHack> Logger
+@inject IJSRuntime Js
+
+<NarrowContainer>
+	<H1>Redirecting</H1>
+	<P>We're redirecting you now. Please wait...</P>
+</NarrowContainer>
+
+@code {
+
+	private static readonly IComponentRenderMode RenderMode = new InteractiveServerRenderMode(prerender:false);
+
+	[Parameter]
+    [SupplyParameterFromQuery]
+	public required string Destination { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		// Yes, this is super hacky. Yes, I know there's a better way to do this. Except for right now, there's not. Because of Blazor bugs, documented in https://github.com/dotnet/aspnetcore/issues/51398 and https://github.com/dotnet/aspnetcore/issues/49651, it's not currently possible to force a reload from a static SSR page, and it's also not currently possible to pass query parameters into a non-static SSR page. So I have to use Javascript to figure out what destination we're trying to redirect to.
+		const string identifier = "Destination=";
+		var currentLocation = await Js.InvokeAsync<string>("window.location.toString");
+		var i = currentLocation.IndexOf(identifier, StringComparison.Ordinal);
+		if (i < 0) return;
+		Destination = currentLocation.Substring(i + identifier.Length);
+		Logger.LogInformation("destination: {d}", Destination);
+		NavManager.NavigateTo(Destination, true);
+	}
+
+}

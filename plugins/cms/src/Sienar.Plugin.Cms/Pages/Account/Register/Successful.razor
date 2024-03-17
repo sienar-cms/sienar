@@ -1,0 +1,27 @@
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Register.Successful)]
+
+<DocTitle Title="Registration successful"/>
+
+<NarrowContainer>
+	<H1>
+		Registration successful
+	</H1>
+
+	<P>
+		Welcome, @Username! Please check for an email sent to @Email. Click the link in the welcome email to verify your account. You won't be able to log in until you've verified your account.
+	</P>
+</NarrowContainer>
+
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string Username { get; set; } = default!;
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string Email { get; set; } = default!;
+
+}

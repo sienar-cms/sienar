@@ -1,0 +1,21 @@
+@inject IUserAccessor UserAccessor
+@inject IOptions<SienarOptions> Options
+
+<header class="px-4 py-3">
+	<H5>@(Options.Value.SiteName)</H5>
+	<AuthorizeView>
+		<Authorized>
+			Welcome, @_username!
+		</Authorized>
+	</AuthorizeView>
+</header>
+
+@code {
+
+	private string? _username;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+		=> _username = await UserAccessor.GetUsername();
+
+}

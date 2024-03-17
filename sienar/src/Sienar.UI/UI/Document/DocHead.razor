@@ -1,0 +1,60 @@
+@using Sienar.Configuration
+@namespace Sienar.UI
+@inject IOptions<SienarOptions> SiteOptions
+@inject NavigationManager NavManager
+
+<DocTitle Title="@Title"
+          Subtitle="@Subtitle"/>
+
+<HeadContent>
+	<meta property="og:site_name" content="@SiteOptions.Value.SiteName"/>
+	<meta property="og:url" content="@($"{SiteOptions.Value.SiteUrl}/{NavManager.ToBaseRelativePath(NavManager.Uri)}")"/>
+	<meta property="og:type" content="@GenerateOgType()"/>
+
+	@if (!string.IsNullOrEmpty(Title))
+	{
+		<meta property="og:title" content="@Title"/>
+	}
+
+	@if (!string.IsNullOrEmpty(Description))
+	{
+		<meta property="og:description" content="@Description"/>
+	}
+
+	@if (!string.IsNullOrEmpty(HeaderImage))
+	{
+		<meta property="og:image" content="@($"{SiteOptions.Value.SiteUrl}{HeaderImage}")"/>
+		<meta property="og:image:alt" content="@ImageAlt"/>
+	}
+</HeadContent>
+
+@code {
+
+	[Parameter]
+	public string? Description { get; set; }
+
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+	public string? Subtitle { get; set; }
+
+	[Parameter]
+	public string? HeaderImage { get; set; }
+
+	[Parameter]
+	public string? ImageAlt { get; set; }
+
+	// TODO: Add support for multiple types from OpenGraph. These should be determined automatically based on data passed into <DocHead>
+	private string GenerateOgType() => "website";
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		if (string.IsNullOrEmpty(ImageAlt))
+		{
+			ImageAlt = $"{SiteOptions.Value.SiteName} header image";
+		}
+	}
+
+}

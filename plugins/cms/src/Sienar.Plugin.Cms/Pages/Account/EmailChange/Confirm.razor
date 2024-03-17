@@ -1,0 +1,44 @@
+@rendermode InteractiveServer
+@inherits ActionPage<PerformEmailChangeRequest>
+@attribute [Route(DashboardUrls.Account.EmailChange.Confirm)]
+@inject IStatusService<PerformEmailChangeRequest> EmailChangeService
+
+<DocTitle Title="Updating your email address"/>
+
+<NarrowContainer>
+	<H1>Updating your email address</H1>
+
+	@if (Loading)
+	{
+		<P>
+			We are verifying your new email address. Please wait...
+		</P>
+	}
+</NarrowContainer>
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+		Logger.LogInformation("Codes are {userId} : {verificationCode}", UserId, Code);
+
+		await SubmitRequest(() => EmailChangeService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.EmailChange.Successful);
+		}
+	}
+
+}

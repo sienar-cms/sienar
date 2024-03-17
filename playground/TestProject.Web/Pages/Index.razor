@@ -1,0 +1,18 @@
+﻿@page "/"
+@using Sienar.Infrastructure
+@attribute [Authorize]
+@inject IUserAccessor UserAccessor
+
+<PageTitle>Index</PageTitle>
+
+<p>Hello, @_username!</p>
+
+@code {
+
+	private string? _username;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+		=> _username = await UserAccessor.GetUsername();
+
+}

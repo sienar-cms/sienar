@@ -1,0 +1,15 @@
+﻿@inherits StandardLayoutBase
+
+<MudProviders @rendermode="InteractiveServer"/>
+
+<FullHeightLayout>
+	<TopNavMenu
+		MenuNames="MenuNames"
+		@rendermode="InteractiveServer"/>
+
+	<StandardMainContent
+		Padded
+		TopPadded>
+		@Body
+	</StandardMainContent>
+</FullHeightLayout>

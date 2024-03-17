@@ -1,0 +1,71 @@
+﻿@inherits NavBase
+ 
+<MudAppBar Elevation="1">
+	<MudHidden Breakpoint="Breakpoint.LgAndUp">
+		<MudIconButton
+			Icon="@Icons.Material.Filled.Menu"
+			Color="Color.Inherit"
+			OnClick="@(() => _open = !_open)"/>
+	</MudHidden>
+
+	<MudHidden Breakpoint="Breakpoint.MdAndDown">
+		<OptionalComponent Type="@ComponentProvider.AppbarLeft"/>
+
+		@for (var i = 0; i < Menus.Count; i++)
+		{
+			if (i > 0)
+			{
+				<MudDivider
+					Class="ma-4"
+					DividerType="DividerType.Middle"
+					FlexItem
+					Vertical/>
+			}
+
+			@foreach (var link in Menus[i])
+			{
+				<TopNavMenuLink Link="link"/>
+			}
+		}
+
+		<OptionalComponent Type="ComponentProvider.AppbarRight"/>
+	</MudHidden>
+</MudAppBar>
+
+<MudHidden Breakpoint="Breakpoint.LgAndUp">
+	<MudDrawer
+		Elevation="1"
+		@bind-Open="_open"
+		Variant="DrawerVariant.Temporary">
+		<div class="flex-grow-1">
+			<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
+
+			<MudNavMenu>
+				@for (var i = 0; i < Menus.Count; i++)
+				{
+					if (i > 0)
+					{
+						<MudDivider Class="my-3"/>
+					}
+
+					@foreach (var link in Menus[i])
+					{
+						<SidebarNavMenuLink Link="link"/>
+					}
+				}
+			</MudNavMenu>
+		</div>
+
+		<div>
+			<div class="pa-4">
+				<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
+			</div>
+		</div>
+	</MudDrawer>
+</MudHidden>
+
+@code {
+
+	private bool _open;
+
+}

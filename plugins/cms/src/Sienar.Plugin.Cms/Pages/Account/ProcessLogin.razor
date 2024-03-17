@@ -1,0 +1,36 @@
+﻿@using System.Web
+@inherits ActionPage
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.ProcessLogin)]
+@inject IStatusService<PerformLoginRequest> UserLoginService 
+
+<NarrowContainer>
+	<H1>Failed to log in</H1>
+	<P>We were unable to log you in.</P>
+</NarrowContainer>
+
+@code {
+
+	[Parameter]
+    [SupplyParameterFromQuery]
+	public Guid TokenId { get; set; }
+
+	[Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		if (await UserLoginService.Execute(new(TokenId))) PerformNavigation();
+	}
+
+	private void PerformNavigation()
+	{
+		var destination = string.IsNullOrEmpty(ReturnUrl)
+			? DashboardUrls.Index
+			: HttpUtility.UrlDecode(ReturnUrl);
+		NavManager.ForceReload(destination);
+	}
+
+}

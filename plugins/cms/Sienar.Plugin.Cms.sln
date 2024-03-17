@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms", "src\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj", "{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.Core", "src\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj", "{90340DC4-6AD6-4D5D-B365-D823898047BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F} = {2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}
+		{90340DC4-6AD6-4D5D-B365-D823898047BE} = {2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}
+	EndGlobalSection
+EndGlobal

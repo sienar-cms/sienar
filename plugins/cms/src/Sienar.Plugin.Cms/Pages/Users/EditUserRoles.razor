@@ -1,0 +1,76 @@
+@rendermode InteractiveServer
+@inherits ActionPage
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route($"{DashboardUrls.Users.Index}/{{userId:guid}}/roles")]
+@inject IEntityReader<SienarUser> UserReader
+@inject IEntityReader<SienarRole> RoleReader
+@inject IStatusService<AddUserToRoleRequest> AddRoleService
+@inject IStatusService<RemoveUserFromRoleRequest> RemoveRoleService
+
+<DocTitle Title="Edit user's roles"/>
+
+@if (_user == null)
+{
+	<Spinner/>
+	return;
+}
+
+<NarrowContainer>
+	<Card Title="@($"Edit {_user.Username}'s roles")">
+    	<CardContent>
+    		@foreach (var role in _roles)
+    		{
+    			<MudSwitch
+    				T="bool"
+    				Checked="_roleMap[role.Id]"
+    				CheckedChanged="b => UpdateRoleStatus(b, role.Id)"
+    				Color="Color.Primary"
+    				Label="@role.Name"/>
+    		}
+    	</CardContent>
+    </Card>
+</NarrowContainer>
+
+@code {
+
+	[Parameter]
+	public Guid UserId { get; set; }
+
+	private readonly Dictionary<Guid, bool> _roleMap = new();
+	private SienarUser? _user;
+	private IEnumerable<SienarRole> _roles = Array.Empty<SienarRole>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		await SubmitRequest(
+			async () =>
+			{
+				_user = await UserReader.Read(UserId);
+				if (_user is null) return;
+
+				_roles = (await RoleReader.Read(Filter.GetAll())).Items;
+				foreach (var role in _roles)
+				{
+					_roleMap[role.Id] = _user.Roles.Contains(role);
+				}
+			});
+	}
+
+	private async Task UpdateRoleStatus(
+		bool shouldBeInRole,
+		Guid roleId)
+	{
+		bool successful;
+		if (shouldBeInRole)
+		{
+			successful = await AddRoleService.Execute(new(_user!.Id, roleId));
+		}
+		else
+		{
+			successful = await RemoveRoleService.Execute(new(_user!.Id, roleId));
+		}
+
+		if (successful) _roleMap[roleId] = shouldBeInRole;
+	}
+
+}

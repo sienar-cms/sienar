@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="docker-compose.yml" Pack="false"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj"/>
+		<ProjectReference Include="..\..\plugins\mailkit\src\Sienar.Plugin.MailKit\Sienar.Plugin.MailKit.csproj"/>
+		<ProjectReference Include="..\..\sienar\src\Sienar.SqliteUtils\Sienar.SqliteUtils.csproj"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

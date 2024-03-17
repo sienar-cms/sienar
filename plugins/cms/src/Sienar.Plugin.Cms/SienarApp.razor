@@ -1,0 +1,64 @@
+﻿@using Sienar.Infrastructure.Plugins
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="/"/>
+	<meta charset="utf-8"/>
+	<meta
+		content="width=device-width, initial-scale=1.0"
+		name="viewport"/>
+	<link
+		href="/favicon.png"
+		rel="icon"
+		type="image/png"/>
+
+	@foreach (var stylesheet in StyleProvider.Items)
+	{
+		<link
+			crossorigin="@stylesheet.CrossOriginMode.GetHtmlValue()"
+			href="@stylesheet.Href"
+			integrity="@stylesheet.Integrity"
+			referrerpolicy="@stylesheet.ReferrerPolicy.GetHtmlValue()"
+			rel="stylesheet"/>
+	}
+
+	@foreach (var script in ScriptProvider.Items)
+	{
+		<script
+			type="@script.GetScriptType()"
+			src="@script.Src"
+			crossorigin="@script.CrossOriginMode.GetHtmlValue()"
+			referrerpolicy="@script.ReferrerPolicy.GetHtmlValue()"
+			integrity="@script.Integrity"
+			async="@script.IsAsync"
+			defer="@script.ShouldDefer"></script>
+	}
+
+	<HeadOutlet/>
+</head>
+
+<body>
+
+<SienarRoutes @rendermode="ContentRenderMode"/>
+
+<script src="/_framework/blazor.web.js"></script>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+</body>
+</html>
+
+@code {
+
+	[Inject]
+	public required IStyleProvider StyleProvider { get; set; }
+
+	[Inject]
+	public required IScriptProvider ScriptProvider { get; set; }
+
+	public static IComponentRenderMode? ContentRenderMode = null;
+
+}

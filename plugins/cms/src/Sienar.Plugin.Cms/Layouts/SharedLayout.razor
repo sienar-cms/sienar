@@ -1,0 +1,13 @@
+﻿@inherits SharedLayoutBase
+
+<MudProviders @rendermode="InteractiveServer"/>
+
+<FullHeightLayout>
+	<SidebarNavMenu
+		MenuNames="MenuNames"
+		@rendermode="InteractiveServer"/>
+
+	<StandardMainContent Padded>
+		@ChildContent
+	</StandardMainContent>
+</FullHeightLayout>
