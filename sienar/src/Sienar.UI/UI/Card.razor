@@ -1,4 +1,6 @@
-﻿<MudCard Square="Square">
+﻿<MudCard
+	Class="@Class"
+	Square="Square">
 	<MudCardHeader class="@CreateHeaderClasses()">
 		<div>
 			<H6 Class="mb-0">
@@ -39,6 +41,9 @@
 
 	[Parameter]
 	public Color ThemeColor { get; set; } = Color.Primary;
+
+	[Parameter]
+	public string? Class { get; set; }
 
 	[Parameter]
 	public bool Square { get; set; }

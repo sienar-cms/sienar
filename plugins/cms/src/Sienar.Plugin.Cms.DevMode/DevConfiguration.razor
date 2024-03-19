@@ -1,0 +1,177 @@
+﻿@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
+@using Sienar.Identity.Requests
+@using Microsoft.AspNetCore.Identity
+@layout DashboardLayout
+@inherits FormPage<RegisterRequest>
+@attribute [Route(DevUrls.DevConfiguration)]
+@inject DbContext Context
+@inject IPasswordHasher<SienarUser> PasswordHasher
+
+<DocHead Title="Dev configuration page"/>
+
+<NarrowContainer>
+	<Card
+		Class="mb-8"
+		Title="Sienar roles">
+		<CardContent>
+			<P>
+				The following Sienar-required roles have been added to the database:
+			</P>
+
+			@foreach (var roleData in _sienarRolesInDatabase)
+			{
+				<Checkbox
+					Checked="@roleData.Value"
+					Label="@roleData.Key"
+					ReadOnly/>
+			}
+		</CardContent>
+
+		<CardActions>
+			<LoadingButton
+				Disabled="!_hasMissingRoles"
+				IsLoading="_isAddingRoles"
+				OnClick="AddMissingRoles">
+				Add missing roles
+			</LoadingButton>
+		</CardActions>
+	</Card>
+
+	<StandardForm
+		Model="Model"
+		OnSubmit="OnSubmit"
+		Title="Create admin user"
+		SubmitText="Create admin user"
+		ShowReset>
+		<Fields>
+			<Textbox
+				@bind-Value="Model.Username"
+				For="() => Model.Username"
+				Label="Username"/>
+			<Textbox
+				@bind-Value="Model.Email"
+				For="() => Model.Email"
+				InputType="InputType.Email"
+				Label="Email address"/>
+			<Textbox
+				@bind-Value="Model.Password"
+				For="() => Model.Password"
+				InputType="InputType.Password"
+				Label="Password"/>
+			<Textbox
+				@bind-Value="Model.ConfirmPassword"
+				For="() => Model.ConfirmPassword"
+				InputType="InputType.Password"
+				Label="Confirm password"/>
+		</Fields>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	private readonly Dictionary<string, bool> _sienarRolesInDatabase = new();
+	private bool _hasMissingRoles;
+	private bool _isAddingRoles;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		await DetermineWhichRolesMapped();
+	}
+
+	private async Task DetermineWhichRolesMapped()
+	{
+		string[] sienarRoles = [Roles.Admin];
+		var anyRolesMissing = false;
+
+		foreach (var role in sienarRoles)
+		{
+			var roleEntity = await Context
+				.Set<SienarRole>()
+				.FirstOrDefaultAsync(r => r.Name == role);
+			_sienarRolesInDatabase[role] = roleEntity is not null;
+			if (roleEntity is null) anyRolesMissing = true;
+		}
+
+		_hasMissingRoles = anyRolesMissing;
+	}
+
+	private Task AddMissingRoles()
+	{
+		return SubmitRequest(
+			async () =>
+			{
+				_isAddingRoles = true;
+				StateHasChanged();
+
+				List<string> addedRoles = new();
+
+				foreach (var roleData in _sienarRolesInDatabase)
+				{
+					if (roleData.Value) continue;
+
+					var newRole = new SienarRole
+					{
+						Name = roleData.Key,
+						ConcurrencyStamp = Guid.NewGuid()
+					};
+
+					await Context
+						.Set<SienarRole>()
+						.AddAsync(newRole);
+					addedRoles.Add(roleData.Key);
+				}
+
+				await Context.SaveChangesAsync();
+
+				foreach (var role in addedRoles)
+				{
+					Notifier.Success($"Added role {role} successfully!");
+				}
+
+				await DetermineWhichRolesMapped();
+
+				_isAddingRoles = false;
+				StateHasChanged();
+			});
+	}
+
+	/// <inheritdoc />
+	protected override async Task OnSubmit()
+	{
+		await SubmitRequest(async () =>
+		{
+			var adminRole = await Context
+				.Set<SienarRole>()
+				.FirstOrDefaultAsync(r => r.Name == Roles.Admin);
+
+			if (adminRole is null)
+			{
+				Notifier.Error("Cannot create admin user: no admin role exists. Please press the \"Add missing roles\" button under \"Sienar roles\" and try again.");
+				return false;
+			}
+
+			var user = new SienarUser
+			{
+				Username = Model.Username,
+				Email = Model.Email,
+				PasswordHash = PasswordHasher.HashPassword(
+					default!,
+					Model.Password),
+				EmailConfirmed = true,
+				ConcurrencyStamp = Guid.NewGuid(),
+				Roles = [adminRole]
+			};
+
+			await Context
+				.Set<SienarUser>()
+				.AddAsync(user);
+			await Context.SaveChangesAsync();
+			return true;
+		});
+
+		if (WasSuccessful) Notifier.Success("User created successfully!");
+	}
+
+}

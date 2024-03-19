@@ -14,6 +14,9 @@ await SienarAppBuilder
 	.AddRootDbContext<AppDbContext>(o => o.UseSienarDb())
 	.AddPlugin<SienarCmsPlugin>()
 	.AddPlugin<MailKitPlugin>()
+#if DEBUG
+	.AddPlugin<DevmodePlugin>()
+#endif
 	.SetupDependencies(
 		builder => builder.Services.AddRequestConfigurer<AppRequestConfigurer>())
 	.SetupApp(
