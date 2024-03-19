@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms", "src\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.Core", "src\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj", "{90340DC4-6AD6-4D5D-B365-D823898047BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.DevMode", "src\Sienar.Plugin.Cms.DevMode\Sienar.Plugin.Cms.DevMode.csproj", "{91715000-8656-49EE-AC1A-5B4A81D35AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90340DC4-6AD6-4D5D-B365-D823898047BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91715000-8656-49EE-AC1A-5B4A81D35AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91715000-8656-49EE-AC1A-5B4A81D35AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91715000-8656-49EE-AC1A-5B4A81D35AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91715000-8656-49EE-AC1A-5B4A81D35AFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FF48E6D9-BEFE-482A-89B4-707CDE1CAF4F} = {2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}
 		{90340DC4-6AD6-4D5D-B365-D823898047BE} = {2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}
+		{91715000-8656-49EE-AC1A-5B4A81D35AFE} = {2ED838D8-C6A6-43F8-9C7B-FA96FC703DC0}
 	EndGlobalSection
 EndGlobal
