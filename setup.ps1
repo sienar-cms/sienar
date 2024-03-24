@@ -36,6 +36,7 @@ foreach ($project in $projects)
 
 Publish-Project "plugins/cms/src" "Sienar.Plugin.Cms.Core"
 Publish-Project "plugins/cms/src" "Sienar.Plugin.Cms"
+Publish-Project "plugins/cms/src" "Sienar.Plugin.Cms.DevMode"
 
 Publish-Project "plugins/mailkit/src" "Sienar.Plugin.MailKit"
 
