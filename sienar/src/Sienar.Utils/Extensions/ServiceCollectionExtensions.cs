@@ -21,20 +21,18 @@ public static class ServiceCollectionExtensions
 		self.TryAddSingleton<IDashboardProvider, DashboardProvider>();
 		self.TryAddSingleton<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
 		self.TryAddSingleton<IComponentProvider, ComponentProvider>();
+		self.TryAddSingleton<IStyleProvider, StyleProvider>();
+		self.TryAddSingleton<IScriptProvider, ScriptProvider>();
 
 		if (isDesktop)
 		{
 			self.TryAddSingleton<IMenuGenerator, MenuGenerator>();
 			self.TryAddSingleton<IDashboardGenerator, DashboardGenerator>();
-			self.TryAddSingleton<IStyleProvider, StyleProvider>();
-			self.TryAddSingleton<IScriptProvider, ScriptProvider>();
 		}
 		else
 		{
 			self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 			self.TryAddScoped<IDashboardGenerator, DashboardGenerator>();
-			self.TryAddScoped<IStyleProvider, StyleProvider>();
-			self.TryAddScoped<IScriptProvider, ScriptProvider>();
 		}
 		
 		self.TryAddScoped(typeof(IEntityReader<>), typeof(EntityReader<>));
