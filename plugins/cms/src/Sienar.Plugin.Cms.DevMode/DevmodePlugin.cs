@@ -8,7 +8,7 @@ using Sienar.Plugin.Cms.DevMode;
 // ReSharper disable once CheckNamespace
 namespace Sienar.Infrastructure.Plugins;
 
-public class DevmodePlugin : ISienarPlugin
+public class DevmodePlugin : IWebPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

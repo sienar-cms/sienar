@@ -9,7 +9,7 @@ using TestProject.Web.Extensions;
 using TestProject.Web.Layouts;
 using TestProject.Web.UI;
 
-await SienarAppBuilder
+await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
 	.AddRootDbContext<AppDbContext>(o => o.UseSienarDb())
 	.AddPlugin<SienarCmsPlugin>()

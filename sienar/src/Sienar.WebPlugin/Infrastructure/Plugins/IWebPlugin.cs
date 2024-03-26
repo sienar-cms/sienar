@@ -2,7 +2,7 @@
 
 namespace Sienar.Infrastructure.Plugins;
 
-public interface ISienarPlugin
+public interface IWebPlugin
 {
 	/// <summary>
 	/// Plugin data for the current plugin

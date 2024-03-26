@@ -9,7 +9,7 @@ using Sienar.Layouts;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarMauiBlazorPlugin : ISienarPlugin
+public class SienarMauiBlazorPlugin : IDesktopPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

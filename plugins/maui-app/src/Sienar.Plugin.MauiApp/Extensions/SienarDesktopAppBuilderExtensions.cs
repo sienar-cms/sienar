@@ -8,9 +8,9 @@ using Sienar.State;
 
 namespace Sienar.Extensions;
 
-public static class SienarAppBuilderExtensions
+public static class SienarDesktopAppBuilderExtensions
 {
-	public static SienarAppBuilder SetApplication<TApp>(this SienarAppBuilder self)
+	public static SienarDesktopAppBuilder SetApplication<TApp>(this SienarDesktopAppBuilder self)
 		where TApp : class, IApplication
 	{
 		self.Builder.UseMauiApp<TApp>();
@@ -18,8 +18,8 @@ public static class SienarAppBuilderExtensions
 		return self;
 	}
 
-	public static SienarAppBuilder UseSienarApplication(
-		this SienarAppBuilder self,
+	public static SienarDesktopAppBuilder UseSienarApplication(
+		this SienarDesktopAppBuilder self,
 		Assembly appAssembly)
 	{
 		self.Builder.UseMauiApp<SienarMauiApp>();
@@ -34,8 +34,8 @@ public static class SienarAppBuilderExtensions
 	/// <param name="isDarkMode">whether the theme represents dark mode or not</param>
 	/// <typeparam name="TTheme">the type of the theme to register</typeparam>
 	/// <returns>the Sienar app builder</returns>
-	public static SienarAppBuilder ConfigureTheme<TTheme>(
-		this SienarAppBuilder self,
+	public static SienarDesktopAppBuilder ConfigureTheme<TTheme>(
+		this SienarDesktopAppBuilder self,
 		bool isDarkMode = false)
 		where TTheme : MudTheme, new()
 		=> ConfigureTheme(
@@ -50,8 +50,8 @@ public static class SienarAppBuilderExtensions
 	/// <param name="theme">the <see cref="MudTheme"/> to use</param>
 	/// <param name="isDarkMode">whether the theme represents dark mode or not</param>
 	/// <returns>the Sienar app builder</returns>
-	public static SienarAppBuilder ConfigureTheme(
-		this SienarAppBuilder self,
+	public static SienarDesktopAppBuilder ConfigureTheme(
+		this SienarDesktopAppBuilder self,
 		MudTheme theme,
 		bool isDarkMode = false)
 	{

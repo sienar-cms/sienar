@@ -10,7 +10,7 @@ using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;
 
-public sealed class SienarAppBuilder
+public sealed class SienarDesktopAppBuilder
 {
 	private bool _hasRootContext;
 
@@ -20,18 +20,18 @@ public sealed class SienarAppBuilder
 	public readonly Dictionary<string, object> CustomItems = new();
 	public readonly IPluginDataProvider PluginDataProvider = new PluginDataProvider();
 
-	private SienarAppBuilder(MauiAppBuilder builder)
+	private SienarDesktopAppBuilder(MauiAppBuilder builder)
 	{
 		Builder = builder;
 	}
 
 	/// <summary>
-	/// Creates a new <see cref="SienarAppBuilder"/> and registers core Sienar services on its service collection
+	/// Creates a new <see cref="SienarDesktopAppBuilder"/> and registers core Sienar services on its service collection
 	/// </summary>
 	/// <param name="usesDefaults">whether to create the <see cref="MauiAppBuilder"/> with common defaults</param>
 	/// <param name="addDebugServices">whether to register debugging services and logging</param>
-	/// <returns>the new <see cref="SienarAppBuilder"/></returns>
-	public static SienarAppBuilder Create(
+	/// <returns>the new <see cref="SienarDesktopAppBuilder"/></returns>
+	public static SienarDesktopAppBuilder Create(
 		bool usesDefaults = true,
 		bool addDebugServices = false)
 	{
@@ -44,7 +44,7 @@ public sealed class SienarAppBuilder
 			builder.Logging.AddDebug();
 		}
 
-		var sienarAppBuilder = new SienarAppBuilder(builder);
+		var sienarAppBuilder = new SienarDesktopAppBuilder(builder);
 		sienarAppBuilder.Builder.Services.AddSingleton(sienarAppBuilder.PluginDataProvider);
 
 		return sienarAppBuilder;
@@ -57,8 +57,8 @@ public sealed class SienarAppBuilder
 	/// <param name="dbContextLifetime">the service lifetime of the context</param>
 	/// <param name="dbContextOptionsLifetime">the service lifetime of the <see cref="DbContextOptions{TContext}"/></param>
 	/// <typeparam name="TContext">the type of the <see cref="DbContext"/></typeparam>
-	/// <returns>the <see cref="SienarAppBuilder"/></returns>
-	public SienarAppBuilder AddRootDbContext<TContext>(
+	/// <returns>the <see cref="SienarDesktopAppBuilder"/></returns>
+	public SienarDesktopAppBuilder AddRootDbContext<TContext>(
 		Action<DbContextOptionsBuilder>? dbContextOptionsConfigurer = null,
 		ServiceLifetime dbContextLifetime = ServiceLifetime.Scoped,
 		ServiceLifetime dbContextOptionsLifetime = ServiceLifetime.Scoped)
@@ -87,20 +87,20 @@ public sealed class SienarAppBuilder
 	}
 
 	/// <summary>
-	/// Adds an <see cref="ISienarPlugin"/> to the Sienar app
+	/// Adds an <see cref="IDesktopPlugin"/> to the Sienar app
 	/// </summary>
 	/// <typeparam name="TPlugin">the type of the plugin to add</typeparam>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder AddPlugin<TPlugin>()
-		where TPlugin : ISienarPlugin, new()
+	public SienarDesktopAppBuilder AddPlugin<TPlugin>()
+		where TPlugin : IDesktopPlugin, new()
 		=> AddPlugin(new TPlugin());
 
 	/// <summary>
-	/// Adds an instance of <see cref="ISienarPlugin"/> to the Sienar app
+	/// Adds an instance of <see cref="IDesktopPlugin"/> to the Sienar app
 	/// </summary>
 	/// <param name="plugin">an instance of the plugin to add</param>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder AddPlugin(ISienarPlugin plugin)
+	public SienarDesktopAppBuilder AddPlugin(IDesktopPlugin plugin)
 	{
 		plugin.SetupDependencies(Builder);
 		Middlewares.Add(plugin.SetupApp);
@@ -113,7 +113,7 @@ public sealed class SienarAppBuilder
 	/// </summary>
 	/// <param name="configurer">an <see cref="Action{MauiAppBuilder}"/> that accepts the <see cref="MauiAppBuilder"/> as its only argument</param>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder SetupDependencies(Action<MauiAppBuilder> configurer)
+	public SienarDesktopAppBuilder SetupDependencies(Action<MauiAppBuilder> configurer)
 	{
 		configurer(Builder);
 		return this;
@@ -124,7 +124,7 @@ public sealed class SienarAppBuilder
 	/// </summary>
 	/// <param name="configurer">an <see cref="Action{MauiApp}"/> that accepts the <see cref="MauiApp"/> as its only argument</param>
 	/// <returns></returns>
-	public SienarAppBuilder SetupApp(Action<MauiApp> configurer)
+	public SienarDesktopAppBuilder SetupApp(Action<MauiApp> configurer)
 	{
 		Middlewares.Add(configurer);
 		return this;

@@ -8,7 +8,7 @@ using Sienar.State;
 
 namespace Sienar.Extensions;
 
-public static class SienarAppBuilderExtensions
+public static class SienarWebAppBuilderExtensions
 {
 	/// <summary>
 	/// Registers a custom <see cref="MudTheme"/> for use in Sienar's <see cref="ThemeState"/>
@@ -17,8 +17,8 @@ public static class SienarAppBuilderExtensions
 	/// <param name="isDarkMode">whether the theme represents dark mode or not</param>
 	/// <typeparam name="TTheme">the type of the theme to register</typeparam>
 	/// <returns>the Sienar app builder</returns>
-	public static SienarAppBuilder ConfigureTheme<TTheme>(
-		this SienarAppBuilder self,
+	public static SienarWebAppBuilder ConfigureTheme<TTheme>(
+		this SienarWebAppBuilder self,
 		bool isDarkMode = false)
 		where TTheme : MudTheme, new()
 		=> ConfigureTheme(
@@ -33,8 +33,8 @@ public static class SienarAppBuilderExtensions
 	/// <param name="theme">the <see cref="MudTheme"/> to use</param>
 	/// <param name="isDarkMode">whether the theme represents dark mode or not</param>
 	/// <returns>the Sienar app builder</returns>
-	public static SienarAppBuilder ConfigureTheme(
-		this SienarAppBuilder self,
+	public static SienarWebAppBuilder ConfigureTheme(
+		this SienarWebAppBuilder self,
 		MudTheme theme,
 		bool isDarkMode = false)
 	{
@@ -47,7 +47,7 @@ public static class SienarAppBuilderExtensions
 		return self;
 	}
 
-	public static WebApplication BuildBlazor(this SienarAppBuilder self)
+	public static WebApplication BuildBlazor(this SienarWebAppBuilder self)
 	{
 		var app = self.Build();
 

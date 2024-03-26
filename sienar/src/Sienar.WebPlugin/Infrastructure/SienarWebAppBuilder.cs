@@ -10,7 +10,7 @@ using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Infrastructure;
 
-public sealed class SienarAppBuilder
+public sealed class SienarWebAppBuilder
 {
 	private bool _hasRootContext;
 
@@ -21,7 +21,7 @@ public sealed class SienarAppBuilder
 	public readonly IPluginDataProvider PluginDataProvider;
 	public string[] StartupArgs = Array.Empty<string>();
 
-	private SienarAppBuilder(
+	private SienarWebAppBuilder(
 		WebApplicationBuilder builder,
 		Assembly? appAssembly)
 	{
@@ -32,12 +32,12 @@ public sealed class SienarAppBuilder
 	}
 
 	/// <summary>
-	/// Creates a new <see cref="SienarAppBuilder"/> and registers core Sienar services on its service collection
+	/// Creates a new <see cref="SienarWebAppBuilder"/> and registers core Sienar services on its service collection
 	/// </summary>
 	/// <param name="args">the runtime arguments supplied to <c>Program.Main()</c></param>
 	/// <param name="appAssembly">the <see cref="Assembly"/> of the main program, used to map its routable components at startup</param>
-	/// <returns>the new <see cref="SienarAppBuilder"/></returns>
-	public static SienarAppBuilder Create(
+	/// <returns>the new <see cref="SienarWebAppBuilder"/></returns>
+	public static SienarWebAppBuilder Create(
 		string[] args,
 		Assembly? appAssembly = null)
 	{
@@ -45,7 +45,7 @@ public sealed class SienarAppBuilder
 
 		builder.Services.AddSienarCoreUtilities();
 
-		return new SienarAppBuilder(builder, appAssembly) { StartupArgs = args };
+		return new SienarWebAppBuilder(builder, appAssembly) { StartupArgs = args };
 	}
 
 	/// <summary>
@@ -55,8 +55,8 @@ public sealed class SienarAppBuilder
 	/// <param name="dbContextLifetime">the service lifetime of the <see cref="TContext"/></param>
 	/// <param name="dbContextOptionsLifetime">the service lifetime of the <see cref="DbContextOptions{TContext}"/></param>
 	/// <typeparam name="TContext">the type of the <see cref="DbContext"/></typeparam>
-	/// <returns>the <see cref="SienarAppBuilder"/></returns>
-	public SienarAppBuilder AddRootDbContext<TContext>(
+	/// <returns>the <see cref="SienarWebAppBuilder"/></returns>
+	public SienarWebAppBuilder AddRootDbContext<TContext>(
 		Action<DbContextOptionsBuilder>? dbContextOptionsConfigurer = null,
 		ServiceLifetime dbContextLifetime = ServiceLifetime.Scoped,
 		ServiceLifetime dbContextOptionsLifetime = ServiceLifetime.Scoped)
@@ -85,20 +85,20 @@ public sealed class SienarAppBuilder
 	}
 
 	/// <summary>
-	/// Adds an <see cref="ISienarPlugin"/> to the Sienar app
+	/// Adds an <see cref="IWebPlugin"/> to the Sienar app
 	/// </summary>
 	/// <typeparam name="TPlugin">the type of the plugin to add</typeparam>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder AddPlugin<TPlugin>()
-		where TPlugin : ISienarPlugin, new()
+	public SienarWebAppBuilder AddPlugin<TPlugin>()
+		where TPlugin : IWebPlugin, new()
 		=> AddPlugin(new TPlugin());
 
 	/// <summary>
-	/// Adds an instance of <see cref="ISienarPlugin"/> to the Sienar app
+	/// Adds an instance of <see cref="IWebPlugin"/> to the Sienar app
 	/// </summary>
 	/// <param name="plugin">an instance of the plugin to add</param>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder AddPlugin(ISienarPlugin plugin)
+	public SienarWebAppBuilder AddPlugin(IWebPlugin plugin)
 	{
 		plugin.SetupDependencies(Builder);
 		Middlewares.Add(plugin.SetupApp);
@@ -111,7 +111,7 @@ public sealed class SienarAppBuilder
 	/// </summary>
 	/// <param name="configurer">an <see cref="Action{WebApplicationBuilder}"/> that accepts the <see cref="WebApplicationBuilder"/> as its only argument</param>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder SetupDependencies(Action<WebApplicationBuilder> configurer)
+	public SienarWebAppBuilder SetupDependencies(Action<WebApplicationBuilder> configurer)
 	{
 		configurer(Builder);
 		return this;
@@ -122,7 +122,7 @@ public sealed class SienarAppBuilder
 	/// </summary>
 	/// <param name="configurer">an <see cref="Action{WebApplication}"/> that accepts the <see cref="WebApplication"/> as its only argument</param>
 	/// <returns>the Sienar app builder</returns>
-	public SienarAppBuilder SetupApp(Action<WebApplication> configurer)
+	public SienarWebAppBuilder SetupApp(Action<WebApplication> configurer)
 	{
 		Middlewares.Add(configurer);
 		return this;

@@ -2,7 +2,7 @@
 
 namespace Sienar.Infrastructure.Plugins;
 
-public interface ISienarPlugin
+public interface IDesktopPlugin
 {
 	/// <summary>
 	/// Plugin data for the current plugin
