@@ -22,6 +22,7 @@ public class SienarMauiBlazorPlugin : IDesktopPlugin
 		Homepage = "https://sienar.levesque.dev"
 	};
 
+	/// <inheritdoc />
 	public void SetupDependencies(MauiAppBuilder builder)
 	{
 		builder.Services
@@ -36,8 +37,9 @@ public class SienarMauiBlazorPlugin : IDesktopPlugin
 			.AddMudServices();
 	}
 
+	/// <inheritdoc />
 	public void SetupApp(MauiApp app)
 	{
-		app.ConfigureComponents(c => c.DefaultLayout = typeof(DashboardLayout));
+		app.ConfigureComponents(c => c.DefaultLayout ??= typeof(DashboardLayout));
 	}
 }

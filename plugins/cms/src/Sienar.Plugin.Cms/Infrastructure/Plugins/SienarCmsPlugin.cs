@@ -141,7 +141,7 @@ public class SienarCmsPlugin : IWebPlugin
 
 	private static void SetupComponents(IComponentProvider componentProvider)
 	{
-		componentProvider.DefaultLayout = typeof(DashboardLayout);
-		componentProvider.SidebarHeader = typeof(DrawerHeader);
+		componentProvider.DefaultLayout ??= typeof(DashboardLayout);
+		componentProvider.SidebarHeader ??= typeof(DrawerHeader);
 	}
 }
