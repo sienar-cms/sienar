@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Sienar.Infrastructure.Plugins;
 
+/// <inheritdoc />
 public class ComponentProvider : IComponentProvider
 {
 	/// <inheritdoc />
-	public Type DefaultLayout { get; set; } = default!;
+	public Type? DefaultLayout { get; set; }
 
 	/// <inheritdoc />
 	public Type? AppbarLeft { get; set; }

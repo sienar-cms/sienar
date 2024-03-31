@@ -1,5 +1,11 @@
 ﻿namespace Sienar.Infrastructure.Plugins;
 
+/// <summary>
+/// Contains the data needed to create an HTML <c>&lt;link&gt;</c> tag
+/// </summary>
+/// <remarks>
+/// The <c>StyleResource</c> cannot be used to output non-stylesheet links or internal CSS. Sienar does not support internal CSS.
+/// </remarks>
 public class StyleResource
 {
 	/// <summary>
@@ -25,6 +31,11 @@ public class StyleResource
 	/// </summary>
 	public string? Integrity { get; init; }
 
+	/// <summary>
+	/// Converts a string URL to a <c>StyleResource</c>
+	/// </summary>
+	/// <param name="source">the URL of the stylesheet</param>
+	/// <returns>the converted <c>StyleResource</c></returns>
 	public static implicit operator StyleResource(string source)
 		=> new() { Href = source };
 }

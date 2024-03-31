@@ -1,5 +1,8 @@
 ﻿namespace Sienar.Email;
 
+/// <summary>
+/// Configures account-related email message subjects
+/// </summary>
 public class IdentityEmailSubjectOptions
 {
 	/// <summary>

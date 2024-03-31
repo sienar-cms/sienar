@@ -1,5 +1,8 @@
 ﻿namespace Sienar.Configuration;
 
+/// <summary>
+/// Configures core Sienar options
+/// </summary>
 public class SienarOptions
 {
 	/// <summary>
