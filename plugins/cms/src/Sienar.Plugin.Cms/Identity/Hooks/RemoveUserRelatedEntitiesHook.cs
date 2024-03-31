@@ -46,7 +46,7 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 		DeleteAccountRequest request,
 		ActionType action)
 	{
-		if (action != ActionType.Action) return;
+		if (action != ActionType.StatusAction) return;
 
 		var userId = (await _userAccessor.GetUserId())!;
 		var user = (await EntitySet.FindAsync(userId.Value))!;

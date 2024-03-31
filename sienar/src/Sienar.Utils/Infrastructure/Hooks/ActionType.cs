@@ -36,6 +36,11 @@ public enum ActionType
 	Action,
 
 	/// <summary>
+	/// Represents a general action that accepts an input and returns a <c>bool</c> to indicate its success status
+	/// </summary>
+	StatusAction,
+
+	/// <summary>
 	/// Represents a general action that accepts no input and returns an output on success
 	/// </summary>
 	ResultAction

@@ -36,19 +36,19 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	/// <inheritdoc />
 	public virtual async Task<bool> Execute(TRequest request)
 	{
-		if (!await _accessValidators.Validate(request, ActionType.Action, _logger))
+		if (!await _accessValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
 			_processor.NotifyNoPermission();
 			return false;
 		}
 
-		if (!await _stateValidators.Validate(request, ActionType.Action, _logger))
+		if (!await _stateValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
 			_processor.NotifyFailure();
 			return false;
 		}
 
-		if (!await _beforeHooks.Run(request, ActionType.Action, _logger))
+		if (!await _beforeHooks.Run(request, ActionType.StatusAction, _logger))
 		{
 			_processor.NotifyFailure();
 			return false;
@@ -76,7 +76,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 			return false;
 		}
 
-		await _afterHooks.Run(request, ActionType.Action, _logger);
+		await _afterHooks.Run(request, ActionType.StatusAction, _logger);
 
 		_processor.NotifySuccess();
 		return result;

@@ -69,7 +69,7 @@ public class Service<TRequest, TResult> : IService<TRequest, TResult>
 		}
 		catch (Exception e)
 		{
-			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
+			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest, TResult>));
 
 			// Notify failure because the failure was unplanned
 			_processor.NotifyFailure();
