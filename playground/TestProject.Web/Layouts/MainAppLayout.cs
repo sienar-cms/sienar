@@ -2,7 +2,7 @@
 
 namespace TestProject.Web.Layouts;
 
-public class MainAppLayout : TopNavLayout
+public class MainAppLayout : TopNavLayoutBase
 {
 	/// <inheritdoc />
 	public MainAppLayout()
