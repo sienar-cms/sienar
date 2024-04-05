@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,18 +12,17 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Hooks;
 
+/// <exclude />
 public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 	IStateValidator<SienarUser>,
 	IStateValidator<RegisterRequest>
 {
-	/// <inheritdoc />
 	public EnsureAccountInfoUniqueValidator(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-	/// <inheritdoc />
 	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser entity, ActionType type)
 		=> UserIsUnique(
 			entity.Username,
@@ -29,7 +30,6 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 			entity.PendingEmail,
 			entity.Id);
 
-	/// <inheritdoc />
 	Task<HookStatus> IStateValidator<RegisterRequest>.Validate(
 		RegisterRequest request,
 		ActionType action)

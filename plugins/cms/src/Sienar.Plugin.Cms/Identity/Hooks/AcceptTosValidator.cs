@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -6,6 +8,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
+/// <exclude />
 public class AcceptTosValidator : IStateValidator<RegisterRequest>
 {
 	private readonly INotificationService _notifier;

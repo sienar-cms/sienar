@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +10,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 {
 	public IQueryable<SienarUser> Search(IQueryable<SienarUser> dataset, Filter filter)
@@ -23,7 +26,6 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 			|| !string.IsNullOrEmpty(s.PendingEmail) && s.PendingEmail.Contains(filter.SearchTerm));
 	}
 
-	/// <inheritdoc />
 	public IQueryable<SienarUser> ProcessIncludes(IQueryable<SienarUser> dataset, Filter filter)
 	{
 		if (filter.Includes is null || !filter.Includes.Any())
@@ -39,7 +41,6 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 		return dataset;
 	}
 
-	/// <inheritdoc />
 	public Expression<Func<SienarUser, object>> GetSortPredicate(string? sortName) => sortName switch
 	{
 		nameof(SienarUser.Username) => u => u.Username,
@@ -48,7 +49,6 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 		_ => u => u.Username
 	};
 
-	/// <inheritdoc />
 	public Filter? ModifyFilter(Filter? filter, ActionType action)
 	{
 		if (filter is null) return new Filter { Includes = ["Roles"] };

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,6 +16,7 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class PerformEmailChangeProcessor : DbService<SienarUser>,
 	IProcessor<PerformEmailChangeRequest, bool>
 {
@@ -23,7 +26,6 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 	private readonly IAccountEmailManager _emailManager;
 	private readonly SienarOptions _sienarOptions;
 
-	/// <inheritdoc />
 	public PerformEmailChangeProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -41,7 +43,6 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		_sienarOptions = sienarOptions.Value;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(PerformEmailChangeRequest request)
 	{
 		var userId = await _userAccessor.GetUserId();
@@ -86,9 +87,7 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		{
 			if (_sienarOptions.EnableEmail)
 			{
-				await _emailManager.SendEmailChangeConfirmationEmail(
-					_vcManager,
-					user);
+				await _emailManager.SendEmailChangeConfirmationEmail(user);
 				Notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
 				return this.Unprocessable();
 			}
@@ -108,19 +107,16 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Email changed successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your email");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to change your email");

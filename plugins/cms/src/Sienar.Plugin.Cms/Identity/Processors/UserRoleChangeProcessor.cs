@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class UserRoleChangeProcessor : DbService<SienarUser>,
 	IProcessor<AddUserToRoleRequest, bool>,
 	IProcessor<RemoveUserFromRoleRequest, bool>
@@ -19,7 +22,6 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	private SienarUser? _user;
 	private SienarRole? _role;
 
-	/// <inheritdoc />
 	public UserRoleChangeProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -28,7 +30,6 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 
 #region AddUserToRoleRequest
 
-	/// <inheritdoc />
 	async Task<HookResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
 	{
 		_user = await GetSienarUserWithRoles(request.UserId);
@@ -59,19 +60,16 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 		return new(HookStatus.Success, true);
 	}
 
-	/// <inheritdoc />
 	void IProcessor<AddUserToRoleRequest, bool>.NotifySuccess()
 	{
 		Notifier.Success($"User {_user?.Username} added to role {_role?.Name}");
 	}
 
-	/// <inheritdoc />
 	void IProcessor<AddUserToRoleRequest, bool>.NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while adding user to role");
 	}
 
-	/// <inheritdoc />
 	void IProcessor<AddUserToRoleRequest, bool>.NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to add users to roles");
@@ -81,7 +79,6 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 
 #region RemoveUserFromRoleRequest
 
-	/// <inheritdoc />
 	async Task<HookResult<bool>> IProcessor<RemoveUserFromRoleRequest, bool>.Process(RemoveUserFromRoleRequest request)
 	{
 		_user = await GetSienarUserWithRoles(request.UserId);
@@ -104,19 +101,16 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 		return new(HookStatus.Success, true);
 	}
 
-	/// <inheritdoc />
 	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifySuccess()
 	{
 		Notifier.Success($"User {_user?.Username} removed from role {_role?.Name}");
 	}
 
-	/// <inheritdoc />
 	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while removing user from role");
 	}
 
-	/// <inheritdoc />
 	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to remove users from roles");

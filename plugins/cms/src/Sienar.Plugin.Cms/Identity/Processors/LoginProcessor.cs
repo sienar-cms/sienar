@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,24 +17,22 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class LoginProcessor : DbService<SienarUser>, 
 	IProcessor<LoginRequest, Guid>
 {
 	private readonly IUserManager _userManager;
 	private readonly LoginTokenCache _tokenCache;
-	private readonly IVerificationCodeManager _verificationCodeManager;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly LoginOptions _loginOptions;
 	private readonly SienarOptions _appOptions;
 
-	/// <inheritdoc />
 	public LoginProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
 		IUserManager userManager,
 		LoginTokenCache tokenCache,
-		IVerificationCodeManager verificationCodeManager,
 		IAccountEmailManager emailManager,
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
@@ -40,13 +40,11 @@ public class LoginProcessor : DbService<SienarUser>,
 	{
 		_userManager = userManager;
 		_tokenCache = tokenCache;
-		_verificationCodeManager = verificationCodeManager;
 		_emailManager = emailManager;
 		_loginOptions = loginOptions.Value;
 		_appOptions = appOptions.Value;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<Guid>> Process(LoginRequest request)
 	{
 		var user = await _userManager.GetSienarUser(
@@ -88,10 +86,9 @@ public class LoginProcessor : DbService<SienarUser>,
 		{
 			if (_appOptions.EnableEmail)
 			{
-				await _emailManager.SendWelcomeEmail(
-					_verificationCodeManager,
-					user);
+				var sent = await _emailManager.SendWelcomeEmail(user);
 				Notifier.Warning(ErrorMessages.Account.LoginFailedNotConfirmed);
+				if (!sent) Notifier.Error(ErrorMessages.Email.FailedToSend);
 				return this.Unauthorized();
 			}
 
@@ -112,19 +109,16 @@ public class LoginProcessor : DbService<SienarUser>,
 		return this.Success(loginToken);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Logged in successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while logging in");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to log in");

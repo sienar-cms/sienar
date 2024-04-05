@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
+using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -15,27 +18,24 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterRequest, bool>
 {
-	private readonly IVerificationCodeManager _verificationCodeManager;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
 	private readonly LoginOptions _loginOptions;
 	private readonly SienarOptions _appOptions;
 
-	/// <inheritdoc />
 	public RegisterProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier,
-		IVerificationCodeManager verificationCodeManager,
 		IAccountEmailManager emailManager,
 		IPasswordHasher<SienarUser> passwordHasher,
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
 		: base(context, logger, notifier)
 	{
-		_verificationCodeManager = verificationCodeManager;
 		_emailManager = emailManager;
 		_passwordHasher = passwordHasher;
 		_loginOptions = loginOptions.Value;
@@ -70,27 +70,25 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 
 		if (shouldSendRegistrationEmail)
 		{
-			await _emailManager.SendWelcomeEmail(
-				_verificationCodeManager,
-				user);
+			if (!await _emailManager.SendWelcomeEmail(user))
+			{
+				Notifier.Error(ErrorMessages.Email.FailedToSend);
+			}
 		}
 
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Registered successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while registering");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to register");

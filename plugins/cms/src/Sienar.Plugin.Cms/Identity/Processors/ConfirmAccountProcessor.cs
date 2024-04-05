@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,6 +16,7 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class ConfirmAccountProcessor : DbService<SienarUser>,
 	IProcessor<ConfirmAccountRequest, bool>
 {
@@ -22,7 +25,6 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 	private readonly IAccountEmailManager _emailManager;
 	private readonly SienarOptions _options;
 
-	/// <inheritdoc />
 	public ConfirmAccountProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -39,7 +41,6 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		_options = options.Value;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(ConfirmAccountRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.UserId);
@@ -65,8 +66,15 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		{
 			if (_options.EnableEmail)
 			{
-				await _emailManager.SendWelcomeEmail(_vcManager, user);
-				Notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
+				if (await _emailManager.SendWelcomeEmail(user))
+				{
+					Notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
+				}
+				else
+				{
+					Notifier.Error(ErrorMessages.Email.FailedToSend);
+				}
+
 				return this.Unprocessable();
 			}
 
@@ -83,19 +91,16 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Account confirmed successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while confirming your account");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to confirm your account");

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -11,6 +13,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 {
 	private readonly IUserManager _userManager;
@@ -33,7 +36,6 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 		_options = options.Value;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(ResetPasswordRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.UserId);
@@ -59,8 +61,9 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 		{
 			if (_options.EnableEmail)
 			{
-				await _emailManager.SendPasswordResetEmail(_vcManager, user);
+				var sent = await _emailManager.SendPasswordResetEmail(user);
 				_notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
+				if (!sent) _notifier.Error(ErrorMessages.Email.FailedToSend);
 				return this.Unprocessable();
 			}
 
@@ -75,19 +78,16 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		_notifier.Success("Password reset successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while resetting your password");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		_notifier.Error("You do not have permission to reset your password");

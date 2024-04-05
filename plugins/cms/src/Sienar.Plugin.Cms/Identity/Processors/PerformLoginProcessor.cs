@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -7,6 +9,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 {
 	private readonly ISignInManager _signInManager;
@@ -26,7 +29,6 @@ public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 		_notifier = notifier;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(PerformLoginRequest request)
 	{
 		var loginRequest = _tokenCache.ConsumeLoginToken(request.LoginToken);
@@ -49,12 +51,9 @@ public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 
 	// Notifiers are blank on purpose. The user should already have been notified of their login success, and the user will be notified manually if there are problems with the login process from here because there *shouldn't* be any issues at this point
 
-	/// <inheritdoc />
 	public void NotifySuccess() {}
 
-	/// <inheritdoc />
 	public void NotifyFailure() {}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission() {}
 }

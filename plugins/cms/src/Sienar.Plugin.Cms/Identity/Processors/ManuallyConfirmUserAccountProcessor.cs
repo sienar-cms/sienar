@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Errors;
@@ -11,13 +13,13 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 	IProcessor<ManuallyConfirmUserAccountRequest, bool>
 {
 	private readonly IUserManager _userManager;
 	private SienarUser? _user;
 
-	/// <inheritdoc />
 	public ManuallyConfirmUserAccountProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -28,7 +30,6 @@ public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 		_userManager = userManager;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(ManuallyConfirmUserAccountRequest request)
 	{
 		_user = await _userManager.GetSienarUser(request.UserId);
@@ -52,19 +53,16 @@ public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success($"Confirmed {_user?.Username}'s account");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("Unable to confirm account");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to manually confirm accounts");

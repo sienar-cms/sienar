@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
+/// <exclude />
 public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
 {
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
@@ -13,7 +16,6 @@ public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
 		_passwordHasher = passwordHasher;
 	}
 
-	/// <inheritdoc />
 	public Task Handle(SienarUser user, ActionType action)
 	{
 		if (action is not (ActionType.Create or ActionType.Update)) return Task.CompletedTask;

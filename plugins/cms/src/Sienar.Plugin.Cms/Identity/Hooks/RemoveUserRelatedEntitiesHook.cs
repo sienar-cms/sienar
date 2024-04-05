@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ using Sienar.Media;
 
 namespace Sienar.Identity.Hooks;
 
+/// <exclude />
 public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 	IBeforeProcess<SienarUser>,
 	IBeforeProcess<DeleteAccountRequest>
@@ -18,7 +21,6 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 	private readonly IEntityDeleter<Upload> _mediaDeleter;
 	private readonly IUserAccessor _userAccessor;
 
-	/// <inheritdoc />
 	public RemoveUserRelatedEntitiesHook(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -31,7 +33,6 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 		_userAccessor = userAccessor;
 	}
 
-	/// <inheritdoc />
 	Task IBeforeProcess<SienarUser>.Handle(
 		SienarUser entity,
 		ActionType action)
@@ -41,7 +42,6 @@ public class RemoveUserRelatedEntitiesHook : DbService<SienarUser>,
 			: Task.CompletedTask;
 	}
 
-	/// <inheritdoc />
 	async Task IBeforeProcess<DeleteAccountRequest>.Handle(
 		DeleteAccountRequest request,
 		ActionType action)

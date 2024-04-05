@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Errors;
@@ -11,13 +13,13 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class DeleteAccountProcessor : DbService<SienarUser>,
 	IProcessor<DeleteAccountRequest, bool>
 {
 	private readonly IUserAccessor _userAccessor;
 	private readonly IUserManager _userManager;
 
-	/// <inheritdoc />
 	public DeleteAccountProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -30,7 +32,6 @@ public class DeleteAccountProcessor : DbService<SienarUser>,
 		_userManager = userManager;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(DeleteAccountRequest request)
 	{
 		var userId = await _userAccessor.GetUserId();
@@ -58,19 +59,16 @@ public class DeleteAccountProcessor : DbService<SienarUser>,
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Account deleted successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while deleting your account");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		Notifier.Error("You do not have permission to delete your account");

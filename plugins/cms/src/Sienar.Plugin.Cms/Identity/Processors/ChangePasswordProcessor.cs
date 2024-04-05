@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Errors;
@@ -11,13 +13,13 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class ChangePasswordProcessor : DbService<SienarUser>,
 	IProcessor<ChangePasswordRequest, bool>
 {
 	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
 
-	/// <inheritdoc />
 	public ChangePasswordProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
@@ -30,7 +32,6 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 		_userAccessor = userAccessor;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<bool>> Process(ChangePasswordRequest request)
 	{
 		var userId = await _userAccessor.GetUserId();
@@ -58,13 +59,11 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 		return this.Success(true);
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		Notifier.Success("Password changed successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		Notifier.Error("An unknown error occurred while changing your password");

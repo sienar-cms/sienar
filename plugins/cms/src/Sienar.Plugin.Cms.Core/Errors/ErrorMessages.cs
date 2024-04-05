@@ -1,5 +1,8 @@
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace Sienar.Errors;
 
+/// <exclude />
 public static class ErrorMessages
 {
 	public static class Account
@@ -37,5 +40,10 @@ public static class ErrorMessages
 	public static class Roles
 	{
 		public const string NotFound = "The specified role was not found.";
+	}
+
+	public static class Email
+	{
+		public const string FailedToSend = "Unable to send email";
 	}
 }

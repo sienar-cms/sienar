@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -13,6 +15,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
+/// <exclude />
 public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 {
 	private readonly IUserManager _userManager;
@@ -32,7 +35,6 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 		_notifier = notifier;
 	}
 
-	/// <inheritdoc />
 	public async Task<HookResult<PersonalDataResult>> Process()
 	{
 		var userId = await _userAccessor.GetUserId();
@@ -81,19 +83,16 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 		return this.Success(new(file));
 	}
 
-	/// <inheritdoc />
 	public void NotifySuccess()
 	{
 		_notifier.Success("Personal data downloaded successfully");
 	}
 
-	/// <inheritdoc />
 	public void NotifyNoPermission()
 	{
 		_notifier.Error("You don't have permission to download permission data");
 	}
 
-	/// <inheritdoc />
 	public void NotifyFailure()
 	{
 		_notifier.Error("An unknown error occurred while downloading your personal data");
