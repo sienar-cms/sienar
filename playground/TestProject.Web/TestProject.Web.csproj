@@ -11,7 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms.DevMode\Sienar.Plugin.Cms.DevMode.csproj" />
-		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj"/>
+		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms.Blazor\Sienar.Plugin.Cms.Blazor.csproj" />
 		<ProjectReference Include="..\..\plugins\mailkit\src\Sienar.Plugin.MailKit\Sienar.Plugin.MailKit.csproj"/>
 		<ProjectReference Include="..\..\sienar\src\Sienar.SqliteUtils\Sienar.SqliteUtils.csproj"/>
 	</ItemGroup>

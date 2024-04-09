@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cms", "cms", "{D25B7AEA-609
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D4A67C29-8A4F-446A-8B88-3306EE1D1AAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms", "plugins\cms\src\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj", "{527E9AEB-B3C9-41A1-8B62-3084E30C4F3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.Blazor", "plugins\cms\src\Sienar.Plugin.Cms.Blazor\Sienar.Plugin.Cms.Blazor.csproj", "{527E9AEB-B3C9-41A1-8B62-3084E30C4F3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mailkit", "mailkit", "{2FFE0DE9-5115-43BB-B6F2-6BA4670E892B}"
 EndProject

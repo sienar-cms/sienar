@@ -28,9 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference
-			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj" />
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\Sienar.Plugin.Cms.Blazor\Sienar.Plugin.Cms.Blazor.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Plugin.Cms" Version="0.1.0"/>

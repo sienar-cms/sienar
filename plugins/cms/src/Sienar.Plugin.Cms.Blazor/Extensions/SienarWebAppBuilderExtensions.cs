@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using Sienar.Infrastructure;
@@ -8,6 +7,9 @@ using Sienar.State;
 
 namespace Sienar.Extensions;
 
+/// <summary>
+/// Contains <see cref="SienarWebAppBuilder"/> extension methods used by the <c>Sienar.Plugin.Cms.Blazor</c> assembly
+/// </summary>
 public static class SienarWebAppBuilderExtensions
 {
 	/// <summary>
@@ -47,6 +49,11 @@ public static class SienarWebAppBuilderExtensions
 		return self;
 	}
 
+	/// <summary>
+	/// Builds the <see cref="SienarWebAppBuilder"/> as a Blazor United application
+	/// </summary>
+	/// <param name="self">the <see cref="SienarWebAppBuilder"/></param>
+	/// <returns>the built <see cref="WebApplication"/></returns>
 	public static WebApplication BuildBlazor(this SienarWebAppBuilder self)
 	{
 		var app = self.Build();

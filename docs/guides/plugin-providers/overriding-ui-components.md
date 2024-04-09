@@ -22,7 +22,7 @@ void Configure(WebApplication app)
 }
 ```
 
-**NOTE**: Sienar configures its default value for `IComponentProvider.DefaultLayout` in the `SienarCmsPlugin` using the null-coalescing assignment operator (`??=`), so your default layout will be honored regardless of when you configure it.
+**NOTE**: Sienar configures its default value for `IComponentProvider.DefaultLayout` in the `SienarCmsBlazorPlugin` using the null-coalescing assignment operator (`??=`), so your default layout will be honored regardless of when you configure it.
 
 ## Overriding the appbar left and right content
 
@@ -72,4 +72,4 @@ void Configure(WebApplication app)
 }
 ```
 
-**NOTE**: Sienar configures a default sidebar header in the `SienarCmsPlugin`, so if you want to override the sidebar header on `/dashboard` pages, you need to register your plugin after `SienarCmsPlugin`.
+**NOTE**: Sienar configures its default value for `IComponentProvider.SidebarHeader` in the `SienarCmsBlazorPlugin` using the null-coalescing assignment operator (`??=`), so your header will be honored regardless of when you configure it.

@@ -7,7 +7,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugin.Cms</PackageId>
+		<PackageId>Sienar.Plugin.Cms.Blazor</PackageId>
 		<Title>Sienar.Plugin.Cms</Title>
 		<PackageVersion>0.1.0</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>

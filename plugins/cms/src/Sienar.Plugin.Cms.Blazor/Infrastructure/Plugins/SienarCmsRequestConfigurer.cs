@@ -29,5 +29,5 @@ public class SienarCmsRequestConfigurer : IRequestConfigurer
 	private void SetupScripts()
 		=> _scriptProvider
 			.Add("/_content/MudBlazor/MudBlazor.min.js")
-			.Add("/_content/Sienar.Plugin.Cms/sienar-cms.js");
+			.Add("/_content/Sienar.Plugin.Cms.Blazor/sienar-cms.js");
 }

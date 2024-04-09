@@ -10,11 +10,11 @@ To cut down on repetition, every example is assumed to be running in the followi
 using Microsoft.AspNetCore.Builder; // Imports WebApplication
 using Sienar.Extensions; // Imports SienarWebAppBuilder.BuildBlazor() extension method
 using Sienar.Infrastructure; // Imports SienarWebAppBuilder
-using Sienar.Infrastructure.Plugins; // Imports SienarCmsPlugin
+using Sienar.Infrastructure.Plugins; // Imports SienarCmsBlazorPlugin
 
 await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
-	.AddPlugin<SienarCmsPlugin>()
+	.AddPlugin<SienarCmsBlazorPlugin>()
 	.SetupApp(Configure)
 	.BuildBlazor()
 	.RunAsync();

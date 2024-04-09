@@ -12,7 +12,7 @@ using TestProject.Web.UI;
 await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
 	.AddRootDbContext<AppDbContext>(o => o.UseSienarDb())
-	.AddPlugin<SienarCmsPlugin>()
+	.AddPlugin<SienarCmsBlazorPlugin>()
 	.AddPlugin<MailKitPlugin>()
 #if DEBUG
 	.AddPlugin<DevmodePlugin>()

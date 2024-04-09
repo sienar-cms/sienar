@@ -89,7 +89,7 @@ using SienarExample;
 await SienarAppBuilder
 	.Create(args, typeof(Program).Assembly)
 	.AddRootDbContext<AppDbContext>(o => o.UseDb())
-	.AddPlugin<SienarCmsPlugin>()
+	.AddPlugin<SienarCmsBlazorPlugin>()
 	.BuildBlazor()
 	.RunAsync();
 ```

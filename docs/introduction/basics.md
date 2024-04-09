@@ -13,7 +13,7 @@ using Sienar.Infrastructure;
 await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
 	.AddRootDbContext<AppDbContext>(o => o.UseDb())
-	.AddPlugin<SienarCmsPlugin>()
+	.AddPlugin<SienarCmsBlazorPlugin>()
 	.AddPlugin<MailKitPlugin>()
 	.ConfigureTheme<CustomTheme>()
 	.BuildBlazor()
@@ -22,7 +22,7 @@ await SienarWebAppBuilder
 
 This boilerplate shows how to initialize a Sienar app, complete with login, account management, user moderation, SMTP email, and more. The core functionality for building a Sienar web application is defined by [SienarWebAppBuilder](xref:Sienar.Infrastructure.SienarWebAppBuilder) and its methods.
 
-The `SienarCmsPlugin` adds the out-of-the-box functionality you would expect from a CMS. By adding this plugin, you get a full UI to manage your own user account, moderate other users, and other functionality like logging in, password reset, and more. If you want to use your own UI, don't use this plugin directly; instead, create your own plugin that uses the non-UI portions of this plugin. If you want to create your own login system and other functionality, don't use this plugin at all.
+The `SienarCmsBlazorPlugin` adds the out-of-the-box functionality you would expect from a CMS. By adding this plugin, you get a full UI to manage your own user account, moderate other users, and other functionality like logging in, password reset, and more. If you want to use your own UI, don't use this plugin directly; instead, create your own plugin that uses the non-UI portions of this plugin. If you want to create your own login system and other functionality, don't use this plugin at all.
 
 The `MailKitPlugin` adds SMTP mailing capabilities to your app. By default, Sienar doesn't know how to send emails to users, so you can either disable email entirely in `appsettings.json`, or you can enable mailing by using `MailKitPlugin`. You can also create your own mailing plugin using the guide at the end of this README, under `Customization > Creating your own mail sending plugin`.
 
