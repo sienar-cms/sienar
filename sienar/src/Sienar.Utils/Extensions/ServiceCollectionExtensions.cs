@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Menus;
 using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure.Services;
@@ -97,9 +96,4 @@ public static class ServiceCollectionExtensions
 
 	public static void RemoveService<TService>(this IServiceCollection self)
 		=> RemoveService(self, typeof(TService));
-
-	public static IServiceCollection AddRequestConfigurer<TConfigurer>(
-		this IServiceCollection self)
-		where TConfigurer : class, IRequestConfigurer
-		=> self.AddScoped<IRequestConfigurer, TConfigurer>();
 }

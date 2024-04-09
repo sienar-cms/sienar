@@ -159,8 +159,6 @@ public sealed class SienarWebAppBuilder
 			middleware(app);
 		}
 
-		app.UseMiddleware<SienarRequestConfigurerMiddleware>();
-
 		return app;
 	}
 }

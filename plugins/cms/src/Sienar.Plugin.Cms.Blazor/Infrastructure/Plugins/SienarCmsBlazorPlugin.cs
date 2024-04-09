@@ -29,7 +29,6 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 		SienarUtils.SetupBaseDirectory();
 
 		builder.Services
-			.AddRequestConfigurer<SienarCmsRequestConfigurer>()
 			.AddSienarCmsCore(builder.Configuration)
 			.AddSienarCmsBlazor();
 	}
@@ -40,20 +39,33 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 		app
 			.ConfigureMenu(SetupMenu)
 			.ConfigureDashboard(SetupDashboard)
-			.ConfigureComponents(SetupComponents);
+			.ConfigureComponents(SetupComponents)
+			.ConfigureStyles(SetupStyles)
+			.ConfigureScripts(SetupScripts);
 	}
 
-	private static void SetupMenu(IMenuProvider menuProvider)
-		=> menuProvider
+	private static void SetupMenu(IMenuProvider p)
+		=> p
 			.CreateMainMenu()
 			.CreateInfoMenu();
 
-	private static void SetupDashboard(IDashboardProvider dashboardProvider)
-		=> dashboardProvider.CreateUserManagementDashboard();
+	private static void SetupDashboard(IDashboardProvider p)
+		=> p.CreateUserManagementDashboard();
 
-	private static void SetupComponents(IComponentProvider componentProvider)
+	private static void SetupComponents(IComponentProvider p)
 	{
-		componentProvider.DefaultLayout ??= typeof(DashboardLayout);
-		componentProvider.SidebarHeader ??= typeof(DrawerHeader);
+		p.DefaultLayout ??= typeof(DashboardLayout);
+		p.SidebarHeader ??= typeof(DrawerHeader);
 	}
+
+	private static void SetupStyles(IStyleProvider p)
+		=> p
+			.Add("/_content/MudBlazor/MudBlazor.min.css")
+			.Add("/_content/Sienar.UI/sienar.css")
+			.Add("/_content/Sienar.UI/Sienar.UI.bundle.scp.css");
+
+	private static void SetupScripts(IScriptProvider p)
+		=> p
+			.Add("/_content/MudBlazor/MudBlazor.min.js")
+			.Add("/_content/Sienar.Plugin.Cms.Blazor/sienar-cms.js");
 }

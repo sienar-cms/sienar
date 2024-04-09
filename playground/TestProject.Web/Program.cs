@@ -3,7 +3,6 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure;
-using TestProject.Web;
 using TestProject.Web.Data;
 using TestProject.Web.Extensions;
 using TestProject.Web.Layouts;
@@ -17,8 +16,6 @@ await SienarWebAppBuilder
 #if DEBUG
 	.AddPlugin<DevmodePlugin>()
 #endif
-	.SetupDependencies(
-		builder => builder.Services.AddRequestConfigurer<AppRequestConfigurer>())
 	.SetupApp(
 		app =>
 		{
@@ -30,6 +27,9 @@ await SienarWebAppBuilder
 					p.AppbarLeft = typeof(Branding);
 				});
 			app.ConfigureMenu(p => p.AddMenu());
+			app.ConfigureStyles(p => p
+				.Add("/styles.css")
+				.Add("/TestProject.Web.styles.css"));
 		})
 	.ConfigureTheme<SienarTheme>()
 	.BuildBlazor()
