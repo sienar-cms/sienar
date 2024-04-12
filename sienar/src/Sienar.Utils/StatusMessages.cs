@@ -1,9 +1,12 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using Sienar.Extensions;
 using Sienar.Infrastructure.Entities;
 
 namespace Sienar;
 
+/// <exclude />
 public static class StatusMessages
 {
 	public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";

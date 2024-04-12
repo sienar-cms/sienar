@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,8 +11,18 @@ using Sienar.Infrastructure.Services;
 
 namespace Sienar.Extensions;
 
-public static class ServiceCollectionExtensions
+/// <summary>
+/// Contains <see cref="IServiceCollection"/> extension methods for the <c>Sienar.Utils</c> assembly
+/// </summary>
+public static class SienarUtilsServiceCollectionExtensions
 {
+	/// <summary>
+	/// Adds universal Sienar utilities to the DI container
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <param name="isDesktop">whether the current application is a desktop application (<c>true</c>) or a web application (<c>false</c>)</param>
+	/// <returns>the service collection</returns>
+	[ExcludeFromCodeCoverage]
 	public static IServiceCollection AddSienarCoreUtilities(
 		this IServiceCollection self,
 		bool isDesktop = false)
@@ -45,12 +56,12 @@ public static class ServiceCollectionExtensions
 	}
 
 	/// <summary>
-	/// Checks if a <see cref="TOptions"/> has already been configured, and if not, adds the supplied default configuration
+	/// Checks if a <c>TOptions</c> has already been configured, and if not, adds the supplied default configuration
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <param name="config">the default configuration to apply if no existing configuration was found</param>
 	/// <typeparam name="TOptions">the type of the options class to configure</typeparam>
-	/// <returns></returns>
+	/// <returns>the service collection</returns>
 	public static IServiceCollection ApplyDefaultConfiguration<TOptions>(
 		this IServiceCollection self,
 		IConfiguration config)
@@ -64,6 +75,12 @@ public static class ServiceCollectionExtensions
 		return self;
 	}
 
+	/// <summary>
+	/// Removes a service from the service collection and returns its implementation instance
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <param name="serviceType">the <c>Type</c> of the service</param>
+	/// <returns>the implementation instance if it exists, else <c>null</c></returns>
 	public static object? GetAndRemoveService(
 		this IServiceCollection self,
 		Type serviceType)
@@ -78,10 +95,21 @@ public static class ServiceCollectionExtensions
 		return service?.ImplementationInstance;
 	}
 
+	/// <summary>
+	/// Removes a service from the service collection and returns its implementation instance
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TService">the type of the service</typeparam>
+	/// <returns>the implementation instance if it exists, else <c>null</c></returns>
 	public static TService? GetAndRemoveService<TService>(
 		this IServiceCollection self)
 		=> (TService?)GetAndRemoveService(self, typeof(TService));
 
+	/// <summary>
+	/// Removes a service from the service collection if it is registered
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <param name="serviceType">the <c>Type</c> of the service to remove</param>
 	public static void RemoveService(
 		this IServiceCollection self,
 		Type serviceType)
@@ -94,6 +122,11 @@ public static class ServiceCollectionExtensions
 		}
 	}
 
+	/// <summary>
+	/// Removes a service from the service collection if it is registered
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TService">the type of the service to remove</typeparam>
 	public static void RemoveService<TService>(this IServiceCollection self)
 		=> RemoveService(self, typeof(TService));
 }

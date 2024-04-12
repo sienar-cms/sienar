@@ -1,8 +1,11 @@
-﻿namespace Sienar.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Sienar.Configuration;
 
 /// <summary>
 /// Configures core Sienar options
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class SienarOptions
 {
 	/// <summary>
