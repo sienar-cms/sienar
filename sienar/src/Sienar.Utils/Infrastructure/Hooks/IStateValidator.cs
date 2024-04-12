@@ -2,13 +2,17 @@
 
 namespace Sienar.Infrastructure.Hooks;
 
+/// <summary>
+/// Verifies that the request or entity does not violate the application state prior to executing a process
+/// </summary>
+/// <typeparam name="TRequest">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IStateValidator<TEntity>
+public interface IStateValidator<TRequest>
 {
 	/// <summary>
 	/// Validates that an entity does not violate logical rules of the app state (for example, checking fields for uniqueness against the database)
 	/// </summary>
-	/// <param name="entity">The entity to validate against the current app state</param>
-	/// <param name="action">The type of action</param>
-	Task<HookStatus> Validate(TEntity entity, ActionType action);
+	/// <param name="request">the request or entity</param>
+	/// <param name="action">the action type</param>
+	Task<HookStatus> Validate(TRequest request, ActionType action);
 }

@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sienar.Infrastructure.Menus;
 
+/// <exclude />
 public class AuthorizedLinkAggregator<TLink> : IAuthorizedLinkAggregator<TLink>
 	where TLink : DashboardLink
 {

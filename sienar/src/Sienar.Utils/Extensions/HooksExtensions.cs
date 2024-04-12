@@ -7,8 +7,20 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Extensions;
 
+/// <summary>
+/// Contains utilities for executing hooks
+/// </summary>
 public static class HooksExtensions
 {
+	/// <summary>
+	/// Runs all before-process hooks
+	/// </summary>
+	/// <param name="beforeHooks">the before-process hooks</param>
+	/// <param name="entity">the entity or request model</param>
+	/// <param name="action">the type of action for the current operation</param>
+	/// <param name="logger">the current logger</param>
+	/// <typeparam name="TEntity">the type of the entity or request</typeparam>
+	/// <returns>whether all hooks ran successfully or not</returns>
 	public static async Task<bool> Run<TEntity>(
 		this IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
 		TEntity entity,
@@ -34,6 +46,14 @@ public static class HooksExtensions
 		return true;
 	}
 
+	/// <summary>
+	/// Runs all after-process hooks
+	/// </summary>
+	/// <param name="afterHooks">the after-process hooks</param>
+	/// <param name="entity">the entity or request model</param>
+	/// <param name="action">the type of action for the current operation</param>
+	/// <param name="logger">the current logger</param>
+	/// <typeparam name="TEntity">the type of the entity or request</typeparam>
 	public static async Task Run<TEntity>(
 		this IEnumerable<IAfterProcess<TEntity>> afterHooks,
 		TEntity entity,
@@ -56,6 +76,15 @@ public static class HooksExtensions
 		}
 	}
 
+	/// <summary>
+	/// Runs all state validation hooks
+	/// </summary>
+	/// <param name="stateValidators">the state validation hooks</param>
+	/// <param name="entity">the entity or request model</param>
+	/// <param name="action">the type of action for the current operation</param>
+	/// <param name="logger">the current logger</param>
+	/// <typeparam name="TEntity">the type of the entity or request</typeparam>
+	/// <returns>whether all hooks ran successfully or not</returns>
 	public static async Task<bool> Validate<TEntity>(
 		this IEnumerable<IStateValidator<TEntity>> stateValidators,
 		TEntity entity,
@@ -79,6 +108,15 @@ public static class HooksExtensions
 		}
 	}
 
+	/// <summary>
+	/// Runs all access validation hooks
+	/// </summary>
+	/// <param name="accessValidators">the access validation hooks</param>
+	/// <param name="entity">the entity or request model</param>
+	/// <param name="action">the type of action for the current operation</param>
+	/// <param name="logger">the current logger</param>
+	/// <typeparam name="TEntity">the type of the entity or request</typeparam>
+	/// <returns>whether all hooks ran successfully or not</returns>
 	public static async Task<bool> Validate<TEntity>(
 		this IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		TEntity? entity,

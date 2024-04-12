@@ -23,12 +23,12 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser entity, ActionType type)
+	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser request, ActionType type)
 		=> UserIsUnique(
-			entity.Username,
-			entity.Email,
-			entity.PendingEmail,
-			entity.Id);
+			request.Username,
+			request.Email,
+			request.PendingEmail,
+			request.Id);
 
 	Task<HookStatus> IStateValidator<RegisterRequest>.Validate(
 		RegisterRequest request,

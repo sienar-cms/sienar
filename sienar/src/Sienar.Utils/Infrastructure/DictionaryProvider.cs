@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Collections.Generic;
 
 namespace Sienar.Infrastructure;
 
+/// <exclude />
 public class DictionaryProvider<T> : IDictionaryProvider<T>
 	where T : new()
 {
-	protected Dictionary<string, T> Items = new();
+	private readonly Dictionary<string, T> _items = new();
 
 	public T Access(string name)
 	{
-		if (!Items.TryGetValue(name, out var item))
+		if (!_items.TryGetValue(name, out var item))
 		{
 			item = new();
-			Items[name] = item;
+			_items[name] = item;
 		}
 
 		return item;

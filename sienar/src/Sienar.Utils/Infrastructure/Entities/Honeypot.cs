@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sienar.Infrastructure.Entities;
 
 /// <summary>
 /// Represents a DTO that has honeypot capabilities
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Honeypot : EntityBase
 {
 	/// <summary>

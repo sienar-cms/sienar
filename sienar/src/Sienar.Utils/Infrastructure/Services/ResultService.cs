@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,6 +10,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <exclude />
 public class ResultService<TResult> : IResultService<TResult>
 {
 	private readonly ILogger<ResultService<TResult>> _logger;

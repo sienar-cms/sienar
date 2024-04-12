@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Threading.Tasks;
 
 namespace Sienar.Infrastructure.Hooks;
 
+/// <exclude />
 public abstract class UserInRoleAccessValidator<T> : IAccessValidator<T>
 {
 	private readonly IUserAccessor _userAccessor;

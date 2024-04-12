@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 namespace Sienar.Infrastructure.Services;
 
 // ReSharper disable once TypeParameterCanBeVariant
+/// <summary>
+/// A service to write or update instances of <c>TEntity</c> in the appropriate repository
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public interface IEntityWriter<TEntity>
 {
 	/// <summary>

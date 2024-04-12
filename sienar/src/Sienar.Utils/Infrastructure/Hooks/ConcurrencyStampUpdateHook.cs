@@ -1,13 +1,15 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Threading.Tasks;
 using Sienar.Infrastructure.Entities;
 
 namespace Sienar.Infrastructure.Hooks;
 
+/// <exclude />
 public class ConcurrencyStampUpdateHook<TEntity> : IBeforeProcess<TEntity>
 	where TEntity : EntityBase
 {
-	/// <inheritdoc />
 	public Task Handle(TEntity entity, ActionType action)
 	{
 		if (action is ActionType.Create or ActionType.Update)

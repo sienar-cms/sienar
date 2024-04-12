@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <exclude />
 public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEntityWriter<TEntity>
 	where TEntity : EntityBase, new()
 	where TContext : DbContext
@@ -18,7 +21,6 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
-	/// <inheritdoc />
 	public EntityWriter(
 		TContext context,
 		ILogger<DbService<TEntity, TContext>> logger,
@@ -35,7 +37,6 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		_afterHooks = afterHooks;
 	}
 
-	/// <inheritdoc />
 	public async Task<Guid> Create(TEntity model)
 	{
 		if (!await _accessValidators.Validate(model, ActionType.Create, Logger))
@@ -68,7 +69,6 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 		return model.Id;
 	}
 
-	/// <inheritdoc />
 	public async Task<bool> Update(TEntity model)
 	{
 		if (!await _accessValidators.Validate(model, ActionType.Update, Logger))
@@ -102,10 +102,10 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 	}
 }
 
+/// <exclude />
 public class EntityWriter<TEntity> : EntityWriter<TEntity, DbContext>
 	where TEntity : EntityBase, new()
 {
-	/// <inheritdoc />
 	public EntityWriter(
 		DbContext context,
 		ILogger<DbService<TEntity, DbContext>> logger,

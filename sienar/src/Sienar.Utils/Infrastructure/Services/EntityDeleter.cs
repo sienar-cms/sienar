@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <exclude />
 public class EntityDeleter<TEntity, TContext>
 	: DbService<TEntity, TContext>, IEntityDeleter<TEntity>
 	where TEntity : EntityBase
@@ -19,7 +22,6 @@ public class EntityDeleter<TEntity, TContext>
 	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
-	/// <inheritdoc />
 	public EntityDeleter(
 		TContext context,
 		ILogger<DbService<TEntity, TContext>> logger,
@@ -36,7 +38,6 @@ public class EntityDeleter<TEntity, TContext>
 		_afterHooks = afterHooks;
 	}
 
-	/// <inheritdoc />
 	public async Task<bool> Delete(Guid id)
 	{
 		TEntity? entity;
@@ -87,10 +88,10 @@ public class EntityDeleter<TEntity, TContext>
 	}
 }
 
+/// <exclude />
 public class EntityDeleter<TEntity> : EntityDeleter<TEntity, DbContext>
 	where TEntity : EntityBase
 {
-	/// <inheritdoc />
 	public EntityDeleter(
 		DbContext context,
 		ILogger<DbService<TEntity, DbContext>> logger,
