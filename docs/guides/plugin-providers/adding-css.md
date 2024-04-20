@@ -6,7 +6,7 @@ Sienar enables developers to add CSS for their plugins with the [IStyleProvider]
 
 ### `IStyleProvider`
 
-The `IStyleProvider` is a container for `StyleResource` instances. It's backed by a `List<StyleResource>` and has a single public method, `Add(StyleResource)`. The `Add()` method is fluent, so multiple `StyleResource` instances can be added via method chaining.
+The `IStyleProvider` is a container for `StyleResource` instances. `IStyleProvider` is just an `IList<StyleResource>`, so anything you can do with an `IList` can be done with `IStyleProvider`. 
 
 ### `StyleResource`
 
@@ -14,7 +14,7 @@ The `StyleResource` class contains the data needed to construct a `<link>` tag i
 
 ## Examples
 
-In each of our examples, we will add a single style to the `IStyleProvider`. Remember that you can chain `Add()` calls together because `IStyleProvider` exposes a fluent API.
+In each of our examples, we will add a single style to the `IStyleProvider`.
 
 It is also worth noting that `StyleResource` has an implicit cast operator from `string`, so if you call `Add()` with a `string` representing the URL of a stylesheet, it will implicitly convert that string to a `StyleResource` with its `Href` property set to the value of the string. This simplifies adding simple stylesheets that don't require extra options such as `StyleResource.CrossOriginMode`.
 

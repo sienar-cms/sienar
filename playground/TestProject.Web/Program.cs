@@ -27,9 +27,11 @@ await SienarWebAppBuilder
 					p.AppbarLeft = typeof(Branding);
 				});
 			app.ConfigureMenu(p => p.AddMenu());
-			app.ConfigureStyles(p => p
-				.Add("/styles.css")
-				.Add("/TestProject.Web.styles.css"));
+			app.ConfigureStyles(p =>
+			{
+				p.Add("/styles.css");
+				p.Add("/TestProject.Web.styles.css");
+			});
 		})
 	.ConfigureTheme<SienarTheme>()
 	.BuildBlazor()

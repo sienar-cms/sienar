@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using Sienar.Infrastructure;
@@ -62,7 +63,7 @@ public static class SienarWebAppBuilderExtensions
 		app
 			.MapRazorComponents<SienarApp>()
 			.AddInteractiveServerRenderMode()
-			.AddAdditionalAssemblies(routableAssemblyProvider.Items.ToArray());
+			.AddAdditionalAssemblies(routableAssemblyProvider.ToArray());
 
 		return app;
 	}

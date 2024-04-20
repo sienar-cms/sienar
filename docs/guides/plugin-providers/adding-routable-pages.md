@@ -20,7 +20,7 @@ This `Assembly`-based model allows developers to unambiguously determine which a
 
 ### `IRoutableAssemblyProvider`
 
-The `IRoutableAssemblyProvider` is the container for routable assemblies. It's backed by a `List<Assembly>` and contains a single public method, `Add(Assembly)`. The `Add()` method is fluent, so multiple assemblies can be added via method chaining.
+The `IRoutableAssemblyProvider` is the container for routable assemblies. `IRoutableAssemblyProvider` is just an `IList<Assembly>`, so anything you can do with an `IList` can be done with `IRoutableAssemblyProvider`.
 
 The Sienar-provided `SienarRoutes.razor` directly uses the `Assembly` entries from the `IRoutableAssemblyProvider`; the first `Assembly` is used as the `Router.AppAssembly` parameter, while the remaining assemblies are used as the `Router.AdditionalAssemblies` parameter.
 
@@ -60,16 +60,15 @@ void Configure(WebApplication app)
 
 ### Example 3: Adding multiple assemblies as routable assemblies
 
-to add multiple assemblies, you use the techniques in the previous two examples to get references to each `Assembly`, then add them each in turn. `IRoutableAssemblyProvider` is fluent, so you can chain calls to `IRoutableAssemblyProvider.Add()` if you wish.
+to add multiple assemblies, you use the techniques in the previous two examples to get references to each `Assembly`, then add them each in turn.
 
 ```csharp
 void Configure(WebApplication app)
 {
 	app.ConfigureRoutableAssemblies(provider =>
 	{
-		provider
-			.Add(typeof(CustomPlugin).Assembly)
-			.Add(typeof(Component1).Assembly);
+		provider.Add(typeof(CustomPlugin).Assembly);
+		provider.Add(typeof(Component1).Assembly);
 	});
 }
 ```

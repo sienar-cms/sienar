@@ -21,7 +21,7 @@
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
-		_assemblies = new List<Assembly>(AssemblyProvider.Items);
+		_assemblies = new List<Assembly>(AssemblyProvider);
 		_rootAssembly = _assemblies[0];
 		_assemblies.RemoveAt(0);
 	}

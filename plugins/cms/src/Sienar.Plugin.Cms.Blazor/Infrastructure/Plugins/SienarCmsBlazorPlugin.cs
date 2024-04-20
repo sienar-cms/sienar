@@ -59,13 +59,15 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 	}
 
 	private static void SetupStyles(IStyleProvider p)
-		=> p
-			.Add("/_content/MudBlazor/MudBlazor.min.css")
-			.Add("/_content/Sienar.UI/sienar.css")
-			.Add("/_content/Sienar.UI/Sienar.UI.bundle.scp.css");
+	{
+		p.Add("/_content/MudBlazor/MudBlazor.min.css");
+		p.Add("/_content/Sienar.UI/sienar.css");
+		p.Add("/_content/Sienar.UI/Sienar.UI.bundle.scp.css");
+	}
 
 	private static void SetupScripts(IScriptProvider p)
-		=> p
-			.Add("/_content/MudBlazor/MudBlazor.min.js")
-			.Add("/_content/Sienar.Plugin.Cms.Blazor/sienar-cms.js");
+	{
+		p.Add("/_content/MudBlazor/MudBlazor.min.js");
+		p.Add("/_content/Sienar.Plugin.Cms.Blazor/sienar-cms.js");
+	}
 }

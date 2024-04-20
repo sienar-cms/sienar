@@ -1,6 +1,8 @@
-﻿namespace Sienar.Infrastructure.Plugins;
+﻿using System.Collections.Generic;
+
+namespace Sienar.Infrastructure.Plugins;
 
 /// <summary>
 /// A container for <see cref="ScriptResource"/> instances that should be rendered on each page
 /// </summary>
-public interface IScriptProvider : IListProvider<ScriptResource>;
+public interface IScriptProvider : IList<ScriptResource>;

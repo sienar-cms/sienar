@@ -8,7 +8,7 @@ As a Blazor app, Sienar removes most of your need for JavaScript. However, you m
 
 ### `IScriptProvider`
 
-The `IScriptProvider` is a container for `ScriptResource` instances. It's backed by a `List<ScriptResource>` and has a single public method, `Add(ScriptResource)`. The `Add()` method is fluent, so multiple `ScriptResource` instances can be added via method chaining.
+The `IScriptProvider` is a container for `ScriptResource` instances. `IScriptProvider` is just an `IList<ScriptResource>`, so anything you can do with an `IList` can be done with `IScriptProvider`.
 
 ### `ScriptResource`
 
@@ -16,7 +16,7 @@ The `ScriptResource` class contains the data needed to construct a `<script>` ta
 
 ## Examples
 
-In each of our examples, we will add a single script to the `IScriptProvider`. Remember that you can chain `Add()` calls together because `IScriptProvider` exposes a fluent API.
+In each of our examples, we will add a single script to the `IScriptProvider`.
 
 It is also worth noting that `ScriptResource` has an implicit cast operator from `string`, so if you call `Add()` with a `string` representing the URL of a script resource, it will implicitly convert that string to a `ScriptResource` with its `Src` property set to the value of the string. This simplifies adding simple JavaScript resources that don't require extra options such as `ScriptResource.IsAsync`.
 

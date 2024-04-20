@@ -13,7 +13,7 @@ A menu is typically appropriate when you have a limited number of items to displ
 
 ### `IMenuProvider`
 
-The [IMenuProvider](xref:Sienar.Infrastructure.Menus.IMenuProvider) acts as a container for named menus. It's backed by a `Dictionary<string, LinkDictionary<MenuLink>>` and has a single public method, `Access(string)`. The `Access()` method's string argument is the unique name of the menu you're trying to modify. Calling `Access(menuName)` will create a `LinkDictionary<MenuLink>` for that name if it doesn't exist, then return the `LinkDictionary<MenuLink>`.
+The [IMenuProvider](xref:Sienar.Infrastructure.Menus.IMenuProvider) acts as a container for named menus. It's just an `IDictionary<string, LinkDictionary<MenuLink>>`, but it adds a single public method, `Access(string)`. The `Access()` method's string argument is the unique name of the menu you're trying to modify. Calling `Access(menuName)` will create a `LinkDictionary<MenuLink>` for that name if it doesn't exist, then return the `LinkDictionary<MenuLink>`. Otherwise, the `IMenuProvider` is just a regular `IDictionary`, so anything you can do with an `IDictionary` can be done with `IMenuProvider`.
 
 ### `LinkDictionary<MenuLink>`
 
@@ -21,9 +21,9 @@ The [LinkDictionary<MenuLink>](xref:Sienar.Infrastructure.Menus.LinkDictionary\`
 
 ### `MenuPriority`
 
-The [MenuPriority](xref:Sienar.Infrastructure.Menus.MenuPriority) enum is a way to let Sienar know the render priority you want to give the menu link you're adding. It has five values: `Lowest`, `Low`, `Mid`, `High`, and `Highest`. The lower the menu priority value, the further down in the menu the `MenuLink` will be rendered (e.g., a `MenuLink` with `MenuPriority.High` will render before a `MenuLink` with `MenuPriority.Mid`). Menu links with the same priority will be rendered in the order they were registered.
+The [MenuPriority](xref:Sienar.Infrastructure.Menus.MenuPriority) enum is a way to let Sienar know the render priority you want to give the menu link you're adding. It has five values: `Lowest`, `Low`, `Normal`, `High`, and `Highest`. The lower the menu priority value, the further down in the menu the `MenuLink` will be rendered (e.g., a `MenuLink` with `MenuPriority.High` will render before a `MenuLink` with `MenuPriority.Normal`). Menu links with the same priority will be rendered in the order they were registered.
 
-**NOTE**: Most of Sienar's links are added with `MenuPriority.Mid`, so you can place your links either before or after Sienar's links if you wish. The exceptions to this rule are the **Register**, **Log in**, and **Log out** links, which are added with `MenuPriority.Lowest` to ensure they always render last.
+**NOTE**: Most of Sienar's links are added with `MenuPriority.Normal`, so you can place your links either before or after Sienar's links if you wish. The exceptions to this rule are the **Register**, **Log in**, and **Log out** links, which are added with `MenuPriority.Lowest` to ensure they always render last.
 
 ### `MenuLink`
 
@@ -138,7 +138,7 @@ And you would notice that you can expand that menu to reveal the three sublinks 
 
 !["Orders" menu expanded to show sublinks](main-menu-with-orders-expanded.jpg)
 
-The reason the `Orders` menu renders before the `Logout` button is that Sienar adds the `Logout` button with `MenuPriority.Lowest`, so you can render your items before the `Logout` button by setting any priority other than `MenuPriority.Lowest` (if you don't supply a priority as the second argument of `IMenuProvider.AddLink()`, `MenuPriority.Mid` is the default).
+The reason the `Orders` menu renders before the `Logout` button is that Sienar adds the `Logout` button with `MenuPriority.Lowest`, so you can render your items before the `Logout` button by setting any priority other than `MenuPriority.Lowest` (if you don't supply a priority as the second argument of `IMenuProvider.AddLink()`, `MenuPriority.Normal` is the default).
 
 It's all looking good so far! There's just one problem with this menu: it displays *even if you're logged out*.
 

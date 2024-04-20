@@ -12,7 +12,7 @@
 		rel="icon"
 		type="image/png"/>
 
-	@foreach (var stylesheet in StyleProvider.Items)
+	@foreach (var stylesheet in StyleProvider)
 	{
 		<link
 			crossorigin="@stylesheet.CrossOriginMode.GetHtmlValue()"
@@ -22,7 +22,7 @@
 			rel="stylesheet"/>
 	}
 
-	@foreach (var script in ScriptProvider.Items)
+	@foreach (var script in ScriptProvider)
 	{
 		<script
 			type="@script.GetScriptType()"
