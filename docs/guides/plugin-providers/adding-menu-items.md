@@ -9,7 +9,8 @@ In Sienar, a "menu" is semantically identical to a website navigation menu. It m
 
 A menu is typically appropriate when you have a limited number of items to display, as menus tend to have limited space available to them.
 
-**NOTE**: The examples on this page use features only available in the `Sienar.Plugin.Cms` plugin: namely, the `DashboardMenuNames` class, the `Roles` class, and the `/dashboard` endpoint. `IMenuProvider` itself is not a part of the CMS plugin, so you can use it in non-CMS apps. If you try to follow along directly with these examples, make sure you have installed and registered this plugin. If you do not, the examples will not work as expected.
+> [!NOTE]
+> The examples on this page use features only available in the `Sienar.Plugin.Cms` plugin: namely, the `DashboardMenuNames` class, the `Roles` class, and the `/dashboard` endpoint. `IMenuProvider` itself is not a part of the CMS plugin, so you can use it in non-CMS apps. If you try to follow along directly with these examples, make sure you have installed and registered this plugin. If you do not, the examples will not work as expected.
 
 ### `IMenuProvider`
 
@@ -23,11 +24,15 @@ The [LinkDictionary<MenuLink>](xref:Sienar.Infrastructure.Menus.LinkDictionary\`
 
 The [MenuPriority](xref:Sienar.Infrastructure.Menus.MenuPriority) enum is a way to let Sienar know the render priority you want to give the menu link you're adding. It has five values: `Lowest`, `Low`, `Normal`, `High`, and `Highest`. The lower the menu priority value, the further down in the menu the `MenuLink` will be rendered (e.g., a `MenuLink` with `MenuPriority.High` will render before a `MenuLink` with `MenuPriority.Normal`). Menu links with the same priority will be rendered in the order they were registered.
 
-**NOTE**: Most of Sienar's links are added with `MenuPriority.Normal`, so you can place your links either before or after Sienar's links if you wish. The exceptions to this rule are the **Register**, **Log in**, and **Log out** links, which are added with `MenuPriority.Lowest` to ensure they always render last.
+> [!NOTE]
+> Most of Sienar's links are added with `MenuPriority.Normal`, so you can place your links either before or after Sienar's links if you wish. The exceptions to this rule are the **Register**, **Log in**, and **Log out** links, which are added with `MenuPriority.Lowest` to ensure they always render last.
 
 ### `MenuLink`
 
-The [MenuLink](xref:Sienar.Infrastructure.Menus.MenuLink) class contains the data for each menu link to be rendered, including a `List<MenuLink> Sublinks` property which contains nested links. In dashboard layouts, nested links are rendered in an accordion-style component with the parent `MenuLink` being rendered as the activator of the accordion. In standard layouts, nested links are rendered in a dropdown component with the parent `MenuLink` being rendered as the activator of the dropdown. **NOTE**: The standard layout only has limited support for sublinks.
+The [MenuLink](xref:Sienar.Infrastructure.Menus.MenuLink) class contains the data for each menu link to be rendered, including a `List<MenuLink> Sublinks` property which contains nested links. In dashboard layouts, nested links are rendered in an accordion-style component with the parent `MenuLink` being rendered as the activator of the accordion. In standard layouts, nested links are rendered in a dropdown component with the parent `MenuLink` being rendered as the activator of the dropdown.
+
+> [!NOTE]
+> The standard layout only has limited support for sublinks.
 
 ## Examples
 

@@ -35,7 +35,10 @@ To configure your site's URL, which is primarily used when sending email (such a
 
 ## Configuring Sienar email sender information (`Sienar:Email:Sender`)
 
-If Sienar is configured to send email, it needs to know what sender identifiers need to be set. This is done with an instance of [EmailSenderOptions](xref:Sienar.Email.EmailSenderOptions). **NOTE**: Sienar does not provide defaults for any of these values. If you want to send email, you need to supply values for this configuration class.
+If Sienar is configured to send email, it needs to know what sender identifiers need to be set. This is done with an instance of [EmailSenderOptions](xref:Sienar.Email.EmailSenderOptions).
+
+> [!NOTE]
+> Sienar does not provide defaults for any of these values. If you want to send email, you need to supply values for this configuration class.
 
 The email address used to send mail is configured using `EmailSenderOptions.FromAddress`.
 

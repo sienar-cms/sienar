@@ -40,4 +40,5 @@ Use `IScriptProvider` to [add JS files](adding-js.md) to an app or sub-app.
 
 Use `IStyleProvider` to [add CSS files](adding-css.md) to an app or sub-app.
 
-**NOTE**: While it's possible to configure providers anywhere, they're only intended to be configured at application startup. The behavior of configuring plugin providers after application startup is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the given provider via the `SienarWebAppBuilder.SetupApp()` method. You can also configure providers from plugins in the `IWebPlugin.SetupApp()` method or `IDesktopPlugin.SetupApp()` method.
+> [!NOTE]
+> While it's possible to configure providers anywhere, they're only intended to be configured at application startup. The behavior of configuring plugin providers after application startup is undefined, and will likely result in unexpected functionality. For that reason, every example will show you how to configure the given provider via the `SienarWebAppBuilder.SetupApp()` method. You can also configure providers from plugins in the `IWebPlugin.SetupApp()` method or `IDesktopPlugin.SetupApp()` method.

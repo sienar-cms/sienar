@@ -24,7 +24,8 @@ The `IRoutableAssemblyProvider` is the container for routable assemblies. `IRout
 
 The Sienar-provided `SienarRoutes.razor` directly uses the `Assembly` entries from the `IRoutableAssemblyProvider`; the first `Assembly` is used as the `Router.AppAssembly` parameter, while the remaining assemblies are used as the `Router.AdditionalAssemblies` parameter.
 
-**NOTE**: You do not need to add your app's entrypoint assembly to the `IRoutableAssemblyProvider` because this is done for you by Sienar. Sienar's boilerplate passes `typeof(Program).Assembly` as the second argument to `SienarWebAppBuilder.Create()`. If you define your routable components in the same assembly as `Program.cs`, this will work fine, but if you define your routable components in a separate assembly, you should provide a reference to that assembly instead.
+> [!NOTE]
+> You do not need to add your app's entrypoint assembly to the `IRoutableAssemblyProvider` because this is done for you by Sienar. Sienar's boilerplate passes `typeof(Program).Assembly` as the second argument to `SienarWebAppBuilder.Create()`. If you define your routable components in the same assembly as `Program.cs`, this will work fine, but if you define your routable components in a separate assembly, you should provide a reference to that assembly instead.
 
 ## Examples
 

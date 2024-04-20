@@ -2,7 +2,8 @@
 
 Sienar enables deverlopers to create dashboards for their plugins (or alter dashboards for other plugins) with the `IDashboardProvider` interface.
 
-**NOTE**: A lot of the information contained in this guide assumes knowledge of several menu-related classes discussed in the previous section. If you haven't already, please read our guide on [adding menu items](adding-menu-items.md) before continuing.
+> [!NOTE]
+> A lot of the information contained in this guide assumes knowledge of several menu-related classes discussed in the previous section. If you haven't already, please read our guide on [adding menu items](adding-menu-items.md) before continuing.
 
 ## Overview
 
@@ -10,7 +11,8 @@ In Sienar, a "dashboard" is similar to a navigation menu. However, instead of di
 
 A dashboard is more appropriate when you have a large number of items to display because dashboards have the entire page width to render, plus unlimited vertical space.
 
-**NOTE**: The example on this page uses features only available in the `Sienar.Plugin.Cms` plugin: namely, the `DashboardMenuNames` class, the `Roles` class, and the `/dashboard` endpoint. `IDashboardProvider` itself is not a part of the CMS plugin, so you can use it in non-CMS apps. If you try to follow along directly with this example, make sure you have installed and registered this plugin. If you do not, the example will not work as expected.
+> [!NOTE]
+> The example on this page uses features only available in the `Sienar.Plugin.Cms` plugin: namely, the `DashboardMenuNames` class, the `Roles` class, and the `/dashboard` endpoint. `IDashboardProvider` itself is not a part of the CMS plugin, so you can use it in non-CMS apps. If you try to follow along directly with this example, make sure you have installed and registered this plugin. If you do not, the example will not work as expected.
 
 ### `IDashboardProvider`
 

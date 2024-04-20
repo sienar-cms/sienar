@@ -2,7 +2,8 @@
 
 Sienar includes a system of hooks similar to that of WordPress. However, instead of hooking into actions with magic strings, Sienar allows you to hook into actions with strongly-typed interfaces. Each type of hookable action supports a specific group of interfaces, so in order to hook into a specific action, you need to implement the correct interface with the correct generic model type.
 
-**NOTE**: Some of the examples given on this page come from the `Sienar.Plugin.Cms` plugin, such as the `LoginRequest` class. Be aware that while the concepts discussed here are applicable across Sienar applications, some specific examples utilize code only found in Sienar CMS.
+> [!NOTE]
+> Some of the examples given on this page come from the `Sienar.Plugin.Cms` plugin, such as the `LoginRequest` class. Be aware that while the concepts discussed here are applicable across Sienar applications, some specific examples utilize code only found in Sienar CMS.
 
 ## Basics: Actions, requests, processors, hooks, and services
 
@@ -96,7 +97,8 @@ The action service is the prototypical service in the documentation, so anytime 
 4. `IProcessor<T>` is executed. If it throws or indicates failure, the action service returns `false`
 5. `IAfterProcess<T>` hooks are executed
 
-**NOTE**: Because a status service is essentially just an action service that always returns a `bool`, status services and action services use hooks identically.
+> [!NOTE]
+> Because a status service is essentially just an action service that always returns a `bool`, status services and action services use hooks identically.
 
 ### Result service
 
