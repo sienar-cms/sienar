@@ -11,10 +11,12 @@ namespace Sienar.Infrastructure.Processors;
 /// <typeparam name="TResult">the type of the processor output</typeparam>
 public interface IProcessor<TRequest, TResult>
 {
+	/// <summary>
+	/// Processes the request and generates the result
+	/// </summary>
+	/// <param name="request">the request input</param>
+	/// <returns>the result of the operation</returns>
 	Task<HookResult<TResult>> Process(TRequest request);
-	void NotifySuccess();
-	void NotifyFailure();
-	void NotifyNoPermission();
 }
 
 // ReSharper disable once TypeParameterCanBeVariant
@@ -24,8 +26,9 @@ public interface IProcessor<TRequest, TResult>
 /// <typeparam name="TResult">the type of the processor output</typeparam>
 public interface IProcessor<TResult>
 {
+	/// <summary>
+	/// Processes the request and generates the result
+	/// </summary>
+	/// <returns>the result of the operation</returns>
 	Task<HookResult<TResult>> Process();
-	void NotifySuccess();
-	void NotifyFailure();
-	void NotifyNoPermission();
 }

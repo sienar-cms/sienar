@@ -19,104 +19,58 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 	IProcessor<AddUserToRoleRequest, bool>,
 	IProcessor<RemoveUserFromRoleRequest, bool>
 {
-	private SienarUser? _user;
-	private SienarRole? _role;
-
 	public UserRoleChangeProcessor(
 		DbContext context,
 		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-#region AddUserToRoleRequest
-
 	async Task<HookResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
 	{
-		_user = await GetSienarUserWithRoles(request.UserId);
-		if (_user is null)
+		var user = await GetSienarUserWithRoles(request.UserId);
+		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.NotFound);
-			return new(HookStatus.NotFound);
+			return new(HookStatus.NotFound, message: CmsErrors.Account.NotFound);
 		}
 
-		if (_user.Roles.Any(r => r.Id == request.RoleId))
+		if (user.Roles.Any(r => r.Id == request.RoleId))
 		{
-			Notifier.Warning(ErrorMessages.Account.AccountAlreadyInRole);
-			return new(HookStatus.Unprocessable);
+			return new(HookStatus.Unprocessable, message: CmsErrors.Account.AccountAlreadyInRole);
 		}
 
-		_role = await Context
+		var role = await Context
 			.Set<SienarRole>()
 			.FindAsync(request.RoleId);
-		if (_role is null)
+		if (role is null)
 		{
-			Notifier.Error(ErrorMessages.Roles.NotFound);
-			return new(HookStatus.NotFound);
+			return new(HookStatus.NotFound, message: CmsErrors.Roles.NotFound);
 		}
 
-		_user.Roles.Add(_role);
+		user.Roles.Add(role);
 		await Context.SaveChangesAsync();
 
-		return new(HookStatus.Success, true);
+		return new(HookStatus.Success, true, $"User {user.Username} added to role {role.Name}");
 	}
-
-	void IProcessor<AddUserToRoleRequest, bool>.NotifySuccess()
-	{
-		Notifier.Success($"User {_user?.Username} added to role {_role?.Name}");
-	}
-
-	void IProcessor<AddUserToRoleRequest, bool>.NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while adding user to role");
-	}
-
-	void IProcessor<AddUserToRoleRequest, bool>.NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to add users to roles");
-	}
-
-#endregion
-
-#region RemoveUserFromRoleRequest
 
 	async Task<HookResult<bool>> IProcessor<RemoveUserFromRoleRequest, bool>.Process(RemoveUserFromRoleRequest request)
 	{
-		_user = await GetSienarUserWithRoles(request.UserId);
-		if (_user is null)
+		var user = await GetSienarUserWithRoles(request.UserId);
+		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.NotFound);
-			return new(HookStatus.NotFound);
+			return new(HookStatus.NotFound, message: CmsErrors.Account.NotFound);
 		}
 
-		_role = _user.Roles.FirstOrDefault(r => r.Id == request.RoleId);
-		if (_role is null)
+		var role = user.Roles.FirstOrDefault(r => r.Id == request.RoleId);
+		if (role is null)
 		{
-			Notifier.Warning(ErrorMessages.Account.AccountNotInRole);
-			return new(HookStatus.Unprocessable);
+			return new(HookStatus.Unprocessable, message: CmsErrors.Account.AccountNotInRole);
 		}
 
-		_user.Roles.Remove(_role);
+		user.Roles.Remove(role);
 		await Context.SaveChangesAsync();
 
-		return new(HookStatus.Success, true);
+		return new(HookStatus.Success, true, $"User {user.Username} removed from role {role.Name}");
 	}
-
-	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifySuccess()
-	{
-		Notifier.Success($"User {_user?.Username} removed from role {_role?.Name}");
-	}
-
-	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while removing user from role");
-	}
-
-	void IProcessor<RemoveUserFromRoleRequest, bool>.NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to remove users from roles");
-	}
-
-#endregion
 
 	private Task<SienarUser?> GetSienarUserWithRoles(Guid id)
 		=> EntitySet

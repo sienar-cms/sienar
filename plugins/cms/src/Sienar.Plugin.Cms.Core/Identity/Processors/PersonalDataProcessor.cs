@@ -21,18 +21,15 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
 	private readonly IEnumerable<IUserPersonalDataRetriever> _personalDataRetrievers;
-	private readonly INotificationService _notifier;
 
 	public PersonalDataProcessor(
 		IUserManager userManager,
 		IUserAccessor userAccessor,
-		IEnumerable<IUserPersonalDataRetriever> personalDataRetrievers,
-		INotificationService notifier)
+		IEnumerable<IUserPersonalDataRetriever> personalDataRetrievers)
 	{
 		_userManager = userManager;
 		_userAccessor = userAccessor;
 		_personalDataRetrievers = personalDataRetrievers;
-		_notifier = notifier;
 	}
 
 	public async Task<HookResult<PersonalDataResult>> Process()
@@ -40,15 +37,13 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
-			_notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
-			_notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var file = new DownloadFile
@@ -80,21 +75,6 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 
 		file.Contents = JsonSerializer.SerializeToUtf8Bytes(personalData);
 
-		return this.Success(new(file));
-	}
-
-	public void NotifySuccess()
-	{
-		_notifier.Success("Personal data downloaded successfully");
-	}
-
-	public void NotifyNoPermission()
-	{
-		_notifier.Error("You don't have permission to download permission data");
-	}
-
-	public void NotifyFailure()
-	{
-		_notifier.Error("An unknown error occurred while downloading your personal data");
+		return this.Success(new(file), "Personal data downloaded successfully");
 	}
 }

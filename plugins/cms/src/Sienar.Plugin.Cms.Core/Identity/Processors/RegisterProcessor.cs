@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
-using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -68,29 +67,8 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 		await EntitySet.AddAsync(user);
 		await Context.SaveChangesAsync();
 
-		if (shouldSendRegistrationEmail)
-		{
-			if (!await _emailManager.SendWelcomeEmail(user))
-			{
-				Notifier.Error(ErrorMessages.Email.FailedToSend);
-			}
-		}
+		if (shouldSendRegistrationEmail) await _emailManager.SendWelcomeEmail(user);
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Registered successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while registering");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to register");
+		return this.Success(true, "Registered successfully");
 	}
 }

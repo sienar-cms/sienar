@@ -34,7 +34,8 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		IUserAccessor userAccessor,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
-		IOptions<SienarOptions> sienarOptions) : base(context, logger, notifier)
+		IOptions<SienarOptions> sienarOptions)
+		: base(context, logger, notifier)
 	{
 		_userManager = userManager;
 		_userAccessor = userAccessor;
@@ -48,27 +49,26 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
+			Notifier.Error(CmsErrors.Account.LoginRequired);
 			return this.Unauthorized();
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
+			Notifier.Error(CmsErrors.Account.LoginRequired);
 			return this.Unauthorized();
 		}
 
 		if (user.Id != request.UserId)
 		{
-			Notifier.Error(ErrorMessages.Account.AccountErrorWrongId);
+			Notifier.Error(CmsErrors.Account.AccountErrorWrongId);
 			return this.Unprocessable();
 		}
 
 		if (string.IsNullOrEmpty(user.PendingEmail))
 		{
-			Notifier.Error($"Unable to change email address because you have no pending email change");
-			return this.Unprocessable();
+			return this.Unprocessable(message: CmsErrors.Account.NoPendingEmail);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -79,8 +79,7 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 
 		if (status == VerificationCodeStatus.Invalid)
 		{
-			Notifier.Error(ErrorMessages.Account.VerificationCodeInvalid);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
@@ -88,13 +87,10 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 			if (_sienarOptions.EnableEmail)
 			{
 				await _emailManager.SendEmailChangeConfirmationEmail(user);
-				Notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
-				return this.Unprocessable();
+				return this.Unprocessable(message: CmsErrors.Account.VerificationCodeExpired);
 			}
 
-			Notifier.Error(
-				ErrorMessages.Account.VerificationCodeExpiredEmailDisabled);
-			return this.Unprocessable();
+			return this.Unprocessable(message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid
@@ -104,21 +100,6 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		EntitySet.Update(user);
 		await Context.SaveChangesAsync();
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Email changed successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while changing your email");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to change your email");
+		return this.Success(true, "Email changed successfully");
 	}
 }

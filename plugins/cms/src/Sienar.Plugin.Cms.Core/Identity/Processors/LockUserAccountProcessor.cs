@@ -18,7 +18,6 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 	IProcessor<LockUserAccountRequest, bool>
 {
 	private readonly IUserManager _userManager;
-	private SienarUser? _user;
 
 	public LockUserAccountProcessor(
 		DbContext context,
@@ -32,14 +31,13 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 
 	public async Task<HookResult<bool>> Process(LockUserAccountRequest request)
 	{
-		_user = await _userManager.GetSienarUser(
+		var user = await _userManager.GetSienarUser(
 			request.UserId,
 			u => u.LockoutReasons);
 
-		if (_user is null)
+		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.NotFound);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.NotFound);
 		}
 
 		foreach (var id in request.Reasons)
@@ -49,33 +47,17 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 				.FindAsync(id);
 			if (reason is null)
 			{
-				Notifier.Error(ErrorMessages.LockoutReason.NotFound);
-				return this.NotFound();
+				return this.NotFound(message: CmsErrors.LockoutReason.NotFound);
 			}
 
-			_user.LockoutReasons.Add(reason);
+			user.LockoutReasons.Add(reason);
 		}
 
-		_user.LockoutEnd = request.EndDate;
+		user.LockoutEnd = request.EndDate;
 
-		EntitySet.Update(_user);
+		EntitySet.Update(user);
 		await Context.SaveChangesAsync();
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success($"Locked user {_user?.Username} successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("Failed to lock user account");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to lock user accounts");
+		return this.Success(true, $"Locked user {user.Username} successfully");
 	}
 }

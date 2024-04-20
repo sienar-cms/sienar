@@ -28,7 +28,7 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 
 	public IQueryable<SienarUser> ProcessIncludes(IQueryable<SienarUser> dataset, Filter filter)
 	{
-		if (filter.Includes is null || !filter.Includes.Any())
+		if (filter.Includes.Count == 0)
 		{
 			return dataset;
 		}
@@ -49,7 +49,7 @@ public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 		_ => u => u.Username
 	};
 
-	public Filter? ModifyFilter(Filter? filter, ActionType action)
+	public Filter ModifyFilter(Filter? filter, ActionType action)
 	{
 		if (filter is null) return new Filter { Includes = ["Roles"] };
 		if (!filter.Includes.Contains("Roles")) filter.Includes.Add("Roles");

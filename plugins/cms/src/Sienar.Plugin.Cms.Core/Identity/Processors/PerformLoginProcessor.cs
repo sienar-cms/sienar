@@ -1,6 +1,8 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -15,18 +17,18 @@ public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 	private readonly ISignInManager _signInManager;
 	private readonly IUserManager _userManager;
 	private readonly LoginTokenCache _tokenCache;
-	private readonly INotificationService _notifier;
+	private readonly ILogger<PerformLoginProcessor> _logger;
 
 	public PerformLoginProcessor(
 		ISignInManager signInManager,
 		IUserManager userManager,
 		LoginTokenCache tokenCache,
-		INotificationService notifier)
+		ILogger<PerformLoginProcessor> logger)
 	{
 		_signInManager = signInManager;
 		_userManager = userManager;
 		_tokenCache = tokenCache;
-		_notifier = notifier;
+		_logger = logger;
 	}
 
 	public async Task<HookResult<bool>> Process(PerformLoginRequest request)
@@ -34,26 +36,18 @@ public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 		var loginRequest = _tokenCache.ConsumeLoginToken(request.LoginToken);
 		if (loginRequest is null)
 		{
-			_notifier.Error("Your login could not be completed: error code LOGIN-1");
-			return this.Unknown();
+			_logger.LogError("Login could not be performed: login request was null");
+			return this.Unknown(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var user = await _userManager.GetSienarUser(loginRequest.AccountName, u => u.Roles);
 		if (user is null)
 		{
-			_notifier.Error("Your login could not be completed: error code LOGIN-2");
-			return this.Unknown();
+			_logger.LogError("Login could not be performed: user does not exist");
+			return this.Unknown(message: CmsErrors.Account.LoginRequired);
 		}
 
 		await _signInManager.SignIn(user, loginRequest.RememberMe);
 		return this.Success(true);
 	}
-
-	// Notifiers are blank on purpose. The user should already have been notified of their login success, and the user will be notified manually if there are problems with the login process from here because there *shouldn't* be any issues at this point
-
-	public void NotifySuccess() {}
-
-	public void NotifyFailure() {}
-
-	public void NotifyNoPermission() {}
 }

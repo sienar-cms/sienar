@@ -19,6 +19,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest, bool> _processor;
+	private readonly INotificationService _notifier;
 
 	public StatusService(
 		ILogger<StatusService<TRequest>> logger,
@@ -26,7 +27,8 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		IEnumerable<IStateValidator<TRequest>> stateValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
-		IProcessor<TRequest, bool> processor)
+		IProcessor<TRequest, bool> processor,
+		INotificationService notifier)
 	{
 		_logger = logger;
 		_accessValidators = accessValidators;
@@ -34,6 +36,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 		_processor = processor;
+		_notifier = notifier;
 	}
 
 	/// <inheritdoc />
@@ -41,19 +44,19 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	{
 		if (!await _accessValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyNoPermission();
+			_notifier.Error(StatusMessages.Processes.NoPermission);
 			return false;
 		}
 
 		if (!await _stateValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.InvalidState);
 			return false;
 		}
 
 		if (!await _beforeHooks.Run(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.BeforeHookFailure);
 			return false;
 		}
 
@@ -61,10 +64,13 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		try
 		{
 			var processResult = await _processor.Process(request);
-			if (processResult.Status != HookStatus.Success)
+			if (processResult.Status == HookStatus.Success)
 			{
-				// Don't notify failure because the failure was calculated
-				// so the IProcessor should notify the user
+				_notifier.Success(processResult.Message);
+			}
+			else
+			{
+				_notifier.Error(processResult.Message);
 				return false;
 			}
 
@@ -75,13 +81,11 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
 
 			// Notify failure because the failure was unplanned
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.Unknown);
 			return false;
 		}
 
 		await _afterHooks.Run(request, ActionType.StatusAction, _logger);
-
-		_processor.NotifySuccess();
 		return result;
 	}
 }

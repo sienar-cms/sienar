@@ -9,7 +9,13 @@ namespace Sienar;
 /// <exclude />
 public static class StatusMessages
 {
-	public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";
+	public static class Processes
+	{
+		public const string NoPermission = "You do not have permission to perform that action";
+		public const string InvalidState = "Your request state is not valid. Please check your data and try again";
+		public const string BeforeHookFailure = "One or more plugins failed to execute. Your operation could not be completed";
+		public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";
+	}
 
 	public static class Crud<TEntity> where TEntity : EntityBase
 	{

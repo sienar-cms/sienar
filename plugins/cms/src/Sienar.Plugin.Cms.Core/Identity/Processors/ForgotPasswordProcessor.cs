@@ -7,7 +7,6 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -18,18 +17,15 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest, bool>
 {
 	private readonly IUserManager _userManager;
 	private readonly IAccountEmailManager _emailManager;
-	private readonly INotificationService _notifier;
 	private readonly SienarOptions _options;
 
 	public ForgotPasswordProcessor(
 		IUserManager userManager,
 		IAccountEmailManager emailManager,
-		INotificationService notifier,
 		IOptions<SienarOptions> options)
 	{
 		_userManager = userManager;
 		_emailManager = emailManager;
-		_notifier = notifier;
 		_options = options.Value;
 	}
 
@@ -43,8 +39,7 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest, bool>
 
 		if (user.IsLockedOut())
 		{
-			_notifier.Error(ErrorMessages.Account.AccountLocked);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.AccountLocked);
 		}
 
 		// They don't need to know whether the user exists or not
@@ -54,26 +49,10 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest, bool>
 		{
 			if (!await _emailManager.SendPasswordResetEmail(user))
 			{
-				_notifier.Error(ErrorMessages.Email.FailedToSend);
-				return this.Unknown();
+				return this.Unknown(message: CmsErrors.Email.FailedToSend);
 			}
 		}
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		_notifier.Success("Password reset requested");
-	}
-
-	public void NotifyFailure()
-	{
-		_notifier.Error("An unknown error occurred while requesting your password reset");
-	}
-
-	public void NotifyNoPermission()
-	{
-		_notifier.Error("You do not have permission to reset your password");
+		return this.Success(true, "Password reset requested");
 	}
 }

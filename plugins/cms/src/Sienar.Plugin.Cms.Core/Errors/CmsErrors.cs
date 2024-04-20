@@ -3,7 +3,7 @@
 namespace Sienar.Errors;
 
 /// <exclude />
-public static class ErrorMessages
+public static class CmsErrors
 {
 	public static class Account
 	{
@@ -30,6 +30,8 @@ public static class ErrorMessages
 		public const string NotFound = "Unable to find user with supplied ID.";
 		public const string AccountAlreadyInRole = "The specified user is already in the specified role.";
 		public const string AccountNotInRole = "The specified user is not in the specified role.";
+
+		public const string NoPendingEmail = "You do not have a pending email change";
 	}
 
 	public static class LockoutReason

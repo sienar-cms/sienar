@@ -19,6 +19,7 @@ public class SienarService<TRequest, TResult> : Service<TRequest, TResult>
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest, TResult> processor,
+		INotificationService notifier,
 		IBotDetector botDetector)
 		: base(
 			logger,
@@ -26,7 +27,8 @@ public class SienarService<TRequest, TResult> : Service<TRequest, TResult>
 			stateValidators,
 			beforeHooks,
 			afterHooks,
-			processor)
+			processor,
+			notifier)
 	{
 		_botDetector = botDetector;
 	}

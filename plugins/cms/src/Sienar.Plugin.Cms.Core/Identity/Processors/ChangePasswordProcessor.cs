@@ -37,40 +37,22 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		if (!await _userManager.VerifyPassword(user, request.CurrentPassword))
 		{
-			Notifier.Error(ErrorMessages.Account.LoginFailedInvalid);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginFailedInvalid);
 		}
 
 		await _userManager.UpdatePassword(user, request.NewPassword);
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Password changed successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while changing your password");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to change your password");
+		return this.Success(true, "Password changed successfully");
 	}
 }

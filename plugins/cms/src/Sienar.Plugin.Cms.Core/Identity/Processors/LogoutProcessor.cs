@@ -26,21 +26,6 @@ public class LogoutProcessor : IProcessor<LogoutRequest, bool>
 	public async Task<HookResult<bool>> Process(LogoutRequest request)
 	{
 		await _signInManager.SignOut();
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		_notifier.Success("Logged out successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		_notifier.Error("An unknown error occurred while logging out");
-	}
-
-	public void NotifyNoPermission()
-	{
-		_notifier.Error("You do not have permission to log out");
+		return this.Success(true, "Logged out successfully");
 	}
 }

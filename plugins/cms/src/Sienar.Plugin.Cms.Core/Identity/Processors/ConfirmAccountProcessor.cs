@@ -46,8 +46,7 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		var user = await _userManager.GetSienarUser(request.UserId);
 		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.AccountErrorInvalidId);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.AccountErrorInvalidId);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -58,29 +57,21 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 
 		if (status == VerificationCodeStatus.Invalid)
 		{
-			Notifier.Error(ErrorMessages.Account.VerificationCodeInvalid);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
 		{
 			if (_options.EnableEmail)
 			{
-				if (await _emailManager.SendWelcomeEmail(user))
-				{
-					Notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
-				}
-				else
-				{
-					Notifier.Error(ErrorMessages.Email.FailedToSend);
-				}
+				var errorMessage = await _emailManager.SendWelcomeEmail(user)
+					? CmsErrors.Account.VerificationCodeExpired
+					: CmsErrors.Email.FailedToSend;
 
-				return this.Unprocessable();
+				return this.Unprocessable(message: errorMessage);
 			}
 
-			Notifier.Error(
-				ErrorMessages.Account.VerificationCodeExpiredEmailDisabled);
-			return this.Unprocessable();
+			return this.Unprocessable(message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid
@@ -88,21 +79,6 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		EntitySet.Update(user);
 		await Context.SaveChangesAsync();
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Account confirmed successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while confirming your account");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to confirm your account");
+		return this.Success(true, "Account confirmed successfully");
 	}
 }

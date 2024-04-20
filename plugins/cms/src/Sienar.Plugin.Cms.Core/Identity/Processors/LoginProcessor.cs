@@ -52,15 +52,13 @@ public class LoginProcessor : DbService<SienarUser>,
 			u => u.Roles);
 		if (user == null)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginFailedNotFound);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.LoginFailedNotFound);
 		}
 
 		// If user is locked out, tell them when the lockout date ends
 		if (user.IsLockedOut())
 		{
-			Notifier.Error(ErrorMessages.Account.LoginFailedLocked);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginFailedLocked);
 		}
 
 		if (!await _userManager.VerifyPassword(user, request.Password))
@@ -75,8 +73,7 @@ public class LoginProcessor : DbService<SienarUser>,
 			EntitySet.Update(user);
 			await Context.SaveChangesAsync();
 
-			Notifier.Error(ErrorMessages.Account.LoginFailedInvalid);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginFailedInvalid);
 		}
 
 		// Still check if email is confirmed no matter what
@@ -86,15 +83,11 @@ public class LoginProcessor : DbService<SienarUser>,
 		{
 			if (_appOptions.EnableEmail)
 			{
-				var sent = await _emailManager.SendWelcomeEmail(user);
-				Notifier.Warning(ErrorMessages.Account.LoginFailedNotConfirmed);
-				if (!sent) Notifier.Error(ErrorMessages.Email.FailedToSend);
-				return this.Unauthorized();
+				await _emailManager.SendWelcomeEmail(user);
+				return this.Unauthorized(message: CmsErrors.Account.LoginFailedNotConfirmed);
 			}
 
-			Notifier.Error(
-				ErrorMessages.Account.LoginFailedNotConfirmedEmailDisabled);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginFailedNotConfirmedEmailDisabled);
 		}
 
 		// User is authenticated and able to log in
@@ -106,21 +99,6 @@ public class LoginProcessor : DbService<SienarUser>,
 		var loginToken = Guid.NewGuid();
 		_tokenCache.AddLoginToken(loginToken, request);
 
-		return this.Success(loginToken);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Logged in successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while logging in");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to log in");
+		return this.Success(loginToken, "Logged in successfully");
 	}
 }

@@ -18,7 +18,6 @@ public class UnlockUserAccountProcessor : DbService<SienarUser>,
 	IProcessor<UnlockUserAccountRequest, bool>
 {
 	private readonly IUserManager _userManager;
-	private SienarUser? _user;
 
 	public UnlockUserAccountProcessor(
 		DbContext context,
@@ -32,36 +31,20 @@ public class UnlockUserAccountProcessor : DbService<SienarUser>,
 
 	public async Task<HookResult<bool>> Process(UnlockUserAccountRequest request)
 	{
-		_user = await _userManager.GetSienarUser(
+		var user = await _userManager.GetSienarUser(
 			request.UserId,
 			u => u.LockoutReasons);
-		if (_user is null)
+		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.NotFound);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.NotFound);
 		}
 
-		_user.LockoutEnd = null;
-		_user.LockoutReasons.Clear();
+		user.LockoutEnd = null;
+		user.LockoutReasons.Clear();
 
-		EntitySet.Update(_user);
+		EntitySet.Update(user);
 		await Context.SaveChangesAsync();
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success($"User {_user?.Username}'s account was unlocked successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("Failed to unlock user account");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to unlock user accounts");
+		return this.Success(true, $"User {user.Username}'s account was unlocked successfully");
 	}
 }

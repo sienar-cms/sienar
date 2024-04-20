@@ -49,7 +49,7 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 			u => u.Id != id && u.Username == username);
 		if (user is not null)
 		{
-			Notifier.Error(ErrorMessages.Account.UsernameTaken);
+			Notifier.Error(CmsErrors.Account.UsernameTaken);
 			valid = false;
 		}
 
@@ -72,7 +72,7 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 
 		if (user is not null)
 		{
-			Notifier.Error(ErrorMessages.Account.EmailTaken);
+			Notifier.Error(CmsErrors.Account.EmailTaken);
 			valid = false;
 		}
 

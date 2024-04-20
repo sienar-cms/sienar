@@ -7,7 +7,6 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -19,20 +18,17 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 	private readonly IUserManager _userManager;
 	private readonly IVerificationCodeManager _vcManager;
 	private readonly IAccountEmailManager _emailManager;
-	private readonly INotificationService _notifier;
 	private readonly SienarOptions _options;
 
 	public ResetPasswordProcessor(
 		IUserManager userManager,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
-		INotificationService notifier,
 		IOptions<SienarOptions> options)
 	{
 		_userManager = userManager;
 		_vcManager = vcManager;
 		_emailManager = emailManager;
-		_notifier = notifier;
 		_options = options.Value;
 	}
 
@@ -41,8 +37,7 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 		var user = await _userManager.GetSienarUser(request.UserId);
 		if (user == null)
 		{
-			_notifier.Error(ErrorMessages.Account.AccountErrorInvalidId);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.AccountErrorInvalidId);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -53,43 +48,23 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 
 		if (status == VerificationCodeStatus.Invalid)
 		{
-			_notifier.Error(ErrorMessages.Account.VerificationCodeInvalid);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
 		{
 			if (_options.EnableEmail)
 			{
-				var sent = await _emailManager.SendPasswordResetEmail(user);
-				_notifier.Error(ErrorMessages.Account.VerificationCodeExpired);
-				if (!sent) _notifier.Error(ErrorMessages.Email.FailedToSend);
-				return this.Unprocessable();
+				await _emailManager.SendPasswordResetEmail(user);
+				return this.Unprocessable(message: CmsErrors.Account.VerificationCodeExpired);
 			}
 
-			_notifier.Error(
-				ErrorMessages.Account.VerificationCodeExpiredEmailDisabled);
-			return this.Unprocessable();
+			return this.Unprocessable(message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid
 		await _userManager.UpdatePassword(user, request.NewPassword);
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		_notifier.Success("Password reset successfully");
-	}
-
-	public void NotifyFailure()
-	{
-		_notifier.Error("An unknown error occurred while resetting your password");
-	}
-
-	public void NotifyNoPermission()
-	{
-		_notifier.Error("You do not have permission to reset your password");
+		return this.Success(true, "Password reset successfully");
 	}
 }

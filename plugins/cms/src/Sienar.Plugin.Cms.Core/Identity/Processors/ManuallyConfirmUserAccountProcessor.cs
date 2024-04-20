@@ -18,7 +18,6 @@ public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 	IProcessor<ManuallyConfirmUserAccountRequest, bool>
 {
 	private readonly IUserManager _userManager;
-	private SienarUser? _user;
 
 	public ManuallyConfirmUserAccountProcessor(
 		DbContext context,
@@ -32,39 +31,22 @@ public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 
 	public async Task<HookResult<bool>> Process(ManuallyConfirmUserAccountRequest request)
 	{
-		_user = await _userManager.GetSienarUser(request.UserId);
-		if (_user is null)
+		var user = await _userManager.GetSienarUser(request.UserId);
+		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.NotFound);
-			return this.NotFound();
+			return this.NotFound(message: CmsErrors.Account.NotFound);
 		}
 
-		if (_user.EmailConfirmed)
+		if (user.EmailConfirmed)
 		{
-			Notifier.Warning($"{_user.Username}'s account is already confirmed");
-			return this.Unprocessable();
+			return this.Unprocessable(message: $"{user.Username}'s account is already confirmed");
 		}
 
-		_user.EmailConfirmed = true;
+		user.EmailConfirmed = true;
 
-		EntitySet.Update(_user);
+		EntitySet.Update(user);
 		await Context.SaveChangesAsync();
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success($"Confirmed {_user?.Username}'s account");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("Unable to confirm account");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to manually confirm accounts");
+		return this.Success(true, $"Confirmed {user.Username}'s account");
 	}
 }

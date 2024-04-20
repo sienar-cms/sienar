@@ -48,21 +48,18 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
-			Notifier.Error(ErrorMessages.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		if (!await _userManager.VerifyPassword(user, request.ConfirmPassword))
 		{
-			Notifier.Error(ErrorMessages.Account.LoginFailedInvalid);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginFailedInvalid);
 		}
 
 		var shouldSendConfirmationEmail = SienarUserExtensions.ShouldSendEmailConfirmationEmail(
@@ -85,25 +82,10 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 		{
 			if (!await _emailManager.SendEmailChangeConfirmationEmail(user))
 			{
-				Notifier.Error(ErrorMessages.Email.FailedToSend);
+				return this.Unknown(true, CmsErrors.Email.FailedToSend);
 			}
 		}
 
-		return this.Success(true);
-	}
-
-	public void NotifySuccess()
-	{
-		Notifier.Success("Email change requested");
-	}
-
-	public void NotifyFailure()
-	{
-		Notifier.Error("An unknown error occurred while requesting an email change");
-	}
-
-	public void NotifyNoPermission()
-	{
-		Notifier.Error("You do not have permission to change your email");
+		return this.Success(true, "Email change requested");
 	}
 }
