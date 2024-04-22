@@ -1,4 +1,6 @@
-﻿@using Sienar.Infrastructure.Plugins
+﻿@inject IStyleProvider StyleProvider
+@inject IScriptProvider ScriptProvider
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +41,7 @@
 
 <body>
 
-<SienarRoutes @rendermode="ContentRenderMode"/>
+<SienarRoutes/>
 
 <script src="/_framework/blazor.web.js"></script>
 
@@ -50,15 +52,3 @@
 </div>
 </body>
 </html>
-
-@code {
-
-	[Inject]
-	public required IStyleProvider StyleProvider { get; set; }
-
-	[Inject]
-	public required IScriptProvider ScriptProvider { get; set; }
-
-	public static IComponentRenderMode? ContentRenderMode = null;
-
-}

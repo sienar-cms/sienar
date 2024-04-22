@@ -16,6 +16,7 @@ await SienarWebAppBuilder
 #if DEBUG
 	.AddPlugin<DevmodePlugin>()
 #endif
+	.AddPlugin<SienarBlazorPlugin>()
 	.SetupApp(
 		app =>
 		{
@@ -34,5 +35,5 @@ await SienarWebAppBuilder
 			});
 		})
 	.ConfigureTheme<SienarTheme>()
-	.BuildBlazor()
+	.Build()
 	.RunAsync();

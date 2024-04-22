@@ -41,7 +41,8 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 			.ConfigureDashboard(SetupDashboard)
 			.ConfigureComponents(SetupComponents)
 			.ConfigureStyles(SetupStyles)
-			.ConfigureScripts(SetupScripts);
+			.ConfigureScripts(SetupScripts)
+			.ConfigureRoutableAssemblies(SetupRoutableAssemblies);
 	}
 
 	private static void SetupMenu(IMenuProvider p)
@@ -69,5 +70,10 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 	{
 		p.Add("/_content/MudBlazor/MudBlazor.min.js");
 		p.Add("/_content/Sienar.Plugin.Cms.Blazor/sienar-cms.js");
+	}
+
+	private static void SetupRoutableAssemblies(IRoutableAssemblyProvider p)
+	{
+		p.Add(typeof(SienarCmsBlazorPlugin).Assembly);
 	}
 }

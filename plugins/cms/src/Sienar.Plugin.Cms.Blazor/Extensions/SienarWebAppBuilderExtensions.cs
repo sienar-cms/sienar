@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using Sienar.Infrastructure;
-using Sienar.Infrastructure.Plugins;
 using Sienar.State;
 
 namespace Sienar.Extensions;
@@ -48,23 +45,5 @@ public static class SienarWebAppBuilderExtensions
 		};
 		self.Builder.Services.AddScoped(_ => themeState);
 		return self;
-	}
-
-	/// <summary>
-	/// Builds the <see cref="SienarWebAppBuilder"/> as a Blazor United application
-	/// </summary>
-	/// <param name="self">the <see cref="SienarWebAppBuilder"/></param>
-	/// <returns>the built <see cref="WebApplication"/></returns>
-	public static WebApplication BuildBlazor(this SienarWebAppBuilder self)
-	{
-		var app = self.Build();
-
-		var routableAssemblyProvider = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
-		app
-			.MapRazorComponents<SienarApp>()
-			.AddInteractiveServerRenderMode()
-			.AddAdditionalAssemblies(routableAssemblyProvider.ToArray());
-
-		return app;
 	}
 }

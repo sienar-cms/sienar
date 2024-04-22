@@ -10,6 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\plugins\architecture\src\Sienar.Plugin.Architecture.Blazor\Sienar.Plugin.Architecture.Blazor.csproj" />
 		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms.DevMode\Sienar.Plugin.Cms.DevMode.csproj" />
 		<ProjectReference Include="..\..\plugins\cms\src\Sienar.Plugin.Cms.Blazor\Sienar.Plugin.Cms.Blazor.csproj" />
 		<ProjectReference Include="..\..\plugins\mailkit\src\Sienar.Plugin.MailKit\Sienar.Plugin.MailKit.csproj"/>

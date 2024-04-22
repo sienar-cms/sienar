@@ -22,12 +22,6 @@ public static class SienarPluginCmsServiceCollectionExtensions
 
 		var mudblazorConfigurer = self.GetAndRemoveService<Action<MudServicesConfiguration>>();
 
-		self
-			.AddRazorComponents()
-			.AddInteractiveServerComponents();
-
-		self.AddCascadingAuthenticationState();
-
 		return self.AddMudServices(mudblazorConfigurer ?? delegate {});
 	}
 }
