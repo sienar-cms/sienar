@@ -129,4 +129,41 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <typeparam name="TService">the type of the service to remove</typeparam>
 	public static void RemoveService<TService>(this IServiceCollection self)
 		=> RemoveService(self, typeof(TService));
+
+	/// <summary>
+	/// Replaces a service in the service collection with a different implementation if the registered service type matches the given implementation
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <param name="serviceType">the type of the service</param>
+	/// <param name="oldImplementationType">the type of the implementation to replace</param>
+	/// <param name="newImplementationType">the type of the new implementation</param>
+	public static void ReplaceService(
+		this IServiceCollection self,
+		Type serviceType,
+		Type oldImplementationType,
+		Type newImplementationType)
+	{
+		var service = self.FirstOrDefault(s => s.ServiceType == serviceType);
+		if (service is null) return;
+		if (service.ImplementationType == oldImplementationType)
+		{
+			self.Remove(service);
+			self.Add(new ServiceDescriptor(serviceType, newImplementationType, service.Lifetime));
+		}
+	}
+
+	/// <summary>
+	/// Replaces a service in the service collection with a different implementation if the registered service type matches the given implementation
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TService">the type of the service</typeparam>
+	/// <typeparam name="TOldImplementation">the type of the implementation to replace</typeparam>
+	/// <typeparam name="TNewImplementation">the type of the new implementation</typeparam>
+	public static void ReplaceService<TService, TOldImplementation, TNewImplementation>(
+		this IServiceCollection self)
+		=> ReplaceService(
+			self,
+			typeof(TService),
+			typeof(TOldImplementation),
+			typeof(TNewImplementation));
 }
