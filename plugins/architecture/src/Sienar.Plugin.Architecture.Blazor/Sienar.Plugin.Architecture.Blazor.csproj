@@ -11,7 +11,7 @@
 		<PackageVersion>0.1.0</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>A Sienar plugin that configures an ASP.NET application to run as a Blazor app</Description>
+		<Description>A Sienar plugin that adds support for Blazor United</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
 		<PackageProjectUrl>https://sienar.levesque.dev</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
