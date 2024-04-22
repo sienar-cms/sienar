@@ -68,4 +68,26 @@ public static class WebApplicationExtensions
 		this WebApplication self,
 		Action<IComponentProvider> configurer)
 		=> Configure(self, configurer);
+
+	/// <summary>
+	/// Configures the <see cref="IScriptProvider">script provider</see>
+	/// </summary>
+	/// <param name="self">the <see cref="WebApplication">web application</see></param>
+	/// <param name="configurer">an <see cref="Action{IScriptProvider}">action</see> that configures the script provider</param>
+	/// <returns>the <see cref="WebApplication">web application</see></returns>
+	public static WebApplication ConfigureScripts(
+		this WebApplication self,
+		Action<IScriptProvider> configurer)
+		=> Configure(self, configurer);
+
+	/// <summary>
+	/// Configures the <see cref="IStyleProvider">style provider</see>
+	/// </summary>
+	/// <param name="self">the <see cref="WebApplication">web application</see></param>
+	/// <param name="configurer">an <see cref="Action{IStyleProvider}">action</see> that configures the style provider</param>
+	/// <returns>the <see cref="WebApplication">web application</see></returns>
+	public static WebApplication ConfigureStyles(
+		this WebApplication self,
+		Action<IStyleProvider> configurer)
+		=> Configure(self, configurer);
 }

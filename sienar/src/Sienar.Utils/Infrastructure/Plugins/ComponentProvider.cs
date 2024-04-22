@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 
 namespace Sienar.Infrastructure.Plugins;
 
+/// <exclude />
 public class ComponentProvider : IComponentProvider
 {
-	/// <inheritdoc />
-	public Type DefaultLayout { get; set; } = default!;
-
-	/// <inheritdoc />
+	public Type? DefaultLayout { get; set; }
 	public Type? AppbarLeft { get; set; }
-
-	/// <inheritdoc />
 	public Type? AppbarRight { get; set; }
-
-	/// <inheritdoc />
 	public Type? SidebarHeader { get; set; }
-
-	/// <inheritdoc />
 	public Type? SidebarFooter { get; set; }
 }

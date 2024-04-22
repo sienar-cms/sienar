@@ -1,5 +1,11 @@
 ﻿namespace Sienar.Infrastructure.Plugins;
 
+/// <summary>
+/// Contains the data needed to create HTML <c>&lt;script&gt;</c> tags
+/// </summary>
+/// <remarks>
+/// The <c>ScriptResource</c> class cannot be used to output inline JavaScript. Sienar does not support inline JavaScript.
+/// </remarks>
 public class ScriptResource
 {
 	/// <summary>
@@ -50,6 +56,11 @@ public class ScriptResource
 			: null;
 	}
 
+	/// <summary>
+	/// Converts a string URL to a <c>ScriptResource</c>
+	/// </summary>
+	/// <param name="source">the URL of the script</param>
+	/// <returns>the converted <c>ScriptResource</c></returns>
 	public static implicit operator ScriptResource(string source)
 		=> new() { Src = source };
 }

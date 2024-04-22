@@ -1,3 +1,8 @@
-﻿namespace Sienar.Infrastructure.Plugins;
+﻿using System.Collections.Generic;
 
-public interface IStyleProvider : IListProvider<StyleResource>;
+namespace Sienar.Infrastructure.Plugins;
+
+/// <summary>
+/// A container for <see cref="StyleResource"/> instances that should be rendered on each page
+/// </summary>
+public interface IStyleProvider : IList<StyleResource>;

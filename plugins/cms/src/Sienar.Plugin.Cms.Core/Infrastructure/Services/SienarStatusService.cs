@@ -19,6 +19,7 @@ public class SienarStatusService<TRequest> : StatusService<TRequest>
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
 		IProcessor<TRequest, bool> processor,
+		INotificationService notifier,
 		IBotDetector botDetector)
 		: base(
 			logger,
@@ -26,7 +27,8 @@ public class SienarStatusService<TRequest> : StatusService<TRequest>
 			stateValidators,
 			beforeHooks,
 			afterHooks, 
-			processor)
+			processor,
+			notifier)
 	{
 		_botDetector = botDetector;
 	}
@@ -38,42 +40,6 @@ public class SienarStatusService<TRequest> : StatusService<TRequest>
 		{
 			// Silently short-circuit spambots
 			return Task.FromResult(true);
-		}
-
-		return base.Execute(request);
-	}
-}
-
-public class SienarService<TRequest, TResult> : Service<TRequest, TResult>
-{
-	private readonly IBotDetector _botDetector;
-
-	/// <inheritdoc />
-	public SienarService(
-		ILogger<Service<TRequest, TResult>> logger,
-		IEnumerable<IAccessValidator<TRequest>> accessValidators,
-		IEnumerable<IStateValidator<TRequest>> stateValidators,
-		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
-		IEnumerable<IAfterProcess<TRequest>> afterHooks,
-		IProcessor<TRequest, TResult> processor,
-		IBotDetector botDetector)
-		: base(
-			logger,
-			accessValidators,
-			stateValidators,
-			beforeHooks,
-			afterHooks,
-			processor)
-	{
-		_botDetector = botDetector;
-	}
-
-	/// <inheritdoc />
-	public override Task<TResult?> Execute(TRequest request)
-	{
-		if (request is Honeypot honeypot && _botDetector.IsSpambot(honeypot))
-		{
-			return Task.FromResult(default(TResult));
 		}
 
 		return base.Execute(request);

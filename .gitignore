@@ -16,6 +16,9 @@ _ReSharper.*
 .nuget/
 *.log
 
+**/coverage.xml
+**/coveragereport
+
 # Docker
 .env
 

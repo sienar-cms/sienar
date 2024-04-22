@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sienar.Infrastructure.Entities;
 
 /// <summary>
 /// A base class containing the fields required by all entities in the app with a customizable primary key type
 /// </summary>
+[ExcludeFromCodeCoverage]
 public abstract class EntityBase
 {
 	/// <summary>

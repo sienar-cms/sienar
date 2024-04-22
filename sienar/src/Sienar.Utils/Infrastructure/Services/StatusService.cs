@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,6 +10,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <exclude />
 public class StatusService<TRequest> : IStatusService<TRequest>
 {
 	private readonly ILogger<StatusService<TRequest>> _logger;
@@ -16,6 +19,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	private readonly IEnumerable<IBeforeProcess<TRequest>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TRequest>> _afterHooks;
 	private readonly IProcessor<TRequest, bool> _processor;
+	private readonly INotificationService _notifier;
 
 	public StatusService(
 		ILogger<StatusService<TRequest>> logger,
@@ -23,7 +27,8 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		IEnumerable<IStateValidator<TRequest>> stateValidators,
 		IEnumerable<IBeforeProcess<TRequest>> beforeHooks,
 		IEnumerable<IAfterProcess<TRequest>> afterHooks,
-		IProcessor<TRequest, bool> processor)
+		IProcessor<TRequest, bool> processor,
+		INotificationService notifier)
 	{
 		_logger = logger;
 		_accessValidators = accessValidators;
@@ -31,26 +36,27 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		_beforeHooks = beforeHooks;
 		_afterHooks = afterHooks;
 		_processor = processor;
+		_notifier = notifier;
 	}
 
 	/// <inheritdoc />
 	public virtual async Task<bool> Execute(TRequest request)
 	{
-		if (!await _accessValidators.Validate(request, ActionType.Action, _logger))
+		if (!await _accessValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyNoPermission();
+			_notifier.Error(StatusMessages.Processes.NoPermission);
 			return false;
 		}
 
-		if (!await _stateValidators.Validate(request, ActionType.Action, _logger))
+		if (!await _stateValidators.Validate(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.InvalidState);
 			return false;
 		}
 
-		if (!await _beforeHooks.Run(request, ActionType.Action, _logger))
+		if (!await _beforeHooks.Run(request, ActionType.StatusAction, _logger))
 		{
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.BeforeHookFailure);
 			return false;
 		}
 
@@ -58,10 +64,13 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		try
 		{
 			var processResult = await _processor.Process(request);
-			if (processResult.Status != HookStatus.Success)
+			if (processResult.Status == HookStatus.Success)
 			{
-				// Don't notify failure because the failure was calculated
-				// so the IProcessor should notify the user
+				_notifier.Success(processResult.Message);
+			}
+			else
+			{
+				_notifier.Error(processResult.Message);
 				return false;
 			}
 
@@ -72,13 +81,11 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
 
 			// Notify failure because the failure was unplanned
-			_processor.NotifyFailure();
+			_notifier.Error(StatusMessages.Processes.Unknown);
 			return false;
 		}
 
-		await _afterHooks.Run(request, ActionType.Action, _logger);
-
-		_processor.NotifySuccess();
+		await _afterHooks.Run(request, ActionType.StatusAction, _logger);
 		return result;
 	}
 }

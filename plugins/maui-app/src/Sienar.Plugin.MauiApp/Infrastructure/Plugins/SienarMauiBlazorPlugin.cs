@@ -9,7 +9,7 @@ using Sienar.Layouts;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarMauiBlazorPlugin : ISienarPlugin
+public class SienarMauiBlazorPlugin : IDesktopPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()
@@ -22,6 +22,7 @@ public class SienarMauiBlazorPlugin : ISienarPlugin
 		Homepage = "https://sienar.levesque.dev"
 	};
 
+	/// <inheritdoc />
 	public void SetupDependencies(MauiAppBuilder builder)
 	{
 		builder.Services
@@ -36,8 +37,9 @@ public class SienarMauiBlazorPlugin : ISienarPlugin
 			.AddMudServices();
 	}
 
+	/// <inheritdoc />
 	public void SetupApp(MauiApp app)
 	{
-		app.ConfigureComponents(c => c.DefaultLayout = typeof(DashboardLayout));
+		app.ConfigureComponents(c => c.DefaultLayout ??= typeof(DashboardLayout));
 	}
 }

@@ -1,5 +1,9 @@
-﻿using System.Reflection;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class RoutableAssemblyProvider : ListProvider<Assembly>, IRoutableAssemblyProvider;
+/// <exclude />
+public class RoutableAssemblyProvider : List<Assembly>, IRoutableAssemblyProvider;

@@ -1,0 +1,83 @@
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Sienar.Errors;
+using Sienar.Identity.Requests;
+using Sienar.Infrastructure;
+using Sienar.Infrastructure.Hooks;
+using Sienar.Infrastructure.Services;
+
+namespace Sienar.Identity.Hooks;
+
+/// <exclude />
+public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
+	IStateValidator<SienarUser>,
+	IStateValidator<RegisterRequest>
+{
+	public EnsureAccountInfoUniqueValidator(
+		DbContext context,
+		ILogger<DbService<SienarUser, DbContext>> logger,
+		INotificationService notifier)
+		: base(context, logger, notifier) {}
+
+	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser request, ActionType type)
+		=> UserIsUnique(
+			request.Username,
+			request.Email,
+			request.PendingEmail,
+			request.Id);
+
+	Task<HookStatus> IStateValidator<RegisterRequest>.Validate(
+		RegisterRequest request,
+		ActionType action)
+		=> UserIsUnique(
+			request.Username,
+			request.Email);
+
+	private async Task<HookStatus> UserIsUnique(
+		string username,
+		string email,
+		string? pendingEmail = null,
+		Guid id = default)
+	{
+		var valid = true;
+
+		var user = await EntitySet.FirstOrDefaultAsync(
+			u => u.Id != id && u.Username == username);
+		if (user is not null)
+		{
+			Notifier.Error(CmsErrors.Account.UsernameTaken);
+			valid = false;
+		}
+
+		if (!string.IsNullOrEmpty(pendingEmail))
+		{
+			user = await EntitySet.FirstOrDefaultAsync(
+				u => u.Id != id
+				&& (u.Email == email
+					|| u.Email == pendingEmail
+					|| u.PendingEmail == email
+					|| u.PendingEmail == pendingEmail));
+		}
+		else
+		{
+			user = await EntitySet.FirstOrDefaultAsync(
+				u => u.Id != id
+				&& (u.Email == email
+					|| u.PendingEmail == email));
+		}
+
+		if (user is not null)
+		{
+			Notifier.Error(CmsErrors.Account.EmailTaken);
+			valid = false;
+		}
+
+		return valid
+			? HookStatus.Success
+			: HookStatus.Conflict;
+	}
+}

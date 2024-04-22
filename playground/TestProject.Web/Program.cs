@@ -3,22 +3,21 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Infrastructure.Plugins;
 using Sienar.Infrastructure;
-using TestProject.Web;
 using TestProject.Web.Data;
 using TestProject.Web.Extensions;
 using TestProject.Web.Layouts;
 using TestProject.Web.UI;
 
-await SienarAppBuilder
+await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
 	.AddRootDbContext<AppDbContext>(o => o.UseSienarDb())
-	.AddPlugin<SienarCmsPlugin>()
+	.AddPlugin<SienarCmsBlazorPlugin>()
 	.AddPlugin<MailKitPlugin>()
 #if DEBUG
 	.AddPlugin<DevmodePlugin>()
 #endif
-	.SetupDependencies(
-		builder => builder.Services.AddRequestConfigurer<AppRequestConfigurer>())
+	.AddPlugin<SienarBlazorPlugin>()
+	.AddPlugin<SienarRestPlugin>()
 	.SetupApp(
 		app =>
 		{
@@ -30,7 +29,12 @@ await SienarAppBuilder
 					p.AppbarLeft = typeof(Branding);
 				});
 			app.ConfigureMenu(p => p.AddMenu());
+			app.ConfigureStyles(p =>
+			{
+				p.Add("/styles.css");
+				p.Add("/TestProject.Web.styles.css");
+			});
 		})
 	.ConfigureTheme<SienarTheme>()
-	.BuildBlazor()
+	.Build()
 	.RunAsync();

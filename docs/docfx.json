@@ -1,0 +1,53 @@
+{
+	"metadata": [
+		{
+			"src": [
+				{
+					"src": "../",
+					"files": [
+						"sienar/src/Sienar.Utils/bin/Release/net8.0/Sienar.Utils.dll",
+						"sienar/src/Sienar.UI/bin/Release/net8.0/Sienar.UI.dll",
+						"sienar/src/Sienar.SqliteUtils/bin/Release/net8.0/Sienar.SqliteUtils.dll",
+						"sienar/src/Sienar.WebPlugin/bin/Release/net8.0/Sienar.WebPlugin.dll",
+						"sienar/src/Sienar.MauiPlugin/bin/Release/net8.0-windows10.0.19041.0/Sienar.MauiPlugin.dll",
+						"plugins/cms/src/Sienar.Plugin.Cms.Core/bin/Release/net8.0/Sienar.Plugin.Cms.Core.dll",
+						"plugins/cms/src/Sienar.Plugin.Cms/bin/Release/net8.0/Sienar.Plugin.Cms.dll",
+						"plugins/mailkit/src/Sienar.Plugin.MailKit/bin/Release/net8.0/Sienar.Plugin.MailKit.dll"
+					]
+				}
+			],
+			"dest": "api",
+			"filter": "filterConfig.yml"
+		}
+	],
+	"build": {
+		"content": [
+			{
+				"files": [
+					"**/*.{md,yml}"
+				],
+				"exclude": [
+					"_site/**"
+				]
+			}
+		],
+		"resource": [
+			{
+				"files": [
+					"**/*.jpg"
+				]
+			}
+		],
+		"output": "_site",
+		"template": [
+			"default",
+			"modern"
+		],
+		"globalMetadata": {
+			"_appName": "Sienar",
+			"_appTitle": "Sienar",
+			"_enableSearch": true,
+			"pdf": false
+		}
+	}
+}

@@ -2,6 +2,10 @@
 
 namespace Sienar.Infrastructure.Menus;
 
+/// <summary>
+/// A dictionary that contains a list of links at different <see cref="MenuPriority"/> keys
+/// </summary>
+/// <typeparam name="TLink">the type of the link</typeparam>
 public class LinkDictionary<TLink> : Dictionary<MenuPriority, List<TLink>>
 {
 	/// <summary>
@@ -11,7 +15,7 @@ public class LinkDictionary<TLink> : Dictionary<MenuPriority, List<TLink>>
 	/// <param name="priority">The priority at which to add the nav link</param>
 	public LinkDictionary<TLink> AddLink(
 		TLink link,
-		MenuPriority priority = MenuPriority.Mid)
+		MenuPriority priority = MenuPriority.Normal)
 	{
 		if (!TryGetValue(priority, out var menuItems))
 		{

@@ -1,3 +1,8 @@
-﻿namespace Sienar.Infrastructure.Plugins;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class PluginDataProvider : ListProvider<PluginData>, IPluginDataProvider;
+using System.Collections.Generic;
+
+namespace Sienar.Infrastructure.Plugins;
+
+/// <exclude />
+public class PluginDataProvider : List<PluginData>, IPluginDataProvider;

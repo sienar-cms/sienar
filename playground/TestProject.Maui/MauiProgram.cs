@@ -9,7 +9,7 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		return SienarAppBuilder
+		return SienarDesktopAppBuilder
 #if DEBUG
 			.Create(addDebugServices: true)
 #else

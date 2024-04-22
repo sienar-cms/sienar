@@ -3,9 +3,9 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<RootNamespace>Sienar</RootNamespace>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
 		<PackageId>Sienar.WebPlugin</PackageId>
 		<Title>Sienar.WebPlugin</Title>

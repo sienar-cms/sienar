@@ -6,6 +6,10 @@ using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Processors;
 
+/// <summary>
+/// A processor which converts a <see cref="Filter"/> into EF queries for the given <c>TEntity</c>
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public interface IFilterProcessor<TEntity>
 {
 	/// <summary>

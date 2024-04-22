@@ -1,0 +1,8 @@
+﻿### YamlMime:ManagedReference
+apiRules:
+  - exclude:
+      uidRegex: ^Sienar\.Pages
+      type: Class
+  - exclude:
+      uidRegex: _Imports
+      type: Class

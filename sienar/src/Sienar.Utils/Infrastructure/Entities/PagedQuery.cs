@@ -1,8 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sienar.Infrastructure.Entities;
 
+/// <summary>
+/// Used to page through database results
+/// </summary>
+/// <typeparam name="TModel"></typeparam>
+[ExcludeFromCodeCoverage]
 public class PagedQuery<TModel>
 {
 	/// <summary>
@@ -15,8 +21,16 @@ public class PagedQuery<TModel>
 	/// </summary>
 	public int TotalCount { get; set; }
 
+	/// <summary>
+	/// Creates an empty <c>PagedQuery</c>
+	/// </summary>
 	public PagedQuery() {}
 
+	/// <summary>
+	/// Creates a <c>PagedQuery</c> that has been populated with results
+	/// </summary>
+	/// <param name="items">the results on the current page</param>
+	/// <param name="totalCount">the total number of items in the database that match the query</param>
 	public PagedQuery(IEnumerable<TModel> items, int totalCount)
 	{
 		Items = items;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,6 +14,7 @@ using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <exclude />
 public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 	IEntityReader<TEntity>
 	where TEntity : EntityBase, new()
@@ -21,7 +24,6 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
-	/// <inheritdoc />
 	public EntityReader(
 		TContext context,
 		ILogger<EntityReader<TEntity, TContext>> logger,
@@ -36,7 +38,6 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 		_afterHooks = afterHooks;
 	}
 
-	/// <inheritdoc />
 	public async Task<TEntity?> Read(
 		Guid id,
 		Filter? filter = null)
@@ -74,7 +75,6 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 		return entity;
 	}
 
-	/// <inheritdoc />
 	public async Task<PagedQuery<TEntity>> Read(Filter? filter = null)
 	{
 		IEnumerable<TEntity> buffered;
@@ -147,10 +147,10 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 	}
 }
 
+/// <exclude />
 public class EntityReader<TEntity> : EntityReader<TEntity, DbContext>
 	where TEntity : EntityBase, new()
 {
-	/// <inheritdoc />
 	public EntityReader(
 		DbContext context,
 		ILogger<EntityReader<TEntity, DbContext>> logger,

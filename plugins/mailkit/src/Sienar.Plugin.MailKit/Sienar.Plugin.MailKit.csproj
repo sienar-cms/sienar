@@ -4,6 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Sienar.Email</RootNamespace>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
 		<PackageId>Sienar.Plugin.MailKit</PackageId>
 		<Title>Sienar.Plugin.MailKit</Title>

@@ -4,6 +4,10 @@ using Sienar.Infrastructure.Entities;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <summary>
+/// A service to read instances of <c>TEntity</c> from the appropriate repository
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public interface IEntityReader<TEntity>
 {
 	/// <summary>

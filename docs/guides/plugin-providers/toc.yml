@@ -1,0 +1,15 @@
+﻿items:
+  - name: Go back
+    href: ~/index.md
+  - name: Customizing Sienar with plugin providers
+    href: index.md
+  - name: Overriding UI components
+    href: overriding-ui-components.md
+  - name: Adding menu items
+    href: adding-menu-items.md
+  - name: Adding dashboard items
+    href: adding-dashboard-items.md
+  - name: Adding JavaScript
+    href: adding-js.md
+  - name: Adding CSS
+    href: adding-css.md

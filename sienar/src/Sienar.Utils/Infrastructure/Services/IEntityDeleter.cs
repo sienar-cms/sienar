@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace Sienar.Infrastructure.Services;
 
+/// <summary>
+/// A service to delete instances of <c>TEntity</c> from the appropriate repository
+/// </summary>
+/// <typeparam name="TEntity">the type of the entity</typeparam>
 public interface IEntityDeleter<TEntity>
 {
 	/// <summary>

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Sienar.Infrastructure;
 
+/// <summary>
+/// Accesses the current user's information
+/// </summary>
 public interface IUserAccessor
 {
 	/// <summary>
