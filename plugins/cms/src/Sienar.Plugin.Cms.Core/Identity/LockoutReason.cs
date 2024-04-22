@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Identity;
 

@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// A base class containing the fields required by all entities in the app with a customizable primary key type

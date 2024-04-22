@@ -2,37 +2,37 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Extensions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
 /// <exclude />
-public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
-	IEntityReader<TEntity>
+public class EntityReader<TEntity> : IEntityReader<TEntity>
 	where TEntity : EntityBase, new()
-	where TContext : DbContext
 {
-	private readonly IFilterProcessor<TEntity> _filterProcessor;
+	private readonly IRepository<TEntity> _repository;
+	private readonly INotificationService _notifier;
+	private readonly ILogger<EntityReader<TEntity>> _logger;
+	private readonly IEntityFrameworkFilterProcessor<TEntity> _filterProcessor;
 	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
 	public EntityReader(
-		TContext context,
-		ILogger<EntityReader<TEntity, TContext>> logger,
+		IRepository<TEntity> repository,
 		INotificationService notifier,
-		IFilterProcessor<TEntity> filterProcessor,
+		ILogger<EntityReader<TEntity>> logger,
+		IEntityFrameworkFilterProcessor<TEntity> filterProcessor,
 		IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		IEnumerable<IAfterProcess<TEntity>> afterHooks)
-		: base(context, logger, notifier)
 	{
+		_repository = repository;
+		_notifier = notifier;
+		_logger = logger;
 		_filterProcessor = filterProcessor;
 		_accessValidators = accessValidators;
 		_afterHooks = afterHooks;
@@ -46,123 +46,51 @@ public class EntityReader<TEntity, TContext> : DbService<TEntity, TContext>,
 		try
 		{
 			filter = _filterProcessor.ModifyFilter(filter, ActionType.Read);
-			entity = filter == null
-				? await EntitySet.FindAsync(id)
-				: await _filterProcessor
-					.ProcessIncludes(EntitySet, filter)
-					.FirstOrDefaultAsync(u => u.Id == id);
+			entity = await _repository.Read(id, filter);
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, StatusMessages.Database.QueryFailed);
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadSingleFailed());
+			_logger.LogError(e, StatusMessages.Database.QueryFailed);
+			_notifier.Error(StatusMessages.Crud<TEntity>.ReadSingleFailed());
 			return null;
 		}
 
 		if (entity is null)
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.NotFound(id));
+			_notifier.Error(StatusMessages.Crud<TEntity>.NotFound(id));
 			return null;
 		}
 
-		if (!await _accessValidators.Validate(entity, ActionType.Read, Logger))
+		if (!await _accessValidators.Validate(entity, ActionType.Read, _logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			_notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
 			return null;
 		}
 
-		await _afterHooks.Run(entity, ActionType.Read, Logger);
+		await _afterHooks.Run(entity, ActionType.Read, _logger);
 		return entity;
 	}
 
 	public async Task<PagedQuery<TEntity>> Read(Filter? filter = null)
 	{
-		IEnumerable<TEntity> buffered;
-		int count;
+		PagedQuery<TEntity> queryResult;
 
 		try
 		{
-			IQueryable<TEntity> entries;
-			IQueryable<TEntity> countEntries;
-			filter = _filterProcessor.ModifyFilter(filter, ActionType.ReadAll);
-
-			if (filter is not null)
-			{
-				entries = ProcessFilter(filter);
-				countEntries = _filterProcessor.Search(EntitySet, filter);
-			}
-			else
-			{
-				entries = EntitySet;
-				countEntries = EntitySet;
-			}
-
-			buffered = await entries.ToListAsync();
-			count = await countEntries.CountAsync();
+			queryResult = await _repository.Read(filter);
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, StatusMessages.Database.QueryFailed);
-			Notifier.Error(StatusMessages.Crud<TEntity>.ReadMultipleFailed());
+			_logger.LogError(e, StatusMessages.Database.QueryFailed);
+			_notifier.Error(StatusMessages.Crud<TEntity>.ReadMultipleFailed());
 			return new();
 		}
 
-		foreach (var entity in buffered)
+		foreach (var entity in queryResult.Items)
 		{
-			await _afterHooks.Run(entity, ActionType.ReadAll, Logger);
+			await _afterHooks.Run(entity, ActionType.ReadAll, _logger);
 		}
 
-		return new (buffered, count);
+		return queryResult;
 	}
-
-	private IQueryable<TEntity> ProcessFilter(
-		Filter filter,
-		Expression<Func<TEntity, bool>>? predicate = null)
-	{
-		var result = (IQueryable<TEntity>)EntitySet;
-		if (predicate is not null)
-		{
-			result = result.Where(predicate);
-		}
-
-		result = _filterProcessor.Search(result, filter);
-		result = _filterProcessor.ProcessIncludes(result, filter);
-		var sortPredicate = _filterProcessor.GetSortPredicate(filter.SortName);
-		result = filter.SortDescending ?? false
-			? result.OrderByDescending(sortPredicate)
-			: result.OrderBy(sortPredicate);
-
-		if (filter.Page > 1)
-		{
-			result = result.Skip((filter.Page - 1) * filter.PageSize);
-		}
-
-		// If filter.PageSize == 0, return all results
-		if (filter.PageSize > 0)
-		{
-			result = result.Take(filter.PageSize);
-		}
-
-		return result;
-	}
-}
-
-/// <exclude />
-public class EntityReader<TEntity> : EntityReader<TEntity, DbContext>
-	where TEntity : EntityBase, new()
-{
-	public EntityReader(
-		DbContext context,
-		ILogger<EntityReader<TEntity, DbContext>> logger,
-		INotificationService notifier,
-		IFilterProcessor<TEntity> filterProcessor,
-		IEnumerable<IAccessValidator<TEntity>> accessValidators,
-		IEnumerable<IAfterProcess<TEntity>> afterHooks)
-		: base(
-			context,
-			logger,
-			notifier,
-			filterProcessor,
-			accessValidators, 
-			afterHooks) {}
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Media.Processors;
 
-public class UploadFilterProcessor : IFilterProcessor<Upload>
+public class UploadFilterProcessor : IEntityFrameworkFilterProcessor<Upload>
 {
 	/// <inheritdoc />
 	public IQueryable<Upload> Search(IQueryable<Upload> dataset, Filter filter)

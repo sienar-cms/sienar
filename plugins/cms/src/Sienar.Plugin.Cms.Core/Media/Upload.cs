@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 using Sienar.Identity;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Media;
 

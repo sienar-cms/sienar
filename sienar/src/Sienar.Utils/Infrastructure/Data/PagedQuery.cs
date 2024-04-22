@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// Used to page through database results

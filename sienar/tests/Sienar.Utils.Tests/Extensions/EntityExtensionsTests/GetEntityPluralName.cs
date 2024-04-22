@@ -1,6 +1,6 @@
 ﻿using System;
 using Sienar.Extensions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Utils.Tests.Extensions.EntityExtensionsTests;
 

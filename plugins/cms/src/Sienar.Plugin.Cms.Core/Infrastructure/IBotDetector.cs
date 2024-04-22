@@ -1,4 +1,4 @@
-﻿using Sienar.Infrastructure.Entities;
+﻿using Sienar.Infrastructure.Data;
 
 namespace Sienar.Infrastructure;
 

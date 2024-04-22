@@ -3,34 +3,37 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Extensions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Services;
 
 /// <exclude />
-public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEntityWriter<TEntity>
-	where TEntity : EntityBase, new()
-	where TContext : DbContext
+public class EntityWriter<TEntity> : IEntityWriter<TEntity>
+	where TEntity : EntityBase
 {
+	private readonly IRepository<TEntity> _repository;
+	private readonly INotificationService _notifier;
+	private readonly ILogger<EntityWriter<TEntity>> _logger;
 	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
 	private readonly IEnumerable<IStateValidator<TEntity>> _stateValidators;
 	private readonly IEnumerable<IBeforeProcess<TEntity>> _beforeHooks;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
 	public EntityWriter(
-		TContext context,
-		ILogger<DbService<TEntity, TContext>> logger,
+		IRepository<TEntity> repository,
 		INotificationService notifier,
+		ILogger<EntityWriter<TEntity>> logger,
 		IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		IEnumerable<IStateValidator<TEntity>> stateValidators,
 		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
 		IEnumerable<IAfterProcess<TEntity>> afterHooks)
-		: base(context, logger, notifier)
 	{
+		_repository = repository;
+		_notifier = notifier;
+		_logger = logger;
 		_accessValidators = accessValidators;
 		_stateValidators = stateValidators;
 		_beforeHooks = beforeHooks;
@@ -39,87 +42,63 @@ public class EntityWriter<TEntity, TContext> : DbService<TEntity, TContext>, IEn
 
 	public async Task<Guid> Create(TEntity model)
 	{
-		if (!await _accessValidators.Validate(model, ActionType.Create, Logger))
+		if (!await _accessValidators.Validate(model, ActionType.Create, _logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			_notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
 			return Guid.Empty;
 		}
 
-		if (!await _stateValidators.Validate(model, ActionType.Create, Logger)
-		|| !await _beforeHooks.Run(model, ActionType.Create, Logger))
+		if (!await _stateValidators.Validate(model, ActionType.Create, _logger)
+		|| !await _beforeHooks.Run(model, ActionType.Create, _logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
+			_notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
 			return Guid.Empty;
 		}
 
 		try
 		{
-			await EntitySet.AddAsync(model);
-			await Context.SaveChangesAsync();
+			await _repository.Create(model);
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, StatusMessages.Database.QueryFailed);
-			Notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
+			_logger.LogError(e, StatusMessages.Database.QueryFailed);
+			_notifier.Error(StatusMessages.Crud<TEntity>.CreateFailed());
 			return Guid.Empty;
 		}
 
-		await _afterHooks.Run(model, ActionType.Create, Logger);
-		Notifier.Success(StatusMessages.Crud<TEntity>.CreateSuccessful());
+		await _afterHooks.Run(model, ActionType.Create, _logger);
+		_notifier.Success(StatusMessages.Crud<TEntity>.CreateSuccessful());
 		return model.Id;
 	}
 
 	public async Task<bool> Update(TEntity model)
 	{
-		if (!await _accessValidators.Validate(model, ActionType.Update, Logger))
+		if (!await _accessValidators.Validate(model, ActionType.Update, _logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
+			_notifier.Error(StatusMessages.Crud<TEntity>.NoPermission());
 			return false;
 		}
 
-		if (!await _stateValidators.Validate(model, ActionType.Update, Logger)
-		|| !await _beforeHooks.Run(model, ActionType.Update, Logger))
+		if (!await _stateValidators.Validate(model, ActionType.Update, _logger)
+		|| !await _beforeHooks.Run(model, ActionType.Update, _logger))
 		{
-			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
+			_notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
 			return false;
 		}
 
 		try
 		{
-			EntitySet.Update(model);
-			await Context.SaveChangesAsync();
+			await _repository.Update(model);
 		}
 		catch (Exception e)
 		{
-			Logger.LogError(e, StatusMessages.Database.QueryFailed);
-			Notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
+			_logger.LogError(e, StatusMessages.Database.QueryFailed);
+			_notifier.Error(StatusMessages.Crud<TEntity>.UpdateFailed());
 			return false;
 		}
 
-		await _afterHooks.Run(model, ActionType.Update, Logger);
-		Notifier.Success(StatusMessages.Crud<TEntity>.UpdateSuccessful());
+		await _afterHooks.Run(model, ActionType.Update, _logger);
+		_notifier.Success(StatusMessages.Crud<TEntity>.UpdateSuccessful());
 		return true;
 	}
-}
-
-/// <exclude />
-public class EntityWriter<TEntity> : EntityWriter<TEntity, DbContext>
-	where TEntity : EntityBase, new()
-{
-	public EntityWriter(
-		DbContext context,
-		ILogger<DbService<TEntity, DbContext>> logger,
-		INotificationService notifier,
-		IEnumerable<IAccessValidator<TEntity>> accessValidators,
-		IEnumerable<IStateValidator<TEntity>> stateValidators,
-		IEnumerable<IBeforeProcess<TEntity>> beforeHooks,
-		IEnumerable<IAfterProcess<TEntity>> afterHooks)
-		: base(
-			context,
-			logger,
-			notifier,
-			accessValidators,
-			stateValidators,
-			beforeHooks,
-			afterHooks) {}
 }

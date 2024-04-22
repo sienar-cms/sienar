@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Infrastructure.Services;
 

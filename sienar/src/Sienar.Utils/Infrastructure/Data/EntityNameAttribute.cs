@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// Allows developers to define singular and plural names for their entities in a way that Sienar can understand

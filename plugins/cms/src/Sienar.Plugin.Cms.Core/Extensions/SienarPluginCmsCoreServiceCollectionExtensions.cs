@@ -14,6 +14,7 @@ using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -47,6 +48,7 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		self
 			.AddHttpContextAccessor()
 			.AddTransient(typeof(IStatusService<>), typeof(SienarStatusService<>))
+			.AddScoped(typeof(IRepository<>), typeof(EntityFrameworkRepository<>))
 			.AddScoped(typeof(IService<,>), typeof(SienarService<,>))
 			.AddTransient(typeof(IStateValidator<>), typeof(ConcurrencyStampValidator<>))
 			.AddTransient(typeof(IBeforeProcess<>), typeof(ConcurrencyStampUpdateHook<>));
@@ -75,9 +77,9 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 			.AddTransient<IStateValidator<SienarUser>, EnsureAccountInfoUniqueValidator>()
 			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>();
 
-		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
+		self.TryAddTransient<IEntityFrameworkFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
+		self.TryAddTransient<IEntityFrameworkFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
+		self.TryAddTransient<IEntityFrameworkFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
 
 		// Security
 		self.TryAddTransient<IProcessor<LoginRequest, Guid>, LoginProcessor>();
@@ -143,7 +145,7 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		self.TryAddTransient<IMediaDirectoryMapper, MediaDirectoryMapper>();
 		self.TryAddTransient<IMediaManager, MediaManager>();
 
-		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
+		self.TryAddTransient<IEntityFrameworkFilterProcessor<Upload>, UploadFilterProcessor>();
 
 		self.TryAddTransient<IAccessValidator<Upload>, VerifyUserCanReadFileHook>();
 		self.TryAddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
