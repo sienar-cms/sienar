@@ -90,20 +90,20 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		self.TryAddScoped<IProcessor<LogoutRequest, bool>, LogoutProcessor>();
 		self.TryAddScoped<IProcessor<PersonalDataResult>, PersonalDataProcessor>();
 		self.TryAddScoped<IProcessor<AddUserToRoleRequest, bool>, UserRoleChangeProcessor>();
-		self.TryAddScoped<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>();
+		self.AddScoped<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>();
 		self.TryAddScoped<IProcessor<RemoveUserFromRoleRequest, bool>, UserRoleChangeProcessor>();
-		self.TryAddScoped<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>();
+		self.AddScoped<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>();
 		self.TryAddScoped<IProcessor<LockUserAccountRequest, bool>, LockUserAccountProcessor>();
-		self.TryAddScoped<IAccessValidator<LockUserAccountRequest>, UserIsAdminAccessValidator<LockUserAccountRequest>>();
+		self.AddScoped<IAccessValidator<LockUserAccountRequest>, UserIsAdminAccessValidator<LockUserAccountRequest>>();
 		self.TryAddScoped<IProcessor<UnlockUserAccountRequest, bool>, UnlockUserAccountProcessor>();
-		self.TryAddScoped<IAccessValidator<UnlockUserAccountRequest>, UserIsAdminAccessValidator<UnlockUserAccountRequest>>();
+		self.AddScoped<IAccessValidator<UnlockUserAccountRequest>, UserIsAdminAccessValidator<UnlockUserAccountRequest>>();
 		self.TryAddScoped<IProcessor<ManuallyConfirmUserAccountRequest, bool>, ManuallyConfirmUserAccountProcessor>();
-		self.TryAddScoped<IAccessValidator<ManuallyConfirmUserAccountRequest>, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>();
+		self.AddScoped<IAccessValidator<ManuallyConfirmUserAccountRequest>, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>();
 
 		// Registration
-		self.TryAddScoped<IStateValidator<RegisterRequest>, RegistrationOpenValidator>();
-		self.TryAddScoped<IStateValidator<RegisterRequest>, AcceptTosValidator>();
-		self.TryAddScoped<IStateValidator<RegisterRequest>, EnsureAccountInfoUniqueValidator>();
+		self.AddScoped<IStateValidator<RegisterRequest>, RegistrationOpenValidator>();
+		self.AddScoped<IStateValidator<RegisterRequest>, AcceptTosValidator>();
+		self.AddScoped<IStateValidator<RegisterRequest>, EnsureAccountInfoUniqueValidator>();
 		self.TryAddScoped<IProcessor<RegisterRequest, bool>, RegisterProcessor>();
 
 		// Email
@@ -117,7 +117,7 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		self.TryAddScoped<IProcessor<ResetPasswordRequest, bool>, ResetPasswordProcessor>();
 
 		// Personal data
-		self.TryAddScoped<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>();
+		self.AddScoped<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>();
 		self.TryAddScoped<IProcessor<DeleteAccountRequest, bool>, DeleteAccountProcessor>();
 
 		self.AddSingleton<LoginTokenCache>();
@@ -150,11 +150,11 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 
 		self.TryAddScoped<IEntityFrameworkFilterProcessor<Upload>, UploadFilterProcessor>();
 
-		self.TryAddScoped<IAccessValidator<Upload>, VerifyUserCanReadFileHook>();
-		self.TryAddScoped<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
-		self.TryAddScoped<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
-		self.TryAddScoped<IBeforeProcess<Upload>, AssignMediaFieldsHook>();
-		self.TryAddScoped<IBeforeProcess<Upload>, UploadFileHook>();
+		self.AddScoped<IAccessValidator<Upload>, VerifyUserCanReadFileHook>();
+		self.AddScoped<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
+		self.AddScoped<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
+		self.AddScoped<IBeforeProcess<Upload>, AssignMediaFieldsHook>();
+		self.AddScoped<IBeforeProcess<Upload>, UploadFileHook>();
 
 
 		/***********
