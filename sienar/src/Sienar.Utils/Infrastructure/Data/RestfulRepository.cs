@@ -11,7 +11,7 @@ namespace Sienar.Infrastructure.Data;
 /// </summary>
 /// <typeparam name="TEntity">the type of the entity</typeparam>
 public class RestfulRepository<TEntity> : RestfulService, IRepository<TEntity>
-	where TEntity : EntityBase
+	where TEntity : class
 {
 	private readonly INotificationService _notifier;
 	private readonly IRestfulRepositoryUrlProvider<TEntity> _urlProvider;

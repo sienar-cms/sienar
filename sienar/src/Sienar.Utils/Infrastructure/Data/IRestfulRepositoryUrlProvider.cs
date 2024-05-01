@@ -7,7 +7,7 @@ namespace Sienar.Infrastructure.Data;
 /// </summary>
 /// <typeparam name="TEntity">the type of the entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IRestfulRepositoryUrlProvider<TEntity> where TEntity : EntityBase
+public interface IRestfulRepositoryUrlProvider<TEntity>
 {
 	/// <summary>
 	/// Generates a URL to perform a read operation on a single entity
