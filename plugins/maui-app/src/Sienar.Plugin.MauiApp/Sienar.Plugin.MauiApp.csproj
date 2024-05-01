@@ -51,12 +51,6 @@
 			Include="Sienar.MauiPlugin" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\architecture\src\Sienar.Plugin.Architecture.Blazor\Sienar.Plugin.Architecture.Blazor.csproj"/>
-		<PackageReference
-			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Architecture.Blazor" Version="0.1.0"/>
-		<ProjectReference
-			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\..\..\..\sienar\src\Sienar.UI\Sienar.UI.csproj"/>
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "

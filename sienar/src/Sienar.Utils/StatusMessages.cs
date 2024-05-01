@@ -9,12 +9,20 @@ namespace Sienar;
 /// <exclude />
 public static class StatusMessages
 {
+	public static class General
+	{
+		public const string NotFound = "The requested resource was not found";
+		public const string Unauthorized = "You do not have permission to perform that action";
+		public const string Unprocessable = "There was a problem with the data you entered. Please check for errors and try again";
+		public const string Conflict = "The data you entered conflicts with existing application data. Please check for errors and try again";
+		public const string Concurrency = "Someone else updated the record before you. Please reload the page and try again";
+		public const string Unknown = "An unknown error has occurred";
+	}
+
 	public static class Processes
 	{
-		public const string NoPermission = "You do not have permission to perform that action";
 		public const string InvalidState = "Your request state is not valid. Please check your data and try again";
 		public const string BeforeHookFailure = "One or more plugins failed to execute. Your operation could not be completed";
-		public const string Unknown = "An unknown error has occurred. If you continue to have problems, please notify the webmaster.";
 	}
 
 	public static class Crud<TEntity> where TEntity : EntityBase
@@ -34,5 +42,12 @@ public static class StatusMessages
 	public static class Database
 	{
 		public const string QueryFailed = "Failed to query database";
+	}
+
+	public static class Rest
+	{
+		public const string NetworkFailed = "A network error occurred. Are you connected to the internet?";
+		public const string NetworkTimeout = "Network request timed out";
+		public const string BadRequest = "The request was malformed";
 	}
 }

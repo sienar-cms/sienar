@@ -10,6 +10,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -43,7 +44,7 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 		_loginOptions = loginOptions.Value;
 	}
 
-	public async Task<HookResult<bool>> Process(InitiateEmailChangeRequest request)
+	public async Task<OperationResult<bool>> Process(InitiateEmailChangeRequest request)
 	{
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)

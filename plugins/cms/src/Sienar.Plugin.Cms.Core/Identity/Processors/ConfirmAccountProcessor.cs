@@ -10,6 +10,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -41,7 +42,7 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 		_options = options.Value;
 	}
 
-	public async Task<HookResult<bool>> Process(ConfirmAccountRequest request)
+	public async Task<OperationResult<bool>> Process(ConfirmAccountRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.UserId);
 		if (user is null)

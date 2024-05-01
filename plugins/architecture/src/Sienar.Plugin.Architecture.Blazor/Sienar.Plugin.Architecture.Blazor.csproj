@@ -40,6 +40,12 @@
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.WebPlugin" Version="0.1.0"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\sienar\src\Sienar.UI\Sienar.UI.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.UI" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

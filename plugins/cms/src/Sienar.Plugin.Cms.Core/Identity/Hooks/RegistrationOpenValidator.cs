@@ -6,6 +6,7 @@ using Sienar.Configuration;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
@@ -24,14 +25,14 @@ public class RegistrationOpenValidator : IStateValidator<RegisterRequest>
 		_notifier = notifier;
 	}
 
-	public Task<HookStatus> Validate(RegisterRequest request, ActionType action)
+	public Task<OperationStatus> Validate(RegisterRequest request, ActionType action)
 	{
 		if (!_sienarOptions.RegistrationOpen)
 		{
 			_notifier.Error(CmsErrors.Account.RegistrationDisabled);
-			return Task.FromResult(HookStatus.Conflict);
+			return Task.FromResult(OperationStatus.Conflict);
 		}
 
-		return Task.FromResult(HookStatus.Success);
+		return Task.FromResult(OperationStatus.Success);
 	}
 }

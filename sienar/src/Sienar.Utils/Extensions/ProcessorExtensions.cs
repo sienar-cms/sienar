@@ -1,10 +1,10 @@
-﻿using Sienar.Infrastructure.Hooks;
+﻿using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains utilities for returning <see cref="HookResult{TResult}"/> instances from processors
+/// Contains utilities for returning <see cref="OperationResult{TResult}"/> instances from processors
 /// </summary>
 public static class ProcessorExtensions
 {
@@ -17,11 +17,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Concurrency<TRequest, TResult>(
+	public static OperationResult<TResult> Concurrency<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Concurrency, result, message);
+		=> new (OperationStatus.Concurrency, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a database concurrency issue
@@ -31,11 +31,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Concurrency<TResult>(
+	public static OperationResult<TResult> Concurrency<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Concurrency, result, message);
+		=> new(OperationStatus.Concurrency, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a database conflict
@@ -46,11 +46,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Conflict<TRequest, TResult>(
+	public static OperationResult<TResult> Conflict<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Conflict, result, message);
+		=> new (OperationStatus.Conflict, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a database conflict
@@ -60,11 +60,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Conflict<TResult>(
+	public static OperationResult<TResult> Conflict<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Conflict, result, message);
+		=> new(OperationStatus.Conflict, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a missing entity
@@ -75,11 +75,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> NotFound<TRequest, TResult>(
+	public static OperationResult<TResult> NotFound<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.NotFound, result, message);
+		=> new (OperationStatus.NotFound, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a missing entity
@@ -89,11 +89,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> NotFound<TResult>(
+	public static OperationResult<TResult> NotFound<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.NotFound, result, message);
+		=> new(OperationStatus.NotFound, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a successful operation
@@ -104,11 +104,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Success<TRequest, TResult>(
+	public static OperationResult<TResult> Success<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Success, result, message);
+		=> new (OperationStatus.Success, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents a successful operation
@@ -118,11 +118,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Success<TResult>(
+	public static OperationResult<TResult> Success<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Success, result, message);
+		=> new(OperationStatus.Success, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unauthorized result
@@ -133,11 +133,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unauthorized<TRequest, TResult>(
+	public static OperationResult<TResult> Unauthorized<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Unauthorized, result, message);
+		=> new (OperationStatus.Unauthorized, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unauthorized result
@@ -147,11 +147,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unauthorized<TResult>(
+	public static OperationResult<TResult> Unauthorized<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Unauthorized, result, message);
+		=> new(OperationStatus.Unauthorized, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unknown issue
@@ -162,11 +162,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unknown<TRequest, TResult>(
+	public static OperationResult<TResult> Unknown<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Unknown, result, message);
+		=> new (OperationStatus.Unknown, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unknown issue
@@ -176,11 +176,11 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unknown<TResult>(
+	public static OperationResult<TResult> Unknown<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Unknown, result, message);
+		=> new(OperationStatus.Unknown, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unprocessable operation
@@ -191,11 +191,11 @@ public static class ProcessorExtensions
 	/// <typeparam name="TRequest">the type of the request</typeparam>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unprocessable<TRequest, TResult>(
+	public static OperationResult<TResult> Unprocessable<TRequest, TResult>(
 		this IProcessor<TRequest, TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new (HookStatus.Unprocessable, result, message);
+		=> new (OperationStatus.Unprocessable, result, message);
 
 	/// <summary>
 	/// Returns a hook result that represents an unprocessable operation
@@ -205,9 +205,9 @@ public static class ProcessorExtensions
 	/// <param name="message">the error message to display, if any</param>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the resulting hook result</returns>
-	public static HookResult<TResult> Unprocessable<TResult>(
+	public static OperationResult<TResult> Unprocessable<TResult>(
 		this IProcessor<TResult> self,
 		TResult? result = default,
 		string? message = null)
-		=> new(HookStatus.Unprocessable, result, message);
+		=> new(OperationStatus.Unprocessable, result, message);
 }

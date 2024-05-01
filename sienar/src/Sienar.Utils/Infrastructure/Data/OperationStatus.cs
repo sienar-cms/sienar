@@ -1,9 +1,9 @@
-﻿namespace Sienar.Infrastructure.Hooks;
+﻿namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// Represents different statuses with which a hook or process can exit
 /// </summary>
-public enum HookStatus
+public enum OperationStatus
 {
 	/// <summary>
 	/// Indicates that a hook or process was successful

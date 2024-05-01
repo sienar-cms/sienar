@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Identity.Hooks;
@@ -19,14 +20,14 @@ public class AcceptTosValidator : IStateValidator<RegisterRequest>
 	}
 
 	/// <inheritdoc />
-	public Task<HookStatus> Validate(RegisterRequest request, ActionType action)
+	public Task<OperationStatus> Validate(RegisterRequest request, ActionType action)
 	{
 		if (!request.AcceptTos)
 		{
 			_notifier.Error(CmsErrors.Account.MustAcceptTos);
-			return Task.FromResult(HookStatus.Unprocessable);
+			return Task.FromResult(OperationStatus.Unprocessable);
 		}
 
-		return Task.FromResult(HookStatus.Success);
+		return Task.FromResult(OperationStatus.Success);
 	}
 }
