@@ -32,6 +32,7 @@ public class SienarBlazorPlugin : IWebPlugin
 	{
 		var p = app.Services.GetRequiredService<IRoutableAssemblyProvider>();
 
+		app.UseAntiforgery();
 		app
 			.MapRazorComponents<SienarApp>()
 			.AddInteractiveServerRenderMode()

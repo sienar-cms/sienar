@@ -145,7 +145,6 @@ public sealed class SienarWebAppBuilder
 
 		app
 			.UseStaticFiles()
-			.UseAntiforgery()
 			.UseAuthentication()
 			.UseAuthorization();
 

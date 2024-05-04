@@ -24,6 +24,10 @@ public class SienarRestPlugin : IWebPlugin
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
+
+		builder.Services.AddScoped<IReadableNotificationService, RestNotificationService>();
+		builder.Services.AddScoped<INotificationService>(
+			sp => sp.GetRequiredService<IReadableNotificationService>());
 	}
 
 	/// <inheritdoc />

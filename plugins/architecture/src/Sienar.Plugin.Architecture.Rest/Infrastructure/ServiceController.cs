@@ -10,6 +10,14 @@ namespace Sienar.Infrastructure;
 /// </summary>
 public class ServiceController : ControllerBase
 {
+	private readonly IReadableNotificationService _notifier;
+
+	/// <inheritdoc />
+	protected ServiceController(IReadableNotificationService notifier)
+	{
+		_notifier = notifier;
+	}
+
 	/// <summary>
 	/// Executes a service
 	/// </summary>
@@ -58,12 +66,12 @@ public class ServiceController : ControllerBase
 	/// </summary>
 	/// <typeparam name="TResult">the type of the result</typeparam>
 	/// <returns>the new <see cref="ApiResult{TResult}"/></returns>
-	protected static ApiResult<TResult> CreateResult<TResult>(TResult result)
+	protected ApiResult<TResult> CreateResult<TResult>(TResult result)
 	{
 		return new()
 		{
 			Result = result,
-			Notifications = []
+			Notifications = _notifier.Notifications.ToArray()
 		};
 	}
 }

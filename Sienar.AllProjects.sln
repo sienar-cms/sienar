@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Architecture.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Architecture.Rest", "plugins\architecture\src\Sienar.Plugin.Architecture.Rest\Sienar.Plugin.Architecture.Rest.csproj", "{B00991EC-27EB-4EFD-8657-2E1C1633761B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject.Rest", "playground\TestProject.Rest\TestProject.Rest.csproj", "{E427D7A7-F453-47B5-B55B-317CB41CD504}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,10 @@ Global
 		{B00991EC-27EB-4EFD-8657-2E1C1633761B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B00991EC-27EB-4EFD-8657-2E1C1633761B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B00991EC-27EB-4EFD-8657-2E1C1633761B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E427D7A7-F453-47B5-B55B-317CB41CD504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E427D7A7-F453-47B5-B55B-317CB41CD504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E427D7A7-F453-47B5-B55B-317CB41CD504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E427D7A7-F453-47B5-B55B-317CB41CD504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BA815BAC-DB9B-486E-8A12-ABA1222B35AD} = {BD58A0B2-0F5A-40C4-A8CD-EDEA9F356CA5}
@@ -155,5 +161,6 @@ Global
 		{570D2E86-9C56-4C1D-B2B1-EEE90344B279} = {A4CA6B24-EC90-4B56-AA55-2CB4FDBB50B2}
 		{0E43D725-E9B8-4D5C-A483-A159A52F3432} = {570D2E86-9C56-4C1D-B2B1-EEE90344B279}
 		{B00991EC-27EB-4EFD-8657-2E1C1633761B} = {570D2E86-9C56-4C1D-B2B1-EEE90344B279}
+		{E427D7A7-F453-47B5-B55B-317CB41CD504} = {9D383232-54C6-416C-B9EA-D59EAE332638}
 	EndGlobalSection
 EndGlobal
