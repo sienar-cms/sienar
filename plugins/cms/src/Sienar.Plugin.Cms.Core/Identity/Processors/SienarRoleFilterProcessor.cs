@@ -3,13 +3,13 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class SienarRoleFilterProcessor : IFilterProcessor<SienarRole>
+public class SienarRoleFilterProcessor : IEntityFrameworkFilterProcessor<SienarRole>
 {
 	public IQueryable<SienarRole> Search(IQueryable<SienarRole> dataset, Filter filter) => dataset;
 

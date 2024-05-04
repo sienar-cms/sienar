@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Processors;
 
 // ReSharper disable once TypeParameterCanBeVariant
 /// <summary>
-/// A processor which accepts a <c>TRequest</c> as input and returns a <see cref="HookResult{TResult}"/>
+/// A processor which accepts a <c>TRequest</c> as input and returns a <see cref="OperationResult{TResult}"/>
 /// </summary>
 /// <typeparam name="TRequest">the type of the processor input</typeparam>
 /// <typeparam name="TResult">the type of the processor output</typeparam>
@@ -16,12 +17,12 @@ public interface IProcessor<TRequest, TResult>
 	/// </summary>
 	/// <param name="request">the request input</param>
 	/// <returns>the result of the operation</returns>
-	Task<HookResult<TResult>> Process(TRequest request);
+	Task<OperationResult<TResult>> Process(TRequest request);
 }
 
 // ReSharper disable once TypeParameterCanBeVariant
 /// <summary>
-/// A processor which accepts no input and returns a <see cref="HookResult{TResult}"/>
+/// A processor which accepts no input and returns a <see cref="OperationResult{TResult}"/>
 /// </summary>
 /// <typeparam name="TResult">the type of the processor output</typeparam>
 public interface IProcessor<TResult>
@@ -30,5 +31,5 @@ public interface IProcessor<TResult>
 	/// Processes the request and generates the result
 	/// </summary>
 	/// <returns>the result of the operation</returns>
-	Task<HookResult<TResult>> Process();
+	Task<OperationResult<TResult>> Process();
 }

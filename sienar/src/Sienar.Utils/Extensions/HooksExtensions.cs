@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Extensions;
@@ -96,7 +97,7 @@ public static class HooksExtensions
 			var wasSuccessful = true;
 			foreach (var validator in stateValidators)
 			{
-				if (await validator.Validate(entity, action) != HookStatus.Success) wasSuccessful = false;
+				if (await validator.Validate(entity, action) != OperationStatus.Success) wasSuccessful = false;
 			}
 
 			return wasSuccessful;

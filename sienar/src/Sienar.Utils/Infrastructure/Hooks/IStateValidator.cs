@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Infrastructure.Hooks;
 
@@ -14,5 +15,5 @@ public interface IStateValidator<TRequest>
 	/// </summary>
 	/// <param name="request">the request or entity</param>
 	/// <param name="action">the action type</param>
-	Task<HookStatus> Validate(TRequest request, ActionType action);
+	Task<OperationStatus> Validate(TRequest request, ActionType action);
 }

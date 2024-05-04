@@ -10,6 +10,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -32,7 +33,7 @@ public class PersonalDataProcessor : IProcessor<PersonalDataResult>
 		_personalDataRetrievers = personalDataRetrievers;
 	}
 
-	public async Task<HookResult<PersonalDataResult>> Process()
+	public async Task<OperationResult<PersonalDataResult>> Process()
 	{
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)

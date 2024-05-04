@@ -7,6 +7,7 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -32,7 +33,7 @@ public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
 		_options = options.Value;
 	}
 
-	public async Task<HookResult<bool>> Process(ResetPasswordRequest request)
+	public async Task<OperationResult<bool>> Process(ResetPasswordRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.UserId);
 		if (user == null)

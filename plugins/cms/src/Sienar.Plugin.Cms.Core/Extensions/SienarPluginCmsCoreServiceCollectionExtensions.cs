@@ -15,7 +15,6 @@ using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
 using Sienar.Media;
 using Sienar.Media.Hooks;
@@ -38,91 +37,88 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		this IServiceCollection self,
 		IConfiguration config)
 	{
-		self.RemoveService(typeof(IStatusService<>));
-		self.RemoveService(typeof(IService<,>));
-
-		self.TryAddTransient<IBotDetector, BotDetector>();
-		self.TryAddTransient<IEmailSender, DefaultEmailSender>();
-
 		self
-			.AddHttpContextAccessor()
-			.AddTransient(typeof(IStatusService<>), typeof(SienarStatusService<>))
-			.AddScoped(typeof(IService<,>), typeof(SienarService<,>))
-			.AddTransient(typeof(IStateValidator<>), typeof(ConcurrencyStampValidator<>))
-			.AddTransient(typeof(IBeforeProcess<>), typeof(ConcurrencyStampUpdateHook<>));
+			.ReplaceService(
+				typeof(IStatusService<>),
+				typeof(StatusService<>),
+				typeof(SienarStatusService<>))
+			.ReplaceService(
+				typeof(IService<,>),
+				typeof(Service<,>),
+				typeof(SienarService<,>))
+			.AddHttpContextAccessor();
 
-		self.TryAddTransient<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
-		self.TryAddTransient<IUserClaimsFactory, UserClaimsFactory>();
-		self.TryAddTransient<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
-		self.TryAddTransient<IVerificationCodeManager, VerificationCodeManager>();
-		self.TryAddTransient<IUserManager, UserManager>();
+		self.TryAddScoped<IBotDetector, BotDetector>();
+		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
+		self.TryAddScoped<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
+		self.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
+		self.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
+		self.TryAddScoped<IVerificationCodeManager, VerificationCodeManager>();
+		self.TryAddScoped<IUserManager, UserManager>();
 
-		
+
 		/************
 		 * Identity *
 		 ***********/
 
 		self.TryAddScoped<IUserAccessor, HttpContextUserAccessor>();
-		self.TryAddTransient<IAccountEmailMessageFactory, AccountEmailMessageFactory>();
-		self.TryAddTransient<IAccountEmailManager, AccountEmailManager>();
-		self.TryAddTransient<IAccountUrlProvider, AccountUrlProvider>();
+		self.TryAddScoped<IAccountEmailMessageFactory, AccountEmailMessageFactory>();
+		self.TryAddScoped<IAccountEmailManager, AccountEmailManager>();
+		self.TryAddScoped<IAccountUrlProvider, AccountUrlProvider>();
 
 		// CRUD
 		self
-			// .AddTransient<IBeforeRead<SienarUser>, IncludeRolesInFilterHook>()
-			.AddTransient<IAccessValidator<SienarUser>, UserIsAdminAccessValidator<SienarUser>>()
-			.AddTransient<IBeforeProcess<SienarUser>, UserPasswordUpdateHook>()
-			.AddTransient<IStateValidator<SienarUser>, EnsureAccountInfoUniqueValidator>()
-			.AddTransient<IBeforeProcess<SienarUser>, RemoveUserRelatedEntitiesHook>();
-
-		self.TryAddTransient<IFilterProcessor<SienarUser>, SienarUserFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<SienarRole>, SienarRoleFilterProcessor>();
-		self.TryAddTransient<IFilterProcessor<LockoutReason>, LockoutReasonFilterProcessor>();
+			.AddAccessValidator<SienarUser, UserIsAdminAccessValidator<SienarUser>>()
+			.AddBeforeHook<SienarUser, UserPasswordUpdateHook>()
+			.AddStateValidator<SienarUser, EnsureAccountInfoUniqueValidator>()
+			.AddBeforeHook<SienarUser, RemoveUserRelatedEntitiesHook>()
+			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor>()
+			.AddEntityFrameworkEntity<SienarRole, SienarRoleFilterProcessor>()
+			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor>()
 
 		// Security
-		self.TryAddTransient<IProcessor<LoginRequest, Guid>, LoginProcessor>();
-		self.TryAddTransient<IProcessor<PerformLoginRequest, bool>, PerformLoginProcessor>();
-		self.TryAddTransient<IProcessor<LogoutRequest, bool>, LogoutProcessor>();
-		self.TryAddTransient<IProcessor<PersonalDataResult>, PersonalDataProcessor>();
-		self.TryAddTransient<IProcessor<AddUserToRoleRequest, bool>, UserRoleChangeProcessor>();
-		self.TryAddTransient<IAccessValidator<AddUserToRoleRequest>, UserIsAdminAccessValidator<AddUserToRoleRequest>>();
-		self.TryAddTransient<IProcessor<RemoveUserFromRoleRequest, bool>, UserRoleChangeProcessor>();
-		self.TryAddTransient<IAccessValidator<RemoveUserFromRoleRequest>, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>();
-		self.TryAddTransient<IProcessor<LockUserAccountRequest, bool>, LockUserAccountProcessor>();
-		self.TryAddTransient<IAccessValidator<LockUserAccountRequest>, UserIsAdminAccessValidator<LockUserAccountRequest>>();
-		self.TryAddTransient<IProcessor<UnlockUserAccountRequest, bool>, UnlockUserAccountProcessor>();
-		self.TryAddTransient<IAccessValidator<UnlockUserAccountRequest>, UserIsAdminAccessValidator<UnlockUserAccountRequest>>();
-		self.TryAddTransient<IProcessor<ManuallyConfirmUserAccountRequest, bool>, ManuallyConfirmUserAccountProcessor>();
-		self.TryAddTransient<IAccessValidator<ManuallyConfirmUserAccountRequest>, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>();
+			.AddProcessor<LoginRequest, Guid, LoginProcessor>()
+			.AddStatusProcessor<PerformLoginRequest, PerformLoginProcessor>()
+			.AddStatusProcessor<LogoutRequest, LogoutProcessor>()
+			.AddResultProcessor<PersonalDataResult, PersonalDataProcessor>()
+			.AddStatusProcessor<AddUserToRoleRequest, UserRoleChangeProcessor>()
+			.AddAccessValidator<AddUserToRoleRequest, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
+			.AddStatusProcessor<RemoveUserFromRoleRequest, UserRoleChangeProcessor>()
+			.AddAccessValidator<RemoveUserFromRoleRequest, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>()
+			.AddStatusProcessor<LockUserAccountRequest, LockUserAccountProcessor>()
+			.AddAccessValidator<LockUserAccountRequest, UserIsAdminAccessValidator<LockUserAccountRequest>>()
+			.AddStatusProcessor<UnlockUserAccountRequest, UnlockUserAccountProcessor>()
+			.AddAccessValidator<UnlockUserAccountRequest, UserIsAdminAccessValidator<UnlockUserAccountRequest>>()
+			.AddStatusProcessor<ManuallyConfirmUserAccountRequest, ManuallyConfirmUserAccountProcessor>()
+			.AddAccessValidator<ManuallyConfirmUserAccountRequest, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>()
+			.AddSingleton<LoginTokenCache>()
 
 		// Registration
-		self.TryAddTransient<IStateValidator<RegisterRequest>, RegistrationOpenValidator>();
-		self.TryAddTransient<IStateValidator<RegisterRequest>, AcceptTosValidator>();
-		self.TryAddTransient<IStateValidator<RegisterRequest>, EnsureAccountInfoUniqueValidator>();
-		self.TryAddTransient<IProcessor<RegisterRequest, bool>, RegisterProcessor>();
+			.AddStateValidator<RegisterRequest, RegistrationOpenValidator>()
+			.AddStateValidator<RegisterRequest, AcceptTosValidator>()
+			.AddStateValidator<RegisterRequest, EnsureAccountInfoUniqueValidator>()
+			.AddStatusProcessor<RegisterRequest, RegisterProcessor>()
 
 		// Email
-		self.TryAddTransient<IProcessor<ConfirmAccountRequest, bool>, ConfirmAccountProcessor>();
-		self.TryAddTransient<IProcessor<InitiateEmailChangeRequest, bool>, InitiateEmailChangeProcessor>();
-		self.TryAddTransient<IProcessor<PerformEmailChangeRequest, bool>, PerformEmailChangeProcessor>();
+			.AddStatusProcessor<ConfirmAccountRequest, ConfirmAccountProcessor>()
+			.AddStatusProcessor<InitiateEmailChangeRequest, InitiateEmailChangeProcessor>()
+			.AddStatusProcessor<PerformEmailChangeRequest, PerformEmailChangeProcessor>()
 
 		// Password
-		self.TryAddTransient<IProcessor<ChangePasswordRequest, bool>, ChangePasswordProcessor>();
-		self.TryAddTransient<IProcessor<ForgotPasswordRequest, bool>, ForgotPasswordProcessor>();
-		self.TryAddTransient<IProcessor<ResetPasswordRequest, bool>, ResetPasswordProcessor>();
+			.AddStatusProcessor<ChangePasswordRequest, ChangePasswordProcessor>()
+			.AddStatusProcessor<ForgotPasswordRequest, ForgotPasswordProcessor>()
+			.AddStatusProcessor<ResetPasswordRequest, ResetPasswordProcessor>()
 
 		// Personal data
-		self.TryAddTransient<IBeforeProcess<DeleteAccountRequest>, RemoveUserRelatedEntitiesHook>();
-		self.TryAddTransient<IProcessor<DeleteAccountRequest, bool>, DeleteAccountProcessor>();
-
-		self.AddSingleton<LoginTokenCache>();
+			.AddBeforeHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook>()
+			.AddStatusProcessor<DeleteAccountRequest, DeleteAccountProcessor>();
 
 
 		/********
 		 * Auth *
 		 *******/
 
-		self.TryAddTransient<ISignInManager, CookieSignInManager>();
+		self.TryAddScoped<ISignInManager, CookieSignInManager>();
 
 		var authorizationConfigurer = self.GetAndRemoveService<Action<AuthorizationOptions>>();
 		var authenticationConfigurer = self.GetAndRemoveService<Action<AuthenticationOptions>>();
@@ -140,16 +136,16 @@ public static class SienarPluginCmsCoreServiceCollectionExtensions
 		 * Media *
 		 ********/
 
-		self.TryAddTransient<IMediaDirectoryMapper, MediaDirectoryMapper>();
-		self.TryAddTransient<IMediaManager, MediaManager>();
+		self.TryAddScoped<IMediaDirectoryMapper, MediaDirectoryMapper>();
+		self.TryAddScoped<IMediaManager, MediaManager>();
 
-		self.TryAddTransient<IFilterProcessor<Upload>, UploadFilterProcessor>();
-
-		self.TryAddTransient<IAccessValidator<Upload>, VerifyUserCanReadFileHook>();
-		self.TryAddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
-		self.TryAddTransient<IAccessValidator<Upload>, VerifyUserCanModifyFileHook>();
-		self.TryAddTransient<IBeforeProcess<Upload>, AssignMediaFieldsHook>();
-		self.TryAddTransient<IBeforeProcess<Upload>, UploadFileHook>();
+		self
+			.AddAccessValidator<Upload, VerifyUserCanReadFileHook>()
+			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
+			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
+			.AddBeforeHook<Upload, AssignMediaFieldsHook>()
+			.AddBeforeHook<Upload, UploadFileHook>()
+			.AddEntityFrameworkEntity<Upload, UploadFilterProcessor>();
 
 
 		/***********

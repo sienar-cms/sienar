@@ -7,6 +7,7 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -29,7 +30,7 @@ public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest, bool>
 		_options = options.Value;
 	}
 
-	public async Task<HookResult<bool>> Process(ForgotPasswordRequest request)
+	public async Task<OperationResult<bool>> Process(ForgotPasswordRequest request)
 	{
 		var user = await _userManager.GetSienarUser(request.AccountName);
 

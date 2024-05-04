@@ -6,6 +6,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -31,7 +32,7 @@ public class PerformLoginProcessor : IProcessor<PerformLoginRequest, bool>
 		_logger = logger;
 	}
 
-	public async Task<HookResult<bool>> Process(PerformLoginRequest request)
+	public async Task<OperationResult<bool>> Process(PerformLoginRequest request)
 	{
 		var loginRequest = _tokenCache.ConsumeLoginToken(request.LoginToken);
 		if (loginRequest is null)

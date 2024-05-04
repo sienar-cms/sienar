@@ -4,14 +4,14 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
+public class SienarUserFilterProcessor : IEntityFrameworkFilterProcessor<SienarUser>
 {
 	public IQueryable<SienarUser> Search(IQueryable<SienarUser> dataset, Filter filter)
 	{

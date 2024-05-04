@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Services;
 
 namespace Sienar.Infrastructure.Hooks;
@@ -21,10 +21,10 @@ public class ConcurrencyStampValidator<TEntity>
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-	public async Task<HookStatus> Validate(TEntity request, ActionType action)
+	public async Task<OperationStatus> Validate(TEntity request, ActionType action)
 	{
 		// Only run on update
-		if (action is not ActionType.Update) return HookStatus.Success;
+		if (action is not ActionType.Update) return OperationStatus.Success;
 
 		var concurrencyStamp = await EntitySet
 			.Where(m => m.Id == request.Id)
@@ -35,9 +35,9 @@ public class ConcurrencyStampValidator<TEntity>
 			|| concurrencyStamp != request.ConcurrencyStamp)
 		{
 			Notifier.Error($"Unable to update {typeof(TEntity).Name}: the entity has been updated by another user.");
-			return HookStatus.Conflict;
+			return OperationStatus.Conflict;
 		}
 
-		return HookStatus.Success;
+		return OperationStatus.Success;
 	}
 }

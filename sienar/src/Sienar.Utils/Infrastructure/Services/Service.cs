@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Extensions;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 
@@ -43,7 +44,7 @@ public class Service<TRequest, TResult> : IService<TRequest, TResult>
 	{
 		if (!await _accessValidators.Validate(request, ActionType.Action, _logger))
 		{
-			_notifier.Error(StatusMessages.Processes.NoPermission);
+			_notifier.Error(StatusMessages.General.Unauthorized);
 			return default;
 		}
 
@@ -63,7 +64,7 @@ public class Service<TRequest, TResult> : IService<TRequest, TResult>
 		try
 		{
 			var processResult = await _processor.Process(request);
-			if (processResult.Status == HookStatus.Success)
+			if (processResult.Status == OperationStatus.Success)
 			{
 				_notifier.Success(processResult.Message);
 			}
@@ -80,7 +81,7 @@ public class Service<TRequest, TResult> : IService<TRequest, TResult>
 			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest, TResult>));
 
 			// Notify failure because the failure was unplanned
-			_notifier.Error(StatusMessages.Processes.Unknown);
+			_notifier.Error(StatusMessages.General.Unknown);
 			return default;
 		}
 

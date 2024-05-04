@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -25,17 +26,17 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-	async Task<HookResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
+	async Task<OperationResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
 	{
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)
 		{
-			return new(HookStatus.NotFound, message: CmsErrors.Account.NotFound);
+			return new(OperationStatus.NotFound, message: CmsErrors.Account.NotFound);
 		}
 
 		if (user.Roles.Any(r => r.Id == request.RoleId))
 		{
-			return new(HookStatus.Unprocessable, message: CmsErrors.Account.AccountAlreadyInRole);
+			return new(OperationStatus.Unprocessable, message: CmsErrors.Account.AccountAlreadyInRole);
 		}
 
 		var role = await Context
@@ -43,33 +44,33 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 			.FindAsync(request.RoleId);
 		if (role is null)
 		{
-			return new(HookStatus.NotFound, message: CmsErrors.Roles.NotFound);
+			return new(OperationStatus.NotFound, message: CmsErrors.Roles.NotFound);
 		}
 
 		user.Roles.Add(role);
 		await Context.SaveChangesAsync();
 
-		return new(HookStatus.Success, true, $"User {user.Username} added to role {role.Name}");
+		return new(OperationStatus.Success, true, $"User {user.Username} added to role {role.Name}");
 	}
 
-	async Task<HookResult<bool>> IProcessor<RemoveUserFromRoleRequest, bool>.Process(RemoveUserFromRoleRequest request)
+	async Task<OperationResult<bool>> IProcessor<RemoveUserFromRoleRequest, bool>.Process(RemoveUserFromRoleRequest request)
 	{
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)
 		{
-			return new(HookStatus.NotFound, message: CmsErrors.Account.NotFound);
+			return new(OperationStatus.NotFound, message: CmsErrors.Account.NotFound);
 		}
 
 		var role = user.Roles.FirstOrDefault(r => r.Id == request.RoleId);
 		if (role is null)
 		{
-			return new(HookStatus.Unprocessable, message: CmsErrors.Account.AccountNotInRole);
+			return new(OperationStatus.Unprocessable, message: CmsErrors.Account.AccountNotInRole);
 		}
 
 		user.Roles.Remove(role);
 		await Context.SaveChangesAsync();
 
-		return new(HookStatus.Success, true, $"User {user.Username} removed from role {role.Name}");
+		return new(OperationStatus.Success, true, $"User {user.Username} removed from role {role.Name}");
 	}
 
 	private Task<SienarUser?> GetSienarUserWithRoles(Guid id)

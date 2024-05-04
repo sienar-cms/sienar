@@ -3,13 +3,13 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LockoutReasonFilterProcessor : IFilterProcessor<LockoutReason>
+public class LockoutReasonFilterProcessor : IEntityFrameworkFilterProcessor<LockoutReason>
 {
 	public IQueryable<LockoutReason> Search(IQueryable<LockoutReason> dataset, Filter filter)
 		=> string.IsNullOrEmpty(filter.SearchTerm)

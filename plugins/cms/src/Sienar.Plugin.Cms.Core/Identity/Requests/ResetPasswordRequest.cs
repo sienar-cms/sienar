@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Sienar.Validation;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Identity.Requests;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// Used to search, sort, order, and page through database records

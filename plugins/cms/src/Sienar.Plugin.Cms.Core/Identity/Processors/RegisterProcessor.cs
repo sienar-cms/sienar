@@ -11,6 +11,7 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -41,7 +42,7 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 		_appOptions = appOptions.Value;
 	}
 
-	public async Task<HookResult<bool>> Process(RegisterRequest request)
+	public async Task<OperationResult<bool>> Process(RegisterRequest request)
 	{
 		// Checks passed. Make a new user
 		var user = new SienarUser

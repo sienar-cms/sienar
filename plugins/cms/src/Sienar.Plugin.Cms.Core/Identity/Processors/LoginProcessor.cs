@@ -11,6 +11,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -45,7 +46,7 @@ public class LoginProcessor : DbService<SienarUser>,
 		_appOptions = appOptions.Value;
 	}
 
-	public async Task<HookResult<Guid>> Process(LoginRequest request)
+	public async Task<OperationResult<Guid>> Process(LoginRequest request)
 	{
 		var user = await _userManager.GetSienarUser(
 			request.AccountName,

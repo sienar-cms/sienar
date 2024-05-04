@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 
 namespace Sienar.Infrastructure.Processors;
@@ -10,7 +10,7 @@ namespace Sienar.Infrastructure.Processors;
 /// A processor which converts a <see cref="Filter"/> into EF queries for the given <c>TEntity</c>
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public interface IFilterProcessor<TEntity>
+public interface IEntityFrameworkFilterProcessor<TEntity>
 {
 	/// <summary>
 	/// Applies included entities to the <see cref="IQueryable"/>

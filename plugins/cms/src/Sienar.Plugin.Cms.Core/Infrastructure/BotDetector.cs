@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Sienar.Infrastructure.Entities;
+using Sienar.Infrastructure.Data;
 
 namespace Sienar.Infrastructure;
 

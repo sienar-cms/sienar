@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Services;
 
@@ -23,21 +24,21 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 		INotificationService notifier)
 		: base(context, logger, notifier) {}
 
-	Task<HookStatus> IStateValidator<SienarUser>.Validate(SienarUser request, ActionType type)
+	Task<OperationStatus> IStateValidator<SienarUser>.Validate(SienarUser request, ActionType type)
 		=> UserIsUnique(
 			request.Username,
 			request.Email,
 			request.PendingEmail,
 			request.Id);
 
-	Task<HookStatus> IStateValidator<RegisterRequest>.Validate(
+	Task<OperationStatus> IStateValidator<RegisterRequest>.Validate(
 		RegisterRequest request,
 		ActionType action)
 		=> UserIsUnique(
 			request.Username,
 			request.Email);
 
-	private async Task<HookStatus> UserIsUnique(
+	private async Task<OperationStatus> UserIsUnique(
 		string username,
 		string email,
 		string? pendingEmail = null,
@@ -77,7 +78,7 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 		}
 
 		return valid
-			? HookStatus.Success
-			: HookStatus.Conflict;
+			? OperationStatus.Success
+			: OperationStatus.Conflict;
 	}
 }

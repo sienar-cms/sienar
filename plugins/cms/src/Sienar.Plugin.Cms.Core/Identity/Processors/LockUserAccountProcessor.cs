@@ -7,6 +7,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -29,7 +30,7 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 		_userManager = userManager;	
 	}
 
-	public async Task<HookResult<bool>> Process(LockUserAccountRequest request)
+	public async Task<OperationResult<bool>> Process(LockUserAccountRequest request)
 	{
 		var user = await _userManager.GetSienarUser(
 			request.UserId,

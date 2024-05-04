@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sienar.Infrastructure.Entities;
+namespace Sienar.Infrastructure.Data;
 
 /// <summary>
 /// Represents a DTO that has honeypot capabilities

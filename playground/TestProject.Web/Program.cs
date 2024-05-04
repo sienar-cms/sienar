@@ -17,7 +17,6 @@ await SienarWebAppBuilder
 	.AddPlugin<DevmodePlugin>()
 #endif
 	.AddPlugin<SienarBlazorPlugin>()
-	.AddPlugin<SienarRestPlugin>()
 	.SetupApp(
 		app =>
 		{

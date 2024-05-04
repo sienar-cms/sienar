@@ -7,6 +7,7 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
 using Sienar.Infrastructure.Services;
@@ -32,7 +33,7 @@ public class ChangePasswordProcessor : DbService<SienarUser>,
 		_userAccessor = userAccessor;
 	}
 
-	public async Task<HookResult<bool>> Process(ChangePasswordRequest request)
+	public async Task<OperationResult<bool>> Process(ChangePasswordRequest request)
 	{
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
