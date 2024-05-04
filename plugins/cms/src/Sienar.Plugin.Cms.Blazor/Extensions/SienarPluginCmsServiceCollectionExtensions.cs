@@ -18,7 +18,7 @@ public static class SienarPluginCmsServiceCollectionExtensions
 	/// <returns>the <see cref="IServiceCollection"/></returns>
 	public static IServiceCollection AddSienarCmsBlazor(this IServiceCollection self)
 	{
-		self.TryAddTransient<INotificationService, NotificationService>();
+		self.TryAddScoped<INotificationService, NotificationService>();
 
 		var mudblazorConfigurer = self.GetAndRemoveService<Action<MudServicesConfiguration>>();
 
