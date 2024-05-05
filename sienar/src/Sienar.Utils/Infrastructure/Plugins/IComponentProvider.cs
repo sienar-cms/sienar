@@ -13,6 +13,11 @@ public interface IComponentProvider
 	public Type? DefaultLayout { get; set; }
 
 	/// <summary>
+	/// A component to render in place of the default dashboard UI
+	/// </summary>
+	public Type? Dashboard { get; set; }
+
+	/// <summary>
 	/// A component to render on the left side of the appbar on large web screens
 	/// </summary>
 	public Type? AppbarLeft { get; set; }

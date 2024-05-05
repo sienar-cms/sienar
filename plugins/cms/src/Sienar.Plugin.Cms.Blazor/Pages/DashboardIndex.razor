@@ -1,5 +1,14 @@
+@using Sienar.Infrastructure.Plugins
 @attribute [Route(DashboardUrls.Index)]
+@inject IComponentProvider ComponentProvider
 
 <DocTitle Title="Dashboard"/>
 
-<Dashboard Categories="@([DashboardMenuNames.Dashboards.UserManagement])"/>
+@if (ComponentProvider.Dashboard is null)
+{
+	<Dashboard Categories="@([DashboardMenuNames.Dashboards.UserManagement])"/>
+}
+else
+{
+	<DynamicComponent Type="ComponentProvider.Dashboard" />
+}
