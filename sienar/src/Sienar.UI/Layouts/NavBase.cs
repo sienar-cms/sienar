@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Sienar.Infrastructure.Menus;
-using Sienar.UI;
 
 namespace Sienar.Layouts;
 
