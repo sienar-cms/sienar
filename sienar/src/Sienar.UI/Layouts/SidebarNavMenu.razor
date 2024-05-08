@@ -8,14 +8,14 @@
 		<MudIconButton
 			Icon="@Icons.Material.Filled.Menu"
 			Color="Color.Inherit"
-			OnClick="@(() => _open = !_open)"/>
+			OnClick="ToggleDrawer"/>
 	</MudAppBar>
 </MudHidden>
 
 <MudDrawer
 	Elevation="1"
 	@bind-Open="Open"
-	Variant="_breakpoint >= Breakpoint.Lg ? DrawerVariant.Persistent : DrawerVariant.Temporary">
+	Variant="DrawerVariant">
 	<DrawerNavContent Menus="Menus"/>
 </MudDrawer>
 
@@ -28,6 +28,10 @@
 		get => _breakpoint >= Breakpoint.Lg || _open;
 		set => _open = value;
 	}
+
+	private DrawerVariant DrawerVariant => _breakpoint >= Breakpoint.Lg
+		? DrawerVariant.Persistent
+		: DrawerVariant.Temporary;
 
 	/// <summary>
 	/// The current browser breakpoint size
@@ -69,6 +73,11 @@
 	{
 		await BrowserViewportService.UnsubscribeAsync(this);
 		GC.SuppressFinalize(this);
+	}
+
+	private void ToggleDrawer()
+	{
+		_open = !_open;
 	}
 
 }
