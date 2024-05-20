@@ -3,26 +3,28 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
-	IStateValidator<SienarUser>,
+public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 	IStateValidator<RegisterRequest>
 {
+	private readonly DbContext _context;
+	private readonly INotificationService _notifier;
+
 	public EnsureAccountInfoUniqueValidator(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
 		INotificationService notifier)
-		: base(context, logger, notifier) {}
+	{
+		_context = context;
+		_notifier = notifier;
+	}
 
 	Task<OperationStatus> IStateValidator<SienarUser>.Validate(SienarUser request, ActionType type)
 		=> UserIsUnique(
@@ -45,18 +47,18 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 		Guid id = default)
 	{
 		var valid = true;
+		var entitySet = _context.Set<SienarUser>();
 
-		var user = await EntitySet.FirstOrDefaultAsync(
-			u => u.Id != id && u.Username == username);
+		var user = await entitySet.FirstOrDefaultAsync(u => u.Id != id && u.Username == username);
 		if (user is not null)
 		{
-			Notifier.Error(CmsErrors.Account.UsernameTaken);
+			_notifier.Error(CmsErrors.Account.UsernameTaken);
 			valid = false;
 		}
 
 		if (!string.IsNullOrEmpty(pendingEmail))
 		{
-			user = await EntitySet.FirstOrDefaultAsync(
+			user = await entitySet.FirstOrDefaultAsync(
 				u => u.Id != id
 				&& (u.Email == email
 					|| u.Email == pendingEmail
@@ -65,7 +67,7 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 		}
 		else
 		{
-			user = await EntitySet.FirstOrDefaultAsync(
+			user = await entitySet.FirstOrDefaultAsync(
 				u => u.Id != id
 				&& (u.Email == email
 					|| u.PendingEmail == email));
@@ -73,7 +75,7 @@ public class EnsureAccountInfoUniqueValidator : DbService<SienarUser>,
 
 		if (user is not null)
 		{
-			Notifier.Error(CmsErrors.Account.EmailTaken);
+			_notifier.Error(CmsErrors.Account.EmailTaken);
 			valid = false;
 		}
 

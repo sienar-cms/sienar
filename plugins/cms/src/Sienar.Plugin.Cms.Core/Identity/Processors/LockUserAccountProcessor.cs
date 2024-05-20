@@ -2,31 +2,25 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LockUserAccountProcessor : DbService<SienarUser>,
-	IProcessor<LockUserAccountRequest, bool>
+public class LockUserAccountProcessor : IProcessor<LockUserAccountRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 
 	public LockUserAccountProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;	
 	}
 
@@ -43,7 +37,7 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 
 		foreach (var id in request.Reasons)
 		{
-			var reason = await Context
+			var reason = await _context
 				.Set<LockoutReason>()
 				.FindAsync(id);
 			if (reason is null)
@@ -56,8 +50,10 @@ public class LockUserAccountProcessor : DbService<SienarUser>,
 
 		user.LockoutEnd = request.EndDate;
 
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		return this.Success(true, $"Locked user {user.Username} successfully");
 	}

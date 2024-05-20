@@ -1,33 +1,24 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ChangePasswordProcessor : DbService<SienarUser>,
-	IProcessor<ChangePasswordRequest, bool>
+public class ChangePasswordProcessor : IProcessor<ChangePasswordRequest, bool>
 {
 	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
 
 	public ChangePasswordProcessor(
-		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager,
 		IUserAccessor userAccessor)
-		: base(context, logger, notifier)
 	{
 		_userManager = userManager;
 		_userAccessor = userAccessor;
