@@ -27,7 +27,7 @@ public class Filter
 	public bool? SortDescending { get; set; }
 
 	/// <summary>
-	/// The page of results to return (0-indexed)
+	/// The page of results to return (1-indexed)
 	/// </summary>
 	[ExcludeFromCodeCoverage]
 	public int Page { get; set; } = 1;

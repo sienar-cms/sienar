@@ -14,6 +14,7 @@ await SienarWebAppBuilder
 #if DEBUG
 	.AddPlugin<DevmodePlugin>()
 #endif
+	.SetupDependencies(builder => builder.SettupSevitaToolsDependencies())
 	.SetupApp(app => app.SetupSevitaTools())
 	.ConfigureTheme<SevitaTheme>()
 	.AddPlugin<SienarBlazorPlugin>() // Must be last plugin registered

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
 using Sevita.Tools.Data;
+using Sevita.Tools.Processors;
 using Sevita.Tools.UI;
 using Sienar;
 using Sienar.Extensions;
@@ -13,6 +14,21 @@ namespace Sevita.Tools.Extensions;
 
 public static class SevitaToolsWebApplicationExtensions
 {
+	public static void SettupSevitaToolsDependencies(
+		this WebApplicationBuilder builder)
+	{
+		builder.Services
+			.AddEntityFrameworkEntity<Event, EventProcessor>()
+			.AddEntityFrameworkEntity<Goal, GoalProcessor>()
+			.AddEntityFrameworkEntity<Location, LocationProcessor>()
+			.AddEntityFrameworkEntity<Objective, ObjectiveProcessor>()
+			.AddEntityFrameworkEntity<Pbs, PbsProcessor>()
+			.AddEntityFrameworkEntity<Prompt, PromptProcessor>()
+			.AddEntityFrameworkEntity<Shift, ShiftProcessor>()
+			.AddEntityFrameworkEntity<Site, SiteProcessor>()
+			.AddEntityFrameworkEntity<TimeLog, TimeLogProcessor>();
+	}
+
 	public static void SetupSevitaTools(this WebApplication app)
 	{
 		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSevitaDbPath());
