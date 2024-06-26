@@ -2,7 +2,6 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -11,16 +10,15 @@ using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class PerformEmailChangeProcessor : DbService<SienarUser>,
-	IProcessor<PerformEmailChangeRequest, bool>
+public class PerformEmailChangeProcessor
+	: IProcessor<PerformEmailChangeRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 	private readonly IUserAccessor _userAccessor;
 	private readonly IVerificationCodeManager _vcManager;
@@ -29,15 +27,13 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 
 	public PerformEmailChangeProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager,
 		IUserAccessor userAccessor,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
 		IOptions<SienarOptions> sienarOptions)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;
 		_userAccessor = userAccessor;
 		_vcManager = vcManager;
@@ -50,21 +46,19 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		var userId = await _userAccessor.GetUserId();
 		if (!userId.HasValue)
 		{
-			Notifier.Error(CmsErrors.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		var user = await _userManager.GetSienarUser(userId.Value);
 		if (user is null)
 		{
-			Notifier.Error(CmsErrors.Account.LoginRequired);
-			return this.Unauthorized();
+			return this.Unauthorized(message: CmsErrors.Account.LoginRequired);
 		}
 
 		if (user.Id != request.UserId)
 		{
-			Notifier.Error(CmsErrors.Account.AccountErrorWrongId);
-			return this.Unprocessable();
+			return this.Unprocessable(
+				message: CmsErrors.Account.AccountErrorWrongId);
 		}
 
 		if (string.IsNullOrEmpty(user.PendingEmail))
@@ -98,8 +92,10 @@ public class PerformEmailChangeProcessor : DbService<SienarUser>,
 		user.Email = user.PendingEmail;
 		user.PendingEmail = null;
 
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		return this.Success(true, "Email changed successfully");
 	}

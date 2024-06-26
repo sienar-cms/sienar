@@ -20,6 +20,9 @@
 	[Parameter]
     public bool TopPadded { get; set; }
 
+	[Parameter]
+    public bool TopPaddedOnSmall { get; set; }
+
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
@@ -28,9 +31,9 @@
 			_mainContentClass = "px-16 pb-16";
 		}
 
-		_containerClass = TopPadded
-			? "px-0 pt-16"
-			: "px-0";
+		if (TopPadded) _containerClass = "px-0 pt-16";
+		else if (TopPaddedOnSmall) _containerClass = "px-0 pt-16 pt-lg-0";
+		else _containerClass = "px-0";
 	}
 
 }

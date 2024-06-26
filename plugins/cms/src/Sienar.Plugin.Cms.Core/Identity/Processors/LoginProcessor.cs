@@ -3,25 +3,21 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LoginProcessor : DbService<SienarUser>, 
-	IProcessor<LoginRequest, Guid>
+public class LoginProcessor : IProcessor<LoginRequest, Guid>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 	private readonly LoginTokenCache _tokenCache;
 	private readonly IAccountEmailManager _emailManager;
@@ -30,15 +26,13 @@ public class LoginProcessor : DbService<SienarUser>,
 
 	public LoginProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager,
 		LoginTokenCache tokenCache,
 		IAccountEmailManager emailManager,
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;
 		_tokenCache = tokenCache;
 		_emailManager = emailManager;
@@ -48,6 +42,8 @@ public class LoginProcessor : DbService<SienarUser>,
 
 	public async Task<OperationResult<Guid>> Process(LoginRequest request)
 	{
+		var entitySet = _context.Set<SienarUser>();
+
 		var user = await _userManager.GetSienarUser(
 			request.AccountName,
 			u => u.Roles);
@@ -71,8 +67,8 @@ public class LoginProcessor : DbService<SienarUser>,
 				user.LockoutEnd = DateTime.Now + _loginOptions.LockoutTimespan;
 			}
 
-			EntitySet.Update(user);
-			await Context.SaveChangesAsync();
+			entitySet.Update(user);
+			await _context.SaveChangesAsync();
 
 			return this.Unauthorized(message: CmsErrors.Account.LoginFailedInvalid);
 		}
@@ -93,8 +89,8 @@ public class LoginProcessor : DbService<SienarUser>,
 
 		// User is authenticated and able to log in
 		user.LoginFailedCount = 0;
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		entitySet.Update(user);
+		await _context.SaveChangesAsync();
 
 		// Save the token to the token cache
 		var loginToken = Guid.NewGuid();

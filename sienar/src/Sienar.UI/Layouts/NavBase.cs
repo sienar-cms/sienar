@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Sienar.Infrastructure.Menus;
-using Sienar.Infrastructure.Plugins;
 
 namespace Sienar.Layouts;
 
@@ -16,9 +15,6 @@ public class NavBase : ComponentBase, IDisposable
 
 	[Parameter]
 	public required IEnumerable<string> MenuNames { get; set; }
-
-	[Inject]
-	protected IComponentProvider ComponentProvider { get; set; } = default!;
 
 	[Inject]
 	protected IMenuGenerator MenuGenerator { get; set; } = default!;

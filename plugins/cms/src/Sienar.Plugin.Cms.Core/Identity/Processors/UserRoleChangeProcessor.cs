@@ -4,27 +4,23 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class UserRoleChangeProcessor : DbService<SienarUser>,
-	IProcessor<AddUserToRoleRequest, bool>,
+public class UserRoleChangeProcessor : IProcessor<AddUserToRoleRequest, bool>,
 	IProcessor<RemoveUserFromRoleRequest, bool>
 {
-	public UserRoleChangeProcessor(
-		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier)
-		: base(context, logger, notifier) {}
+	private readonly DbContext _context;
+
+	public UserRoleChangeProcessor(DbContext context)
+	{
+		_context = context;
+	}
 
 	async Task<OperationResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
 	{
@@ -39,7 +35,7 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 			return new(OperationStatus.Unprocessable, message: CmsErrors.Account.AccountAlreadyInRole);
 		}
 
-		var role = await Context
+		var role = await _context
 			.Set<SienarRole>()
 			.FindAsync(request.RoleId);
 		if (role is null)
@@ -48,7 +44,7 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 		}
 
 		user.Roles.Add(role);
-		await Context.SaveChangesAsync();
+		await _context.SaveChangesAsync();
 
 		return new(OperationStatus.Success, true, $"User {user.Username} added to role {role.Name}");
 	}
@@ -68,13 +64,14 @@ public class UserRoleChangeProcessor : DbService<SienarUser>,
 		}
 
 		user.Roles.Remove(role);
-		await Context.SaveChangesAsync();
+		await _context.SaveChangesAsync();
 
 		return new(OperationStatus.Success, true, $"User {user.Username} removed from role {role.Name}");
 	}
 
 	private Task<SienarUser?> GetSienarUserWithRoles(Guid id)
-		=> EntitySet
+		=> _context
+			.Set<SienarUser>()
 			.Include(u => u.Roles)
 			.FirstOrDefaultAsync(u => u.Id == id);
 }

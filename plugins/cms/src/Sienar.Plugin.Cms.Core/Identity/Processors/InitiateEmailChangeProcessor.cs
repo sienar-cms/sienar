@@ -2,7 +2,6 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -11,16 +10,14 @@ using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class InitiateEmailChangeProcessor : DbService<SienarUser>,
-	IProcessor<InitiateEmailChangeRequest, bool>
+public class InitiateEmailChangeProcessor : IProcessor<InitiateEmailChangeRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly IUserAccessor _userAccessor;
@@ -29,14 +26,13 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 
 	public InitiateEmailChangeProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager,
 		IAccountEmailManager emailManager,
 		IUserAccessor userAccessor,
 		IOptions<SienarOptions> sienarOptions,
-		IOptions<LoginOptions> loginOptions) : base(context, logger, notifier)
+		IOptions<LoginOptions> loginOptions)
 	{
+		_context = context;
 		_userManager = userManager;
 		_emailManager = emailManager;
 		_userAccessor = userAccessor;
@@ -76,8 +72,10 @@ public class InitiateEmailChangeProcessor : DbService<SienarUser>,
 			user.Email = request.Email;
 		}
 
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		if (shouldSendConfirmationEmail)
 		{

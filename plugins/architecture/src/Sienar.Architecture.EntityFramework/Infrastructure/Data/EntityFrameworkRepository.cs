@@ -3,10 +3,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Infrastructure.Data;
 
@@ -15,21 +13,28 @@ namespace Sienar.Infrastructure.Data;
 /// </summary>
 /// <typeparam name="TEntity">the type of the entity</typeparam>
 /// <typeparam name="TContext">the type of the database context</typeparam>
-public class EntityFrameworkRepository<TEntity, TContext>
-	: DbService<TEntity, TContext>, IRepository<TEntity>
+public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	where TEntity : EntityBase
 	where TContext : DbContext
 {
 	private readonly IEntityFrameworkFilterProcessor<TEntity> _filterProcessor;
 
+	/// <summary>
+	/// The <see cref="DbContext"/> backing this repository
+	/// </summary>
+	protected readonly DbContext Context;
+
+	/// <summary>
+	/// The <see cref="DbSet{TEntity}"/> backing this repository
+	/// </summary>
+	protected DbSet<TEntity> EntitySet => Context.Set<TEntity>();
+
 	/// <exclude />
 	public EntityFrameworkRepository(
 		TContext context,
-		ILogger<DbService<TEntity, TContext>> logger,
-		INotificationService notifier,
 		IEntityFrameworkFilterProcessor<TEntity> filterProcessor)
-		: base(context, logger, notifier)
 	{
+		Context = context;
 		_filterProcessor = filterProcessor;
 	}
 
@@ -142,12 +147,6 @@ public class EntityFrameworkRepository<TEntity> : EntityFrameworkRepository<TEnt
 	/// <exclude />
 	public EntityFrameworkRepository(
 		DbContext context,
-		ILogger<DbService<TEntity, DbContext>> logger,
-		INotificationService notifier,
 		IEntityFrameworkFilterProcessor<TEntity> filterProcessor)
-		: base(
-			context,
-			logger,
-			notifier,
-			filterProcessor) {}
+		: base(context, filterProcessor) {}
 }

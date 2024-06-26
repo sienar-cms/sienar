@@ -1,4 +1,6 @@
-﻿@inherits NavBase
+﻿@using Sienar.Infrastructure.Plugins
+@inherits NavBase
+@inject IComponentProvider ComponentProvider
  
 <MudAppBar Elevation="1">
 	<MudHidden Breakpoint="Breakpoint.LgAndUp">
@@ -37,30 +39,7 @@
 		Elevation="1"
 		@bind-Open="_open"
 		Variant="DrawerVariant.Temporary">
-		<div class="flex-grow-1">
-			<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
-
-			<MudNavMenu>
-				@for (var i = 0; i < Menus.Count; i++)
-				{
-					if (i > 0)
-					{
-						<MudDivider Class="my-3"/>
-					}
-
-					@foreach (var link in Menus[i])
-					{
-						<SidebarNavMenuLink Link="link"/>
-					}
-				}
-			</MudNavMenu>
-		</div>
-
-		<div>
-			<div class="pa-4">
-				<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
-			</div>
-		</div>
+		<DrawerNavContent Menus="Menus"/>
 	</MudDrawer>
 </MudHidden>
 

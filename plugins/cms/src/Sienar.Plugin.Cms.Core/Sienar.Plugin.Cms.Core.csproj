@@ -41,6 +41,16 @@
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Utils" Version="0.1.0"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\sienar\src\Sienar.WebPlugin\Sienar.WebPlugin.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.WebPlugin" Version="0.1.0"/>
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\..\..\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugin.Architecture.EntityFramework" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

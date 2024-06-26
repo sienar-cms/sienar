@@ -4,8 +4,16 @@ using Sienar.Infrastructure.Menus;
 
 namespace Sienar.Extensions;
 
+/// <summary>
+/// Contains <see cref="IMenuProvider"/> extension methods used by the <c>Sienar.Plugin.Cms.Blazor</c> assembly
+/// </summary>
 public static class MenuProviderExtensions
 {
+	/// <summary>
+	/// Registers the main menu with the menu provider
+	/// </summary>
+	/// <param name="self">the menu provider</param>
+	/// <returns>the menu provider</returns>
 	public static IMenuProvider CreateMainMenu(this IMenuProvider self)
 	{
 		var accountLink = new MenuLink
@@ -78,6 +86,11 @@ public static class MenuProviderExtensions
 		return self;
 	}
 
+	/// <summary>
+	/// Registers the info menu with the menu provider
+	/// </summary>
+	/// <param name="self">the menu provider</param>
+	/// <returns>the menu provider</returns>
 	public static IMenuProvider CreateInfoMenu(this IMenuProvider self)
 	{
 		self

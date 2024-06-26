@@ -2,25 +2,21 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ConfirmAccountProcessor : DbService<SienarUser>,
-	IProcessor<ConfirmAccountRequest, bool>
+public class ConfirmAccountProcessor : IProcessor<ConfirmAccountRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 	private readonly IVerificationCodeManager _vcManager;
 	private readonly IAccountEmailManager _emailManager;
@@ -28,14 +24,12 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 
 	public ConfirmAccountProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
 		IOptions<SienarOptions> options)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;
 		_vcManager = vcManager;
 		_emailManager = emailManager;
@@ -77,8 +71,10 @@ public class ConfirmAccountProcessor : DbService<SienarUser>,
 
 		// Code was valid
 		user.EmailConfirmed = true;
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		return this.Success(true, "Account confirmed successfully");
 	}

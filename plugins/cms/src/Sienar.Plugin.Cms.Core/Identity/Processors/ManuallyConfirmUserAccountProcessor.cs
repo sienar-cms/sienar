@@ -2,31 +2,26 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
-	IProcessor<ManuallyConfirmUserAccountRequest, bool>
+public class ManuallyConfirmUserAccountProcessor
+	: IProcessor<ManuallyConfirmUserAccountRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 
 	public ManuallyConfirmUserAccountProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;
 	}
 
@@ -45,8 +40,10 @@ public class ManuallyConfirmUserAccountProcessor : DbService<SienarUser>,
 
 		user.EmailConfirmed = true;
 
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		return this.Success(true, $"Confirmed {user.Username}'s account");
 	}

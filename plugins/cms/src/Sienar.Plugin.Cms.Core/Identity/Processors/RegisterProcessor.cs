@@ -4,23 +4,20 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterRequest, bool>
+public class RegisterProcessor : IProcessor<RegisterRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
 	private readonly LoginOptions _loginOptions;
@@ -28,14 +25,12 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 
 	public RegisterProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IAccountEmailManager emailManager,
 		IPasswordHasher<SienarUser> passwordHasher,
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_emailManager = emailManager;
 		_passwordHasher = passwordHasher;
 		_loginOptions = loginOptions.Value;
@@ -65,8 +60,10 @@ public class RegisterProcessor : DbService<SienarUser>, IProcessor<RegisterReque
 		}
 
 		// Try to create that user with the given password
-		await EntitySet.AddAsync(user);
-		await Context.SaveChangesAsync();
+		await _context
+			.Set<SienarUser>()
+			.AddAsync(user);
+		await _context.SaveChangesAsync();
 
 		if (shouldSendRegistrationEmail) await _emailManager.SendWelcomeEmail(user);
 

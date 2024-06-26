@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9829856A-657
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Architecture.Blazor", "src\Sienar.Plugin.Architecture.Blazor\Sienar.Plugin.Architecture.Blazor.csproj", "{72A13839-D807-417D-8FAF-FC655744B151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Architecture.Rest", "src\Sienar.Plugin.Architecture.Rest\Sienar.Plugin.Architecture.Rest.csproj", "{1E769947-3BD3-404E-84EE-F74A3087F949}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Architecture.EntityFramework", "src\Sienar.Plugin.Architecture.EntityFramework\Sienar.Plugin.Architecture.EntityFramework.csproj", "{D0A8274E-1E22-4709-882A-3B96B907246F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,13 +22,14 @@ Global
 		{72A13839-D807-417D-8FAF-FC655744B151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72A13839-D807-417D-8FAF-FC655744B151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72A13839-D807-417D-8FAF-FC655744B151}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E769947-3BD3-404E-84EE-F74A3087F949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E769947-3BD3-404E-84EE-F74A3087F949}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E769947-3BD3-404E-84EE-F74A3087F949}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E769947-3BD3-404E-84EE-F74A3087F949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A8274E-1E22-4709-882A-3B96B907246F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A8274E-1E22-4709-882A-3B96B907246F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A8274E-1E22-4709-882A-3B96B907246F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A8274E-1E22-4709-882A-3B96B907246F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{72A13839-D807-417D-8FAF-FC655744B151} = {9829856A-6570-477C-92DB-BE7FB62ADD42}
-		{1E769947-3BD3-404E-84EE-F74A3087F949} = {9829856A-6570-477C-92DB-BE7FB62ADD42}
+
+		{D0A8274E-1E22-4709-882A-3B96B907246F} = {9829856A-6570-477C-92DB-BE7FB62ADD42}
 	EndGlobalSection
 EndGlobal

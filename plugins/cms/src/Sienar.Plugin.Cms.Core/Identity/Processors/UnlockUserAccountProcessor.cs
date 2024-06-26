@@ -2,31 +2,25 @@
 
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Infrastructure.Data;
-using Sienar.Infrastructure.Hooks;
 using Sienar.Infrastructure.Processors;
-using Sienar.Infrastructure.Services;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class UnlockUserAccountProcessor : DbService<SienarUser>,
-	IProcessor<UnlockUserAccountRequest, bool>
+public class UnlockUserAccountProcessor : IProcessor<UnlockUserAccountRequest, bool>
 {
+	private readonly DbContext _context;
 	private readonly IUserManager _userManager;
 
 	public UnlockUserAccountProcessor(
 		DbContext context,
-		ILogger<DbService<SienarUser, DbContext>> logger,
-		INotificationService notifier,
 		IUserManager userManager)
-		: base(context, logger, notifier)
 	{
+		_context = context;
 		_userManager = userManager;
 	}
 
@@ -43,8 +37,10 @@ public class UnlockUserAccountProcessor : DbService<SienarUser>,
 		user.LockoutEnd = null;
 		user.LockoutReasons.Clear();
 
-		EntitySet.Update(user);
-		await Context.SaveChangesAsync();
+		_context
+			.Set<SienarUser>()
+			.Update(user);
+		await _context.SaveChangesAsync();
 
 		return this.Success(true, $"User {user.Username}'s account was unlocked successfully");
 	}
