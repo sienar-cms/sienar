@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Sienar.Extensions;
 using Sienar.Infrastructure.Data;
 using Sienar.Infrastructure.Hooks;
-using Sienar.Infrastructure.Processors;
 
 namespace Sienar.Infrastructure.Services;
 
@@ -18,7 +17,6 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 	private readonly IRepository<TEntity> _repository;
 	private readonly INotificationService _notifier;
 	private readonly ILogger<EntityReader<TEntity>> _logger;
-	private readonly IEntityFrameworkFilterProcessor<TEntity> _filterProcessor;
 	private readonly IEnumerable<IAccessValidator<TEntity>> _accessValidators;
 	private readonly IEnumerable<IAfterProcess<TEntity>> _afterHooks;
 
@@ -26,14 +24,12 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		IRepository<TEntity> repository,
 		INotificationService notifier,
 		ILogger<EntityReader<TEntity>> logger,
-		IEntityFrameworkFilterProcessor<TEntity> filterProcessor,
 		IEnumerable<IAccessValidator<TEntity>> accessValidators,
 		IEnumerable<IAfterProcess<TEntity>> afterHooks)
 	{
 		_repository = repository;
 		_notifier = notifier;
 		_logger = logger;
-		_filterProcessor = filterProcessor;
 		_accessValidators = accessValidators;
 		_afterHooks = afterHooks;
 	}
@@ -45,7 +41,6 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		TEntity? entity;
 		try
 		{
-			filter = _filterProcessor.ModifyFilter(filter, ActionType.Read);
 			entity = await _repository.Read(id, filter);
 		}
 		catch (Exception e)

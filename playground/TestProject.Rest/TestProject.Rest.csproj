@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\plugins\architecture\src\Sienar.Plugin.Architecture.Rest\Sienar.Plugin.Architecture.Rest.csproj" />
+	  <ProjectReference Include="..\..\sienar\src\Sienar.WebPlugin\Sienar.WebPlugin.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
