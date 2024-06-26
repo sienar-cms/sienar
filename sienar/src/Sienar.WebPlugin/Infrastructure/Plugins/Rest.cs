@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Sienar.Infrastructure.Plugins;
 
-public class SienarRestPlugin : IWebPlugin
+public class Rest : IWebPlugin
 {
 	/// <inheritdoc />
 	public PluginData PluginData { get; } = new()

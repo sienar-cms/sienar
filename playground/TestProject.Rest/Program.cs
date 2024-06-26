@@ -5,7 +5,7 @@ using TestProject.Rest.Temp;
 
 await SienarWebAppBuilder
 	.Create(args, typeof(Program).Assembly)
-	.AddPlugin<SienarRestPlugin>()
+	.AddPlugin<Rest>()
 	.SetupDependencies(builder =>
 	{
 		builder.Services
