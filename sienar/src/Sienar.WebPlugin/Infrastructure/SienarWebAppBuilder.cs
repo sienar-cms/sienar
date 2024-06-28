@@ -113,7 +113,7 @@ public sealed class SienarWebAppBuilder
 
 		if (AppAssembly is not null)
 		{
-			app.ConfigureRoutableAssemblies(p => p.Add(AppAssembly));
+			app.Services.ConfigureRoutableAssemblies(p => p.Add(AppAssembly));
 		}
 
 		foreach (var middleware in Middlewares)

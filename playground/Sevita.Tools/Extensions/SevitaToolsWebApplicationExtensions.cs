@@ -32,9 +32,10 @@ public static class SevitaToolsWebApplicationExtensions
 	public static void SetupSevitaTools(this WebApplication app)
 	{
 		app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSevitaDbPath());
-		app.ConfigureComponents(SetupComponents);
-		app.ConfigureMenu(SetupMenu);
-		app.ConfigureStyles(SetupStyles);
+		app.Services.
+			ConfigureComponents(SetupComponents)
+			.ConfigureMenu(SetupMenu)
+			.ConfigureStyles(SetupStyles);
 	}
 
 	private static void SetupComponents(IComponentProvider p)

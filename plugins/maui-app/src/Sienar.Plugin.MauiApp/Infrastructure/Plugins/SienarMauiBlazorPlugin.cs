@@ -40,6 +40,7 @@ public class SienarMauiBlazorPlugin : IDesktopPlugin
 	/// <inheritdoc />
 	public void SetupApp(MauiApp app)
 	{
-		app.ConfigureComponents(c => c.DefaultLayout ??= typeof(DashboardLayout));
+		app.Services.ConfigureComponents(
+			c => c.DefaultLayout ??= typeof(DashboardLayout));
 	}
 }

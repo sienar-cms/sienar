@@ -24,19 +24,20 @@ public class DevmodePlugin : IWebPlugin
 	/// <inheritdoc />
 	public void SetupApp(WebApplication app)
 	{
-		app.ConfigureRoutableAssemblies(p => p.Add(typeof(DevmodePlugin).Assembly));
-		app.ConfigureMenu(p =>
-		{
-			p
-				.Access(DashboardMenuNames.MainMenu)
-				.AddLink(
-					new()
-					{
-						Url = DevUrls.DevConfiguration,
-						Text = "Dev configuration",
-						Icon = Icons.Material.Filled.DeveloperMode
-					},
-					MenuPriority.High);
-		});
+		app.Services
+			.ConfigureRoutableAssemblies(p => p.Add(typeof(DevmodePlugin).Assembly))
+			.ConfigureMenu(p =>
+			{
+				p
+					.Access(DashboardMenuNames.MainMenu)
+					.AddLink(
+						new()
+						{
+							Url = DevUrls.DevConfiguration,
+							Text = "Dev configuration",
+							Icon = Icons.Material.Filled.DeveloperMode
+						},
+						MenuPriority.High);
+			});
 	}
 }

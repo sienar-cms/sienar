@@ -21,18 +21,19 @@ await SienarWebAppBuilder
 		app =>
 		{
 			app.Services.MigrateDb<AppDbContext>(SienarDataExtensions.GetSienarDbPath());
-			app.ConfigureComponents(
-				p =>
+			app.Services
+				.ConfigureComponents(
+					p =>
+					{
+						p.DefaultLayout = typeof(MainAppLayout);
+						p.AppbarLeft = typeof(Branding);
+					})
+				.ConfigureMenu(p => p.AddMenu())
+				.ConfigureStyles(p =>
 				{
-					p.DefaultLayout = typeof(MainAppLayout);
-					p.AppbarLeft = typeof(Branding);
+					p.Add("/styles.css");
+					p.Add("/TestProject.Web.styles.css");
 				});
-			app.ConfigureMenu(p => p.AddMenu());
-			app.ConfigureStyles(p =>
-			{
-				p.Add("/styles.css");
-				p.Add("/TestProject.Web.styles.css");
-			});
 		})
 	.ConfigureTheme<SienarTheme>()
 	.Build()

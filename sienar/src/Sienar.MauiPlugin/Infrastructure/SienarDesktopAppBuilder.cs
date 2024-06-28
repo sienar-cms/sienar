@@ -11,8 +11,6 @@ namespace Sienar.Infrastructure;
 
 public sealed class SienarDesktopAppBuilder
 {
-	private bool _hasRootContext;
-
 	public Assembly AppAssembly = default!;
 	public readonly MauiAppBuilder Builder;
 	public readonly List<Action<MauiApp>> Middlewares = [];
@@ -100,7 +98,7 @@ public sealed class SienarDesktopAppBuilder
 	public MauiApp Build()
 	{
 		var app = Builder.Build();
-		app.ConfigureRoutableAssemblies(r => r.Add(AppAssembly));
+		app.Services.ConfigureRoutableAssemblies(r => r.Add(AppAssembly));
 
 		foreach (var middleware in Middlewares)
 		{

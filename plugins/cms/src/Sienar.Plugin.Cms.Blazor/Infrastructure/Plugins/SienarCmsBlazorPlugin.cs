@@ -36,7 +36,7 @@ public class SienarCmsBlazorPlugin : IWebPlugin
 	/// <inheritdoc />
 	public void SetupApp(WebApplication app)
 	{
-		app
+		app.Services
 			.ConfigureMenu(SetupMenu)
 			.ConfigureDashboard(SetupDashboard)
 			.ConfigureComponents(SetupComponents)
