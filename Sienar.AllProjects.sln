@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevita.Tools", "playground\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Architecture.EntityFramework", "plugins\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj", "{37F7199C-AE96-45CE-98B9-40252E536475}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.WasmPlugin", "sienar\src\Sienar.WasmPlugin\Sienar.WasmPlugin.csproj", "{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +142,10 @@ Global
 		{37F7199C-AE96-45CE-98B9-40252E536475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37F7199C-AE96-45CE-98B9-40252E536475}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37F7199C-AE96-45CE-98B9-40252E536475}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BA815BAC-DB9B-486E-8A12-ABA1222B35AD} = {BD58A0B2-0F5A-40C4-A8CD-EDEA9F356CA5}
@@ -169,5 +175,6 @@ Global
 		{E427D7A7-F453-47B5-B55B-317CB41CD504} = {9D383232-54C6-416C-B9EA-D59EAE332638}
 		{1666DDF5-592C-41FF-BD06-8B99D2606FD1} = {9D383232-54C6-416C-B9EA-D59EAE332638}
 		{37F7199C-AE96-45CE-98B9-40252E536475} = {570D2E86-9C56-4C1D-B2B1-EEE90344B279}
+		{0E6FEC68-6EE7-4EE8-970A-D7ADE2640EC8} = {BA815BAC-DB9B-486E-8A12-ABA1222B35AD}
 	EndGlobalSection
 EndGlobal
