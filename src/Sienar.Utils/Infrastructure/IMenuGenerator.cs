@@ -1,5 +1,17 @@
-﻿namespace Sienar.Infrastructure;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Sienar.Infrastructure;
+
 /// <summary>
-/// The <see cref="IAuthorizedLinkAggregator{TLink}"/> used to generate a list of <see cref="MenuLink">menu links</see> the user is authorized to see
+/// Generates a list of <see cref="MenuLink">menu links</see> the user is authorized to see
 /// </summary>
-public interface IMenuGenerator : IAuthorizedLinkAggregator<MenuLink>;
+public interface IMenuGenerator
+{
+	/// <summary>
+	/// Creates a list of authorized <c>TLink</c> instances to be rendered
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+	Task<List<MenuLink>> Create(string name);
+}
