@@ -7,7 +7,7 @@ namespace Sienar.Infrastructure;
 
 /// <exclude />
 public class AuthorizedLinkAggregator<TLink> : IAuthorizedLinkAggregator<TLink>
-	where TLink : DashboardLink
+	where TLink : MenuLink
 {
 	private readonly IUserAccessor _userAccessor;
 	private readonly IDictionaryProvider<LinkDictionary<TLink>> _provider;

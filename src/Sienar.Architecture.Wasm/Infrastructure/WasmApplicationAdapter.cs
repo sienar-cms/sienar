@@ -36,7 +36,6 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 	{
 		Builder.Services
 			.AddSingleton(sp.GetRequiredService<IComponentProvider>())
-			.AddSingleton(sp.GetRequiredService<IDashboardProvider>())
 			.AddSingleton(sp.GetRequiredService<IMenuProvider>())
 			.AddSingleton(sp.GetRequiredService<IPluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IRoutableAssemblyProvider>())
