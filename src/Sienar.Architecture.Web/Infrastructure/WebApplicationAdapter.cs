@@ -33,7 +33,6 @@ public class WebApplicationAdapter : IApplicationAdapter<WebApplicationBuilder>
 	public object Build(IServiceProvider sp)
 	{
 		Builder.Services
-			.AddSingleton(sp.GetRequiredService<IDashboardProvider>())
 			.AddSingleton(sp.GetRequiredService<IMenuProvider>())
 			.AddSingleton(sp.GetRequiredService<IPluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IScriptProvider>())

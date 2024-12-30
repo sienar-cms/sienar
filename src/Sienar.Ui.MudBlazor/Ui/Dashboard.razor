@@ -1,5 +1,5 @@
 ﻿@inject AuthenticationStateProvider AuthState
-@inject IDashboardGenerator DashboardGenerator
+@inject IMenuGenerator DashboardGenerator
 
 <H3 Class="mb-8">
 	@Name
@@ -29,8 +29,8 @@
 
 @code {
 
-	private readonly Dictionary<string, List<DashboardLink>> _allMenus = new();
-	private Dictionary<string, List<DashboardLink>> _menus = new();
+	private readonly Dictionary<string, List<MenuLink>> _allMenus = new();
+	private Dictionary<string, List<MenuLink>> _menus = new();
 
 	[Parameter]
 	public string Name { get; set; } = "Dashboard";
@@ -39,7 +39,7 @@
 	public required List<string> Categories { get; set; }
 
 	[Parameter]
-	public RenderFragment<DashboardLink>? LinkTemplate { get; set; }
+	public RenderFragment<MenuLink>? LinkTemplate { get; set; }
 
 	protected override void OnInitialized()
 	{

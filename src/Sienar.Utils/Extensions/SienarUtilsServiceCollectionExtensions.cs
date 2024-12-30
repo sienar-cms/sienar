@@ -37,12 +37,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IBeforeProcessService<>), typeof(BeforeProcessService<>));
 		self.TryAddScoped(typeof(IAfterProcessService<>), typeof(AfterProcessService<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
-		self.TryAddSingleton<IDashboardProvider, DashboardProvider>();
-		self.TryAddScoped<IDashboardGenerator, DashboardGenerator>();
-		self.TryAddSingleton<IMenuProvider, MenuProvider>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
-		self.TryAddSingleton<IScriptProvider, ScriptProvider>();
-		self.TryAddSingleton<IStyleProvider, StyleProvider>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
 
 		return self;
