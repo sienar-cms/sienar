@@ -37,9 +37,9 @@ public class MenuGenerator : IMenuGenerator
 				continue;
 			}
 
-			if (link.Sublinks is not null)
+			if (!string.IsNullOrEmpty(link.ChildMenu))
 			{
-				link.Sublinks = await ProcessNavLinks(link.Sublinks);
+				link.Sublinks = await Create(link.ChildMenu);
 			}
 
 			includedLinks.Add(link);

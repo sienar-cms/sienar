@@ -49,6 +49,11 @@ public class MenuLink
 	public IEnumerable<string>? Roles { get; set; }
 
 	/// <summary>
+	/// The name of a menu to render as a child menu of this menu, if any
+	/// </summary>
+	public string? ChildMenu { get; set; }
+
+	/// <summary>
 	/// Child links to display in a submenu, if any
 	/// </summary>
 	public List<MenuLink>? Sublinks;
