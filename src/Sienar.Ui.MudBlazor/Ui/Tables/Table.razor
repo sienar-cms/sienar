@@ -88,7 +88,7 @@
 	public required RenderFragment<TItem> RowTemplate { get; set; }
 
 	[Parameter]
-	public required Func<Filter?, Task<PagedQuery<TItem>>> LoadData { get; set; }
+	public required Func<Filter?, Task<OperationResult<PagedQuery<TItem>>>> LoadData { get; set; }
 
 	private MudTable<TItem> TableRef { get; set; } = null!;
 	private bool _loading;
@@ -137,8 +137,8 @@
 
 		return new TableData<TItem>
 		{
-			Items = result.Items,
-			TotalItems = result.TotalCount
+			Items = result.Result?.Items ?? [],
+			TotalItems = result.Result?.TotalCount ?? 0
 		};
 	}
 
