@@ -1,0 +1,57 @@
+@* @namespace Sienar.UI *@
+@* @inherits FormPage<DeleteAccountRequest> *@
+@* @inject IStatusService<DeleteAccountRequest> DeleteAccountService *@
+@* *@
+@* <StandardForm *@
+@* 	Model="Model" *@
+@* 	OnSubmit="OnSubmit" *@
+@* 	Title="Delete your data" *@
+@* 	SubmitText="Yes, delete my data and account" *@
+@* 	ThemeColor="Color.Error"> *@
+@* 	<Information> *@
+@* 		<P> *@
+@* 			Are you sure you want to delete your data? We will also have to delete your account. This cannot be undone! *@
+@* 		</P> *@
+@* 		<P> *@
+@* 			Confirm your password to delete your account. *@
+@* 		</P> *@
+@* 	</Information> *@
+@* *@
+@* 	<Fields> *@
+@* 		<MudTextField *@
+@* 			@bind-Value="Model.Password" *@
+@* 			For="() => Model.Password" *@
+@* 			InputType="InputType.Password" *@
+@* 			Label="Confirm your password"/> *@
+@* 	</Fields> *@
+@* *@
+@* 	<MoreActions> *@
+@* 		<PrimaryButton *@
+@* 			Variant="Variant.Outlined" *@
+@* 			OnClick="Close"> *@
+@* 			No, keep my data and account *@
+@* 		</PrimaryButton> *@
+@* 	</MoreActions> *@
+@* </StandardForm> *@
+@* *@
+@* @code { *@
+@* *@
+@* 	[CascadingParameter] *@
+@* 	private MudDialogInstance Instance { get; set; } = default!; *@
+@* *@
+@* 	protected override async Task OnSubmit() *@
+@* 	{ *@
+@* 		await SubmitRequest(() => DeleteAccountService.Execute(Model)); *@
+@* 		if (WasSuccessful) *@
+@* 		{ *@
+@* 			NavManager.NavigateTo(DashboardUrls.Account.Logout); *@
+@* 			Close(); *@
+@* 		} *@
+@* 	} *@
+@* *@
+@* 	private void Close() *@
+@* 	{ *@
+@* 		Instance.Close(); *@
+@* 	} *@
+@* *@
+@* } *@

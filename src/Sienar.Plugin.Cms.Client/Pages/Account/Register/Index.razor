@@ -1,0 +1,76 @@
+@inherits FormPage<Sienar.Identity.Requests.RegisterRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Register.Index)]
+@inject IStatusService<RegisterRequest> Service
+
+<DocTitle Title="Register"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="Model"
+		OnSubmit="@OnSubmit"
+		Title="Register"
+		SubmitText="Register"
+		ShowReset>
+    	<Fields>
+		    <Textbox
+			    @bind-Value="Model.Username"
+			    For="() => Model.Username"
+			    Label="Username"
+			    HelperText="Your username should be between 6 and 32 characters long. It should only contain letters, numbers, underscores, and periods."/>
+
+		    <Textbox
+			    @bind-Value="Model.Email"
+			    For="() => Model.Email"
+			    InputType="InputType.Email"
+			    Label="Email address"
+			    HelperText="You need an email address to verify your account."/>
+
+		    <Textbox
+			    @bind-Value="Model.Password"
+			    For="() => Model.Password"
+			    InputType="InputType.Password"
+			    Label="Password"
+			    HelperText="Your password should be between 8 and 64 characters long. It should contain a mix of uppercase and lowercase letters, numbers, and special characters."/>
+
+		    <Textbox
+			    @bind-Value="Model.ConfirmPassword"
+			    For="() => Model.ConfirmPassword"
+			    InputType="InputType.Password"
+			    Label="Confirm password"/>
+
+    		<Honeypot @bind-Value="Model.SecretKeyField"/>
+    
+		    <Checkbox
+			    @bind-Checked="Model.AcceptTos"
+			    For="() => Model.AcceptTos">
+    			I accept the Terms of Service and Privacy Policy
+    		</Checkbox>
+    	</Fields>
+    </StandardForm>
+</NarrowContainer>
+
+
+@code {
+
+	[Inject]
+	private INotificationService Notifier { get; set; } = null!;
+
+	private async Task OnSubmit()
+	{
+		// MudBlazor doesn't show errors on checkboxes
+		// so unfortunately, a [RequireTrue] wouldn't do any good
+		if (!Model.AcceptTos)
+		{
+			Notifier.Error("You must accept the Terms of Service and Privacy Policy to register.");
+			return;
+		}
+
+		await SubmitRequest(() => Service.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo($"{DashboardUrls.Account.Register.Successful}?username={Model.Username}&email={Model.Email}");
+		}
+	}
+
+}

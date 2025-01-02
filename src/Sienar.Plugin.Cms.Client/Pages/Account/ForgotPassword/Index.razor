@@ -1,0 +1,43 @@
+@inherits FormPage<ForgotPasswordRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.ForgotPassword.Index)]
+@inject IStatusService<ForgotPasswordRequest> ForgotPasswordService
+
+<DocHead Title="Forgot Password"
+         Description="Just another Blazor site with a password reset page"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="@Model"
+		OnSubmit="@OnSubmit"
+		SubmitText="Request password reset"
+		Title="Forgot password">
+		<Information>
+			<P>
+				To reset your password, please enter your username or email address in the form below. If there is an account associated with that username or email address, you will receive an email with a link authorizing a password reset.
+			</P>
+		</Information>
+
+		<Fields>
+			<MudTextField
+				@bind-Value="Model.AccountName"
+				For="() => Model.AccountName"
+				Label="Username or email address"/>
+
+			<Honeypot @bind-Value="Model.SecretKeyField"/>
+		</Fields>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	private async Task OnSubmit()
+	{
+		await SubmitRequest(() => ForgotPasswordService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.ForgotPassword.Successful);
+		}
+	}
+
+}

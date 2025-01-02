@@ -1,0 +1,77 @@
+﻿@inherits UpsertPage<SienarUser>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.Users.Add)]
+@attribute [Route($"{DashboardUrls.Users.Index}/{{id:guid}}")]
+
+<DocTitle Title="@Title"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="Model"
+		OnSubmit="@OnSubmit"
+		Title="@Title"
+		SubmitText="@SubmitText"
+		Icon="@Icon"
+		IconTitle="@($"{Model.Username}'s email is confirmed")">
+		<Fields>
+			<MudTextField
+				@bind-Value="Model.Username"
+				For="() => Model.Username"
+				Label="Username"
+				Immediate/>
+			<MudTextField
+				@bind-Value="Model.Email"
+				For="() => Model.Email"
+				InputType="InputType.Email"
+				Label="Email address"
+				Immediate/>
+			<MudTextField
+				@bind-Value="Model.Password"
+				For="() => Model.Password"
+				InputType="InputType.Password"
+				Label="Password"
+				Immediate/>
+			<MudTextField
+				@bind-Value="Model.ConfirmPassword"
+				For="() => Model.ConfirmPassword"
+				InputType="InputType.Password"
+				Label="Confirm password"
+				Immediate/>
+		</Fields>
+
+		<MoreActions>
+			<SecondaryButton Href="@DashboardUrls.Users.Index">
+				Back to users listing
+			</SecondaryButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	/// <inheritdoc />
+	protected override string GetName() => Model.Username;
+
+	private string? Icon => Model.EmailConfirmed
+		? Icons.Material.Filled.CheckCircle
+		: null;
+
+	/// <inheritdoc />
+	protected override Task OnSuccess()
+	{
+		NavManager.NavigateTo(DashboardUrls.Users.Index);
+		return Task.CompletedTask;
+	}
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		if (!IsEditing)
+		{
+			Model.Password = string.Empty;
+			Model.ConfirmPassword = string.Empty;
+		}
+	}
+
+}

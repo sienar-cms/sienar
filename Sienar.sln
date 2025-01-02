@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject.Server", "playg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject.Client.Wasm", "playground\TestProject.Client.Wasm\TestProject.Client.Wasm.csproj", "{CD59A1F1-CB14-4B83-99C2-24D8BC4629DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.Client", "src\Sienar.Plugin.Cms.Client\Sienar.Plugin.Cms.Client.csproj", "{AF2373BD-C70F-4DA4-9F51-B633318F1017}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +116,10 @@ Global
 		{CD59A1F1-CB14-4B83-99C2-24D8BC4629DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD59A1F1-CB14-4B83-99C2-24D8BC4629DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD59A1F1-CB14-4B83-99C2-24D8BC4629DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF2373BD-C70F-4DA4-9F51-B633318F1017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF2373BD-C70F-4DA4-9F51-B633318F1017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF2373BD-C70F-4DA4-9F51-B633318F1017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF2373BD-C70F-4DA4-9F51-B633318F1017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{111E852D-F9ED-4C3D-B869-3C9FA106D56F} = {EDD39A85-CD11-4469-A8AB-0364DC3232D4}
@@ -132,5 +138,6 @@ Global
 		{288EEDA5-EC96-45F3-896B-067F5019C32A} = {AECA84A1-073B-49F3-A5FB-0218436826FB}
 		{32707482-95B4-4FD9-A08C-7783368C1F56} = {AECA84A1-073B-49F3-A5FB-0218436826FB}
 		{CD59A1F1-CB14-4B83-99C2-24D8BC4629DE} = {AECA84A1-073B-49F3-A5FB-0218436826FB}
+		{AF2373BD-C70F-4DA4-9F51-B633318F1017} = {EDD39A85-CD11-4469-A8AB-0364DC3232D4}
 	EndGlobalSection
 EndGlobal

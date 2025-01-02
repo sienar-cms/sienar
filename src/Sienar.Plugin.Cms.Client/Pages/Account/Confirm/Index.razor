@@ -1,0 +1,55 @@
+@inherits ActionPage<ConfirmAccountRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Confirm.Index)]
+@inject IStatusService<ConfirmAccountRequest> Service
+
+<DocTitle Title="Confirming your account"/>
+
+<NarrowContainer>
+	<H1>
+		Confirming account
+	</H1>
+
+	@if (IsLoading)
+	{
+		<P>
+			We are confirming your account. Hold on...
+		</P>
+	}
+</NarrowContainer>
+
+@code {
+
+	/// <summary>
+	/// The ID of the user whose account to confirm
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	/// <summary>
+	/// The verification code of the user whose account to confirm
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	[Inject]
+	private NavigationManager NavManager { get; set; } = null!;
+
+	/// <inheritdoc />
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+		await SubmitRequest(() => Service.Execute(Model));
+
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.Confirm.Successful);
+		}
+	}
+
+}

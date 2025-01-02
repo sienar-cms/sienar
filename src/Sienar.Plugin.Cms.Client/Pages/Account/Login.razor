@@ -1,0 +1,83 @@
+@* @rendermode InteractiveServer *@
+@* @inherits FormPage<LoginRequest> *@
+@* @attribute [AllowAnonymous] *@
+@* @attribute [Route(DashboardUrls.Account.Login)] *@
+@* @inject IService<LoginRequest, Guid> Service *@
+@* *@
+@* <DocHead *@
+@* 	Description="Just another Blazor site with a login page" *@
+@* 	Title="Log in"/> *@
+@* *@
+@* <NarrowContainer> *@
+@* 	<StandardForm *@
+@* 		Model="@Model" *@
+@* 		OnSubmit="@OnSubmit" *@
+@* 		SubmitText="Log in" *@
+@* 		Title="Log in" *@
+@* 		FormName="login"> *@
+@* 		<Fields> *@
+@* 			<MudTextField *@
+@* 				@bind-Value="Model.AccountName" *@
+@* 				For="() => Model.AccountName" *@
+@* 				Label="Username or email address" *@
+@* 				name="Model.AccountName"/> *@
+@* 			<MudTextField *@
+@* 				@bind-Value="Model.Password" *@
+@* 				For="() => Model.Password" *@
+@* 				InputType="InputType.Password" *@
+@* 				Label="Password" *@
+@* 				name="Model.Password"/> *@
+@* 			<MudCheckBox *@
+@* 				Class="mt-4" *@
+@* 				Color="Color.Primary" *@
+@* 				UnCheckedColor="Color.Default" *@
+@* 				@bind-Checked="Model.RememberMe" *@
+@* 				For="() => Model.RememberMe" *@
+@* 				Label="Remember me" *@
+@* 				id="remember-me" *@
+@* 				name="Model.RememberMe"/> *@
+@* 			<Honeypot @bind-Value="Model.SecretKeyField"/> *@
+@* 		</Fields> *@
+@* *@
+@* 		<MoreActions> *@
+@* 			<SecondaryButton Link="@DashboardUrls.Account.ForgotPassword.Index"> *@
+@* 				I forgot my password *@
+@* 			</SecondaryButton> *@
+@* 		</MoreActions> *@
+@* 	</StandardForm> *@
+@* </NarrowContainer> *@
+@* *@
+@* @code { *@
+@* *@
+@* 	[Inject] *@
+@* 	private IUserManager UserManager { get; set; } = default!; *@
+@* *@
+@* 	[Parameter] *@
+@* 	[SupplyParameterFromQuery] *@
+@* 	public string? ReturnUrl { get; set; } *@
+@* *@
+@* 	[CascadingParameter] *@
+@* 	public Task<AuthenticationState>? AuthState { get; set; } *@
+@* *@
+@* 	protected override async Task OnSubmit() *@
+@* 	{ *@
+@* 		var id = await SubmitRequest(() => Service.Execute(Model)); *@
+@* 		if (WasSuccessful) *@
+@* 		{ *@
+@* 			var destination = $"{DashboardUrls.Account.ProcessLogin}?{nameof(ProcessLogin.TokenId)}={id}"; *@
+@* 			if (!string.IsNullOrEmpty(ReturnUrl)) *@
+@* 				destination = $"{destination}&ReturnUrl={ReturnUrl}"; *@
+@* *@
+@* 			NavManager.NavigateTo(destination); *@
+@* 		} *@
+@* 		else *@
+@* 		{ *@
+@* 			var user = await UserManager.GetSienarUser(Model.AccountName); *@
+@* 			if (user is not null && user.IsLockedOut()) *@
+@* 			{ *@
+@* 				NavManager.NavigateTo($"{DashboardUrls.Account.Locked}/{user.Id}"); *@
+@* 			} *@
+@* 		} *@
+@* 	} *@
+@* *@
+@* } *@

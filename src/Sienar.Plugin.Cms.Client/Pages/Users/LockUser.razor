@@ -1,0 +1,187 @@
+﻿@using Sienar.Errors
+@inherits FormPage<LockUserAccountRequest>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route($"{DashboardUrls.Users.Index}/{{userId:guid}}/lock")]
+@inject IEntityReader<SienarUser> UserReader
+@inject IEntityReader<LockoutReason> LockoutReasonReader
+@inject IStatusService<LockUserAccountRequest> LockAccountService
+
+@if (_user is null)
+{
+	<Spinner/>
+	return;
+}
+
+<NarrowContainer>
+	<StandardForm
+    	Model="Model"
+    	OnSubmit="@OnSubmit"
+    	Title="@($"Lock {_user.Username}'s account")"
+    	SubmitText="@($"Lock {_user.Username}'s account")"
+    	ThemeColor="Color.Error">
+		<Fields>
+			<Select
+				T="LockoutReason"
+				Label="Select one or more reasons to lock the user out"
+				@bind-SelectedValues="@_selectedReasons"
+				MultiSelection>
+				@foreach (var reason in _lockoutReasons)
+				{
+					<MudSelectItem
+						T="LockoutReason"
+						Value="reason">
+						@reason.Reason
+					</MudSelectItem>
+				}
+			</Select>
+			<MudRadioGroup
+				T="LockDuration"
+				Class="mt-4"
+				SelectedOption="_lockDuration"
+				SelectedOptionChanged="UpdateLockDuration">
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneDay">
+					One day
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneWeek">
+					One week
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneMonth">
+					One month
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.OneYear">
+					One year
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.Permanent">
+					Permanently
+				</Radio>
+				<Radio
+					T="LockDuration"
+					Option="@LockDuration.Custom">
+					<MudDatePicker
+						Label="Select a date"
+						@bind-Date="_lockEnd"
+						Disabled="_lockDuration != LockDuration.Custom"/>
+				</Radio>
+			</MudRadioGroup>
+		</Fields>
+
+		<MoreActions>
+			<PrimaryButton
+				Href="@DashboardUrls.Users.Index"
+				Variant="Variant.Outlined">
+				Back to users listing
+			</PrimaryButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	private SienarUser? _user;
+	private IEnumerable<LockoutReason> _lockoutReasons = Array.Empty<LockoutReason>();
+	private LockDuration _lockDuration = LockDuration.OneDay;
+	private DateTime? _lockEnd = DateTime.Now.AddDays(1);
+	private IEnumerable<LockoutReason> _selectedReasons = [];
+
+	[Parameter]
+	public Guid UserId { get; set; }
+
+	[Inject]
+	private INotificationService Notifier { get; set; } = null!;
+
+	[Inject]
+	private ILogger<LockUser> Logger { get; set; } = null!;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		_user = (await UserReader.Read(UserId)).Result;
+		if (_user is null)
+		{
+			Notifier.Error(CmsErrors.Account.NotFound);
+			return;
+		}
+
+		_lockoutReasons = (await LockoutReasonReader.Read(Filter.GetAll())).Result?.Items ?? [];
+	}
+
+	protected async Task OnSubmit()
+	{
+		Model.UserId = UserId;
+
+		var selectedReasons = _selectedReasons
+			.Select(r => r.Id)
+			.ToList();
+		if (selectedReasons.Count == 0)
+		{
+			Notifier.Error($"You must select at least one reason to lock {_user!.Username}'s account");
+			return;
+		}
+		Model.Reasons = selectedReasons;
+
+		if (!_lockEnd.HasValue)
+		{
+			Notifier.Error("You must select a date for the lockout to end. If you want the lockout to be permanent, select \"permanent\"");
+			return;
+		}
+
+		Model.EndDate = _lockEnd.Value;
+
+		await SubmitRequest(() => LockAccountService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Users.Index);
+		}
+	}
+
+	private void UpdateLockDuration(LockDuration duration)
+	{
+		Logger.LogInformation("New lock duration: {duration}", duration);
+		_lockDuration = duration;
+		int days;
+
+		switch (duration)
+		{
+			case LockDuration.Custom:
+				return;
+			case LockDuration.Permanent:
+				_lockEnd = DateTime.MaxValue;
+				return;
+			case LockDuration.OneDay:
+				days = 1;
+				break;
+			case LockDuration.OneWeek:
+				days = 7;
+				break;
+			case LockDuration.OneMonth:
+				days = 30;
+				break;
+			default:
+				days = 365;
+				break;
+		}
+
+		_lockEnd = DateTime.Now.AddDays(days);
+	}
+
+	enum LockDuration
+	{
+		OneDay,
+		OneWeek,
+		OneMonth,
+		OneYear,
+		Permanent,
+		Custom
+	}
+
+}

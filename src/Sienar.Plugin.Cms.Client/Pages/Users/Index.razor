@@ -1,0 +1,110 @@
+@inherits TablePage<SienarUser>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.Users.Index)]
+@inject IStatusService<UnlockUserAccountRequest> UnlockService
+@inject IStatusService<ManuallyConfirmUserAccountRequest> ConfirmService
+
+<DocTitle Title="Users listing"/>
+
+<Table
+	@ref="Table"
+	TableTitle="Site users"
+	LoadData="Reader.Read">
+	<ToolBarContent>
+		<PrimaryIconButton
+			Href="@DashboardUrls.Users.Add"
+			Icon="@Icons.Material.Filled.Add"/>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<SortLabel For="(SienarUser u) => u.Username">
+			Username
+		</SortLabel>
+		<SortLabel For="(SienarUser u) => u.Email">
+			Email address
+		</SortLabel>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Confirmed
+			</div>
+		</MudTh>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Actions
+			</div>
+		</MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+		<MudTd DataLabel="Username">@context.Username</MudTd>
+		<MudTd DataLabel="Email address">@context.Email</MudTd>
+		<MudTd DataLabel="Confirmed">
+			<div class="d-flex justify-center">
+				<MudIcon Icon="@GetConfirmationIcon(context.EmailConfirmed)"/>
+			</div>
+		</MudTd>
+		<MudTd DataLabel="Actions">
+			<div class="d-flex justify-center">
+				<PrimaryIconButton
+                	Link="@($"{DashboardUrls.Users.Index}/{context.Id}")"
+                	Title="@($"View user {context.Username}")"
+                	Icon="@Icons.Material.Filled.RemoveRedEye"/>
+				<PrimaryIconButton
+					Link="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
+					Title="@($"Edit {context.Username}'s roles")"
+					Icon="@Icons.Material.Filled.AdminPanelSettings"/>
+				@if (context.IsLockedOut())
+				{
+					<WarningIconButton
+						Title="@($"Unlock {context.Username}'s account")"
+						Icon="@Icons.Material.Filled.LockOpen"
+						OnClick="@(() => UnlockUser(context))"/>
+				}
+				else
+				{
+					<WarningIconButton
+						Link="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
+						Title="@($"Lock {context.Username}'s account")"
+						Icon="@Icons.Material.Filled.Lock"/>
+				}
+
+				<WarningIconButton
+					Title="@($"Confirm {context.Username}'s account")"
+					Icon="@Icons.Material.Filled.Check"
+					OnClick="@(() => ConfirmUser(context))"
+					Disabled="context.EmailConfirmed"/>
+				<ErrorIconButton
+                	Title="@($"Delete user {context.Username}")"
+                	Icon="@Icons.Material.Filled.DeleteForever"
+                	OnClick="@(() => DeleteUser(context))"/>
+			</div>
+		</MudTd>
+	</RowTemplate>
+</Table>
+
+@code {
+
+	private static string GetConfirmationIcon(bool isConfirmed)
+		=> isConfirmed
+			? Icons.Material.Filled.Check
+			: Icons.Material.Filled.Close;
+
+	private Task UnlockUser(SienarUser user)
+		=> ConfirmAction(
+			$"Unlock {user.Username}'s account",
+			$"Are you sure you want to unlock {user.Username}'s account? This will take effect immediately",
+			async () => await UnlockService.Execute(new UnlockUserAccountRequest { UserId = user.Id }));
+
+	private Task ConfirmUser(SienarUser user)
+		=> ConfirmAction(
+			$"Confirm {user.Username}'s account",
+			$"Are you sure you want to confirm {user.Username}'s account? This will take effect immediately",
+			async () => await ConfirmService.Execute(new ManuallyConfirmUserAccountRequest { UserId = user.Id }));
+
+	private Task DeleteUser(SienarUser user)
+		=> DeleteEntity(
+			user.Id,
+			$"Delete {user.Username}'s account",
+			$"Are you sure you want to delete {user.Username}'s account? This cannot be undone!");
+
+}
