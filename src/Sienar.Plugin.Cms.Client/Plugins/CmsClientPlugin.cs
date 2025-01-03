@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
@@ -43,14 +44,13 @@ public class CmsClientPlugin : IPlugin
 	/// <inheritdoc />
 	public void Configure()
 	{
-		_adapter.AddServices(s => s.AddRestClient());
-
 		SetupComponents();
 		SetupMenu();
 		SetupPluginData();
 		SetupRoutableAssemblies();
 		SetupScripts();
 		SetupStyles();
+		SetupServices();
 	}
 
 	private void SetupComponents()
@@ -94,6 +94,18 @@ public class CmsClientPlugin : IPlugin
 	{
 		_styleProvider.Add("/_content/Sienar.UI/sienar.css");
 		_styleProvider.Add("/_content/Sienar.Ui.MudBlazor/Sienar.UI.bundle.scp.css");
+	}
+
+	private void SetupServices()
+	{
+		_adapter.AddServices(s =>
+		{
+			s
+				.AddRestClient()
+				.AddBrowserCookieAuthClient();
+
+			s.TryAddScoped<INotificationService, NotificationService>();
+		});
 	}
 
 	[AppConfigurer]
