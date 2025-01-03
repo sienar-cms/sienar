@@ -68,12 +68,12 @@ public static class SienarRestServiceCollectionExtensions
 	}
 
 	public static IServiceCollection AddRestClient(this IServiceCollection self)
-	{
-		self.TryAddSingleton<IRestClient, RestClient>();
-		return self;
-	}
+		=> self.AddRestClient<RestClient>();
 
 	public static IServiceCollection AddRestClient<TClient>(this IServiceCollection self)
 		where TClient : class, IRestClient
-		=> self.AddSingleton<IRestClient, TClient>();
+	{
+		self.AddHttpClient<IRestClient, TClient>();
+		return self;
+	}
 }
