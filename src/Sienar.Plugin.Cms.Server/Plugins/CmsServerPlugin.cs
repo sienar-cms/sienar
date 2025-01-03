@@ -21,12 +21,12 @@ using Sienar.Media.Hooks;
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class CmsRestPlugin : IPlugin
+public class CmsServerPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly IPluginDataProvider _pluginDataProvider;
 
-	public CmsRestPlugin(
+	public CmsServerPlugin(
 		WebApplicationBuilder builder,
 		IPluginDataProvider pluginDataProvider)
 	{
