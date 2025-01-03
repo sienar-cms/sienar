@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Sienar.Services;
+namespace Sienar.Infrastructure;
 
 public interface IRestAuthClient
 {
@@ -9,10 +9,10 @@ public interface IRestAuthClient
 	/// Obtains an access token from the REST API
 	/// </summary>
 	/// <remarks>
-	/// This method is not intended to perform a primary login. Rather, this method is intended to obtain credentials for a REST API (e.g., obtaining a BEARER token). Those credentials will be stored in-memory and added to an <see cref="HttpRequestMessage"/> with the <see cref="AddAuthorization"/> method. Primary login should be performed using a different mechanism (for example, a Sienar <c>IStatusService&lt;LoginRequest&gt;</c>, and will likely vary from API to API.
+	/// This method is not intended to perform a primary login. Rather, this method is intended to obtain credentials for a REST API (e.g., obtaining a BEARER token). Those credentials will be stored in-memory and added to an <see cref="HttpRequestMessage"/> with the <see cref="AddAuthentication"/> method. Primary login should be performed using a different mechanism (for example, a Sienar <c>IStatusService&lt;LoginRequest&gt;</c>, and will likely vary from API to API.
 	/// </remarks>
 	/// <returns><c>true</c> if the user was granted an access token, else <c>false</c></returns>
-	Task<bool> RefreshAuthorization();
+	Task<bool> RefreshAuthentication();
 
 	/// <summary>
 	/// Adds the REST API's authorization mechanism to the <see cref="HttpRequestMessage"/>
@@ -21,7 +21,7 @@ public interface IRestAuthClient
 	/// This method applies a REST API's authorization to a given <see cref="HttpRequestMessage"/>. For example, a Sienar REST API uses a BEARER token for authorization, so the Sienar implementation of this interface will add an <c>Authorization</c> HTTP header to the provided request.
 	/// </remarks>
 	/// <param name="request">the request to which to add authorization details</param>
-	Task AddAuthorization(HttpRequestMessage request);
+	Task AddAuthentication(HttpRequestMessage request);
 
 	/// <summary>
 	/// Updates the app's authentication using the supplied HTTP response

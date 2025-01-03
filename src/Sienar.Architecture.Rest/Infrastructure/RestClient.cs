@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 
-namespace Sienar.Services;
+namespace Sienar.Infrastructure;
 
 /// <summary>
 /// A base class for services that interact with REST APIs
@@ -181,7 +181,7 @@ public class RestClient : IRestClient
 		while (true)
 		{
 			var message = CreateRequestMessage(method, endpoint, input);
-			await AuthClient.AddAuthorization(message);
+			await AuthClient.AddAuthentication(message);
 			result = await Client.SendAsync(message);
 
 			// If we've already been through once, or if the request was authorized, we're done
@@ -192,7 +192,7 @@ public class RestClient : IRestClient
 			}
 	
 			// Otherwise, we re-authenticate to the API if we got a 401
-			if (!await AuthClient.RefreshAuthorization())
+			if (!await AuthClient.RefreshAuthentication())
 			{
 				// If a token was not re-issued, they need to re-authenticate
 				return result;

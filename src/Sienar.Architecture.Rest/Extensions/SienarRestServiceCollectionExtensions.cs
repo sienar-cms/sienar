@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Data;
-using Sienar.Services;
+using Sienar.Infrastructure;
 
 namespace Sienar.Extensions;
 
@@ -85,6 +85,27 @@ public static class SienarRestServiceCollectionExtensions
 		where TClient : class, IRestClient
 	{
 		self.AddHttpClient<IRestClient, TClient>();
+		return self;
+	}
+
+	/// <summary>
+	/// Adds the default <see cref="IRestAuthClient"/> for cookie-based browser authentication to the DI container
+	/// </summary>
+	/// <param name="self">The <see cref="IServiceCollection"/></param>
+	/// <returns>The <see cref="IServiceCollection"/></returns>
+	public static IServiceCollection AddBrowserCookieAuthClient(this IServiceCollection self)
+		=> self.AddAuthClient<CookieRestAuthBrowserClient>();
+
+	/// <summary>
+	/// Adds the specified <see cref="IRestAuthClient"/> to the DI container
+	/// </summary>
+	/// <param name="self">The <see cref="IServiceCollection"/></param>
+	/// <typeparam name="TClient">The type of the client</typeparam>
+	/// <returns>The <see cref="IServiceCollection"/></returns>
+	public static IServiceCollection AddAuthClient<TClient>(this IServiceCollection self)
+		where TClient : class, IRestAuthClient
+	{
+		self.TryAddScoped<IRestAuthClient, TClient>();
 		return self;
 	}
 }
