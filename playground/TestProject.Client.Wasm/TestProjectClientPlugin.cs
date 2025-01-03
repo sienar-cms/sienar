@@ -1,8 +1,8 @@
 ﻿using Sienar.Extensions;
 using Sienar.Infrastructure;
+using Sienar.Layouts;
 using Sienar.Plugins;
 using TestProject.Client.Extensions;
-using TestProject.Client.Layouts;
 using TestProject.Client.UI;
 
 namespace TestProject.Client;
@@ -55,6 +55,6 @@ public class TestProjectClientPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<MudBlazorPlugin>();
+		builder.AddPlugin<CmsClientPlugin>();
 	}
 }
