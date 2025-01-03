@@ -42,7 +42,7 @@ public class TestProjectClientPlugin : IPlugin
 
 	private void ConfigureComponents()
 	{
-		_componentProvider.DefaultLayout = typeof(MainAppLayout);
+		_componentProvider.DefaultLayout = typeof(DashboardLayout);
 		_componentProvider.AppbarLeft = typeof(Branding);
 	}
 
