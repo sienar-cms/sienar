@@ -67,9 +67,20 @@ public static class SienarRestServiceCollectionExtensions
 		return self;
 	}
 
+	/// <summary>
+	/// Adds the default <see cref="IRestClient"/> implementation to the DI container
+	/// </summary>
+	/// <param name="self">The <see cref="IServiceCollection"/></param>
+	/// <returns>The <see cref="IServiceCollection"/></returns>
 	public static IServiceCollection AddRestClient(this IServiceCollection self)
 		=> self.AddRestClient<RestClient>();
 
+	/// <summary>
+	/// Adds the specified <see cref="IRestClient"/> implementation to the DI container
+	/// </summary>
+	/// <param name="self">The <see cref="IServiceCollection"/></param>
+	/// <typeparam name="TClient">The type of the client</typeparam>
+	/// <returns>The <see cref="IServiceCollection"/></returns>
 	public static IServiceCollection AddRestClient<TClient>(this IServiceCollection self)
 		where TClient : class, IRestClient
 	{
