@@ -4,7 +4,7 @@
 
 <EditForm
 	Model="Model"
-	OnValidSubmit="HandleSubmit"
+	OnValidSubmit="@HandleSubmit"
 	FormName="@FormName">
 	<DataAnnotationsValidator/>
 
@@ -35,7 +35,7 @@
 			{
 				<SecondaryButton
 					ButtonType="ButtonType.Reset"
-					OnClick="OnReset"
+					OnClick="@OnReset"
 					Class="mr-3">
 					@ResetText
 				</SecondaryButton>
