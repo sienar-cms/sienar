@@ -17,11 +17,11 @@ public static class SienarUtilsBlazorServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection AddSienarBlazorUtilities(this IServiceCollection self)
 	{
-		self.TryAddSingleton<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
-		self.TryAddSingleton<IComponentProvider, ComponentProvider>();
-		self.TryAddSingleton<AuthenticationStateProvider, AuthStateProvider>();
-		self.TryAddSingleton<IUserAccessor, BlazorUserAccessor>();
+		self.TryAddScoped<AuthenticationStateProvider, AuthStateProvider>();
+		self.TryAddScoped<IUserAccessor, BlazorUserAccessor>();
 
-		return self;
+		return self
+			.AddCascadingAuthenticationState()
+			.AddAuthorizationCore();
 	}
 }
