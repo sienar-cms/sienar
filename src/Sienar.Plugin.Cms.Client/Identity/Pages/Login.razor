@@ -1,0 +1,70 @@
+﻿@inherits FormPage<LoginRequest>
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Login)]
+@inject IService<LoginRequest, LoginResult> Service
+
+<DocTitle Title="Log in"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="@Model"
+		OnSubmit="@HandleLogin"
+		SubmitText="Log in"
+		Title="Log in"
+		FormName="login">
+		<Fields>
+			<Textbox
+				@bind-Value="Model.AccountName"
+				For="() => Model.AccountName"
+				Label="Username or email address"/>
+			<Textbox
+				@bind-Value="Model.Password"
+				For="() => Model.Password"
+				InputType="InputType.Password"
+				Label="Password"/>
+			<Checkbox
+				Class="mt-4"
+				Color="Color.Primary"
+				UnCheckedColor="Color.Default"
+				@bind-Checked="Model.RememberMe"
+				For="() => Model.RememberMe"
+				Label="Remember me"/>
+			<Honeypot @bind-Value="Model.SecretKeyField"/>
+		</Fields>
+
+		<MoreActions>
+			<SecondaryButton Href="@DashboardUrls.Account.ForgotPassword.Index">
+				I forgot my password
+			</SecondaryButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	/// <summary>
+	/// An optional URL that the user should be returned to after successfully logging in
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string? ReturnUrl { get; set; }
+
+	/// <summary>
+	/// Handles logging in after the login form has been successfully submitted
+	/// </summary>
+	protected async Task HandleLogin()
+	{
+		var result = await SubmitRequest(() => Service.Execute(Model));
+		if (WasSuccessful)
+		{
+			var destination = ReturnUrl ?? DashboardUrls.Index;
+			NavManager.NavigateTo(destination);
+		}
+		else
+		{
+			if (result is null) return;
+			NavManager.NavigateTo($"{DashboardUrls.Account.Locked}?userId={result.UserId}&verificationCode={result.VerificationCode}");
+		}
+	}
+
+}
