@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Extensions;
+using Sienar.Identity.Processors;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
 using Sienar.Ui;
@@ -110,6 +111,8 @@ public class CmsClientPlugin : IPlugin
 				.AddBrowserCookieAuthClient();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
+
+			s.TryAddProcessor<ClientLoginProcessor>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
 				_configuration.GetSection("Sienar:Core"));
