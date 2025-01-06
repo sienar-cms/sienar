@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Sienar.Configuration;
 using Sienar.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
@@ -13,6 +15,7 @@ namespace Sienar.Plugins;
 public class CmsClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
+	private readonly IConfiguration _configuration;
 	private readonly IComponentProvider _componentProvider;
 	private readonly IMenuProvider _menuProvider;
 	private readonly IPluginDataProvider _pluginDataProvider;
@@ -25,6 +28,7 @@ public class CmsClientPlugin : IPlugin
 	/// </summary>
 	public CmsClientPlugin(
 		IApplicationAdapter adapter,
+		IConfiguration configuration,
 		IComponentProvider componentProvider,
 		IMenuProvider menuProvider,
 		IPluginDataProvider pluginDataProvider,
@@ -33,6 +37,7 @@ public class CmsClientPlugin : IPlugin
 		IStyleProvider styleProvider)
 	{
 		_adapter = adapter;
+		_configuration = configuration;
 		_componentProvider = componentProvider;
 		_menuProvider = menuProvider;
 		_pluginDataProvider = pluginDataProvider;
@@ -105,6 +110,9 @@ public class CmsClientPlugin : IPlugin
 				.AddBrowserCookieAuthClient();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
+
+			s.ApplyDefaultConfiguration<SienarOptions>(
+				_configuration.GetSection("Sienar:Core"));
 		});
 	}
 

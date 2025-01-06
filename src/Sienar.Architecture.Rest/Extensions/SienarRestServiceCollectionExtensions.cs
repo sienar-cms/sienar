@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Sienar.Configuration;
 using Sienar.Data;
 using Sienar.Infrastructure;
 
@@ -84,7 +87,11 @@ public static class SienarRestServiceCollectionExtensions
 	public static IServiceCollection AddRestClient<TClient>(this IServiceCollection self)
 		where TClient : class, IRestClient
 	{
-		self.AddHttpClient<IRestClient, TClient>();
+		self.AddHttpClient<IRestClient, TClient>((sp, client) =>
+		{
+			var siteSettings = sp.GetRequiredService<IOptions<SienarOptions>>().Value;
+			client.BaseAddress = new Uri($"{siteSettings.SiteUrl}/api/");
+		});
 		return self;
 	}
 
