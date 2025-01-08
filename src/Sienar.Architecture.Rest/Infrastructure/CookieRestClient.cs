@@ -34,7 +34,7 @@ public class CookieRestClient : IRestClient
 		_beforeProcessHooks = beforeProcessHooks;
 		_afterProcessHooks = afterProcessHooks;
 		_logger = logger;
-		_jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+		_jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 	}
 
 #region REST methods
