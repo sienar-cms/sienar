@@ -13,7 +13,7 @@ using Sienar.Hooks;
 namespace Sienar.Infrastructure;
 
 /// <summary>
-/// A base class for services that interact with REST APIs secured by cookie authentication
+/// A client for interacting with Sienar REST APIs secured by cookie authentication
 /// </summary>
 public class CookieRestClient : IRestClient
 {
