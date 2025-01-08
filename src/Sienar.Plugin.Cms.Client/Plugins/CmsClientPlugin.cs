@@ -106,7 +106,9 @@ public class CmsClientPlugin : IPlugin
 	{
 		_adapter.AddServices(s =>
 		{
-			s.AddCookieRestClient();
+			s
+				.AddCookieRestClient()
+				.AddBeforeHook<AddCsrfTokenToHttpRequestHook>();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
 
