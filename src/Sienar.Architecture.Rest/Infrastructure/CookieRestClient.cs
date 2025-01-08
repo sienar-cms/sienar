@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -7,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
+using Sienar.Hooks;
 
 namespace Sienar.Infrastructure;
 
@@ -16,6 +18,8 @@ namespace Sienar.Infrastructure;
 public class CookieRestClient : IRestClient
 {
 	protected readonly HttpClient Client;
+	protected readonly IEnumerable<IBeforeProcess<HttpRequestMessage>> BeforeProcessHooks;
+	protected readonly IEnumerable<IAfterProcess<HttpResponseMessage>> AfterProcessHooks;
 	protected readonly JsonSerializerOptions JsonOptions;
 
 	/// <summary>
@@ -26,9 +30,13 @@ public class CookieRestClient : IRestClient
 	/// <exclude />
 	public CookieRestClient(
 		HttpClient client,
+		IEnumerable<IBeforeProcess<HttpRequestMessage>> beforeProcessHooks,
+		IEnumerable<IAfterProcess<HttpResponseMessage>> afterProcessHooks,
 		ILogger<CookieRestClient> logger)
 	{
 		Client = client;
+		BeforeProcessHooks = beforeProcessHooks;
+		AfterProcessHooks = afterProcessHooks;
 		Logger = logger;
 		JsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 	}
@@ -170,7 +178,18 @@ public class CookieRestClient : IRestClient
 	{
 		method ??= HttpMethod.Get;
 		var message = CreateRequestMessage(method, endpoint, input);
+
+		foreach (var beforeHook in BeforeProcessHooks)
+		{
+			await beforeHook.Handle(message, ActionType.Action);
+		}
+
 		var result = await Client.SendAsync(message);
+
+		foreach (var afterHook in AfterProcessHooks)
+		{
+			await afterHook.Handle(result, ActionType.Action);
+		}
 
 		return result;
 	}
