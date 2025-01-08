@@ -35,13 +35,13 @@ public class UsersController : ServiceController
 
 	[HttpPost]
 	public Task<IActionResult> Create(
-		[FromForm] SienarUser entity,
+		SienarUser entity,
 		[FromServices] IEntityWriter<SienarUser> service)
 		=> Execute(() => service.Create(entity));
 
 	[HttpPut]
 	public Task<IActionResult> Update(
-		[FromForm] SienarUser entity,
+		SienarUser entity,
 		[FromServices] IEntityWriter<SienarUser> service)
 		=> Execute(() => service.Update(entity));
 
@@ -53,31 +53,31 @@ public class UsersController : ServiceController
 
 	[HttpPost("roles")]
 	public Task<IActionResult> AddToRole(
-		[FromForm] AddUserToRoleRequest data,
+		AddUserToRoleRequest data,
 		[FromServices] IStatusService<AddUserToRoleRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpDelete("roles")]
 	public Task<IActionResult> RemoveFromRole(
-		[FromForm] RemoveUserFromRoleRequest data,
+		RemoveUserFromRoleRequest data,
 		[FromServices] IStatusService<RemoveUserFromRoleRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPatch("lock")]
 	public Task<IActionResult> LockUser(
-		[FromForm] LockUserAccountRequest data,
+		LockUserAccountRequest data,
 		[FromServices] IStatusService<LockUserAccountRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpDelete("lock")]
 	public Task<IActionResult> UnlockUser(
-		[FromForm] UnlockUserAccountRequest data,
+		UnlockUserAccountRequest data,
 		[FromServices] IStatusService<UnlockUserAccountRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPatch("confirm")]
 	public Task<IActionResult> ConfirmUserAccount(
-		[FromForm] ManuallyConfirmUserAccountRequest data,
+		ManuallyConfirmUserAccountRequest data,
 		[FromServices] IStatusService<ManuallyConfirmUserAccountRequest> service)
 		=> Execute(() => service.Execute(data));
 }

@@ -25,7 +25,7 @@ public class AccountController : ServiceController
 	[HttpPost]
 	[AllowAnonymous]
 	public Task<IActionResult> Register(
-		[FromForm] RegisterRequest data,
+		RegisterRequest data,
 		[FromServices] IStatusService<RegisterRequest> service)
 		=> Execute(() => service.Execute(data));
 
@@ -36,59 +36,59 @@ public class AccountController : ServiceController
 
 	[HttpDelete]
 	public Task<IActionResult> DeleteAccount(
-		[FromForm] DeleteAccountRequest data,
+		DeleteAccountRequest data,
 		[FromServices] IStatusService<DeleteAccountRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPost("confirm")]
 	[AllowAnonymous]
 	public Task<IActionResult> Confirm(
-		[FromForm] ConfirmAccountRequest data,
+		ConfirmAccountRequest data,
 		[FromServices] IStatusService<ConfirmAccountRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPost("login")]
 	[AllowAnonymous]
 	public Task<IActionResult> Login(
-		[FromForm] LoginRequest data,
+		LoginRequest data,
 		[FromServices] IService<LoginRequest, LoginResult> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpDelete("login")]
 	public Task<IActionResult> Logout(
-		[FromForm] LogoutRequest data,
+		LogoutRequest data,
 		[FromServices] IStatusService<LogoutRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpDelete("password")]
 	[AllowAnonymous]
 	public Task<IActionResult> RequestPasswordReset(
-		[FromForm] ForgotPasswordRequest data,
+		ForgotPasswordRequest data,
 		[FromServices] IStatusService<ForgotPasswordRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPatch("password")]
 	[AllowAnonymous]
 	public Task<IActionResult> PerformPasswordReset(
-		[FromForm] ResetPasswordRequest data,
+		ResetPasswordRequest data,
 		[FromServices] IStatusService<ResetPasswordRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPatch("change-password")]
 	public Task<IActionResult> ChangePassword(
-		[FromForm] ChangePasswordRequest data,
+		ChangePasswordRequest data,
 		[FromServices] IStatusService<ChangePasswordRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPost("change-email")]
 	public Task<IActionResult> ChangeEmail(
-		[FromForm] InitiateEmailChangeRequest data,
+		InitiateEmailChangeRequest data,
 		[FromServices] IStatusService<InitiateEmailChangeRequest> service)
 		=> Execute(() => service.Execute(data));
 
 	[HttpPatch("email")]
 	public Task<IActionResult> UpdateEmail(
-		[FromForm] PerformEmailChangeRequest data,
+		PerformEmailChangeRequest data,
 		[FromServices] IStatusService<PerformEmailChangeRequest> service)
 		=> Execute(() => service.Execute(data));
 
@@ -118,7 +118,7 @@ public class AccountController : ServiceController
 	[HttpPost("lockout-reasons")]
 	[AllowAnonymous]
 	public Task<IActionResult> GetLockoutReaons(
-		[FromForm] AccountLockoutRequest data,
+		AccountLockoutRequest data,
 		[FromServices] IService<AccountLockoutRequest, AccountLockoutResult> service)
 		=> Execute(() => service.Execute(data));
 }
