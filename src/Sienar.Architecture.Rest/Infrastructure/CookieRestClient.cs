@@ -11,27 +11,24 @@ using Sienar.Data;
 namespace Sienar.Infrastructure;
 
 /// <summary>
-/// A base class for services that interact with REST APIs
+/// A base class for services that interact with REST APIs secured by cookie authentication
 /// </summary>
-public class RestClient : IRestClient
+public class CookieRestClient : IRestClient
 {
 	protected readonly HttpClient Client;
-	protected readonly IRestAuthClient AuthClient;
 	protected readonly JsonSerializerOptions JsonOptions;
 
 	/// <summary>
 	/// The service's logger
 	/// </summary>
-	protected readonly ILogger<RestClient> Logger;
+	protected readonly ILogger<CookieRestClient> Logger;
 
 	/// <exclude />
-	public RestClient(
+	public CookieRestClient(
 		HttpClient client,
-		IRestAuthClient authClient,
-		ILogger<RestClient> logger)
+		ILogger<CookieRestClient> logger)
 	{
 		Client = client;
-		AuthClient = authClient;
 		Logger = logger;
 		JsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 	}
@@ -172,38 +169,8 @@ public class RestClient : IRestClient
 		HttpMethod? method = null)
 	{
 		method ??= HttpMethod.Get;
-		HttpResponseMessage result;
-		var tries = 1;
-
-		// Try to send the request and get a response
-		// If the response indicates the user is unathorized,
-		// refresh the authorization mechanism and repeat the request
-		while (true)
-		{
-			var message = CreateRequestMessage(method, endpoint, input);
-			await AuthClient.AddAuthentication(message);
-			result = await Client.SendAsync(message);
-
-			// If we've already been through once, or if the request was authorized, we're done
-			if (tries > 1
-				|| result.StatusCode != HttpStatusCode.Unauthorized)
-			{
-				break;
-			}
-	
-			// Otherwise, we re-authenticate to the API if we got a 401
-			if (!await AuthClient.RefreshAuthentication())
-			{
-				// If a token was not re-issued, they need to re-authenticate
-				return result;
-			}
-
-			// Increment and try again
-			tries++;
-		}
-
-		// Listen for updates to the authentication mechanism
-		await AuthClient.UpdateAuthentication(result);
+		var message = CreateRequestMessage(method, endpoint, input);
+		var result = await Client.SendAsync(message);
 
 		return result;
 	}

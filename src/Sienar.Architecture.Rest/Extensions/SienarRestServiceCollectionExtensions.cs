@@ -75,8 +75,8 @@ public static class SienarRestServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">The <see cref="IServiceCollection"/></param>
 	/// <returns>The <see cref="IServiceCollection"/></returns>
-	public static IServiceCollection AddRestClient(this IServiceCollection self)
-		=> self.AddRestClient<RestClient>();
+	public static IServiceCollection AddCookieRestClient(this IServiceCollection self)
+		=> self.AddRestClient<CookieRestClient>();
 
 	/// <summary>
 	/// Adds the specified <see cref="IRestClient"/> implementation to the DI container
@@ -92,27 +92,6 @@ public static class SienarRestServiceCollectionExtensions
 			var siteSettings = sp.GetRequiredService<IOptions<SienarOptions>>().Value;
 			client.BaseAddress = new Uri($"{siteSettings.SiteUrl}/api/");
 		});
-		return self;
-	}
-
-	/// <summary>
-	/// Adds the default <see cref="IRestAuthClient"/> for cookie-based browser authentication to the DI container
-	/// </summary>
-	/// <param name="self">The <see cref="IServiceCollection"/></param>
-	/// <returns>The <see cref="IServiceCollection"/></returns>
-	public static IServiceCollection AddBrowserCookieAuthClient(this IServiceCollection self)
-		=> self.AddAuthClient<CookieRestAuthBrowserClient>();
-
-	/// <summary>
-	/// Adds the specified <see cref="IRestAuthClient"/> to the DI container
-	/// </summary>
-	/// <param name="self">The <see cref="IServiceCollection"/></param>
-	/// <typeparam name="TClient">The type of the client</typeparam>
-	/// <returns>The <see cref="IServiceCollection"/></returns>
-	public static IServiceCollection AddAuthClient<TClient>(this IServiceCollection self)
-		where TClient : class, IRestAuthClient
-	{
-		self.TryAddScoped<IRestAuthClient, TClient>();
 		return self;
 	}
 }

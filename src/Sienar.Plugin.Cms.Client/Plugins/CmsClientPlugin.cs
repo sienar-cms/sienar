@@ -106,9 +106,7 @@ public class CmsClientPlugin : IPlugin
 	{
 		_adapter.AddServices(s =>
 		{
-			s
-				.AddRestClient()
-				.AddBrowserCookieAuthClient();
+			s.AddCookieRestClient();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
 
