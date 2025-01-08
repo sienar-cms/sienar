@@ -18,8 +18,8 @@ namespace Sienar.Infrastructure;
 public class CookieRestClient : IRestClient
 {
 	protected readonly HttpClient Client;
-	protected readonly IEnumerable<IBeforeProcess<HttpRequestMessage>> BeforeProcessHooks;
-	protected readonly IEnumerable<IAfterProcess<HttpResponseMessage>> AfterProcessHooks;
+	protected readonly IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> BeforeProcessHooks;
+	protected readonly IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> AfterProcessHooks;
 	protected readonly JsonSerializerOptions JsonOptions;
 
 	/// <summary>
@@ -30,8 +30,8 @@ public class CookieRestClient : IRestClient
 	/// <exclude />
 	public CookieRestClient(
 		HttpClient client,
-		IEnumerable<IBeforeProcess<HttpRequestMessage>> beforeProcessHooks,
-		IEnumerable<IAfterProcess<HttpResponseMessage>> afterProcessHooks,
+		IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> beforeProcessHooks,
+		IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> afterProcessHooks,
 		ILogger<CookieRestClient> logger)
 	{
 		Client = client;
@@ -178,20 +178,22 @@ public class CookieRestClient : IRestClient
 	{
 		method ??= HttpMethod.Get;
 		var message = CreateRequestMessage(method, endpoint, input);
+		var restClientRequest = new RestClientRequest<CookieRestClient> { RequestMessage = message };
 
 		foreach (var beforeHook in BeforeProcessHooks)
 		{
-			await beforeHook.Handle(message, ActionType.Action);
+			await beforeHook.Handle(restClientRequest, ActionType.Action);
 		}
 
-		var result = await Client.SendAsync(message);
+		var response = await Client.SendAsync(message);
+		var restClientResponse = new RestClientResponse<CookieRestClient> { ResponseMessage = response };
 
 		foreach (var afterHook in AfterProcessHooks)
 		{
-			await afterHook.Handle(result, ActionType.Action);
+			await afterHook.Handle(restClientResponse, ActionType.Action);
 		}
 
-		return result;
+		return response;
 	}
 
 	private HttpRequestMessage CreateRequestMessage(
