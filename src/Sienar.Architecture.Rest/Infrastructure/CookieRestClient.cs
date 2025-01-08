@@ -17,15 +17,11 @@ namespace Sienar.Infrastructure;
 /// </summary>
 public class CookieRestClient : IRestClient
 {
-	protected readonly HttpClient Client;
-	protected readonly IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> BeforeProcessHooks;
-	protected readonly IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> AfterProcessHooks;
-	protected readonly JsonSerializerOptions JsonOptions;
-
-	/// <summary>
-	/// The service's logger
-	/// </summary>
-	protected readonly ILogger<CookieRestClient> Logger;
+	private readonly HttpClient _client;
+	private readonly IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> _beforeProcessHooks;
+	private readonly IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> _afterProcessHooks;
+	private readonly ILogger<CookieRestClient> _logger;
+	private readonly JsonSerializerOptions _jsonOptions;
 
 	/// <exclude />
 	public CookieRestClient(
@@ -34,11 +30,11 @@ public class CookieRestClient : IRestClient
 		IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> afterProcessHooks,
 		ILogger<CookieRestClient> logger)
 	{
-		Client = client;
-		BeforeProcessHooks = beforeProcessHooks;
-		AfterProcessHooks = afterProcessHooks;
-		Logger = logger;
-		JsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+		_client = client;
+		_beforeProcessHooks = beforeProcessHooks;
+		_afterProcessHooks = afterProcessHooks;
+		_logger = logger;
+		_jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 	}
 
 #region REST methods
@@ -137,7 +133,7 @@ public class CookieRestClient : IRestClient
 			var result = await SendRaw(endpoint, input, method);
 			if (result.IsSuccessStatusCode)
 			{
-				var parsedResponse = await result.Content.ReadFromJsonAsync<TResult>(JsonOptions);
+				var parsedResponse = await result.Content.ReadFromJsonAsync<TResult>(_jsonOptions);
 				if (parsedResponse is not null)
 				{
 					return new(OperationStatus.Success, parsedResponse);
@@ -180,15 +176,15 @@ public class CookieRestClient : IRestClient
 		var message = CreateRequestMessage(method, endpoint, input);
 		var restClientRequest = new RestClientRequest<CookieRestClient> { RequestMessage = message };
 
-		foreach (var beforeHook in BeforeProcessHooks)
+		foreach (var beforeHook in _beforeProcessHooks)
 		{
 			await beforeHook.Handle(restClientRequest, ActionType.Action);
 		}
 
-		var response = await Client.SendAsync(message);
+		var response = await _client.SendAsync(message);
 		var restClientResponse = new RestClientResponse<CookieRestClient> { ResponseMessage = response };
 
-		foreach (var afterHook in AfterProcessHooks)
+		foreach (var afterHook in _afterProcessHooks)
 		{
 			await afterHook.Handle(restClientResponse, ActionType.Action);
 		}
@@ -221,7 +217,7 @@ public class CookieRestClient : IRestClient
 
 	private StringContent CreateContentPayload(object input)
 		=> new(
-			JsonSerializer.Serialize(input, JsonOptions),
+			JsonSerializer.Serialize(input, _jsonOptions),
 			Encoding.UTF8,
 			"application/json");
 
@@ -266,7 +262,7 @@ public class CookieRestClient : IRestClient
 				break;
 		}
 
-		Logger.LogError(e, "{}", logMessage);
+		_logger.LogError(e, "{}", logMessage);
 		return new(OperationStatus.Unknown, default, errorMessage);
 	}
 
@@ -298,7 +294,7 @@ public class CookieRestClient : IRestClient
 				break;
 		}
 
-		Logger.LogError("{}", logMessage);
+		_logger.LogError("{}", logMessage);
 
 		return new(status, default, errorMessage);
 	}
