@@ -18,16 +18,16 @@ namespace Sienar.Infrastructure;
 public class CookieRestClient : IRestClient
 {
 	private readonly HttpClient _client;
-	private readonly IEnumerable<IBeforeAction<RestClientRequest<CookieRestClient>>> _beforeActionHooks;
-	private readonly IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> _afterActionHooks;
+	private readonly IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> _beforeActionHooks;
+	private readonly IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> _afterActionHooks;
 	private readonly ILogger<CookieRestClient> _logger;
 	private readonly JsonSerializerOptions _jsonOptions;
 
 	/// <exclude />
 	public CookieRestClient(
 		HttpClient client,
-		IEnumerable<IBeforeAction<RestClientRequest<CookieRestClient>>> beforeActionHooks,
-		IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> afterActionHooks,
+		IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> beforeActionHooks,
+		IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> afterActionHooks,
 		ILogger<CookieRestClient> logger)
 	{
 		_client = client;
@@ -178,7 +178,7 @@ public class CookieRestClient : IRestClient
 
 		foreach (var beforeHook in _beforeActionHooks)
 		{
-			await beforeHook.Handle(restClientRequest, ActionType.Action);
+			await beforeHook.Handle(restClientRequest);
 		}
 
 		var response = await _client.SendAsync(message);
@@ -186,7 +186,7 @@ public class CookieRestClient : IRestClient
 
 		foreach (var afterHook in _afterActionHooks)
 		{
-			await afterHook.Handle(restClientResponse, ActionType.Action);
+			await afterHook.Handle(restClientResponse);
 		}
 
 		return response;
