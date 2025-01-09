@@ -71,11 +71,11 @@ public class CmsServerPlugin : IPlugin
 		// CRUD
 		services
 			.AddAccessValidator<SienarUser, UserIsAdminAccessValidator<SienarUser>>()
-			.AddBeforeHook<SienarUser, UserMapNormalizedFieldsHook>()
-			.AddBeforeHook<SienarUser, UserPasswordUpdateHook>()
+			.AddBeforeActionHook<SienarUser, UserMapNormalizedFieldsHook>()
+			.AddBeforeActionHook<SienarUser, UserPasswordUpdateHook>()
 			.AddStateValidator<SienarUser, EnsureAccountInfoUniqueValidator>()
-			.AddBeforeHook<SienarUser, RemoveUserRelatedEntitiesHook>()
-			.AddBeforeHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
+			.AddBeforeActionHook<SienarUser, RemoveUserRelatedEntitiesHook>()
+			.AddBeforeActionHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
 
 		// Security
 			.AddProcessor<LoginRequest, LoginResult, LoginProcessor>()
@@ -110,7 +110,7 @@ public class CmsServerPlugin : IPlugin
 			.AddStatusProcessor<PerformEmailChangeRequest, PerformEmailChangeProcessor>()
 
 		// Personal data
-			.AddBeforeHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook>()
+			.AddBeforeActionHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook>()
 			.AddStatusProcessor<DeleteAccountRequest, DeleteAccountProcessor>();
 
 
@@ -132,8 +132,8 @@ public class CmsServerPlugin : IPlugin
 			.AddAccessValidator<Upload, VerifyUserCanReadFileHook>()
 			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
 			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
-			.AddBeforeHook<Upload, AssignMediaFieldsHook>()
-			.AddBeforeHook<Upload, UploadFileHook>();
+			.AddBeforeActionHook<Upload, AssignMediaFieldsHook>()
+			.AddBeforeActionHook<Upload, UploadFileHook>();
 
 
 		/***********

@@ -195,6 +195,32 @@ public static class SienarUtilsServiceCollectionExtensions
 			false);
 
 	/// <summary>
+	/// Adds a before-task hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddBeforeTaskHook<TRequest, THook>(
+		this IServiceCollection self)
+		where TRequest : class
+		where THook : class, IBeforeTask<TRequest>
+		=> self.AddScoped<IBeforeTask<TRequest>, THook>();
+
+	/// <summary>
+	/// Adds a before-task hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddBeforeTaskHook<THook>(this IServiceCollection self)
+		=> self.AddImplementationAsInterface(
+			typeof(THook),
+			typeof(IBeforeTask<>),
+			ServiceLifetime.Scoped,
+			false);
+
+	/// <summary>
 	/// Adds an after-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
@@ -217,6 +243,33 @@ public static class SienarUtilsServiceCollectionExtensions
 		=> self.AddImplementationAsInterface(
 			typeof(THook),
 			typeof(IAfterAction<>),
+			ServiceLifetime.Scoped,
+			false);
+
+	/// <summary>
+	/// Adds an after-task hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterTaskHook<TRequest, THook>(
+		this IServiceCollection self)
+		where TRequest : class
+		where THook : class, IAfterTask<TRequest>
+		=> self.AddScoped<IAfterTask<TRequest>, THook>();
+
+	/// <summary>
+	/// Adds an after-action hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterTaskHook<THook>(
+		this IServiceCollection self)
+		=> self.AddImplementationAsInterface(
+			typeof(THook),
+			typeof(IAfterTask<>),
 			ServiceLifetime.Scoped,
 			false);
 
