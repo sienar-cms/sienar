@@ -17,7 +17,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	private readonly IBotDetector _botDetector;
 	private readonly IAccessValidatorService<TRequest> _accessValidator;
 	private readonly IStateValidatorService<TRequest> _stateValidator;
-	private readonly IBeforeProcessService<TRequest> _beforeHooks;
+	private readonly IBeforeActionService<TRequest> _beforeHooks;
 	private readonly IAfterActionService<TRequest> _afterHooks;
 	private readonly IProcessor<TRequest, bool> _processor;
 
@@ -26,7 +26,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		IBotDetector botDetector,
 		IAccessValidatorService<TRequest> accessValidator,
 		IStateValidatorService<TRequest> stateValidator,
-		IBeforeProcessService<TRequest> beforeHooks,
+		IBeforeActionService<TRequest> beforeHooks,
 		IAfterActionService<TRequest> afterHooks,
 		IProcessor<TRequest, bool> processor)
 	{

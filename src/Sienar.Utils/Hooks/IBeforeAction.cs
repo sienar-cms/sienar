@@ -7,7 +7,7 @@ namespace Sienar.Hooks;
 /// </summary>
 /// <typeparam name="TRequest">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IBeforeProcess<TRequest>
+public interface IBeforeAction<TRequest>
 {
 	/// <summary>
 	/// Performs arbitrary actions before a processor has run

@@ -16,7 +16,7 @@ public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
 	private readonly ILogger<EntityDeleter<TEntity>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeProcessService<TEntity> _beforeHooks;
+	private readonly IBeforeActionService<TEntity> _beforeHooks;
 	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityDeleter(
@@ -24,7 +24,7 @@ public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
 		ILogger<EntityDeleter<TEntity>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeProcessService<TEntity> beforeHooks,
+		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)
 	{
 		_repository = repository;

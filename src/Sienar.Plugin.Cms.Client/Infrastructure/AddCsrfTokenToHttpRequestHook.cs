@@ -12,7 +12,7 @@ using Sienar.Hooks;
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class AddCsrfTokenToHttpRequestHook : IBeforeProcess<RestClientRequest<CookieRestClient>>
+public class AddCsrfTokenToHttpRequestHook : IBeforeAction<RestClientRequest<CookieRestClient>>
 {
 	private readonly IJSRuntime _js;
 

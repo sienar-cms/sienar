@@ -5,14 +5,14 @@ using Sienar.Hooks;
 namespace Sienar.Services;
 
 /// <summary>
-/// Runs before hooks for a hookable request
+/// Runs before-action hooks for a hookable request
 /// </summary>
 /// <typeparam name="T">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IBeforeProcessService<T>
+public interface IBeforeActionService<T>
 {
 	/// <summary>
-	/// Runs all before hooks for a hookable request
+	/// Runs all before-action hooks for a hookable request
 	/// </summary>
 	/// <param name="input">the request or entity</param>
 	/// <param name="action">the action type</param>

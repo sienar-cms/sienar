@@ -55,7 +55,7 @@ public static class SienarEntityFrameworkServiceCollectionExtensions
 		where TRepository : class, IRepository<TEntity>
 		where TRepositoryImplementation : class, TRepository
 	{
-		self.TryAddScoped<IBeforeProcess<TEntity>, ConcurrencyStampUpdateHook<TEntity>>();
+		self.TryAddScoped<IBeforeAction<TEntity>, ConcurrencyStampUpdateHook<TEntity>>();
 		self.TryAddScoped<IStateValidator<TEntity>, ConcurrencyStampValidator<TEntity>>();
 		self.TryAddScoped<IEntityFrameworkFilterProcessor<TEntity>, TFilterProcessor>();
 		self.TryAddScoped<TRepository, TRepositoryImplementation>();

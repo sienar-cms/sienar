@@ -18,7 +18,7 @@ namespace Sienar.Infrastructure;
 public class CookieRestClient : IRestClient
 {
 	private readonly HttpClient _client;
-	private readonly IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> _beforeProcessHooks;
+	private readonly IEnumerable<IBeforeAction<RestClientRequest<CookieRestClient>>> _beforeActionHooks;
 	private readonly IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> _afterActionHooks;
 	private readonly ILogger<CookieRestClient> _logger;
 	private readonly JsonSerializerOptions _jsonOptions;
@@ -26,12 +26,12 @@ public class CookieRestClient : IRestClient
 	/// <exclude />
 	public CookieRestClient(
 		HttpClient client,
-		IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> beforeProcessHooks,
+		IEnumerable<IBeforeAction<RestClientRequest<CookieRestClient>>> beforeActionHooks,
 		IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> afterActionHooks,
 		ILogger<CookieRestClient> logger)
 	{
 		_client = client;
-		_beforeProcessHooks = beforeProcessHooks;
+		_beforeActionHooks = beforeActionHooks;
 		_afterActionHooks = afterActionHooks;
 		_logger = logger;
 		_jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
@@ -176,7 +176,7 @@ public class CookieRestClient : IRestClient
 		var message = CreateRequestMessage(method, endpoint, input);
 		var restClientRequest = new RestClientRequest<CookieRestClient> { RequestMessage = message };
 
-		foreach (var beforeHook in _beforeProcessHooks)
+		foreach (var beforeHook in _beforeActionHooks)
 		{
 			await beforeHook.Handle(restClientRequest, ActionType.Action);
 		}

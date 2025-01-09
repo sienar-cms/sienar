@@ -7,7 +7,7 @@ using Sienar.Data;
 namespace Sienar.Hooks;
 
 /// <exclude />
-public class ConcurrencyStampUpdateHook<TEntity> : IBeforeProcess<TEntity>
+public class ConcurrencyStampUpdateHook<TEntity> : IBeforeAction<TEntity>
 	where TEntity : EntityBase
 {
 	public Task Handle(TEntity entity, ActionType action)

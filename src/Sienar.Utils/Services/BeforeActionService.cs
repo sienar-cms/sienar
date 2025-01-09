@@ -10,14 +10,14 @@ using Sienar.Hooks;
 namespace Sienar.Services;
 
 /// <exclude />
-public class BeforeProcessService<T> : IBeforeProcessService<T>
+public class BeforeActionService<T> : IBeforeActionService<T>
 {
-	private readonly IEnumerable<IBeforeProcess<T>> _hooks;
-	private readonly ILogger<IBeforeProcessService<T>> _logger;
+	private readonly IEnumerable<IBeforeAction<T>> _hooks;
+	private readonly ILogger<IBeforeActionService<T>> _logger;
 
-	public BeforeProcessService(
-		IEnumerable<IBeforeProcess<T>> hooks,
-		ILogger<IBeforeProcessService<T>> logger)
+	public BeforeActionService(
+		IEnumerable<IBeforeAction<T>> hooks,
+		ILogger<IBeforeActionService<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;

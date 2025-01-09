@@ -6,7 +6,7 @@ using Sienar.Hooks;
 
 namespace Sienar.Media.Hooks;
 
-public class UploadFileHook : IBeforeProcess<Upload>
+public class UploadFileHook : IBeforeAction<Upload>
 {
 	private readonly IMediaManager _mediaManager;
 	private readonly ILogger<UploadFileHook> _logger;

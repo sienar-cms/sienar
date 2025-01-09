@@ -5,7 +5,7 @@ using Sienar.Hooks;
 
 namespace Sienar.Media.Hooks;
 
-public class AssignMediaFieldsHook : IBeforeProcess<Upload>
+public class AssignMediaFieldsHook : IBeforeAction<Upload>
 {
 	private readonly IUserAccessor _userAccessor;
 

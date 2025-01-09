@@ -34,7 +34,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
 		self.TryAddScoped(typeof(IAccessValidatorService<>), typeof(AccessValidatorService<>));
 		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
-		self.TryAddScoped(typeof(IBeforeProcessService<>), typeof(BeforeProcessService<>));
+		self.TryAddScoped(typeof(IBeforeActionService<>), typeof(BeforeActionService<>));
 		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
@@ -169,28 +169,28 @@ public static class SienarUtilsServiceCollectionExtensions
 			false);
 
 	/// <summary>
-	/// Adds a before-process hook for the given <c>TRequest</c>
+	/// Adds a before-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeHook<TRequest, THook>(
+	public static IServiceCollection AddBeforeActionHook<TRequest, THook>(
 		this IServiceCollection self)
-		where THook : class, IBeforeProcess<TRequest>
-		=> self.AddScoped<IBeforeProcess<TRequest>, THook>();
+		where THook : class, IBeforeAction<TRequest>
+		=> self.AddScoped<IBeforeAction<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds a before-process hook for the given <c>TRequest</c>
+	/// Adds a before-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeHook<THook>(
+	public static IServiceCollection AddBeforeActionHook<THook>(
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(THook),
-			typeof(IBeforeProcess<>),
+			typeof(IBeforeAction<>),
 			ServiceLifetime.Scoped,
 			false);
 
