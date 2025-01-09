@@ -72,10 +72,6 @@ public class WebArchitecturePlugin : IPlugin
 				Priority.Low,
 				app => app.UseAuthentication());
 		}
-
-		_middlewareProvider.AddWithPriority(
-			Priority.Low,
-			app => app.UseMiddleware<CsrfMiddleware>());
 	
 		if (_authorizationConfigurer is not null)
 		{
