@@ -7,7 +7,7 @@ namespace Sienar.Hooks;
 /// </summary>
 /// <typeparam name="TRequest">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IAfterProcess<TRequest>
+public interface IAfterAction<TRequest>
 {
 	/// <summary>
 	/// Performs arbitrary actions after a processor has already run

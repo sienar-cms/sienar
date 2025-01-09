@@ -35,7 +35,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IAccessValidatorService<>), typeof(AccessValidatorService<>));
 		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
 		self.TryAddScoped(typeof(IBeforeProcessService<>), typeof(BeforeProcessService<>));
-		self.TryAddScoped(typeof(IAfterProcessService<>), typeof(AfterProcessService<>));
+		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
@@ -195,28 +195,28 @@ public static class SienarUtilsServiceCollectionExtensions
 			false);
 
 	/// <summary>
-	/// Adds an after-process hook for the given <c>TRequest</c>
+	/// Adds an after-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterHook<TRequest, THook>(
+	public static IServiceCollection AddAfterActionHook<TRequest, THook>(
 		this IServiceCollection self)
-		where THook : class, IAfterProcess<TRequest>
-		=> self.AddScoped<IAfterProcess<TRequest>, THook>();
+		where THook : class, IAfterAction<TRequest>
+		=> self.AddScoped<IAfterAction<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds an after-process hook for the given <c>TRequest</c>
+	/// Adds an after-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterHook<THook>(
+	public static IServiceCollection AddAfterActionHook<THook>(
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(THook),
-			typeof(IAfterProcess<>),
+			typeof(IAfterAction<>),
 			ServiceLifetime.Scoped,
 			false);
 

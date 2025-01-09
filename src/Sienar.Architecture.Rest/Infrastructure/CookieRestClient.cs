@@ -19,7 +19,7 @@ public class CookieRestClient : IRestClient
 {
 	private readonly HttpClient _client;
 	private readonly IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> _beforeProcessHooks;
-	private readonly IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> _afterProcessHooks;
+	private readonly IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> _afterActionHooks;
 	private readonly ILogger<CookieRestClient> _logger;
 	private readonly JsonSerializerOptions _jsonOptions;
 
@@ -27,12 +27,12 @@ public class CookieRestClient : IRestClient
 	public CookieRestClient(
 		HttpClient client,
 		IEnumerable<IBeforeProcess<RestClientRequest<CookieRestClient>>> beforeProcessHooks,
-		IEnumerable<IAfterProcess<RestClientResponse<CookieRestClient>>> afterProcessHooks,
+		IEnumerable<IAfterAction<RestClientResponse<CookieRestClient>>> afterActionHooks,
 		ILogger<CookieRestClient> logger)
 	{
 		_client = client;
 		_beforeProcessHooks = beforeProcessHooks;
-		_afterProcessHooks = afterProcessHooks;
+		_afterActionHooks = afterActionHooks;
 		_logger = logger;
 		_jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 	}
@@ -184,7 +184,7 @@ public class CookieRestClient : IRestClient
 		var response = await _client.SendAsync(message);
 		var restClientResponse = new RestClientResponse<CookieRestClient> { ResponseMessage = response };
 
-		foreach (var afterHook in _afterProcessHooks)
+		foreach (var afterHook in _afterActionHooks)
 		{
 			await afterHook.Handle(restClientResponse, ActionType.Action);
 		}

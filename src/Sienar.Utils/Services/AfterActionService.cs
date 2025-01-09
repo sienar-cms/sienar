@@ -9,14 +9,14 @@ using Sienar.Hooks;
 namespace Sienar.Services;
 
 /// <exclude />
-public class AfterProcessService<T> : IAfterProcessService<T>
+public class AfterActionService<T> : IAfterActionService<T>
 {
-	private readonly IEnumerable<IAfterProcess<T>> _hooks;
-	private readonly ILogger<IAfterProcessService<T>> _logger;
+	private readonly IEnumerable<IAfterAction<T>> _hooks;
+	private readonly ILogger<IAfterActionService<T>> _logger;
 
-	public AfterProcessService(
-		IEnumerable<IAfterProcess<T>> hooks,
-		ILogger<IAfterProcessService<T>> logger)
+	public AfterActionService(
+		IEnumerable<IAfterAction<T>> hooks,
+		ILogger<IAfterActionService<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;

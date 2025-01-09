@@ -15,13 +15,13 @@ public class ResultService<TResult> : IResultService<TResult>
 {
 	private readonly ILogger<ResultService<TResult>> _logger;
 	private readonly IAccessValidatorService<TResult> _accessValidator;
-	private readonly IAfterProcessService<TResult> _afterHooks;
+	private readonly IAfterActionService<TResult> _afterHooks;
 	private readonly IProcessor<TResult> _processor;
 
 	public ResultService(
 		ILogger<ResultService<TResult>> logger,
 		IAccessValidatorService<TResult> accessValidator,
-		IAfterProcessService<TResult> afterHooks,
+		IAfterActionService<TResult> afterHooks,
 		IProcessor<TResult> processor)
 	{
 		_logger = logger;

@@ -18,7 +18,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	private readonly IAccessValidatorService<TRequest> _accessValidator;
 	private readonly IStateValidatorService<TRequest> _stateValidator;
 	private readonly IBeforeProcessService<TRequest> _beforeHooks;
-	private readonly IAfterProcessService<TRequest> _afterHooks;
+	private readonly IAfterActionService<TRequest> _afterHooks;
 	private readonly IProcessor<TRequest, bool> _processor;
 
 	public StatusService(
@@ -27,7 +27,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		IAccessValidatorService<TRequest> accessValidator,
 		IStateValidatorService<TRequest> stateValidator,
 		IBeforeProcessService<TRequest> beforeHooks,
-		IAfterProcessService<TRequest> afterHooks,
+		IAfterActionService<TRequest> afterHooks,
 		IProcessor<TRequest, bool> processor)
 	{
 		_logger = logger;
