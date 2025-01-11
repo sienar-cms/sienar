@@ -17,7 +17,9 @@ public static class SienarUtilsBlazorServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection AddSienarBlazorUtilities(this IServiceCollection self)
 	{
-		self.TryAddScoped<AuthenticationStateProvider, AuthStateProvider>();
+		self.TryAddScoped<AuthStateProvider>();
+		self.TryAddScoped<AuthenticationStateProvider>(
+			sp => sp.GetRequiredService<AuthStateProvider>());
 		self.TryAddScoped<IUserAccessor, BlazorUserAccessor>();
 
 		return self
