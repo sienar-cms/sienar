@@ -1,4 +1,6 @@
-﻿using MudBlazor;
+﻿using System;
+using MudBlazor;
+using Sienar.Data;
 
 namespace Sienar.Infrastructure;
 
@@ -35,6 +37,18 @@ public class NotificationService : INotificationService
 		_snackbar.Add(message, Severity.Error, ConfigureDangerSnackbar);
 	}
 
+	/// <inheritdoc />
+	public void Notify(Notification notification)
+	{
+		var isDanger = notification.Type is
+			NotificationType.Error or NotificationType.Warning;
+
+		_snackbar.Add(
+			notification.Message,
+			MapNotificationType(notification.Type),
+			isDanger ? ConfigureDangerSnackbar : ConfigureSnackbar);
+	}
+
 	private void ConfigureSnackbar(SnackbarOptions o)
 	{
 		o.ShowTransitionDuration = 500;
@@ -48,4 +62,14 @@ public class NotificationService : INotificationService
 		o.HideTransitionDuration = 500;
 		o.RequireInteraction = true;
 	}
+
+	private static Severity MapNotificationType(NotificationType type)
+		=> type switch
+		{
+			NotificationType.Success => Severity.Success,
+			NotificationType.Warning => Severity.Warning,
+			NotificationType.Info => Severity.Info,
+			NotificationType.Error => Severity.Error,
+			_ => throw new InvalidOperationException($"Invalid notification type {type}")
+		};
 }

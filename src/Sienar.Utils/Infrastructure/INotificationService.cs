@@ -1,4 +1,5 @@
 ﻿using System;
+using Sienar.Data;
 
 namespace Sienar.Infrastructure;
 
@@ -30,4 +31,10 @@ public interface INotificationService
 	/// </summary>
 	/// <param name="message">The message to display</param>
 	void Error(string message);
+
+	/// <summary>
+	/// Used to display an arbitrary notification to the user
+	/// </summary>
+	/// <param name="notification">The notification to display</param>
+	void Notify(Notification notification);
 }

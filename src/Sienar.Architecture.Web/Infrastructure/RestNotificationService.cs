@@ -27,4 +27,7 @@ public class RestNotificationService : IReadableNotificationService
 	public void Error(string message)
 		=> Notifications.Add(new(message, NotificationType.Error));
 
+	/// <inheritdoc />
+	public void Notify(Notification notification)
+		=> Notifications.Add(notification);
 }
