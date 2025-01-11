@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Extensions;
+using Sienar.Identity;
 using Sienar.Identity.Processors;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
@@ -112,6 +113,7 @@ public class CmsClientPlugin : IPlugin
 				.AddBeforeTaskHook<InitializeCsrfTokenOnAppStartHook>();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
+			s.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 
 			s.TryAddProcessor<ClientLoginProcessor>();
 
