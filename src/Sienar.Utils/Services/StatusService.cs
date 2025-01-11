@@ -11,7 +11,7 @@ using Sienar.Processors;
 namespace Sienar.Services;
 
 /// <exclude />
-public class StatusService<TRequest> : IStatusService<TRequest>
+public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 {
 	private readonly ILogger<StatusService<TRequest>> _logger;
 	private readonly IBotDetector _botDetector;
@@ -28,7 +28,9 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		IStateValidatorService<TRequest> stateValidator,
 		IBeforeActionService<TRequest> beforeHooks,
 		IAfterActionService<TRequest> afterHooks,
-		IProcessor<TRequest, bool> processor)
+		IProcessor<TRequest, bool> processor,
+		INotificationService notifier)
+		: base(notifier)
 	{
 		_logger = logger;
 		_botDetector = botDetector;
@@ -44,28 +46,28 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 	{
 		if (request is Honeypot honeypot && _botDetector.IsSpambot(honeypot))
 		{
-			return new(result: true);
+			return NotifyOfResult(new OperationResult<bool>(result: true));
 		}
 
 		// Run access validation
 		var result = await _accessValidator.Validate(request, ActionType.StatusAction);
 		if (!result.Result)
 		{
-			return result;
+			return NotifyOfResult(result);
 		}
 
 		// Run state validation
 		result = await _stateValidator.Validate(request, ActionType.StatusAction);
 		if (!result.Result)
 		{
-			return result;
+			return NotifyOfResult(result);
 		}
 
 		// Run before hooks
 		result = await _beforeHooks.Run(request, ActionType.StatusAction);
 		if (!result.Result)
 		{
-			return result;
+			return NotifyOfResult(result);
 		}
 
 		try
@@ -75,7 +77,7 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 		catch (Exception e)
 		{
 			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
-			return new(OperationStatus.Unknown);
+			return NotifyOfResult(new OperationResult<bool>(OperationStatus.Unknown));
 		}
 
 		if (result.Status is OperationStatus.Success)
@@ -83,6 +85,6 @@ public class StatusService<TRequest> : IStatusService<TRequest>
 			await _afterHooks.Run(request, ActionType.StatusAction);
 		}
 
-		return result;
+		return NotifyOfResult(result);
 	}
 }
