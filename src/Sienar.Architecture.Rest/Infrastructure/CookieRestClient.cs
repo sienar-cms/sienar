@@ -49,7 +49,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="input">the request payload, if any</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>the response wrapped with an operation result</returns>
-	public Task<OperationResult<TResult>> Get<TResult>(
+	public Task<OperationResult<TResult?>> Get<TResult>(
 		string endpoint,
 		object? input = null)
 		=> SendRequest<TResult>(endpoint, input, HttpMethod.Get);
@@ -61,7 +61,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="input">the request payload, if any</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>the response wrapped with an operation result</returns>
-	public Task<OperationResult<TResult>> Post<TResult>(
+	public Task<OperationResult<TResult?>> Post<TResult>(
 		string endpoint,
 		object input)
 		=> SendRequest<TResult>(endpoint, input, HttpMethod.Post);
@@ -73,7 +73,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="input">the request payload, if any</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>the response wrapped with an operation result</returns>
-	public Task<OperationResult<TResult>> Put<TResult>(
+	public Task<OperationResult<TResult?>> Put<TResult>(
 		string endpoint,
 		object input)
 		=> SendRequest<TResult>(endpoint, input, HttpMethod.Put);
@@ -85,7 +85,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="input">the request payload, if any</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>the response wrapped with an operation result</returns>
-	public Task<OperationResult<TResult>> Patch<TResult>(
+	public Task<OperationResult<TResult?>> Patch<TResult>(
 		string endpoint,
 		object input)
 		=> SendRequest<TResult>(endpoint, input, HttpMethod.Patch);
@@ -97,7 +97,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="input">the request payload, if any</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>the response wrapped with an operation result</returns>
-	public Task<OperationResult<TResult>> Delete<TResult>(
+	public Task<OperationResult<TResult?>> Delete<TResult>(
 		string endpoint,
 		object? input = null)
 		=> SendRequest<TResult>(endpoint, input, HttpMethod.Delete);
@@ -126,7 +126,7 @@ public class CookieRestClient : IRestClient
 	/// <param name="method">the HTTP method</param>
 	/// <typeparam name="TResult">the type of the response</typeparam>
 	/// <returns>an operation result wrapping around the result</returns>
-	protected async Task<OperationResult<TResult>> SendRequest<TResult>(
+	protected async Task<OperationResult<TResult?>> SendRequest<TResult>(
 		string endpoint,
 		object? input = null,
 		HttpMethod? method = null)
@@ -251,7 +251,7 @@ public class CookieRestClient : IRestClient
 		return new(sb.ToString(), UriKind.Relative);
 	}
 
-	private OperationResult<TResult> HandleException<TResult>(Exception e)
+	private OperationResult<TResult?> HandleException<TResult>(Exception e)
 	{
 		string logMessage;
 		string errorMessage;
@@ -275,7 +275,7 @@ public class CookieRestClient : IRestClient
 		return new(OperationStatus.Unknown, default, errorMessage);
 	}
 
-	private OperationResult<TResult> HandleFailureResponse<TResult>(
+	private OperationResult<TResult?> HandleFailureResponse<TResult>(
 		HttpResponseMessage message)
 	{
 		string logMessage;
