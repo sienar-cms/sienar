@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -9,14 +10,33 @@ namespace Sienar.Infrastructure;
 /// </summary>
 public class AuthStateProvider : AuthenticationStateProvider
 {
+	private AuthenticationState _authState = CreateAuthenticationState([], false);
+
 	/// <ignore />
-	public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+	public override Task<AuthenticationState> GetAuthenticationStateAsync()
+		=> Task.FromResult(_authState);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="claims"></param>
+	/// <param name="isAuthenticated"></param>
+	public void NotifyUserAuthentication(
+		IEnumerable<Claim> claims,
+		bool isAuthenticated)
 	{
-		return CreateAuthenticationState();
+		_authState = CreateAuthenticationState(claims, isAuthenticated);
+		NotifyAuthenticationStateChanged(Task.FromResult(_authState));
 	}
 
-	private static AuthenticationState CreateAuthenticationState()
+	private static AuthenticationState CreateAuthenticationState(
+		IEnumerable<Claim> claims,
+		bool isAuthenticated)
 	{
-		return new(new ClaimsPrincipal());
+		var identity = isAuthenticated
+			? new ClaimsIdentity(claims, "CookieAuth")
+			: new ClaimsIdentity(claims);
+		var principal = new ClaimsPrincipal(identity);
+		return new AuthenticationState(principal);
 	}
 }
