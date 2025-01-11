@@ -20,6 +20,7 @@ public class CookieRestClient : IRestClient
 	private readonly HttpClient _client;
 	private readonly IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> _beforeActionHooks;
 	private readonly IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> _afterActionHooks;
+	private readonly INotificationService _notifier;
 	private readonly ILogger<CookieRestClient> _logger;
 	private readonly JsonSerializerOptions _jsonOptions;
 
@@ -28,11 +29,13 @@ public class CookieRestClient : IRestClient
 		HttpClient client,
 		IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> beforeActionHooks,
 		IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> afterActionHooks,
+		INotificationService notifier,
 		ILogger<CookieRestClient> logger)
 	{
 		_client = client;
 		_beforeActionHooks = beforeActionHooks;
 		_afterActionHooks = afterActionHooks;
+		_notifier = notifier;
 		_logger = logger;
 		_jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 	}
@@ -133,16 +136,22 @@ public class CookieRestClient : IRestClient
 			var result = await SendRaw(endpoint, input, method);
 			if (result.IsSuccessStatusCode)
 			{
-				var parsedResponse = await result.Content.ReadFromJsonAsync<TResult>(_jsonOptions);
-				if (parsedResponse is not null)
+				var parsedResponse = await result.Content.ReadFromJsonAsync<WebResult<TResult>>(_jsonOptions);
+
+				if (parsedResponse is null)
 				{
-					return new(OperationStatus.Success, parsedResponse);
+					return new(
+						OperationStatus.Unknown,
+						default,
+						"The request was successful, but the server's response was not understood.");
 				}
 
-				return new(
-					OperationStatus.Unknown,
-					default,
-					"The request was successful, but the server's response was not understood.");
+				foreach (var notification in parsedResponse.Notifications)
+				{
+					_notifier.Notify(notification);
+				}
+
+				return new(OperationStatus.Success, parsedResponse.Result);
 			}
 
 			if (result.StatusCode == HttpStatusCode.Unauthorized)
