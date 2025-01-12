@@ -110,7 +110,8 @@ public class CmsClientPlugin : IPlugin
 			s
 				.AddCookieRestClient()
 				.AddBeforeTaskHook<AddCsrfTokenToHttpRequestHook>()
-				.AddBeforeTaskHook<InitializeCsrfTokenOnAppStartHook>();
+				.AddStartupTask<InitializeCsrfTokenOnAppStartHook>()
+				.AddStartupTask<LoadUserDataProcessor>();
 
 			s.TryAddScoped<INotificationService, NotificationService>();
 			s.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
