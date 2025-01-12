@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Sienar.Components;
+using Sienar.Hooks;
 using Sienar.Infrastructure;
 
 namespace Sienar.Extensions;
@@ -26,4 +28,14 @@ public static class SienarUtilsBlazorServiceCollectionExtensions
 			.AddCascadingAuthenticationState()
 			.AddAuthorizationCore();
 	}
+
+	/// <summary>
+	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="T">The type of the startup task</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddStartupTask<T>(this IServiceCollection self)
+		where T : class, IBeforeTask<SienarStartupActor>
+		=> self.AddScoped<T>();
 }
