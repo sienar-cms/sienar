@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
@@ -14,14 +13,14 @@ namespace Sienar.Identity.Processors;
 public class ClientLoginProcessor : IProcessor<LoginRequest, LoginResult>
 {
 	private readonly IRestClient _client;
-	private readonly ILogger<ClientLoginProcessor> _logger;
+	private readonly IProcessor<SienarUser> _loadUserDataProcessor;
 
 	public ClientLoginProcessor(
 		IRestClient client,
-		ILogger<ClientLoginProcessor> logger)
+		IProcessor<SienarUser> loadUserDataProcessor)
 	{
 		_client = client;
-		_logger = logger;
+		_loadUserDataProcessor = loadUserDataProcessor;
 	}
 
 	public async Task<OperationResult<LoginResult?>> Process(LoginRequest request)
@@ -30,15 +29,7 @@ public class ClientLoginProcessor : IProcessor<LoginRequest, LoginResult>
 
 		if (result.Status == OperationStatus.Success)
 		{
-			// do something to initiate login
-			_logger.LogInformation("Login was successful");
-		}
-		else
-		{
-			_logger.LogError(
-				"Login was not successful: {status}/{message}",
-				result.Status,
-				result.Message ?? "(none)");
+			await _loadUserDataProcessor.Process();
 		}
 
 		return result;
