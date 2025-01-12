@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Sienar.Hooks;
 
-namespace Sienar.Components;
+namespace Sienar.Ui;
 
 /// <summary>
 /// A component that performs actions at application startup, after the Blazor UI has rendered

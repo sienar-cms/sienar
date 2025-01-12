@@ -6,12 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Sienar.Components;
 using Sienar.Email;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 using Sienar.Services;
+using Sienar.Ui;
 
 namespace Sienar.Extensions;
 
