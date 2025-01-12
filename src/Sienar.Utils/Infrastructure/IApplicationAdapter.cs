@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Sienar.Infrastructure;
@@ -9,6 +8,11 @@ namespace Sienar.Infrastructure;
 /// </summary>
 public interface IApplicationAdapter
 {
+	/// <summary>
+	/// The specific type of application the adapter represents
+	/// </summary>
+	ApplicationType ApplicationType { get; }
+
 	/// <summary>
 	/// Calls the underlying app builder's <c>Create()</c> method
 	/// </summary>
