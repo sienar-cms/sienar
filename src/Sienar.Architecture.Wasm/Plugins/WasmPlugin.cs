@@ -23,6 +23,8 @@ public class WasmPlugin : IPlugin
 	/// <inheritdoc />
 	public void Configure()
 	{
+		if (_adapter.ApplicationType is not ApplicationType.Client) return;
+
 		_adapter.AddServices(sp =>
 		{
 			sp.TryAddScoped<IUserAccessor, BlazorUserAccessor>();

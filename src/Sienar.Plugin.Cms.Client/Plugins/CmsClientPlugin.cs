@@ -105,6 +105,8 @@ public class CmsClientPlugin : IPlugin
 
 	private void SetupServices()
 	{
+		if (_adapter.ApplicationType is not ApplicationType.Client) return;
+
 		_adapter.AddServices(s =>
 		{
 			s
