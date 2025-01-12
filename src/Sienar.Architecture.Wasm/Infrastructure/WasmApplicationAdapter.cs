@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Extensions;
 using Sienar.Plugins;
 
 namespace Sienar.Infrastructure;
@@ -40,8 +39,7 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton(sp.GetRequiredService<IPluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IRoutableAssemblyProvider>())
 			.AddSingleton(sp.GetRequiredService<IScriptProvider>())
-			.AddSingleton(sp.GetRequiredService<IStyleProvider>())
-			.AddSienarBlazorUtilities();
+			.AddSingleton(sp.GetRequiredService<IStyleProvider>());
 
 		return Builder.Build();
 	}

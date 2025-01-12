@@ -116,7 +116,9 @@ public class CmsClientPlugin : IPlugin
 			s.TryAddScoped<INotificationService, NotificationService>();
 			s.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 
-			s.TryAddProcessor<ClientLoginProcessor>();
+			s
+				.TryAddProcessor<ClientLoginProcessor>()
+				.TryAddResultProcessor<LoadUserDataProcessor>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
 				_configuration.GetSection("Sienar:Core"));
@@ -126,6 +128,8 @@ public class CmsClientPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<MudBlazorPlugin>();
+		builder
+			.AddPlugin<MudBlazorPlugin>()
+			.AddPlugin<WasmPlugin>();
 	}
 }

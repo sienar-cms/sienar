@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Sienar.Hooks;
 
 namespace Sienar.Components;
@@ -13,13 +14,19 @@ public class SienarStartupActor : ComponentBase
 	[Inject]
 	private IEnumerable<IBeforeTask<SienarStartupActor>> StartupActions { get; set; } = null!;
 
+	[Inject]
+	private ILogger<SienarStartupActor> Logger { get; set; } = null!;
+
 	/// <inheritdoc />
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (!firstRender) return;
 
+		Logger.LogInformation("SienarStartupActor callinga ctions");
+
 		foreach (var action in StartupActions)
 		{
+			Logger.LogInformation("SienarStartupActorAction called");
 			await action.Handle();
 		}
 	}

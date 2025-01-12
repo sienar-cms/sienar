@@ -7,7 +7,7 @@ using Microsoft.JSInterop;
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="IJSRuntime"/> extension methods for the <c>Sienar.Utils.Blazor</c> assembly
+/// Contains <see cref="IJSRuntime"/> extension methods for the <c>Sienar.Utils</c> assembly
 /// </summary>
 public static class SienarUtilsBlazorJsRuntimeExtensions
 {
