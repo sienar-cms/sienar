@@ -18,7 +18,8 @@
 	TableTitle="Lockout reasons"
 	LoadData="Reader.Read">
 	<ToolBarContent>
-		<PrimaryIconButton
+		<MudIconButton
+			Color="Color.Primary"
 			Link="@DashboardUrls.LockoutReasons.Add"
 			Icon="@Icons.Material.Filled.Add"/>
 	</ToolBarContent>
@@ -37,11 +38,14 @@
 
 		<MudTd DataLabel="Actions">
 			<div class="d-flex justify-center">
-				<PrimaryIconButton
+				<MudIconButton
+					Color="Color.Primary"
 					Link="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
 					Title="View lockout reason"
 					Icon="@Icons.Material.Filled.RemoveRedEye"/>
-				<ErrorIconButton
+				<MudIconButton
+					Color="Color.Error"
+					Variant="Variant.Filled"
 					Title="Delete lockout reason"
 					Icon="@Icons.Material.Filled.DeleteForever"
 					OnClick="@(() => DeleteReason(context))"/>

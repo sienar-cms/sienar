@@ -22,14 +22,18 @@
 		</CardContent>
 
 		<CardActions>
-			<PrimaryButton
+			<MudButton
+				Color="Color.Primary"
 				OnClick="@DownloadPersonalData"
 				Class="mr-3">
 				Download personal data
-			</PrimaryButton>
-			<ErrorButton OnClick="@LaunchDeleteAccountDialog">
+			</MudButton>
+			<MudIconButton
+				Color="Color.Error"
+				Variant="Variant.Filled"
+				OnClick="@LaunchDeleteAccountDialog">
 				Delete personal data
-			</ErrorButton>
+			</MudIconButton>
 		</CardActions>
 	</Card>
 </NarrowContainer>

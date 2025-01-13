@@ -1,12 +1,13 @@
 ﻿@namespace Sienar.Ui
 
-<PrimaryButton
+<MudButton
 	Class="@Classes"
+	Color="Color.Primary"
 	OnClick="@OnClick">
 	<MudIcon Icon="@(Active ? Icons.Material.Filled.CheckCircle : Icons.Material.Outlined.Circle)"/>
 
 	@ChildContent
-</PrimaryButton>
+</MudButton>
 
 @code {
 

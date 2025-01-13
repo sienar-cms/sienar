@@ -11,7 +11,8 @@
 	TableTitle="Site users"
 	LoadData="Reader.Read">
 	<ToolBarContent>
-		<PrimaryIconButton
+		<MudIconButton
+			Color="Color.Primary"
 			Href="@DashboardUrls.Users.Add"
 			Icon="@Icons.Material.Filled.Add"/>
 	</ToolBarContent>
@@ -45,35 +46,45 @@
 		</MudTd>
 		<MudTd DataLabel="Actions">
 			<div class="d-flex justify-center">
-				<PrimaryIconButton
+				<MudIconButton
+					Color="Color.Primary"
                 	Link="@($"{DashboardUrls.Users.Index}/{context.Id}")"
                 	Title="@($"View user {context.Username}")"
                 	Icon="@Icons.Material.Filled.RemoveRedEye"/>
-				<PrimaryIconButton
+				<MudIconButton
+					Color="Color.Primary"
 					Link="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
 					Title="@($"Edit {context.Username}'s roles")"
 					Icon="@Icons.Material.Filled.AdminPanelSettings"/>
 				@if (context.IsLockedOut())
 				{
-					<WarningIconButton
+					<MudIconButton
+						Color="Color.Warning"
+						Variant="Variant.Filled"
 						Title="@($"Unlock {context.Username}'s account")"
 						Icon="@Icons.Material.Filled.LockOpen"
 						OnClick="@(() => UnlockUser(context))"/>
 				}
 				else
 				{
-					<WarningIconButton
+					<MudIconButton
+						Color="Color.Warning"
+						Variant="Variant.Filled"
 						Link="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
 						Title="@($"Lock {context.Username}'s account")"
 						Icon="@Icons.Material.Filled.Lock"/>
 				}
 
-				<WarningIconButton
+				<MudIconButton
+					Color="Color.Warning"
+					Variant="Variant.Filled"
 					Title="@($"Confirm {context.Username}'s account")"
 					Icon="@Icons.Material.Filled.Check"
 					OnClick="@(() => ConfirmUser(context))"
 					Disabled="context.EmailConfirmed"/>
-				<ErrorIconButton
+				<MudIconButton
+					Color="Color.Warning"
+					Variant="Variant.Filled"
                 	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
                 	OnClick="@(() => DeleteUser(context))"/>

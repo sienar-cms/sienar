@@ -33,12 +33,14 @@
 
 			@if (ShowReset)
 			{
-				<SecondaryButton
+				<MudButton
+					Color="Color.Secondary"
+					Variant="Variant.Outlined"
 					ButtonType="ButtonType.Reset"
 					OnClick="@OnReset"
 					Class="mr-3">
 					@ResetText
-				</SecondaryButton>
+				</MudButton>
 			}
 			@MoreActions
 		</CardActions>
