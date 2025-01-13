@@ -10,7 +10,7 @@
 	Elevation="10"
 	@ref="@TableRef">
 	<ToolBarContent>
-		<H6 Class="mb-0">@TableTitle</H6>
+		<MudText Typo="Typo.h6" Class="mb-0">@TableTitle</MudText>
 		<MudSpacer />
 
 		@if (!HideSearch)
@@ -43,9 +43,9 @@
 	</RowTemplate>
 
 	<NoRecordsContent>
-		<P>
+		<MudText>
 			There are not currently any @TableTitle to display
-		</P>
+		</MudText>
 	</NoRecordsContent>
 
 	<PagerContent>

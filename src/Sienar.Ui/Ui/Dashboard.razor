@@ -1,15 +1,15 @@
 ﻿@inject AuthenticationStateProvider AuthState
 @inject IMenuGenerator DashboardGenerator
 
-<H3 Class="mb-8">
+<MudText Typo="Typo.h3" Class="mb-8">
 	@Name
-</H3>
+</MudText>
 
 @foreach (var menuName in _menus.Keys)
 {
 	@if (!_menus[menuName].Any()) continue;
 
-	<H5>@menuName</H5>
+	<MudText Typo="Typo.h5">@menuName</MudText>
 	<MudDivider Class="mt-1 mb-6"/>
 
 	<div class="d-flex flex-wrap">
