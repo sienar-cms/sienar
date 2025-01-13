@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.MailKit", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Utils.Sqlite", "src\Sienar.Utils.Sqlite\Sienar.Utils.Sqlite.csproj", "{64832002-8E32-49C9-B9E4-881C0C0F02C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Ui.MudBlazor", "src\Sienar.Ui.MudBlazor\Sienar.Ui.MudBlazor.csproj", "{F6889155-145C-4B5A-9E77-1FD13F49152D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Ui", "src\Sienar.Ui\Sienar.Ui.csproj", "{F6889155-145C-4B5A-9E77-1FD13F49152D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Utils", "src\Sienar.Utils\Sienar.Utils.csproj", "{34E638B7-75AA-4DD5-9352-A2A71B22742D}"
 EndProject

@@ -6,8 +6,8 @@
 		<RootNamespace>Sienar</RootNamespace>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Ui.MudBlazor</PackageId>
-		<Title>Sienar.Ui.MudBlazor</Title>
+		<PackageId>Sienar.Ui</PackageId>
+		<Title>Sienar.Ui</Title>
 		<PackageVersion>0.1.0</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>

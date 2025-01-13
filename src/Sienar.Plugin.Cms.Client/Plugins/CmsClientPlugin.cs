@@ -100,7 +100,7 @@ public class CmsClientPlugin : IPlugin
 	private void SetupStyles()
 	{
 		_styleProvider.Add("/_content/Sienar.UI/sienar.css");
-		_styleProvider.Add("/_content/Sienar.Ui.MudBlazor/Sienar.UI.bundle.scp.css");
+		_styleProvider.Add("/_content/Sienar.Ui/Sienar.UI.bundle.scp.css");
 	}
 
 	private void SetupServices()
