@@ -1,3 +1,4 @@
+@using System.Threading
 @using Sienar.Data
 @namespace Sienar.Ui
 @typeparam TItem
@@ -110,7 +111,7 @@
 	}
 
 
-	private async Task<TableData<TItem>> LoadDataFunc(TableState state)
+	private async Task<TableData<TItem>> LoadDataFunc(TableState state, CancellationToken ctx)
 	{
 		_loading = true;
 		StateHasChanged();

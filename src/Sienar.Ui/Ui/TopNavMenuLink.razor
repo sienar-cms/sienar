@@ -27,7 +27,7 @@ else
 		{
 			@foreach (var sublink in Link.Sublinks!)
 			{
-				<MudList Clickable>
+				<MudList T="string">
 					<MudListSubheader>
 						@sublink.Text
 					</MudListSubheader>
@@ -44,7 +44,7 @@ else
 		}
 		else
 		{
-			<MudList Clickable>
+			<MudList T="string">
 				@foreach (var sublink in Link.Sublinks!)
 				{
 					<MudListItem
