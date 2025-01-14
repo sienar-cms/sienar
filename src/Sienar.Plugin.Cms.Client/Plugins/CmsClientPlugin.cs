@@ -120,6 +120,7 @@ public class CmsClientPlugin : IPlugin
 
 			s
 				.TryAddProcessor<ClientLoginProcessor>()
+				.TryAddStatusProcessor<ClientLogoutProcessor>()
 				.TryAddResultProcessor<LoadUserDataProcessor>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(

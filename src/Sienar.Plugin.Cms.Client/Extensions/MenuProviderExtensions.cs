@@ -1,5 +1,9 @@
-﻿using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using Sienar.Data;
+using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Services;
 
 namespace Sienar.Extensions;
 
@@ -58,8 +62,18 @@ public static class MenuProviderExtensions
 				{
 					Text = "Log out",
 					Icon = Icons.Material.Filled.Logout,
-					Url = DashboardUrls.Account.Logout,
-					RequireLoggedIn = true
+					RequireLoggedIn = true,
+					OnClick = async (
+						IStatusService<LogoutRequest> service,
+						NavigationManager navManager) =>
+					{
+						var result = await service.Execute(new LogoutRequest());
+
+						if (result.Status == OperationStatus.Success)
+						{
+							navManager.NavigateTo(DashboardUrls.Account.Login);
+						}
+					}
 				},
 				new MenuLink
 				{
