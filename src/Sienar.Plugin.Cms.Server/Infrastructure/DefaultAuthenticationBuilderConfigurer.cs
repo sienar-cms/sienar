@@ -16,9 +16,8 @@ public class DefaultAuthenticationBuilderConfigurer
 			CookieAuthenticationDefaults.AuthenticationScheme,
 			o =>
 			{
-				o.LoginPath = "/Dashboard/Account/Login";
-				o.LogoutPath = "/Dashboard/Account/Logout";
-				o.AccessDeniedPath = "/Dashboard/Account/Forbidden";
+				o.LoginPath = DashboardUrls.Account.Login;
+				o.AccessDeniedPath = DashboardUrls.Account.Forbidden;
 			});
 	}
 }
