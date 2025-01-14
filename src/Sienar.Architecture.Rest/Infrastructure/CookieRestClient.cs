@@ -207,6 +207,8 @@ public class CookieRestClient : IRestClient
 		object? input = null)
 	{
 		var message = new HttpRequestMessage(method, endpoint);
+		message.Headers.Add("X-Requested-With", "XMLHttpRequest");
+
 		if (input is null)
 		{
 			return message;
