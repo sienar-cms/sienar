@@ -1,0 +1,35 @@
+﻿<NarrowContainer>
+	<MudText Typo="Typo.h1">
+		Registration successful
+	</MudText>
+
+	@ChildContent
+</NarrowContainer>
+
+@code {
+
+	/// <summary>
+	/// The title to display on the status page
+	/// </summary>
+	[Parameter]
+    public required string Title { get; set; }
+
+	/// <summary>
+	/// The typography display level to use for the status page title
+	/// </summary>
+	[Parameter]
+	public Typo TitleTypo { get; set; } = Typo.h1;
+
+	/// <summary>
+	/// The HTML element to use for the status page title
+	/// </summary>
+	[Parameter]
+	public string TitleTag { get; set; } = "h1";
+
+	/// <summary>
+	/// The child content to render
+	/// </summary>
+	[Parameter]
+	public required RenderFragment ChildContent { get; set; }
+
+}
