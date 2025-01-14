@@ -1,8 +1,11 @@
-﻿@if (Link.Sublinks is null)
+﻿@using Microsoft.Extensions.DependencyInjection
+
+@if (Link.Sublinks is null)
 {
 	<MudNavLink
     	Href="@Link.Url"
-    	Icon="@Link.Icon"
+	    Icon="@Link.Icon"
+	    OnClick="@HandleClick"
     	IconColor="Color.Inherit"
     	Match="NavLinkMatch.All">
     	@Link.Text
@@ -24,5 +27,31 @@ else
 
 	[Parameter]
 	public required MenuLink Link { get; set; }
+
+	[Inject]
+	private IServiceProvider Sp { get; set; } = null!;
+
+	private void HandleClick(MouseEventArgs e)
+	{
+		if (Link.OnClick is null) return;
+
+		var parameters = Link.OnClick.Method.GetParameters();
+		var args = new object?[parameters.Length];
+
+		for (var i = 0; i < parameters.Length; i++)
+		{
+			var parameterType = parameters[i].ParameterType;
+			if (parameterType == typeof(MouseEventArgs))
+			{
+				args[i] = e;
+			}
+			else
+			{
+				args[i] = Sp.GetRequiredService(parameterType);
+			}
+		}
+
+		Link.OnClick.DynamicInvoke(args);
+	}
 
 }
