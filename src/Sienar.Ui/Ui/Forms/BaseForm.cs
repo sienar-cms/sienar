@@ -28,6 +28,9 @@ public class BaseForm : ComponentBase
 	public string? Title { get; set; }
 
 	[Parameter]
+	public string? TitleTag { get; set; }
+
+	[Parameter]
 	public required string FormName { get; set; }
 
 	[Parameter]

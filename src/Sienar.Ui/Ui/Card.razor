@@ -3,12 +3,17 @@
 	Square="Square">
 	<MudCardHeader class="@CreateHeaderClasses()">
 		<div>
-			<MudText Typo="Typo.h6" Class="mb-0">
+			<MudText
+				Typo="Typo.h6"
+				HtmlTag="@TitleTag"
+				Class="mb-0">
 				@Title
 			</MudText>
 			@if (!string.IsNullOrEmpty(Subtitle))
 			{
-				<MudText Typo="Typo.caption">
+				<MudText
+					Typo="Typo.caption"
+					HtmlTag="@SubtitleTag">
 					@Subtitle
 				</MudText>
 			}
@@ -40,6 +45,9 @@
 	public string? Title { get; set; }
 
 	[Parameter]
+	public string TitleTag { get; set; } = "h1";
+
+	[Parameter]
 	public Color ThemeColor { get; set; } = Color.Primary;
 
 	[Parameter]
@@ -50,6 +58,9 @@
 
 	[Parameter]
 	public string? Subtitle { get; set; }
+
+	[Parameter]
+	public string SubtitleTag { get; set; } = "p";
 
 	[Parameter]
 	public string? Icon { get; set; }
