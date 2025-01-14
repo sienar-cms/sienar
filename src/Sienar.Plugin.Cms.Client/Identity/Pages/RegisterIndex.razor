@@ -1,4 +1,4 @@
-@inherits FormPage<Sienar.Identity.Requests.RegisterRequest>
+﻿@inherits FormPage<Sienar.Identity.Requests.RegisterRequest>
 @attribute [AllowAnonymous]
 @attribute [Route(DashboardUrls.Account.Register.Index)]
 @inject IStatusService<RegisterRequest> Service
@@ -42,7 +42,7 @@
     		<Honeypot @bind-Value="Model.SecretKeyField"/>
     
 		    <Checkbox
-			    @bind-Checked="Model.AcceptTos"
+			    @bind-Value="Model.AcceptTos"
 			    For="() => Model.AcceptTos">
     			I accept the Terms of Service and Privacy Policy
     		</Checkbox>
@@ -53,19 +53,8 @@
 
 @code {
 
-	[Inject]
-	private INotificationService Notifier { get; set; } = null!;
-
 	private async Task OnSubmit()
 	{
-		// MudBlazor doesn't show errors on checkboxes
-		// so unfortunately, a [RequireTrue] wouldn't do any good
-		if (!Model.AcceptTos)
-		{
-			Notifier.Error("You must accept the Terms of Service and Privacy Policy to register.");
-			return;
-		}
-
 		await SubmitRequest(() => Service.Execute(Model));
 		if (WasSuccessful)
 		{

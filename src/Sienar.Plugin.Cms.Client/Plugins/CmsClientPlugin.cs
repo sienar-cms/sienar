@@ -121,6 +121,7 @@ public class CmsClientPlugin : IPlugin
 			s
 				.TryAddProcessor<ClientLoginProcessor>()
 				.TryAddStatusProcessor<ClientLogoutProcessor>()
+				.TryAddStatusProcessor<ClientRegisterProcessor>()
 				.TryAddResultProcessor<LoadUserDataProcessor>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
