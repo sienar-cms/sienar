@@ -120,6 +120,7 @@ public class CmsClientPlugin : IPlugin
 
 			s
 				.TryAddProcessor<ClientLoginProcessor>()
+				.TryAddProcessor<ClientAccountLockoutProcessor>()
 				.TryAddStatusProcessor<ClientLogoutProcessor>()
 				.TryAddStatusProcessor<ClientRegisterProcessor>()
 				.TryAddStatusProcessor<ClientConfirmAccountProcessor>()
