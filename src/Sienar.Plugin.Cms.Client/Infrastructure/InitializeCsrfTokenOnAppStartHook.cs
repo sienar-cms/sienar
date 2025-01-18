@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Ui;
 
@@ -28,7 +29,7 @@ public class InitializeCsrfTokenOnAppStartHook : IBeforeTask<SienarStartupActor>
 	{
 		try
 		{
-			_ = await _client.SendRaw("csrf");
+			await _client.RefreshCsrfToken();
 		}
 		catch (Exception e)
 		{
