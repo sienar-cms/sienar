@@ -16,6 +16,8 @@ public static class DashboardUrls
 		public const string Forbidden = $"{Prefix}/forbidden";
 		public const string PersonalData = $"{Prefix}/personal-data";
 		public const string Locked = $"{Prefix}/locked";
+		public const string Delete = $"{Prefix}/delete";
+		public const string Deleted = $"{Prefix}/deleted";
 
 		public static class Register
 		{
