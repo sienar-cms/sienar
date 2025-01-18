@@ -53,6 +53,12 @@ public static class MenuProviderExtensions
 							Text = "Personal data",
 							Icon = Icons.Material.Filled.Archive,
 							Url = DashboardUrls.Account.PersonalData
+						},
+						new()
+						{
+							Text = "Delete account",
+							Icon = Icons.Material.Filled.DeleteForever,
+							Url = DashboardUrls.Account.Delete
 						}
 					]
 				})
