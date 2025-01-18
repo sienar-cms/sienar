@@ -53,7 +53,7 @@ public static class DashboardUrls
 		}
 		public static class EmailChange
 		{
-			private const string Prefix = $"{Account.Prefix}/email";
+			private const string Prefix = $"{Account.Prefix}/change-email";
 			public const string Index = Prefix;
 			public const string Requested = $"{Prefix}/requested";
 			public const string Confirm = $"{Prefix}/confirm";

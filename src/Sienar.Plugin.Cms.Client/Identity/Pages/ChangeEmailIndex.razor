@@ -11,24 +11,21 @@
 		SubmitText="Update email"
 		Title="Change email">
 		<Fields>
-			<MudTextField
+			<Textbox
 				@bind-Value="Model.Email"
 				For="() => Model.Email"
 				InputType="InputType.Email"
-				Label="Enter your new email address"
-				Immediate/>
-			<MudTextField
+				Label="Enter your new email address"/>
+			<Textbox
 				@bind-Value="Model.ConfirmEmail"
 				For="() => Model.ConfirmEmail"
 				InputType="InputType.Email"
-				Label="Confirm your new email address"
-				Immediate/>
-			<MudTextField
+				Label="Confirm your new email address"/>
+			<Textbox
 				@bind-Value="Model.ConfirmPassword"
 				For="() => Model.ConfirmPassword"
 				InputType="InputType.Password"
-				Label="Confirm your password"
-				Immediate/>
+				Label="Confirm your password"/>
 		</Fields>
 	</StandardForm>
 </NarrowContainer>

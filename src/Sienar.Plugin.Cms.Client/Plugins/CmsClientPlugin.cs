@@ -123,6 +123,8 @@ public class CmsClientPlugin : IPlugin
 				.TryAddStatusProcessor<ClientLogoutProcessor>()
 				.TryAddStatusProcessor<ClientRegisterProcessor>()
 				.TryAddStatusProcessor<ClientConfirmAccountProcessor>()
+				.TryAddStatusProcessor<ClientInitiateEmailChangeProcessor>()
+				.TryAddStatusProcessor<ClientPerformEmailChangeProcessor>()
 				.TryAddResultProcessor<LoadUserDataProcessor>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
