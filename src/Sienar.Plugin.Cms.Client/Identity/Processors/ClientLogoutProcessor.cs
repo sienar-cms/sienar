@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using Sienar.Data;
+using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Processors;
@@ -29,6 +30,7 @@ public class ClientLogoutProcessor : IProcessor<LogoutRequest, bool>
 		if (loggedOutResult.Status is OperationStatus.Success)
 		{
 			_authStateProvider.NotifyUserAuthentication([], false);
+			await _client.RefreshCsrfToken();
 		}
 
 		return loggedOutResult;

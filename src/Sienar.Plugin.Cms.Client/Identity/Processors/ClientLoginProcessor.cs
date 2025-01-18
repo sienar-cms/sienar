@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using Sienar.Data;
+using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
@@ -30,6 +31,7 @@ public class ClientLoginProcessor : IProcessor<LoginRequest, LoginResult>
 		if (result.Status == OperationStatus.Success)
 		{
 			await _loadUserDataProcessor.Process();
+			await _client.RefreshCsrfToken();
 		}
 
 		return result;
