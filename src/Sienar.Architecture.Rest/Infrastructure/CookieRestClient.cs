@@ -134,34 +134,23 @@ public class CookieRestClient : IRestClient
 		try
 		{
 			var result = await SendRaw(endpoint, input, method);
-			if (result.IsSuccessStatusCode)
+
+			var parsedResponse = await result.Content.ReadFromJsonAsync<WebResult<TResult>>(_jsonOptions);
+
+			if (parsedResponse is null)
 			{
-				var parsedResponse = await result.Content.ReadFromJsonAsync<WebResult<TResult>>(_jsonOptions);
-
-				if (parsedResponse is null)
-				{
-					return new(
-						OperationStatus.Unknown,
-						default,
-						"The request was successful, but the server's response was not understood.");
-				}
-
-				foreach (var notification in parsedResponse.Notifications)
-				{
-					_notifier.Notify(notification);
-				}
-
-				return new(OperationStatus.Success, parsedResponse.Result);
+				return new OperationResult<TResult?>(
+					OperationStatus.Unknown,
+					default,
+					"Unable to read response from server");
 			}
 
-			if (result.StatusCode == HttpStatusCode.Unauthorized)
-			{
-				return new(
-					OperationStatus.Unauthorized,
-					message: StatusMessages.General.Unauthorized);
-			}
+			foreach (var notification in parsedResponse.Notifications)
+            {
+            	_notifier.Notify(notification);
+            }
 
-			return HandleFailureResponse<TResult>(result);
+			return CreateResult(result, parsedResponse);
 		}
 		catch (Exception e)
 		{
@@ -277,12 +266,18 @@ public class CookieRestClient : IRestClient
 		return new(OperationStatus.Unknown, default, errorMessage);
 	}
 
-	private OperationResult<TResult?> HandleFailureResponse<TResult>(
-		HttpResponseMessage message)
+	private OperationResult<TResult?> CreateResult<TResult>(
+		HttpResponseMessage message,
+		WebResult<TResult> parsedResult)
 	{
+		if (message.IsSuccessStatusCode)
+		{
+			return new OperationResult<TResult?>(result: parsedResult.Result);
+		}
+
 		string logMessage;
 		string errorMessage;
-		var status = OperationStatus.Unknown;
+		OperationStatus status;
 
 		// Use the status code to generate an error message
 		switch (message.StatusCode)
@@ -290,23 +285,37 @@ public class CookieRestClient : IRestClient
 			case HttpStatusCode.BadRequest:
 				logMessage = "The request payload was not understood";
 				errorMessage = StatusMessages.Rest.BadRequest;
+				status = OperationStatus.Unprocessable;
 				break;
 			case HttpStatusCode.Unauthorized:
 				logMessage = "Unauthorized user";
 				errorMessage = StatusMessages.General.Unauthorized;
+				status = OperationStatus.Unauthorized;
+				break;
+			case HttpStatusCode.Conflict:
+				logMessage = "Database conflict";
+				errorMessage = StatusMessages.General.Conflict;
+				status = OperationStatus.Conflict;
 				break;
 			case HttpStatusCode.UnprocessableEntity:
 				logMessage = "There was a problem with the request data";
 				errorMessage = StatusMessages.General.Unprocessable;
+				status = OperationStatus.Unprocessable;
 				break;
 			default:
 				logMessage = StatusMessages.General.Unknown;
 				errorMessage = StatusMessages.General.Unknown;
+				status = OperationStatus.Unknown;
 				break;
 		}
 
 		_logger.LogError("{}", logMessage);
 
-		return new(status, default, errorMessage);
+		return new OperationResult<TResult?>(
+			status,
+			parsedResult.Result,
+			parsedResult.Notifications.Length == 0
+				? errorMessage
+				: null);
 	}
 }
