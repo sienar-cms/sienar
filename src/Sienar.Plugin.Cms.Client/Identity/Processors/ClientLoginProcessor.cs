@@ -14,11 +14,11 @@ namespace Sienar.Identity.Processors;
 public class ClientLoginProcessor : IProcessor<LoginRequest, LoginResult>
 {
 	private readonly IRestClient _client;
-	private readonly IProcessor<SienarUser> _loadUserDataProcessor;
+	private readonly IProcessor<AccountDataResult> _loadUserDataProcessor;
 
 	public ClientLoginProcessor(
 		IRestClient client,
-		IProcessor<SienarUser> loadUserDataProcessor)
+		IProcessor<AccountDataResult> loadUserDataProcessor)
 	{
 		_client = client;
 		_loadUserDataProcessor = loadUserDataProcessor;

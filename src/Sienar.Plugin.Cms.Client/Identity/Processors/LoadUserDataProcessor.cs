@@ -1,8 +1,10 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using System.Linq;
 using System.Threading.Tasks;
 using Sienar.Data;
 using Sienar.Hooks;
+using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 using Sienar.Ui;
@@ -11,7 +13,7 @@ namespace Sienar.Identity.Processors;
 
 /// <exclude />
 public class LoadUserDataProcessor
-	: IProcessor<SienarUser>, IBeforeTask<SienarStartupActor>
+	: IProcessor<AccountDataResult>, IBeforeTask<SienarStartupActor>
 {
 	private readonly IRestClient _client;
 	private readonly IUserClaimsFactory _claimsFactory;
@@ -27,23 +29,35 @@ public class LoadUserDataProcessor
 		_authStateProvider = authStateProvider;
 	}
 
-	Task<OperationResult<SienarUser?>> IProcessor<SienarUser>.Process()
+	Task<OperationResult<AccountDataResult?>> IProcessor<AccountDataResult>.Process()
 		=> LoadUserData();
 
 	Task IBeforeTask<SienarStartupActor>.Handle(SienarStartupActor? a)
 		=> LoadUserData();
 
-	private async Task<OperationResult<SienarUser?>> LoadUserData()
+	private async Task<OperationResult<AccountDataResult?>> LoadUserData()
 	{
-		var user = (await _client.Get<SienarUser>("account")).Result;
+		var userResult = await _client.Get<AccountDataResult>("account");
 
-		if (user is null)
+		if (userResult.Status is not OperationStatus.Success)
 		{
-			return new OperationResult<SienarUser?>(OperationStatus.Unauthorized);
+			return userResult;
 		}
+
+		var user = new SienarUser
+		{
+			Username = userResult.Result!.Username,
+			Roles = userResult.Result!.Roles
+				.Select(r => new SienarRole
+				{
+					Name = r
+				})
+				.ToList()
+		};
 
 		var userClaims = _claimsFactory.CreateClaims(user);
 		_authStateProvider.NotifyUserAuthentication(userClaims, true);
-		return new OperationResult<SienarUser?>();
+
+		return userResult;
 	}
 }
