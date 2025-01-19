@@ -14,7 +14,7 @@ else
 {
 	<MudMenu
 		Class="mr-4"
-		ListClass="d-flex px-4 pb-2"
+		ListClass="@($"{(_hasNestedSublinks ? "d-flex" : "")} px-4 pb-2")"
 		Color="Color.Inherit"
 		Variant="Variant.Text"
 		Label="@Link.Text"
@@ -33,27 +33,25 @@ else
 					</MudListSubheader>
 					@foreach (var nestedSublink in sublink.Sublinks!)
 					{
-						<MudListItem
+						<MudMenuItem
 							Href="@nestedSublink.Url"
 							Icon="@nestedSublink.Icon">
 							@nestedSublink.Text
-						</MudListItem>
+						</MudMenuItem>
 					}
 				</MudList>
 			}
 		}
 		else
 		{
-			<MudList T="string">
-				@foreach (var sublink in Link.Sublinks!)
-				{
-					<MudListItem
-						Href="@sublink.Url"
-						Icon="@sublink.Icon">
-						@sublink.Text
-					</MudListItem>
-				}
-			</MudList>
+			@foreach (var sublink in Link.Sublinks!)
+			{
+				<MudMenuItem
+					Href="@sublink.Url"
+					Icon="@sublink.Icon">
+					@sublink.Text
+				</MudMenuItem>
+			}
 		}
 	</MudMenu>
 }
