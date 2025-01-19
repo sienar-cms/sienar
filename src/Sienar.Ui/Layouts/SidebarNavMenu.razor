@@ -1,6 +1,6 @@
-﻿@inherits NavBase
+﻿@using MudBlazor.Services
+@inherits NavBase
 @implements IBrowserViewportObserver
-@using MudBlazor.Services
 @implements IAsyncDisposable
 
 <MudHidden Breakpoint="Breakpoint.LgAndUp">
@@ -21,12 +21,10 @@
 
 @code {
 
-	private bool _open;
-
 	private bool Open
 	{
-		get => _breakpoint >= Breakpoint.Lg || _open;
-		set => _open = value;
+		get => _breakpoint >= Breakpoint.Lg || MenuOpen;
+		set => MenuOpen = value;
 	}
 
 	private DrawerVariant DrawerVariant => _breakpoint >= Breakpoint.Lg
@@ -73,11 +71,6 @@
 	{
 		await BrowserViewportService.UnsubscribeAsync(this);
 		GC.SuppressFinalize(this);
-	}
-
-	private void ToggleDrawer()
-	{
-		_open = !_open;
 	}
 
 }
