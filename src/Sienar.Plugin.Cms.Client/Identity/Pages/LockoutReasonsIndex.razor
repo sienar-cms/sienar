@@ -20,7 +20,7 @@
 	<ToolBarContent>
 		<MudIconButton
 			Color="Color.Primary"
-			Link="@DashboardUrls.LockoutReasons.Add"
+			Href="@DashboardUrls.LockoutReasons.Add"
 			Icon="@Icons.Material.Filled.Add"/>
 	</ToolBarContent>
 
@@ -40,15 +40,14 @@
 			<div class="d-flex justify-center">
 				<MudIconButton
 					Color="Color.Primary"
-					Link="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
-					Title="View lockout reason"
-					Icon="@Icons.Material.Filled.RemoveRedEye"/>
+					Href="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
+					Icon="@Icons.Material.Filled.RemoveRedEye"
+					title="View lockout reason"/>
 				<MudIconButton
 					Color="Color.Error"
-					Variant="Variant.Filled"
-					Title="Delete lockout reason"
 					Icon="@Icons.Material.Filled.DeleteForever"
-					OnClick="@(() => DeleteReason(context))"/>
+					OnClick="@(() => DeleteReason(context))"
+					title="Delete lockout reason"/>
 			</div>
 		</MudTd>
 	</RowTemplate>

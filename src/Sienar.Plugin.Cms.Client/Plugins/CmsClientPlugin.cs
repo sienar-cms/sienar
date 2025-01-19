@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Extensions;
 using Sienar.Identity;
+using Sienar.Identity.Data;
 using Sienar.Identity.Processors;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
@@ -130,7 +131,9 @@ public class CmsClientPlugin : IPlugin
 				.TryAddStatusProcessor<ClientForgotPasswordProcessor>()
 				.TryAddStatusProcessor<ClientResetPasswordProcessor>()
 				.TryAddStatusProcessor<ClientDeleteAccountProcessor>()
-				.TryAddResultProcessor<LoadUserDataProcessor>();
+				.TryAddResultProcessor<LoadUserDataProcessor>()
+
+				.AddRestfulEntity<LockoutReason, LockoutReasonsUrlProvider>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
 				_configuration.GetSection("Sienar:Core"));
