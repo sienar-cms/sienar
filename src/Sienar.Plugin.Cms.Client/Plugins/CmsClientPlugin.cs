@@ -110,6 +110,7 @@ public class CmsClientPlugin : IPlugin
 
 		_adapter.AddServices(s =>
 		{
+			// Infrastructure
 			s
 				.AddCookieRestClient()
 				.AddBeforeTaskHook<AddCsrfTokenToHttpRequestHook>()
@@ -120,6 +121,7 @@ public class CmsClientPlugin : IPlugin
 			s.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 
 			s
+				// Account
 				.TryAddProcessor<ClientLoginProcessor>()
 				.TryAddProcessor<ClientAccountLockoutProcessor>()
 				.TryAddStatusProcessor<ClientLogoutProcessor>()
@@ -133,6 +135,15 @@ public class CmsClientPlugin : IPlugin
 				.TryAddStatusProcessor<ClientDeleteAccountProcessor>()
 				.TryAddResultProcessor<LoadUserDataProcessor>()
 
+				// Users
+				.TryAddStatusProcessor<ClientLockUserAccountProcessor>()
+				.TryAddStatusProcessor<ClientUnlockUserAccountProcessor>()
+				.TryAddStatusProcessor<ClientManuallyConfirmUserAccountProcessor>()
+				.TryAddStatusProcessor<ClientAddUsertoRoleProcessor>()
+				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor>()
+				.AddRestfulEntity<SienarUser, UsersUrlProvider>()
+
+				// Lockout reasons
 				.AddRestfulEntity<LockoutReason, LockoutReasonsUrlProvider>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
