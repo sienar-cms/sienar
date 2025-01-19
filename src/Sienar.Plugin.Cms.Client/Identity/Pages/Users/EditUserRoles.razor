@@ -20,9 +20,9 @@
     		@foreach (var role in _roles)
     		{
     			<MudSwitch
-    				T="bool"
-    				Checked="_roleMap[role.Id]"
-    				CheckedChanged="b => UpdateRoleStatus(b, role.Id)"
+				    T="bool"
+				    Value="_roleMap[role.Id]"
+    				ValueChanged="b => UpdateRoleStatus(b, role.Id)"
     				Color="Color.Primary"
     				Label="@role.Name"/>
     		}
@@ -34,6 +34,9 @@
 
 	[Parameter]
 	public Guid UserId { get; set; }
+
+	[Inject]
+	private ILogger<EditUserRoles> Logger { get; set; } = null!;
 
 	private readonly Dictionary<Guid, bool> _roleMap = new();
 	private SienarUser? _user;
@@ -48,10 +51,11 @@
 				_user = (await UserReader.Read(UserId)).Result;
 				if (_user is null) return;
 
-				_roles = (await RoleReader.Read(Filter.GetAll())).Result?.Items ?? [];
+				_roles = (await RoleReader.Read()).Result?.Items ?? [];
 				foreach (var role in _roles)
 				{
-					_roleMap[role.Id] = _user.Roles.Contains(role);
+					_roleMap[role.Id] = _user.Roles.Any(r => r.Id == role.Id);
+					Logger.LogInformation("User in role {name}: {is}", role.Name, _roleMap[role.Id]);
 				}
 			});
 	}

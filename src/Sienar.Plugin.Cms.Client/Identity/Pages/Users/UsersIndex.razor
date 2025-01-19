@@ -48,46 +48,42 @@
 			<div class="d-flex justify-center">
 				<MudIconButton
 					Color="Color.Primary"
-                	Link="@($"{DashboardUrls.Users.Index}/{context.Id}")"
-                	Title="@($"View user {context.Username}")"
-                	Icon="@Icons.Material.Filled.RemoveRedEye"/>
+					Href="@($"{DashboardUrls.Users.Index}/{context.Id}")"
+                	Icon="@Icons.Material.Filled.RemoveRedEye"
+					title="@($"View user {context.Username}")"/>
 				<MudIconButton
 					Color="Color.Primary"
-					Link="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
-					Title="@($"Edit {context.Username}'s roles")"
-					Icon="@Icons.Material.Filled.AdminPanelSettings"/>
+					Href="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
+					Icon="@Icons.Material.Filled.AdminPanelSettings"
+					title="@($"Edit {context.Username}'s roles")"/>
 				@if (context.IsLockedOut())
 				{
 					<MudIconButton
 						Color="Color.Warning"
-						Variant="Variant.Filled"
-						Title="@($"Unlock {context.Username}'s account")"
 						Icon="@Icons.Material.Filled.LockOpen"
-						OnClick="@(() => UnlockUser(context))"/>
+						OnClick="@(() => UnlockUser(context))"
+						title="@($"Unlock {context.Username}'s account")"/>
 				}
 				else
 				{
 					<MudIconButton
 						Color="Color.Warning"
-						Variant="Variant.Filled"
-						Link="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
-						Title="@($"Lock {context.Username}'s account")"
-						Icon="@Icons.Material.Filled.Lock"/>
+						Href="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
+						Icon="@Icons.Material.Filled.Lock"
+						title="@($"Lock {context.Username}'s account")"/>
 				}
 
 				<MudIconButton
 					Color="Color.Warning"
-					Variant="Variant.Filled"
-					Title="@($"Confirm {context.Username}'s account")"
 					Icon="@Icons.Material.Filled.Check"
 					OnClick="@(() => ConfirmUser(context))"
-					Disabled="context.EmailConfirmed"/>
+					Disabled="context.EmailConfirmed"
+					title="@($"Confirm {context.Username}'s account")"/>
 				<MudIconButton
 					Color="Color.Warning"
-					Variant="Variant.Filled"
-                	Title="@($"Delete user {context.Username}")"
                 	Icon="@Icons.Material.Filled.DeleteForever"
-                	OnClick="@(() => DeleteUser(context))"/>
+                	OnClick="@(() => DeleteUser(context))"
+					title="@($"Delete user {context.Username}")"/>
 			</div>
 		</MudTd>
 	</RowTemplate>
