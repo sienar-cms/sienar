@@ -80,7 +80,7 @@
 					Disabled="context.EmailConfirmed"
 					title="@($"Confirm {context.Username}'s account")"/>
 				<MudIconButton
-					Color="Color.Warning"
+					Color="Color.Error"
                 	Icon="@Icons.Material.Filled.DeleteForever"
                 	OnClick="@(() => DeleteUser(context))"
 					title="@($"Delete user {context.Username}")"/>
