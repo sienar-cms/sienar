@@ -66,6 +66,7 @@ public class CmsClientPlugin : IPlugin
 	{
 		_componentProvider.DefaultLayout ??= typeof(DashboardLayout);
 		_componentProvider.SidebarHeader ??= typeof(DrawerHeader);
+		_componentProvider.NotFoundView ??= typeof(NotFound);
 		_componentProvider.UnauthorizedView ??= typeof(Unauthorized);
 	}
 
