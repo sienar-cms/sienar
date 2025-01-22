@@ -1,0 +1,38 @@
+﻿<StatusPage Title="@_title">
+	<MudText>
+		@if (_authenticated)
+		{
+			<text>You do not have permission to access the requested resource.</text>
+		}
+		else
+		{
+			<text>You must <MudLink Href="@($"{DashboardUrls.Account.Login}?returnUrl={NavManager.ToBaseRelativePath(NavManager.Uri)}")">log in</MudLink> to access the requested resource.</text>
+		}
+	</MudText>
+</StatusPage>
+
+@code {
+
+	private AuthenticationState? _authState;
+	private bool _authenticated;
+	private string _title = "Not logged in";
+
+	[CascadingParameter]
+	private Task<AuthenticationState> AuthState { get; set; } = null!;
+
+	[Inject]
+	private NavigationManager NavManager { get; set; } = null!;
+
+	/// <inheritdoc />
+	protected override async Task OnParametersSetAsync()
+	{
+		var newAuthState = await AuthState;
+		if (_authState == newAuthState) return;
+
+		_authState = newAuthState;
+		_authenticated = _authState.IsAuthenticated();
+		_title = _authenticated ? "Forbidden" : "Not logged in";
+		StateHasChanged();
+	}
+
+}
