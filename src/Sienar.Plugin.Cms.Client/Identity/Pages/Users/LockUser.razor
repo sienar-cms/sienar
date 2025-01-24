@@ -116,6 +116,9 @@
 		_lockoutReasons = (await LockoutReasonReader.Read(Filter.GetAll())).Result?.Items ?? [];
 	}
 
+	/// <summary>
+	/// Submits a request to lock the specified user's account
+	/// </summary>
 	protected async Task OnSubmit()
 	{
 		Model.UserId = UserId;

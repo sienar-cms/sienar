@@ -91,24 +91,36 @@
 
 @code {
 
-	private static string GetConfirmationIcon(bool isConfirmed)
+	/// <summary>
+	/// Determines the correct icon to display in the account confirmation status column
+	/// </summary>
+	protected static string GetConfirmationIcon(bool isConfirmed)
 		=> isConfirmed
 			? Icons.Material.Filled.Check
 			: Icons.Material.Filled.Close;
 
-	private Task UnlockUser(SienarUser user)
+	/// <summary>
+	/// Creates a prompt to unlock the specified user's account
+	/// </summary>
+	protected Task UnlockUser(SienarUser user)
 		=> ConfirmAction(
 			$"Unlock {user.Username}'s account",
 			$"Are you sure you want to unlock {user.Username}'s account? This will take effect immediately",
 			async () => await UnlockService.Execute(new UnlockUserAccountRequest { UserId = user.Id }));
 
-	private Task ConfirmUser(SienarUser user)
+	/// <summary>
+	/// Creates a prompt to confirm the specified user's account
+	/// </summary>
+	protected Task ConfirmUser(SienarUser user)
 		=> ConfirmAction(
 			$"Confirm {user.Username}'s account",
 			$"Are you sure you want to confirm {user.Username}'s account? This will take effect immediately",
 			async () => await ConfirmService.Execute(new ManuallyConfirmUserAccountRequest { UserId = user.Id }));
 
-	private Task DeleteUser(SienarUser user)
+	/// <summary>
+	/// Creates a prompt to delete the specified user's account
+	/// </summary>
+	protected Task DeleteUser(SienarUser user)
 		=> DeleteEntity(
 			user.Id,
 			$"Delete {user.Username}'s account",

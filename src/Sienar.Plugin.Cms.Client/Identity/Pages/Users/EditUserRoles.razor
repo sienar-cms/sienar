@@ -60,7 +60,12 @@
 			});
 	}
 
-	private async Task UpdateRoleStatus(
+	/// <summary>
+	/// Sends a request to update the user's membership in the given role
+	/// </summary>
+	/// <param name="shouldBeInRole">If <c>true</c>, the user should be added to the role. If <c>false</c>, the user should be removed from the role.</param>
+	/// <param name="roleId">The ID of the role</param>
+	protected async Task UpdateRoleStatus(
 		bool shouldBeInRole,
 		Guid roleId)
 	{

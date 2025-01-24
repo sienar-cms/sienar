@@ -27,7 +27,10 @@
 
 @code {
 
-	private async Task OnSubmit()
+	/// <summary>
+	/// Submits a request to delete the current user's account
+	/// </summary>
+	protected async Task OnSubmit()
 	{
 		await SubmitRequest(() => DeleteAccountService.Execute(Model));
 		if (WasSuccessful)

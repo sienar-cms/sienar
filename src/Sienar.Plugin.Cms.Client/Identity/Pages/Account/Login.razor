@@ -8,7 +8,7 @@
 <NarrowContainer>
 	<StandardForm
 		Model="@Model"
-		OnSubmit="@HandleLogin"
+		OnSubmit="@OnSubmit"
 		SubmitText="Log in"
 		Title="Log in"
 		FormName="login">
@@ -53,9 +53,9 @@
 	public string? ReturnUrl { get; set; }
 
 	/// <summary>
-	/// Handles logging in after the login form has been successfully submitted
+	/// Submits a request to log in the specified user account
 	/// </summary>
-	protected async Task HandleLogin()
+	protected async Task OnSubmit()
 	{
 		var result = await SubmitRequest(() => Service.Execute(Model));
 		if (WasSuccessful)

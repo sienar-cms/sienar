@@ -55,7 +55,10 @@
 
 @code {
 
-	private Task DeleteReason(LockoutReason reason)
+	/// <summary>
+	/// Creates a prompt to delete a lockout reason
+	/// </summary>
+	protected Task DeleteReason(LockoutReason reason)
 		=> DeleteEntity(
 			reason.Id,
 			"Delete lockout reason",
