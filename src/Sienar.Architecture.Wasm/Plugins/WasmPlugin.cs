@@ -29,9 +29,7 @@ public class WasmPlugin : IPlugin
 		{
 			sp.TryAddScoped<IUserAccessor, BlazorUserAccessor>();
 
-			sp
-				.AddCascadingAuthenticationState()
-				.AddAuthorizationCore();
+			sp.AddAuthorizationCore();
 		});
 	}
 }
