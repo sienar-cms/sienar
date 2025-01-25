@@ -15,7 +15,12 @@ public interface IComponentProvider
 	/// <summary>
 	/// The component to render when no route is matched by the router
 	/// </summary>
-	public Type NotFoundView { get; set; }
+	public Type? NotFoundView { get; set; }
+
+	/// <summary>
+	/// The component to render when the user is fails an authorization check
+	/// </summary>
+	public Type? UnauthorizedView { get; set; }
 
 	/// <summary>
 	/// A component to render in place of the default dashboard UI

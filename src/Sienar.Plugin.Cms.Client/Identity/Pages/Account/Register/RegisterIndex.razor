@@ -53,7 +53,10 @@
 
 @code {
 
-	private async Task OnSubmit()
+	/// <summary>
+	/// Submits a request to register a new user
+	/// </summary>
+	protected async Task OnSubmit()
 	{
 		await SubmitRequest(() => Service.Execute(Model));
 		if (WasSuccessful)

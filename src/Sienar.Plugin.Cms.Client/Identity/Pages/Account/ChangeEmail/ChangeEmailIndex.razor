@@ -32,7 +32,10 @@
 
 @code {
 
-	private async Task OnSubmit()
+	/// <summary>
+	/// Submits a request to change the user's email address
+	/// </summary>
+	protected async Task OnSubmit()
 	{
 		await SubmitRequest(() => EmailChangeService.Execute(Model));
 		if (WasSuccessful)

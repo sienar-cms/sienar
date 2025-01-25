@@ -9,6 +9,7 @@ using Sienar.Identity.Processors;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
 using Sienar.Ui;
+using Sienar.Ui.Views;
 
 namespace Sienar.Plugins;
 
@@ -65,6 +66,8 @@ public class CmsClientPlugin : IPlugin
 	{
 		_componentProvider.DefaultLayout ??= typeof(DashboardLayout);
 		_componentProvider.SidebarHeader ??= typeof(DrawerHeader);
+		_componentProvider.NotFoundView ??= typeof(NotFound);
+		_componentProvider.UnauthorizedView ??= typeof(Unauthorized);
 	}
 
 	private void SetupMenu()
@@ -142,6 +145,7 @@ public class CmsClientPlugin : IPlugin
 				.TryAddStatusProcessor<ClientAddUsertoRoleProcessor>()
 				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor>()
 				.AddRestfulEntity<SienarUser, UsersUrlProvider>()
+				.AddRestfulEntity<SienarRole, RolesUrlProvider>()
 
 				// Lockout reasons
 				.AddRestfulEntity<LockoutReason, LockoutReasonsUrlProvider>();

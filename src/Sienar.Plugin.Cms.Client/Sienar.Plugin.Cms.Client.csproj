@@ -54,4 +54,19 @@
 			Include="Sienar.Ui.MudBlazor" Version="0.1.0"/>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordSuccessful.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailConfirm.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailRequested.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailSuccessful.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterSuccessful.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Identity\Pages\Account\Login.razor" />
+	</ItemGroup>
+
 </Project>

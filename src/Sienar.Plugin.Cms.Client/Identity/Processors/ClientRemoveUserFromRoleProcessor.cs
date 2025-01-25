@@ -19,5 +19,5 @@ public class ClientRemoveUserFromRoleProcessor : IProcessor<RemoveUserFromRoleRe
 	}
 
 	public Task<OperationResult<bool>> Process(RemoveUserFromRoleRequest request)
-		=> _client.Delete<bool>("users/role", request);
+		=> _client.Delete<bool>("users/roles", request);
 }
