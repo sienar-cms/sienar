@@ -2,12 +2,14 @@
 
 <MudProviders/>
 
-<FullHeightLayout>
+<MudLayout Class="min-vh-100">
 	<TopNavMenu MenuNames="MenuNames"/>
 
-	<StandardMainContent
-		Padded
-		TopPadded>
-		@Body
-	</StandardMainContent>
-</FullHeightLayout>
+	<MudMainContent Class="px-16 pb-16">
+		<MudContainer
+			Class="px-0 pt-16"
+			MaxWidth="MaxWidth.False">
+			@Body
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
