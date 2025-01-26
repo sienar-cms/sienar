@@ -1,0 +1,87 @@
+﻿@inherits ServiceAwareClickHandlerBase
+@implements IDisposable
+@inject IMenuGenerator MenuGenerator
+@inject IUserAccessor UserAccessor
+@inject AuthenticationStateProvider AuthStateProvider
+
+<MudDivider Class="mb-2"/>
+
+<MudStack
+	AlignItems="AlignItems.Center"
+	Spacing="1"
+	Row>
+	<MudAvatar Color="Color.Primary">
+		@_initial
+	</MudAvatar>
+
+	<div class="mr-auto">
+		<MudText
+			Class="ml-1"
+			Typo="Typo.body2"
+			HtmlTag="span">
+			@_username
+		</MudText>
+	</div>
+
+	<MudMenu Icon="@Icons.Material.Filled.Settings" Dense>
+		@foreach (var menu in _menus)
+		{
+			@foreach (var submenu in menu)
+			{
+				<MudMenuItem
+					Href="@submenu.Url"
+					OnClick="@(e => HandleClick(submenu.OnClick, e))">
+					<div class="d-flex align-center">
+						<MudIcon
+							Class="mr-2"
+							Icon="@submenu.Icon"/>
+						@submenu.Text
+					</div>
+				</MudMenuItem>
+			}
+			<MudDivider/>
+		}
+	</MudMenu>
+</MudStack>
+
+@code {
+
+	private string _initial = "U";
+	private string _username = string.Empty;
+	private List<List<MenuLink>> _menus = [];
+
+	/// <summary>
+	/// The names of the menus to render in the user settings menu
+	/// </summary>
+	[Parameter]
+	public required IEnumerable<string> MenuNames { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		AuthStateProvider.AuthenticationStateChanged += HandleRerender;
+		await Update();
+	}
+
+	private void HandleRerender(Task<AuthenticationState> s) => _ = Update();
+
+	private async Task Update()
+	{
+		_username = await UserAccessor.GetUsername() ?? string.Empty;
+		_initial = _username.Length > 0 ? _username[..1].ToUpper() : "U";
+
+		_menus.Clear();
+
+		foreach (var menuName in MenuNames)
+		{
+			_menus.Add(await MenuGenerator.Create(menuName));
+		}
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		AuthStateProvider.AuthenticationStateChanged -= HandleRerender;
+	}
+
+}
