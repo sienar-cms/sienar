@@ -1,0 +1,63 @@
+﻿@inherits ActionPage
+@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Locked)]
+@inject IService<AccountLockoutRequest, AccountLockoutResult> LockoutService
+
+@if (_result is null)
+{
+	<Spinner/>
+	return;
+}
+
+<NarrowContainer>
+	<StatusPage Title="Account locked">
+		@if (_result.LockoutEnd is null)
+		{
+			<MudText>Your account is locked <strong>permanently</strong>.</MudText>
+		}
+		else
+		{
+			<MudText>
+				Your account is currently locked until <strong>@_result.LockoutEnd.Value.ToLocalTime()</strong>.
+			</MudText>
+			<MudText>
+				Your account is locked for the following reason(s):
+			</MudText>
+			<MudList T="string">
+				@foreach (var reason in _result.LockoutReasons)
+				{
+					<MudListItem Icon="@Icons.Material.Filled.Label">
+						@reason.Reason
+					</MudListItem>
+				}
+			</MudList>
+		}
+	</StatusPage>
+</NarrowContainer>
+
+@code {
+
+	private AccountLockoutResult? _result;
+
+	[SupplyParameterFromQuery]
+	public Guid UserId { get; set; }
+
+	[SupplyParameterFromQuery]
+	public Guid VerificationCode { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		await SubmitRequest(
+			async () =>
+			{
+				var request = new AccountLockoutRequest
+				{
+					UserId = UserId,
+					VerificationCode = VerificationCode
+				};
+				var result = await LockoutService.Execute(request);
+				_result = result.Result;
+			});
+	}
+}

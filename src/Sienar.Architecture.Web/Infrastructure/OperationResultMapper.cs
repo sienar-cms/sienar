@@ -22,18 +22,6 @@ public class OperationResultMapper : IOperationResultMapper
 
 	public ObjectResult MapToObjectResult<T>(OperationResult<T> result)
 	{
-		if (!string.IsNullOrEmpty(result.Message))
-		{
-			if (result.Status is OperationStatus.Success)
-			{
-				_notifier.Success(result.Message);
-			}
-			else
-			{
-				_notifier.Error(result.Message);
-			}
-		}
-
 		var webResult = new WebResult<T>
 		{
 			Result = result.Result,

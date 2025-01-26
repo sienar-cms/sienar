@@ -4,7 +4,7 @@ using Sienar.Hooks;
 
 namespace Sienar.Identity.Hooks;
 
-public class FetchNotUpdatedUserPropertiesHook<TContext> : IBeforeProcess<SienarUser>
+public class FetchNotUpdatedUserPropertiesHook<TContext> : IBeforeAction<SienarUser>
 	where TContext : DbContext
 {
 	private readonly TContext _context;

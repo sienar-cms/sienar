@@ -34,13 +34,13 @@ public class LockoutReasonController : ServiceController
 
 	[HttpPost]
 	public Task<IActionResult> Create(
-		[FromForm] LockoutReason entity,
+		LockoutReason entity,
 		[FromServices] IEntityWriter<LockoutReason> service)
 		=> Execute(() => service.Create(entity));
 
 	[HttpPut]
 	public Task<IActionResult> Update(
-		[FromForm] LockoutReason entity,
+		LockoutReason entity,
 		[FromServices] IEntityWriter<LockoutReason> service)
 		=> Execute(() => service.Update(entity));
 

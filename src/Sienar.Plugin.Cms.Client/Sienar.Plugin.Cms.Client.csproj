@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Sienar</RootNamespace>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<PackageId>Sienar.Plugin.Cms.Blazor</PackageId>
+		<Title>Sienar.Plugin.Cms</Title>
+		<PackageVersion>0.1.0</PackageVersion>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>Christian LeVesque</Authors>
+		<Description>The CMS portion of Sienar applications</Description>
+		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
+		<PackageProjectUrl>https://sienar.levesque.dev</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>sienar cms utilities blazor plugin</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Architecture.Wasm" Version="0.1.0"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugin.Cms.Core" Version="0.1.1"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugin.Architecture.Rest" Version="0.1.0"/>
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\Sienar.Ui\Sienar.Ui.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Ui.MudBlazor" Version="0.1.0"/>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordSuccessful.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailConfirm.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailRequested.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailSuccessful.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterIndex.razor" />
+	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterSuccessful.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Identity\Pages\Account\Login.razor" />
+	</ItemGroup>
+
+</Project>

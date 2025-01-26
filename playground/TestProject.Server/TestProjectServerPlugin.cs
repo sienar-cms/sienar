@@ -25,7 +25,7 @@ public class TestProjectServerPlugin : IPlugin
 	{
 		builder
 			.AddPlugin<BlazorPlugin>()
-			.AddPlugin<CmsRestPlugin>()
+			.AddPlugin<CmsServerPlugin>()
 			.AddPlugin<SienarCmsEfRepositoriesPlugin<AppDbContext>>();
 	}
 }

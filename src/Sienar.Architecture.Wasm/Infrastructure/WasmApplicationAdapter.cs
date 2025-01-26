@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +11,9 @@ namespace Sienar.Infrastructure;
 /// </summary>
 public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder>
 {
+	/// <inheritdoc />
+	public ApplicationType ApplicationType => ApplicationType.Client;
+
 	/// <inheritdoc />
 	public WebAssemblyHostBuilder Builder { get; private set; } = null!;
 
@@ -40,11 +42,7 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton(sp.GetRequiredService<IPluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IRoutableAssemblyProvider>())
 			.AddSingleton(sp.GetRequiredService<IScriptProvider>())
-			.AddSingleton(sp.GetRequiredService<IStyleProvider>())
-			.AddSingleton<AuthenticationStateProvider, AuthStateProvider>()
-			.AddCascadingAuthenticationState()
-			.AddAuthorizationCore()
-			.AddSingleton<IUserAccessor, BlazorUserAccessor>();
+			.AddSingleton(sp.GetRequiredService<IStyleProvider>());
 
 		return Builder.Build();
 	}

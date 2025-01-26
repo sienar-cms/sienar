@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,6 +11,7 @@ using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 using Sienar.Services;
+using Sienar.Ui;
 
 namespace Sienar.Extensions;
 
@@ -34,11 +36,14 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
 		self.TryAddScoped(typeof(IAccessValidatorService<>), typeof(AccessValidatorService<>));
 		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
-		self.TryAddScoped(typeof(IBeforeProcessService<>), typeof(BeforeProcessService<>));
-		self.TryAddScoped(typeof(IAfterProcessService<>), typeof(AfterProcessService<>));
+		self.TryAddScoped(typeof(IBeforeActionService<>), typeof(BeforeActionService<>));
+		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
+		self.TryAddScoped<AuthStateProvider>();
+		self.TryAddScoped<AuthenticationStateProvider>(
+			sp => sp.GetRequiredService<AuthStateProvider>());
 
 		return self;
 	}
@@ -169,54 +174,107 @@ public static class SienarUtilsServiceCollectionExtensions
 			false);
 
 	/// <summary>
-	/// Adds a before-process hook for the given <c>TRequest</c>
+	/// Adds a before-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeHook<TRequest, THook>(
+	public static IServiceCollection AddBeforeActionHook<TRequest, THook>(
 		this IServiceCollection self)
-		where THook : class, IBeforeProcess<TRequest>
-		=> self.AddScoped<IBeforeProcess<TRequest>, THook>();
+		where THook : class, IBeforeAction<TRequest>
+		=> self.AddScoped<IBeforeAction<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds a before-process hook for the given <c>TRequest</c>
+	/// Adds a before-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeHook<THook>(
+	public static IServiceCollection AddBeforeActionHook<THook>(
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(THook),
-			typeof(IBeforeProcess<>),
+			typeof(IBeforeAction<>),
 			ServiceLifetime.Scoped,
 			false);
 
 	/// <summary>
-	/// Adds an after-process hook for the given <c>TRequest</c>
+	/// Adds a before-task hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterHook<TRequest, THook>(
+	public static IServiceCollection AddBeforeTaskHook<TRequest, THook>(
 		this IServiceCollection self)
-		where THook : class, IAfterProcess<TRequest>
-		=> self.AddScoped<IAfterProcess<TRequest>, THook>();
+		where TRequest : class
+		where THook : class, IBeforeTask<TRequest>
+		=> self.AddScoped<IBeforeTask<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds an after-process hook for the given <c>TRequest</c>
+	/// Adds a before-task hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterHook<THook>(
+	public static IServiceCollection AddBeforeTaskHook<THook>(this IServiceCollection self)
+		=> self.AddImplementationAsInterface(
+			typeof(THook),
+			typeof(IBeforeTask<>),
+			ServiceLifetime.Scoped,
+			false);
+
+	/// <summary>
+	/// Adds an after-action hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterActionHook<TRequest, THook>(
+		this IServiceCollection self)
+		where THook : class, IAfterAction<TRequest>
+		=> self.AddScoped<IAfterAction<TRequest>, THook>();
+
+	/// <summary>
+	/// Adds an after-action hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterActionHook<THook>(
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(THook),
-			typeof(IAfterProcess<>),
+			typeof(IAfterAction<>),
+			ServiceLifetime.Scoped,
+			false);
+
+	/// <summary>
+	/// Adds an after-task hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterTaskHook<TRequest, THook>(
+		this IServiceCollection self)
+		where TRequest : class
+		where THook : class, IAfterTask<TRequest>
+		=> self.AddScoped<IAfterTask<TRequest>, THook>();
+
+	/// <summary>
+	/// Adds an after-action hook for the given <c>TRequest</c>
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddAfterTaskHook<THook>(
+		this IServiceCollection self)
+		=> self.AddImplementationAsInterface(
+			typeof(THook),
+			typeof(IAfterTask<>),
 			ServiceLifetime.Scoped,
 			false);
 
@@ -275,6 +333,16 @@ public static class SienarUtilsServiceCollectionExtensions
 			typeof(IProcessor<,>),
 			ServiceLifetime.Scoped,
 			true);
+
+	/// <summary>
+	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="T">The type of the startup task</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddStartupTask<T>(this IServiceCollection self)
+		where T : class, IBeforeTask<SienarStartupActor>
+		=> self.AddScoped<IBeforeTask<SienarStartupActor>, T>();
 
 	/// <summary>
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>

@@ -1,0 +1,14 @@
+@layout DashboardLayout
+@attribute [Route(DashboardUrls.Index)]
+@inject IComponentProvider ComponentProvider
+
+<DocTitle Title="Dashboard"/>
+
+@if (ComponentProvider.Dashboard is null)
+{
+	<Dashboard Categories="@([DashboardMenuNames.UserManagement])"/>
+}
+else
+{
+	<DynamicComponent Type="ComponentProvider.Dashboard" />
+}

@@ -6,7 +6,7 @@ using Sienar.Hooks;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class LockoutReasonMapNormalizedFieldsHook : IBeforeProcess<LockoutReason>
+public class LockoutReasonMapNormalizedFieldsHook : IBeforeAction<LockoutReason>
 {
 	public Task Handle(LockoutReason request, ActionType action)
 	{

@@ -7,7 +7,7 @@ using Sienar.Hooks;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class UserPasswordUpdateHook : IBeforeProcess<SienarUser>
+public class UserPasswordUpdateHook : IBeforeAction<SienarUser>
 {
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
 

@@ -1,0 +1,67 @@
+﻿@inherits TablePage<LockoutReason>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.LockoutReasons.Index)]
+
+<DocTitle Title="Lockout reasons listing"/>
+
+<MudText Typo="Typo.h1">Lockout reasons</MudText>
+
+<MudText>
+	When you lock a user's account, you need to select at least one reason for locking their account. This reason will be visible to the user when they try to log in.
+</MudText>
+<MudText>
+	Sienar does not provide any reasons for locking user accounts. You should define reasons for locking use accounts based on the needs of your specific app. If you're not sure what reasons to add, you don't need to add any reasons until you need to lock a user account, so you can also add lockout reasons on an as-needed basis.
+</MudText>
+
+<Table
+	@ref="Table"
+	TableTitle="Lockout reasons"
+	LoadData="Reader.Read">
+	<ToolBarContent>
+		<MudIconButton
+			Color="Color.Primary"
+			Href="@DashboardUrls.LockoutReasons.Add"
+			Icon="@Icons.Material.Filled.Add"/>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<SortLabel For="(LockoutReason r) => r.Reason">Reason</SortLabel>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Actions
+			</div>
+		</MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+		<MudTd DataLabel="Reason">@context.Reason</MudTd>
+
+		<MudTd DataLabel="Actions">
+			<div class="d-flex justify-center">
+				<MudIconButton
+					Color="Color.Primary"
+					Href="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
+					Icon="@Icons.Material.Filled.RemoveRedEye"
+					title="View lockout reason"/>
+				<MudIconButton
+					Color="Color.Error"
+					Icon="@Icons.Material.Filled.DeleteForever"
+					OnClick="@(() => DeleteReason(context))"
+					title="Delete lockout reason"/>
+			</div>
+		</MudTd>
+	</RowTemplate>
+</Table>
+
+@code {
+
+	/// <summary>
+	/// Creates a prompt to delete a lockout reason
+	/// </summary>
+	protected Task DeleteReason(LockoutReason reason)
+		=> DeleteEntity(
+			reason.Id,
+			"Delete lockout reason",
+			"Are you sure you want to delete this lockout reason? This cannot be undone!");
+
+}

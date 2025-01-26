@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Sienar.Data;
-using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Processors;
 

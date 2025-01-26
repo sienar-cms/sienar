@@ -1,0 +1,31 @@
+﻿@inherits ServiceAwareClickHandlerBase
+
+@if (Link.Sublinks is null)
+{
+	<MudNavLink
+    	Href="@Link.Url"
+	    Icon="@Link.Icon"
+	    OnClick="@(e => HandleClick(Link.OnClick, e))"
+    	IconColor="Color.Inherit"
+    	Match="NavLinkMatch.All">
+    	@Link.Text
+    </MudNavLink>
+}
+else
+{
+	<MudNavGroup
+		Icon="@Link.Icon"
+		Title="@Link.Text">
+		@foreach (var sublink in Link.Sublinks)
+		{
+			<SidebarNavMenuLink Link="sublink"/>
+		}
+	</MudNavGroup>
+}
+
+@code {
+
+	[Parameter]
+	public required MenuLink Link { get; set; }
+
+}

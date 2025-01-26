@@ -1,0 +1,49 @@
+﻿@inherits UpsertPage<LockoutReason>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.LockoutReasons.Add)]
+@attribute [Route($"{DashboardUrls.LockoutReasons.Index}/{{id:guid}}")]
+
+<DocTitle Title="@Title"/>
+
+<NarrowContainer>
+	<StandardForm
+		Model="Model"
+		OnSubmit="@OnSubmit"
+		Title="@Title"
+		SubmitText="@SubmitText">
+		<Fields>
+			<MudTextField
+				@bind-Value="Model.Reason"
+				For="() => Model.Reason"
+				Label="Lockout reason"
+				MaxLines="3"
+				Counter="250"
+				MaxLength="250"
+				AutoGrow
+				Immediate/>
+		</Fields>
+
+		<MoreActions>
+			<MudButton
+				Color="Color.Secondary"
+				Variant="Variant.Outlined"
+				Href="@DashboardUrls.LockoutReasons.Index">
+				Back to reasons listing
+			</MudButton>
+		</MoreActions>
+	</StandardForm>
+</NarrowContainer>
+
+@code {
+
+	/// <inheritdoc />
+	protected override string GetName() => "reason";
+
+	/// <inheritdoc />
+	protected override Task OnSuccess()
+	{
+		NavManager.NavigateTo(DashboardUrls.LockoutReasons.Index);
+		return Task.CompletedTask;
+	}
+
+}

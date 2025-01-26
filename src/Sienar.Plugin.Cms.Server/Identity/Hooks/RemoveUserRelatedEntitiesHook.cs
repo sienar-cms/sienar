@@ -13,8 +13,8 @@ using Sienar.Media;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class RemoveUserRelatedEntitiesHook : IBeforeProcess<SienarUser>,
-	IBeforeProcess<DeleteAccountRequest>
+public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
+	IBeforeAction<DeleteAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IEntityDeleter<Upload> _mediaDeleter;
@@ -30,7 +30,7 @@ public class RemoveUserRelatedEntitiesHook : IBeforeProcess<SienarUser>,
 		_userAccessor = userAccessor;
 	}
 
-	Task IBeforeProcess<SienarUser>.Handle(
+	Task IBeforeAction<SienarUser>.Handle(
 		SienarUser entity,
 		ActionType action)
 	{
@@ -39,7 +39,7 @@ public class RemoveUserRelatedEntitiesHook : IBeforeProcess<SienarUser>,
 			: Task.CompletedTask;
 	}
 
-	async Task IBeforeProcess<DeleteAccountRequest>.Handle(
+	async Task IBeforeAction<DeleteAccountRequest>.Handle(
 		DeleteAccountRequest request,
 		ActionType action)
 	{

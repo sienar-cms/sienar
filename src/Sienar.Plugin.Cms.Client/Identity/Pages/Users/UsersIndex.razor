@@ -1,0 +1,129 @@
+@inherits TablePage<SienarUser>
+@attribute [Authorize(Roles = Roles.Admin)]
+@attribute [Route(DashboardUrls.Users.Index)]
+@inject IStatusService<UnlockUserAccountRequest> UnlockService
+@inject IStatusService<ManuallyConfirmUserAccountRequest> ConfirmService
+
+<DocTitle Title="Users listing"/>
+
+<Table
+	@ref="Table"
+	TableTitle="Site users"
+	LoadData="Reader.Read">
+	<ToolBarContent>
+		<MudIconButton
+			Color="Color.Primary"
+			Href="@DashboardUrls.Users.Add"
+			Icon="@Icons.Material.Filled.Add"/>
+	</ToolBarContent>
+
+	<HeaderContent>
+		<SortLabel For="(SienarUser u) => u.Username">
+			Username
+		</SortLabel>
+		<SortLabel For="(SienarUser u) => u.Email">
+			Email address
+		</SortLabel>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Confirmed
+			</div>
+		</MudTh>
+		<MudTh>
+			<div class="d-flex justify-center">
+				Actions
+			</div>
+		</MudTh>
+	</HeaderContent>
+
+	<RowTemplate>
+		<MudTd DataLabel="Username">@context.Username</MudTd>
+		<MudTd DataLabel="Email address">@context.Email</MudTd>
+		<MudTd DataLabel="Confirmed">
+			<div class="d-flex justify-center">
+				<MudIcon Icon="@GetConfirmationIcon(context.EmailConfirmed)"/>
+			</div>
+		</MudTd>
+		<MudTd DataLabel="Actions">
+			<div class="d-flex justify-center">
+				<MudIconButton
+					Color="Color.Primary"
+					Href="@($"{DashboardUrls.Users.Index}/{context.Id}")"
+                	Icon="@Icons.Material.Filled.RemoveRedEye"
+					title="@($"View user {context.Username}")"/>
+				<MudIconButton
+					Color="Color.Primary"
+					Href="@($"{DashboardUrls.Users.Index}/{context.Id}/roles")"
+					Icon="@Icons.Material.Filled.AdminPanelSettings"
+					title="@($"Edit {context.Username}'s roles")"/>
+				@if (context.IsLockedOut())
+				{
+					<MudIconButton
+						Color="Color.Warning"
+						Icon="@Icons.Material.Filled.LockOpen"
+						OnClick="@(() => UnlockUser(context))"
+						title="@($"Unlock {context.Username}'s account")"/>
+				}
+				else
+				{
+					<MudIconButton
+						Color="Color.Warning"
+						Href="@($"{DashboardUrls.Users.Index}/{context.Id}/lock")"
+						Icon="@Icons.Material.Filled.Lock"
+						title="@($"Lock {context.Username}'s account")"/>
+				}
+
+				<MudIconButton
+					Color="Color.Warning"
+					Icon="@Icons.Material.Filled.Check"
+					OnClick="@(() => ConfirmUser(context))"
+					Disabled="context.EmailConfirmed"
+					title="@($"Confirm {context.Username}'s account")"/>
+				<MudIconButton
+					Color="Color.Error"
+                	Icon="@Icons.Material.Filled.DeleteForever"
+                	OnClick="@(() => DeleteUser(context))"
+					title="@($"Delete user {context.Username}")"/>
+			</div>
+		</MudTd>
+	</RowTemplate>
+</Table>
+
+@code {
+
+	/// <summary>
+	/// Determines the correct icon to display in the account confirmation status column
+	/// </summary>
+	protected static string GetConfirmationIcon(bool isConfirmed)
+		=> isConfirmed
+			? Icons.Material.Filled.Check
+			: Icons.Material.Filled.Close;
+
+	/// <summary>
+	/// Creates a prompt to unlock the specified user's account
+	/// </summary>
+	protected Task UnlockUser(SienarUser user)
+		=> ConfirmAction(
+			$"Unlock {user.Username}'s account",
+			$"Are you sure you want to unlock {user.Username}'s account? This will take effect immediately",
+			async () => await UnlockService.Execute(new UnlockUserAccountRequest { UserId = user.Id }));
+
+	/// <summary>
+	/// Creates a prompt to confirm the specified user's account
+	/// </summary>
+	protected Task ConfirmUser(SienarUser user)
+		=> ConfirmAction(
+			$"Confirm {user.Username}'s account",
+			$"Are you sure you want to confirm {user.Username}'s account? This will take effect immediately",
+			async () => await ConfirmService.Execute(new ManuallyConfirmUserAccountRequest { UserId = user.Id }));
+
+	/// <summary>
+	/// Creates a prompt to delete the specified user's account
+	/// </summary>
+	protected Task DeleteUser(SienarUser user)
+		=> DeleteEntity(
+			user.Id,
+			$"Delete {user.Username}'s account",
+			$"Are you sure you want to delete {user.Username}'s account? This cannot be undone!");
+
+}

@@ -16,16 +16,16 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 	private readonly ILogger<EntityWriter<TEntity>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeProcessService<TEntity> _beforeHooks;
-	private readonly IAfterProcessService<TEntity> _afterHooks;
+	private readonly IBeforeActionService<TEntity> _beforeHooks;
+	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityWriter(
 		IRepository<TEntity> repository,
 		ILogger<EntityWriter<TEntity>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeProcessService<TEntity> beforeHooks,
-		IAfterProcessService<TEntity> afterHooks)
+		IBeforeActionService<TEntity> beforeHooks,
+		IAfterActionService<TEntity> afterHooks)
 	{
 		_repository = repository;
 		_logger = logger;

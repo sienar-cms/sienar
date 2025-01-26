@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Components;
 using Sienar.Infrastructure;
+using Sienar.Ui;
 
 namespace Sienar.Plugins;
 
@@ -45,9 +45,7 @@ public class BlazorPlugin : IPlugin
 		_builder.Services
 			.AddSingleton(_routableAssemblyProvider)
 			.AddSingleton(_componentProvider)
-			.AddScoped<AuthenticationStateProvider, AuthStateProvider>()
-			.AddCascadingAuthenticationState();
-
+			.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 		var blazorBuilder = _builder.Services
 			.AddRazorComponents(o => _blazorConfigurer?.Configure(o))
 			.AddInteractiveWebAssemblyComponents();

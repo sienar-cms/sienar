@@ -1,0 +1,23 @@
+@attribute [Route(DashboardUrls.Account.PersonalData)]
+
+<DocTitle Title="Personal data"/>
+
+<NarrowContainer>
+	<Card Title="Personal data">
+		<CardContent>
+			<MudText>
+				By creating an account, you give us personal data that we store. You have the right to know what data we have. You also have the right to request that we delete your personal data.
+			</MudText>
+		</CardContent>
+
+		<CardActions>
+			<MudButton
+				Color="Color.Primary"
+				Href="/api/account/personal-data"
+				Target="_blank"
+				Class="mr-3">
+				Download personal data
+			</MudButton>
+		</CardActions>
+	</Card>
+</NarrowContainer>

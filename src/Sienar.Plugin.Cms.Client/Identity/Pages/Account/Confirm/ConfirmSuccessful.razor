@@ -1,0 +1,10 @@
+﻿@attribute [AllowAnonymous]
+@attribute [Route(DashboardUrls.Account.Confirm.Successful)]
+
+<DocTitle Title="Account confirmed"/>
+
+<StatusPage Title="Account confirmed">
+	<MudText>
+		Your account has been confirmed successfully. You can now <MudLink Href="@DashboardUrls.Account.Login">log in</MudLink>.
+	</MudText>
+</StatusPage>

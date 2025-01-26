@@ -6,7 +6,7 @@ using Sienar.Hooks;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class UserMapNormalizedFieldsHook : IBeforeProcess<SienarUser>
+public class UserMapNormalizedFieldsHook : IBeforeAction<SienarUser>
 {
 	public Task Handle(SienarUser user, ActionType action)
 	{

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Sienar.Infrastructure;
 
@@ -52,6 +54,14 @@ public class MenuLink
 	/// The name of a menu to render as a child menu of this menu, if any
 	/// </summary>
 	public string? ChildMenu { get; set; }
+
+	/// <summary>
+	/// A function to execute when the menu link is clicked
+	/// </summary>
+	/// <remarks>
+	/// The arguments of the provided delegate will be resolved from the DI container. The only exception to this is the <see cref="MouseEventArgs"/> from the <c>onclick</c> handler, which can be provided at any position (but is not required).
+	/// </remarks>
+	public Delegate? OnClick { get; set; }
 
 	/// <summary>
 	/// Child links to display in a submenu, if any
