@@ -74,6 +74,7 @@ public class CmsClientPlugin : IPlugin
 	{
 		_menuProvider
 			.CreateMainMenu()
+			.CreateUserSettingsMenu()
 			.CreateInfoMenu()
 			.CreateUserManagementMenu();
 	}

@@ -28,42 +28,53 @@ public static class MenuProviderExtensions
 					Icon = Icons.Material.Filled.Dashboard,
 					Url = DashboardUrls.Index,
 					RequireLoggedIn = true
+				});
+
+		return self;
+	}
+
+	/// <summary>
+	/// Registers the user settings menu with the menu provider
+	/// </summary>
+	/// <param name="self">the menu provider</param>
+	/// <returns>the menu provider</returns>
+	public static IMenuProvider CreateUserSettingsMenu(this IMenuProvider self)
+	{
+		self
+			.Access(DashboardMenuNames.UserSettings)
+			.AddWithNormalPriority(
+				new MenuLink
+				{
+					Text = "Email",
+					Icon = Icons.Material.Filled.Email,
+					RequireLoggedIn = true,
+					Url = DashboardUrls.Account.EmailChange.Index
 				},
 				new MenuLink
 				{
-					Text = "My account",
-					Icon = Icons.Material.Filled.AccountCircle,
+					Text = "Password",
+					Icon = Icons.Material.Filled.Lock,
 					RequireLoggedIn = true,
-					Sublinks =
-					[
-						new()
-						{
-							Text = "Email",
-							Icon = Icons.Material.Filled.Email,
-							Url = DashboardUrls.Account.EmailChange.Index
-						},
-						new()
-						{
-							Text = "Password",
-							Icon = Icons.Material.Filled.Lock,
-							Url = DashboardUrls.Account.PasswordChange.Index
-						},
-						new()
-						{
-							Text = "Personal data",
-							Icon = Icons.Material.Filled.Archive,
-							Url = DashboardUrls.Account.PersonalData
-						},
-						new()
-						{
-							Text = "Delete account",
-							Icon = Icons.Material.Filled.DeleteForever,
-							Url = DashboardUrls.Account.Delete
-						}
-					]
-				})
-			.AddWithPriority(
-				Priority.Lowest,
+					Url = DashboardUrls.Account.PasswordChange.Index
+				},
+				new MenuLink
+				{
+					Text = "Personal data",
+					Icon = Icons.Material.Filled.Archive,
+					RequireLoggedIn = true,
+					Url = DashboardUrls.Account.PersonalData
+				},
+				new MenuLink
+				{
+					Text = "Delete account",
+					Icon = Icons.Material.Filled.DeleteForever,
+					RequireLoggedIn = true,
+					Url = DashboardUrls.Account.Delete
+				});
+
+		self
+			.Access(DashboardMenuNames.UserLogout)
+			.AddWithNormalPriority(
 				new MenuLink
 				{
 					Text = "Log out",
@@ -80,20 +91,6 @@ public static class MenuProviderExtensions
 							navManager.NavigateTo(DashboardUrls.Account.Login);
 						}
 					}
-				},
-				new MenuLink
-				{
-					Text = "Register",
-					Icon = Icons.Material.Filled.Assignment,
-					Url = DashboardUrls.Account.Register.Index,
-					RequireLoggedOut = true
-				},
-				new MenuLink
-				{
-					Text = "Log in",
-					Icon = Icons.Material.Filled.Login,
-					Url = DashboardUrls.Account.Login,
-					RequireLoggedOut = true
 				});
 
 		return self;
