@@ -131,9 +131,10 @@ public class CookieRestClient : IRestClient
 		object? input = null,
 		HttpMethod? method = null)
 	{
+		HttpResponseMessage? result = null;
 		try
 		{
-			var result = await SendRaw(endpoint, input, method);
+			result = await SendRaw(endpoint, input, method);
 
 			var parsedResponse = await result.Content.ReadFromJsonAsync<WebResult<TResult>>(_jsonOptions);
 
@@ -154,7 +155,7 @@ public class CookieRestClient : IRestClient
 		}
 		catch (Exception e)
 		{
-			return HandleException<TResult>(e);
+			return HandleException<TResult>(e, result);
 		}
 	}
 
@@ -242,8 +243,20 @@ public class CookieRestClient : IRestClient
 		return new(sb.ToString(), UriKind.Relative);
 	}
 
-	private OperationResult<TResult?> HandleException<TResult>(Exception e)
+	private OperationResult<TResult?> HandleException<TResult>(
+		Exception e,
+		HttpResponseMessage? response)
 	{
+		// ASP.NET doesn't return a message body on 401/403 errors by default
+		// So if the framework returns these, then the HTTP response will not
+		// be null, and the status code will be either 401 or 403
+		// In this event, deserializing the response will fail, so if that's what
+		// happened, just return unauthorized and skip logging errors
+		if (response?.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
+		{
+			return new OperationResult<TResult?>(OperationStatus.Unauthorized);
+		}
+
 		string logMessage;
 		string errorMessage;
 		switch (e)
