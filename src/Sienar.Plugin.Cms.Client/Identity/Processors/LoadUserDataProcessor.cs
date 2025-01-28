@@ -13,7 +13,7 @@ namespace Sienar.Identity.Processors;
 
 /// <exclude />
 public class LoadUserDataProcessor
-	: IProcessor<AccountDataResult>, IBeforeTask<SienarStartupActor>
+	: IResultProcessor<AccountDataResult>, IBeforeTask<SienarStartupActor>
 {
 	private readonly IRestClient _client;
 	private readonly IUserClaimsFactory _claimsFactory;
@@ -29,7 +29,7 @@ public class LoadUserDataProcessor
 		_authStateProvider = authStateProvider;
 	}
 
-	Task<OperationResult<AccountDataResult?>> IProcessor<AccountDataResult>.Process()
+	Task<OperationResult<AccountDataResult?>> IResultProcessor<AccountDataResult>.Process()
 		=> LoadUserData();
 
 	Task IBeforeTask<SienarStartupActor>.Handle(SienarStartupActor? a)

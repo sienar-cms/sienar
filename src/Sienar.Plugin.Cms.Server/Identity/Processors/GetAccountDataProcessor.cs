@@ -11,7 +11,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class GetAccountDataProcessor : IProcessor<AccountDataResult>
+public class GetAccountDataProcessor : IResultProcessor<AccountDataResult>
 {
 	private readonly IUserAccessor _userAccessor;
 
