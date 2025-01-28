@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
+using Sienar.Infrastructure;
 
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityWriter<TEntity> : IEntityWriter<TEntity>
+public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 	where TEntity : EntityBase
 {
 	private readonly IRepository<TEntity> _repository;
@@ -20,12 +21,14 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityWriter(
+		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<EntityWriter<TEntity>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
 		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)
+		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
@@ -41,30 +44,30 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 		var accessValidationResult = await _accessValidator.Validate(model, ActionType.Create);
 		if (!accessValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<Guid?>(
 				OperationStatus.Unauthorized,
-				default,
-				StatusMessages.Crud<TEntity>.NoPermission());
+				null,
+				StatusMessages.Crud<TEntity>.NoPermission()));
 		}
 
 		// Run state validation
 		var stateValidationResult = await _stateValidator.Validate(model, ActionType.Create);
 		if (!stateValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<Guid?>(
 				OperationStatus.Unprocessable,
-				default,
-				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed());
+				null,
+				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed()));
 		}
 
 		// Run before hooks
 		var beforeHooksResult = await _beforeHooks.Run(model, ActionType.Create);
 		if (!beforeHooksResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<Guid?>(
 				OperationStatus.Unknown,
-				default,
-				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed());
+				null,
+				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed()));
 		}
 
 		try
@@ -74,19 +77,19 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<Guid?>(
 				OperationStatus.Unknown,
-				default,
-				StatusMessages.Crud<TEntity>.CreateFailed());
+				null,
+				StatusMessages.Crud<TEntity>.CreateFailed()));
 		}
 
 		// Run after hooks
 		await _afterHooks.Run(model, ActionType.Create);
 
-		return new(
+		return NotifyOfResult(new OperationResult<Guid?>(
 			OperationStatus.Success,
 			model.Id,
-			StatusMessages.Crud<TEntity>.CreateSuccessful());
+			StatusMessages.Crud<TEntity>.CreateSuccessful()));
 	}
 
 	public async Task<OperationResult<bool>> Update(TEntity model)
@@ -95,30 +98,30 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 		var accessValidationResult = await _accessValidator.Validate(model, ActionType.Update);
 		if (!accessValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unauthorized,
 				false,
-				StatusMessages.Crud<TEntity>.NoPermission());
+				StatusMessages.Crud<TEntity>.NoPermission()));
 		}
 
 		// Run state validation
 		var stateValidationResult = await _stateValidator.Validate(model, ActionType.Update);
 		if (!stateValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unprocessable,
 				false,
-				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.UpdateFailed());
+				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.UpdateFailed()));
 		}
 
 		// Run before hooks
 		var beforeHooksResult = await _beforeHooks.Run(model, ActionType.Update);
 		if (!beforeHooksResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unknown,
 				false,
-				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.UpdateFailed());
+				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.UpdateFailed()));
 		}
 
 		try
@@ -128,18 +131,18 @@ public class EntityWriter<TEntity> : IEntityWriter<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unknown,
 				false,
-				StatusMessages.Crud<TEntity>.UpdateFailed());
+				StatusMessages.Crud<TEntity>.UpdateFailed()));
 		}
 
 		// Run after hooks
 		await _afterHooks.Run(model, ActionType.Update);
 
-		return new(
+		return NotifyOfResult(new OperationResult<bool>(
 			OperationStatus.Success,
 			true,
-			StatusMessages.Crud<TEntity>.UpdateSuccessful());
+			StatusMessages.Crud<TEntity>.UpdateSuccessful()));
 	}
 }
