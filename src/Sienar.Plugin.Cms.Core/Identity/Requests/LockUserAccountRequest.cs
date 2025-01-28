@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class LockUserAccountRequest
+public class LockUserAccountRequest : IRequest
 {
 	public Guid UserId { get; set; }
 	public List<Guid> Reasons { get; set; } = [];

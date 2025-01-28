@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sienar.Data;
+using Sienar.Services;
 
 namespace Sienar.Processors;
 
@@ -8,7 +9,7 @@ namespace Sienar.Processors;
 /// A processor which accepts a <c>TRequest</c> as input and returns an <c>OperationResult&lt;bool&gt;</c>
 /// </summary>
 /// <typeparam name="TRequest">The type of the processor input</typeparam>
-public interface IStatusProcessor<TRequest>
+public interface IStatusProcessor<TRequest> where TRequest : IRequest
 {
 	/// <summary>
 	/// Processes the provided request

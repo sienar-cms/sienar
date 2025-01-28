@@ -2,10 +2,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Sienar.Validation;
 using Sienar.Data;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class RegisterRequest : Honeypot
+public class RegisterRequest : Honeypot, IRequest
 {
 	[Required]
 	[DisplayName("Email")]

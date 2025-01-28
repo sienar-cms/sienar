@@ -1,11 +1,12 @@
 ﻿using System;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
 /// <summary>
 /// Represents a request to view an account's lockout reasons
 /// </summary>
-public class AccountLockoutRequest
+public class AccountLockoutRequest : IRequest
 {
 	/// <summary>
 	/// The verification code for the request

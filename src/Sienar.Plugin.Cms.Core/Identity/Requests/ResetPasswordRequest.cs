@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Sienar.Validation;
 using Sienar.Data;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class ResetPasswordRequest : Honeypot
+public class ResetPasswordRequest : Honeypot, IRequest
 {
 	[Required]
 	public Guid UserId { get; set; }

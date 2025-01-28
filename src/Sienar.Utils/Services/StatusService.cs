@@ -12,6 +12,7 @@ namespace Sienar.Services;
 
 /// <exclude />
 public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
+	where TRequest : IRequest
 {
 	private readonly ILogger<StatusService<TRequest>> _logger;
 	private readonly IBotDetector _botDetector;
