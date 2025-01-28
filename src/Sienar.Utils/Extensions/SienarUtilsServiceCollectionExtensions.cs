@@ -408,8 +408,8 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection AddResultProcessor<TResult, TProcessor>(
 		this IServiceCollection self)
-		where TProcessor : class, IProcessor<TResult>
-		=> self.AddScoped<IProcessor<TResult>, TProcessor>();
+		where TProcessor : class, IResultProcessor<TResult>
+		=> self.AddScoped<IResultProcessor<TResult>, TProcessor>();
 
 	/// <summary>
 	/// Adds a result processor (<c>IProcessor&lt;TRequest&gt;</c>)
@@ -421,7 +421,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(TProcessor),
-			typeof(IProcessor<>),
+			typeof(IResultProcessor<>),
 			ServiceLifetime.Scoped,
 			false);
 
@@ -434,9 +434,9 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection TryAddResultProcessor<TResult, TProcessor>(
 		this IServiceCollection self)
-		where TProcessor : class, IProcessor<TResult>
+		where TProcessor : class, IResultProcessor<TResult>
 	{
-		self.TryAddScoped<IProcessor<TResult>, TProcessor>();
+		self.TryAddScoped<IResultProcessor<TResult>, TProcessor>();
 		return self;
 	}
 
@@ -450,7 +450,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(TProcessor),
-			typeof(IProcessor<>),
+			typeof(IResultProcessor<>),
 			ServiceLifetime.Scoped,
 			true);
 
