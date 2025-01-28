@@ -1,9 +1,10 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class InitiateEmailChangeRequest
+public class InitiateEmailChangeRequest : IRequest
 {
 	[Required]
 	[DisplayName("Email")]

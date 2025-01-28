@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class DeleteAccountRequest
+public class DeleteAccountRequest : IRequest
 {
 	[Required]
 	[DisplayName("Password")]

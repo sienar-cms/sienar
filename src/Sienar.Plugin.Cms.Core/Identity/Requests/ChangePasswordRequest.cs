@@ -2,11 +2,12 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Sienar.Services;
 using Sienar.Validation;
 
 namespace Sienar.Identity.Requests;
 
-public class ChangePasswordRequest
+public class ChangePasswordRequest : IRequest
 {
 	[Required]
 	[DisplayName("New password")]

@@ -2,10 +2,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
-public class ConfirmAccountRequest
+public class ConfirmAccountRequest : IRequest
 {
 	[Required]
 	public Guid UserId { get; set; }
