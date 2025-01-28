@@ -29,7 +29,7 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		_afterHooks = afterHooks;
 	}
 
-	public async Task<OperationResult<TEntity>> Read(
+	public async Task<OperationResult<TEntity?>> Read(
 		Guid id,
 		Filter? filter = null)
 	{
