@@ -13,8 +13,8 @@ namespace Sienar.Identity.Processors;
 
 /// <exclude />
 public class UserRoleChangeProcessor
-	: IProcessor<AddUserToRoleRequest, bool>,
-	IProcessor<RemoveUserFromRoleRequest, bool>
+	: IStatusProcessor<AddUserToRoleRequest>,
+		IStatusProcessor<RemoveUserFromRoleRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IRepository<SienarRole> _roleRepository;
@@ -27,7 +27,7 @@ public class UserRoleChangeProcessor
 		_roleRepository = roleRepository;
 	}
 
-	async Task<OperationResult<bool>> IProcessor<AddUserToRoleRequest, bool>.Process(AddUserToRoleRequest request)
+	async Task<OperationResult<bool>> IStatusProcessor<AddUserToRoleRequest>.Process(AddUserToRoleRequest request)
 	{
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)
@@ -52,7 +52,7 @@ public class UserRoleChangeProcessor
 			: new(OperationStatus.Unknown, false, StatusMessages.Database.QueryFailed);
 	}
 
-	async Task<OperationResult<bool>> IProcessor<RemoveUserFromRoleRequest, bool>.Process(RemoveUserFromRoleRequest request)
+	async Task<OperationResult<bool>> IStatusProcessor<RemoveUserFromRoleRequest>.Process(RemoveUserFromRoleRequest request)
 	{
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)

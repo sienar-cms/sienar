@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientRemoveUserFromRoleProcessor : IProcessor<RemoveUserFromRoleRequest, bool>
+public class ClientRemoveUserFromRoleProcessor : IStatusProcessor<RemoveUserFromRoleRequest>
 {
 	private readonly IRestClient _client;
 

@@ -6,7 +6,7 @@ using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
-public class AccessTokenProcessor : IProcessor<AccessTokenRequest, bool>
+public class AccessTokenProcessor : IStatusProcessor<AccessTokenRequest>
 {
 	private readonly IHttpContextAccessor _accessor;
 

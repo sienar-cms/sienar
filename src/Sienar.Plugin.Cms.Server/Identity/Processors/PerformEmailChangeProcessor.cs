@@ -15,7 +15,7 @@ namespace Sienar.Identity.Processors;
 
 /// <exclude />
 public class PerformEmailChangeProcessor
-	: IProcessor<PerformEmailChangeRequest, bool>
+	: IStatusProcessor<PerformEmailChangeRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IUserAccessor _userAccessor;

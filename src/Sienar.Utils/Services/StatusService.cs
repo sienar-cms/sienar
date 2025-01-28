@@ -19,7 +19,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 	private readonly IStateValidatorService<TRequest> _stateValidator;
 	private readonly IBeforeActionService<TRequest> _beforeHooks;
 	private readonly IAfterActionService<TRequest> _afterHooks;
-	private readonly IProcessor<TRequest, bool> _processor;
+	private readonly IStatusProcessor<TRequest> _processor;
 
 	public StatusService(
 		ILogger<StatusService<TRequest>> logger,
@@ -28,7 +28,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 		IStateValidatorService<TRequest> stateValidator,
 		IBeforeActionService<TRequest> beforeHooks,
 		IAfterActionService<TRequest> afterHooks,
-		IProcessor<TRequest, bool> processor,
+		IStatusProcessor<TRequest> processor,
 		INotificationService notifier)
 		: base(notifier)
 	{

@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientInitiateEmailChangeProcessor : IProcessor<InitiateEmailChangeRequest, bool>
+public class ClientInitiateEmailChangeProcessor : IStatusProcessor<InitiateEmailChangeRequest>
 {
 	private readonly IRestClient _client;
 

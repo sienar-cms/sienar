@@ -11,7 +11,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class DeleteAccountProcessor : IProcessor<DeleteAccountRequest, bool>
+public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 {
 	private readonly IUserAccessor _userAccessor;
 	private readonly IUserRepository _userRepository;

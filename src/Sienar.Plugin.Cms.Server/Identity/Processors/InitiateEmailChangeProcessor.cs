@@ -15,7 +15,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class InitiateEmailChangeProcessor : IProcessor<InitiateEmailChangeRequest, bool>
+public class InitiateEmailChangeProcessor : IStatusProcessor<InitiateEmailChangeRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IPasswordManager _passwordManager;

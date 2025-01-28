@@ -11,7 +11,7 @@ namespace Sienar.Identity.Processors;
 
 /// <exclude />
 public class ManuallyConfirmUserAccountProcessor
-	: IProcessor<ManuallyConfirmUserAccountRequest, bool>
+	: IStatusProcessor<ManuallyConfirmUserAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
 

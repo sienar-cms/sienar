@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientDeleteAccountProcessor : IProcessor<DeleteAccountRequest, bool>
+public class ClientDeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 {
 	private readonly IRestClient _client;
 	private readonly AuthStateProvider _authStateProvider;

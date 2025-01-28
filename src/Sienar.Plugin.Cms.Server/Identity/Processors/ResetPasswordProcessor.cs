@@ -13,7 +13,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ResetPasswordProcessor : IProcessor<ResetPasswordRequest, bool>
+public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IPasswordManager _passwordManager;

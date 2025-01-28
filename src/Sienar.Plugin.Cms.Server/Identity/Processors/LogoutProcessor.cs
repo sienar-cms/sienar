@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LogoutProcessor : IProcessor<LogoutRequest, bool>
+public class LogoutProcessor : IStatusProcessor<LogoutRequest>
 {
 	private readonly ISignInManager _signInManager;
 	private readonly INotificationService _notifier;

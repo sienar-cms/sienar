@@ -15,7 +15,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class RegisterProcessor : IProcessor<RegisterRequest, bool>
+public class RegisterProcessor : IStatusProcessor<RegisterRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IAccountEmailManager _emailManager;

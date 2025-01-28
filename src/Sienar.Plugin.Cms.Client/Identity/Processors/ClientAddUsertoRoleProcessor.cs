@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientAddUsertoRoleProcessor : IProcessor<AddUserToRoleRequest, bool>
+public class ClientAddUsertoRoleProcessor : IStatusProcessor<AddUserToRoleRequest>
 {
 	private readonly IRestClient _client;
 
