@@ -9,7 +9,7 @@ namespace Sienar.Infrastructure;
 public class MenuGenerator : IMenuGenerator
 {
 	private readonly IUserAccessor _userAccessor;
-	private readonly IDictionaryProvider<LinkDictionary<MenuLink>> _provider;
+	private readonly IMenuProvider _provider;
 
 	public MenuGenerator(
 		IUserAccessor userAccessor,

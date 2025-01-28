@@ -5,14 +5,15 @@ using System.Collections.Generic;
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class DictionaryProvider<T> : Dictionary<string, T>, IDictionaryProvider<T>
-	where T : new()
+public class DictionaryProvider<TKey, TValue> : Dictionary<TKey, TValue>, IDictionaryProvider<TKey, TValue>
+	where TKey : notnull
+	where TValue : new()
 {
-	public T Access(string name)
+	public TValue Access(TKey name)
 	{
 		if (!TryGetValue(name, out var item))
 		{
-			item = new();
+			item = new TValue();
 			this[name] = item;
 		}
 
