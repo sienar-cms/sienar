@@ -13,6 +13,7 @@ namespace Sienar.Processors;
 /// <typeparam name="TResult">the type of the processor output</typeparam>
 public interface IProcessor<TRequest, TResult>
 	where TRequest : IRequest
+	where TResult : IResult
 {
 	/// <summary>
 	/// Processes the request and generates the result

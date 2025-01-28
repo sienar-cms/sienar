@@ -1,9 +1,11 @@
-﻿namespace Sienar.Identity.Results;
+﻿using Sienar.Services;
+
+namespace Sienar.Identity.Results;
 
 /// <summary>
 /// Contains the account data of the currently logged in account
 /// </summary>
-public class AccountDataResult
+public class AccountDataResult : IResult
 {
 	/// <summary>
 	/// The username of the currently logged in account
