@@ -28,8 +28,8 @@ public abstract class ServiceBase
 	/// <param name="result">The operation result</param>
 	/// <typeparam name="TResult">The type returned from the result</typeparam>
 	/// <returns>The operation result</returns>
-	protected OperationResult<TResult?> NotifyOfResult<TResult>(
-		OperationResult<TResult?> result)
+	protected OperationResult<TResult> NotifyOfResult<TResult>(
+		OperationResult<TResult> result)
 	{
 		if (result.Message is not null)
 		{

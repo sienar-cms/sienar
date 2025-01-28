@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
+using Sienar.Infrastructure;
 
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
+public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 	where TEntity : EntityBase
 {
 	private readonly IRepository<TEntity> _repository;
@@ -20,12 +21,14 @@ public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
 	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityDeleter(
+		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<EntityDeleter<TEntity>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
 		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)
+		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
@@ -43,49 +46,49 @@ public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
 			entity = await _repository.Read(id);
 			if (entity is null)
 			{
-				return new(
+				return NotifyOfResult(new OperationResult<bool>(
 					OperationStatus.NotFound,
 					false,
-					StatusMessages.Crud<TEntity>.NotFound(id));
+					StatusMessages.Crud<TEntity>.NotFound(id)));
 			}
 		}
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unknown,
 				false,
-				StatusMessages.Crud<TEntity>.DeleteFailed());
+				StatusMessages.Crud<TEntity>.DeleteFailed()));
 		}
 
 		// Run access validation
 		var accessValidationResult = await _accessValidator.Validate(entity, ActionType.Delete);
 		if (!accessValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unauthorized,
 				false,
-				StatusMessages.Crud<TEntity>.NoPermission());
+				StatusMessages.Crud<TEntity>.NoPermission()));
 		}
 
 		// Run state validation
 		var stateValidationResult = await _stateValidator.Validate(entity, ActionType.Delete);
 		if (!stateValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unprocessable,
 				false,
-				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.DeleteFailed());
+				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.DeleteFailed()));
 		}
 
 		// Run before hooks
 		var beforeHooksResult = await _beforeHooks.Run(entity, ActionType.Delete);
 		if (!beforeHooksResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unknown,
 				false,
-				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.DeleteFailed());
+				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.DeleteFailed()));
 		}
 
 		try
@@ -95,18 +98,18 @@ public class EntityDeleter<TEntity> : IEntityDeleter<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<bool>(
 				OperationStatus.Unknown,
 				false,
-				StatusMessages.Crud<TEntity>.DeleteFailed());
+				StatusMessages.Crud<TEntity>.DeleteFailed()));
 		}
 
 		// Run after hooks
 		await _afterHooks.Run(entity, ActionType.Delete);
 
-		return new(
+		return NotifyOfResult(new OperationResult<bool>(
 			OperationStatus.Success,
 			true,
-			StatusMessages.Crud<TEntity>.DeleteSuccessful());
+			StatusMessages.Crud<TEntity>.DeleteSuccessful()));
 	}
 }

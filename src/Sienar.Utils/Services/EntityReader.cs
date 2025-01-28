@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
+using Sienar.Infrastructure;
 
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityReader<TEntity> : IEntityReader<TEntity>
+public class EntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 	where TEntity : EntityBase, new()
 {
 	private readonly IRepository<TEntity> _repository;
@@ -18,10 +19,12 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityReader(
+		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<EntityReader<TEntity>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IAfterActionService<TEntity> afterHooks)
+		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
@@ -29,7 +32,7 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		_afterHooks = afterHooks;
 	}
 
-	public async Task<OperationResult<TEntity>> Read(
+	public async Task<OperationResult<TEntity?>> Read(
 		Guid id,
 		Filter? filter = null)
 	{
@@ -41,32 +44,32 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<TEntity?>(
 				OperationStatus.Unknown,
-				default,
-				StatusMessages.Crud<TEntity>.ReadSingleFailed());
+				null,
+				StatusMessages.Crud<TEntity>.ReadSingleFailed()));
 		}
 
 		if (entity is null)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<TEntity?>(
 				OperationStatus.NotFound,
-				default,
-				StatusMessages.Crud<TEntity>.NotFound(id));
+				null,
+				StatusMessages.Crud<TEntity>.NotFound(id)));
 		}
 
 		// Run access validation
 		var accessValidationResult = await _accessValidator.Validate(entity, ActionType.Read);
 		if (!accessValidationResult.Result)
 		{
-			return new(
+			return NotifyOfResult(new OperationResult<TEntity?>(
 				OperationStatus.Unauthorized,
-				default,
-				StatusMessages.Crud<TEntity>.NoPermission());
+				null,
+				StatusMessages.Crud<TEntity>.NoPermission()));
 		}
 
 		await _afterHooks.Run(entity, ActionType.Read);
-		return new(result: entity);
+		return NotifyOfResult(new OperationResult<TEntity?>(result: entity));
 	}
 
 	public async Task<OperationResult<PagedQuery<TEntity>>> Read(Filter? filter = null)
@@ -80,10 +83,10 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return new(
+			return NotifyOfResult(new OperationResult<PagedQuery<TEntity>>(
 				OperationStatus.Unknown,
-				new(),
-				StatusMessages.Crud<TEntity>.ReadMultipleFailed());
+				new PagedQuery<TEntity>(),
+				StatusMessages.Crud<TEntity>.ReadMultipleFailed()));
 		}
 
 		foreach (var entity in queryResult.Items)
@@ -91,6 +94,6 @@ public class EntityReader<TEntity> : IEntityReader<TEntity>
 			await _afterHooks.Run(entity, ActionType.ReadAll);
 		}
 
-		return new(result: queryResult);
+		return NotifyOfResult(new OperationResult<PagedQuery<TEntity>>(result: queryResult));
 	}
 }
