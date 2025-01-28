@@ -289,6 +289,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddProcessor<TRequest, TResult, TProcessor>(
 		this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
+		where TRequest : IRequest
 		=> self.AddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 
 	/// <summary>
@@ -315,6 +316,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection TryAddProcessor<TRequest, TResult, TProcessor>(this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
+		where TRequest : IRequest
 	{
 		self.TryAddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 		return self;
@@ -354,6 +356,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddStatusProcessor<TRequest, TProcessor>(
 		this IServiceCollection self)
 		where TProcessor : class, IStatusProcessor<TRequest>
+		where TRequest : IRequest
 		=> self.AddScoped<IStatusProcessor<TRequest>, TProcessor>();
 
 	/// <summary>
@@ -380,6 +383,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection TryAddStatusProcessor<TRequest, TProcessor>(
 		this IServiceCollection self)
 		where TProcessor : class, IStatusProcessor<TRequest>
+		where TRequest : IRequest
 	{
 		self.TryAddScoped<IStatusProcessor<TRequest>>();
 		return self;
