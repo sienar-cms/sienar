@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sienar.Data;
+using Sienar.Services;
 
 namespace Sienar.Processors;
 
@@ -7,7 +8,7 @@ namespace Sienar.Processors;
 /// <summary>
 /// A processor which accepts no input and returns a <see cref="OperationResult{TResult}"/>
 /// </summary>
-public interface IResultProcessor<TResult>
+public interface IResultProcessor<TResult> where TResult : IResult
 {
 	/// <summary>
 	/// Processes the request and generates the result

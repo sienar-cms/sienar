@@ -13,6 +13,7 @@ namespace Sienar.Services;
 /// <exclude />
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class ResultService<TResult> : ServiceBase, IResultService<TResult>
+	where TResult : IResult
 {
 	private readonly ILogger<ResultService<TResult>> _logger;
 	private readonly IAccessValidatorService<TResult> _accessValidator;
