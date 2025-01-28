@@ -353,8 +353,8 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection AddStatusProcessor<TRequest, TProcessor>(
 		this IServiceCollection self)
-		where TProcessor : class, IProcessor<TRequest, bool>
-		=> AddProcessor<TRequest, bool, TProcessor>(self);
+		where TProcessor : class, IStatusProcessor<TRequest>
+		=> self.AddScoped<IStatusProcessor<TRequest>, TProcessor>();
 
 	/// <summary>
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
@@ -366,7 +366,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(TProcessor),
-			typeof(IProcessor<,>),
+			typeof(IStatusProcessor<>),
 			ServiceLifetime.Scoped,
 			false);
 
@@ -379,8 +379,11 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection TryAddStatusProcessor<TRequest, TProcessor>(
 		this IServiceCollection self)
-		where TProcessor : class, IProcessor<TRequest, bool>
-		=> TryAddProcessor<TRequest, bool, TProcessor>(self);
+		where TProcessor : class, IStatusProcessor<TRequest>
+	{
+		self.TryAddScoped<IStatusProcessor<TRequest>>();
+		return self;
+	}
 
 	/// <summary>
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
@@ -392,7 +395,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		this IServiceCollection self)
 		=> self.AddImplementationAsInterface(
 			typeof(TProcessor),
-			typeof(IProcessor<,>),
+			typeof(IStatusProcessor<>),
 			ServiceLifetime.Scoped,
 			true);
 
