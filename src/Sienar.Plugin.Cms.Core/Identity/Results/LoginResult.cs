@@ -1,11 +1,12 @@
 ﻿using System;
+using Sienar.Services;
 
 namespace Sienar.Identity.Results;
 
 /// <summary>
 /// Represents the result of a login operation
 /// </summary>
-public class LoginResult
+public class LoginResult : IResult
 {
 	/// <summary>
 	/// The ID of the user who failed to log in
