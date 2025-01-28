@@ -19,17 +19,3 @@ public interface IProcessor<TRequest, TResult>
 	/// <returns>the result of the operation</returns>
 	Task<OperationResult<TResult?>> Process(TRequest request);
 }
-
-// ReSharper disable once TypeParameterCanBeVariant
-/// <summary>
-/// A processor which accepts no input and returns a <see cref="OperationResult{TResult}"/>
-/// </summary>
-/// <typeparam name="TResult">the type of the processor output</typeparam>
-public interface IProcessor<TResult>
-{
-	/// <summary>
-	/// Processes the request and generates the result
-	/// </summary>
-	/// <returns>the result of the operation</returns>
-	Task<OperationResult<TResult?>> Process();
-}
