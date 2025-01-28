@@ -290,6 +290,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
 		where TRequest : IRequest
+		where TResult : IResult
 		=> self.AddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 
 	/// <summary>
@@ -317,6 +318,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection TryAddProcessor<TRequest, TResult, TProcessor>(this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
 		where TRequest : IRequest
+		where TResult : IResult
 	{
 		self.TryAddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 		return self;
@@ -413,6 +415,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddResultProcessor<TResult, TProcessor>(
 		this IServiceCollection self)
 		where TProcessor : class, IResultProcessor<TResult>
+		where TResult : IResult
 		=> self.AddScoped<IResultProcessor<TResult>, TProcessor>();
 
 	/// <summary>
@@ -439,6 +442,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection TryAddResultProcessor<TResult, TProcessor>(
 		this IServiceCollection self)
 		where TProcessor : class, IResultProcessor<TResult>
+		where TResult : IResult
 	{
 		self.TryAddScoped<IResultProcessor<TResult>, TProcessor>();
 		return self;
