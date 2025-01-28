@@ -21,6 +21,7 @@ public class CmsClientPlugin : IPlugin
 	private readonly IApplicationAdapter _adapter;
 	private readonly IConfiguration _configuration;
 	private readonly IComponentProvider _componentProvider;
+	private readonly IGlobalComponentProvider _globalComponentProvider;
 	private readonly IMenuProvider _menuProvider;
 	private readonly IPluginDataProvider _pluginDataProvider;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
@@ -34,6 +35,7 @@ public class CmsClientPlugin : IPlugin
 		IApplicationAdapter adapter,
 		IConfiguration configuration,
 		IComponentProvider componentProvider,
+		IGlobalComponentProvider globalComponentProvider,
 		IMenuProvider menuProvider,
 		IPluginDataProvider pluginDataProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider,
@@ -43,6 +45,7 @@ public class CmsClientPlugin : IPlugin
 		_adapter = adapter;
 		_configuration = configuration;
 		_componentProvider = componentProvider;
+		_globalComponentProvider = globalComponentProvider;
 		_menuProvider = menuProvider;
 		_pluginDataProvider = pluginDataProvider;
 		_routableAssemblyProvider = routableAssemblyProvider;
@@ -67,8 +70,10 @@ public class CmsClientPlugin : IPlugin
 		_componentProvider.DefaultLayout ??= typeof(DashboardLayout);
 		_componentProvider.SidebarHeader ??= typeof(DrawerHeader);
 		_componentProvider.SidebarFooter ??= typeof(DrawerFooter);
-		_componentProvider.NotFoundView ??= typeof(NotFound);
-		_componentProvider.UnauthorizedView ??= typeof(Unauthorized);
+
+		_globalComponentProvider.DefaultLayout ??= typeof(DashboardLayout);
+		_globalComponentProvider.NotFoundView ??= typeof(NotFound);
+		_globalComponentProvider.UnauthorizedView ??= typeof(Unauthorized);
 	}
 
 	private void SetupMenu()

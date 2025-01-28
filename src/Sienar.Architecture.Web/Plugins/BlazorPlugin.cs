@@ -19,6 +19,7 @@ public class BlazorPlugin : IPlugin
 	private readonly MiddlewareProvider _middlewareProvider;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly IComponentProvider _componentProvider;
+	private readonly IGlobalComponentProvider _globalComponentProvider;
 
 	/// <summary>
 	/// Creates a new instance of <c>BlazorPlugin</c>
@@ -29,6 +30,7 @@ public class BlazorPlugin : IPlugin
 		MiddlewareProvider middlewareProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider,
 		IComponentProvider componentProvider,
+		IGlobalComponentProvider globalComponentProvider,
 		IConfigurer<RazorComponentsServiceOptions>? blazorConfigurer = null)
 	{
 		_builder = builder;
@@ -36,6 +38,7 @@ public class BlazorPlugin : IPlugin
 		_middlewareProvider = middlewareProvider;
 		_routableAssemblyProvider = routableAssemblyProvider;
 		_componentProvider = componentProvider;
+		_globalComponentProvider = globalComponentProvider;
 		_blazorConfigurer = blazorConfigurer;
 	}
 
@@ -45,6 +48,7 @@ public class BlazorPlugin : IPlugin
 		_builder.Services
 			.AddSingleton(_routableAssemblyProvider)
 			.AddSingleton(_componentProvider)
+			.AddSingleton(_globalComponentProvider)
 			.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 		var blazorBuilder = _builder.Services
 			.AddRazorComponents(o => _blazorConfigurer?.Configure(o))
@@ -79,6 +83,7 @@ public class BlazorPlugin : IPlugin
 		builder.AddPlugin<WebArchitecturePlugin>();
 		builder.StartupServices
 			.AddSingleton<IRoutableAssemblyProvider, RoutableAssemblyProvider>()
+			.AddSingleton<IGlobalComponentProvider, GlobalComponentProvider>()
 			.AddSingleton<IComponentProvider, ComponentProvider>();
 	}
 }
