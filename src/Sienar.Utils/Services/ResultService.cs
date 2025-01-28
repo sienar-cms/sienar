@@ -17,13 +17,13 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 	private readonly ILogger<ResultService<TResult>> _logger;
 	private readonly IAccessValidatorService<TResult> _accessValidator;
 	private readonly IAfterActionService<TResult> _afterHooks;
-	private readonly IProcessor<TResult> _processor;
+	private readonly IResultProcessor<TResult> _processor;
 
 	public ResultService(
 		ILogger<ResultService<TResult>> logger,
 		IAccessValidatorService<TResult> accessValidator,
 		IAfterActionService<TResult> afterHooks,
-		IProcessor<TResult> processor,
+		IResultProcessor<TResult> processor,
 		INotificationService notifier)
 		: base(notifier)
 	{
@@ -52,7 +52,7 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 		}
 		catch (Exception e)
 		{
-			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TResult>));
+			_logger.LogError(e, "{type} failed to process", typeof(IResultProcessor<TResult>));
 			return NotifyOfResult(new OperationResult<TResult?>(OperationStatus.Unknown));
 		}
 
