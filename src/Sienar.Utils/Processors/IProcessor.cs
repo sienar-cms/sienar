@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Sienar.Data;
 using Sienar.Hooks;
+using Sienar.Services;
 
 namespace Sienar.Processors;
 
@@ -11,6 +12,7 @@ namespace Sienar.Processors;
 /// <typeparam name="TRequest">the type of the processor input</typeparam>
 /// <typeparam name="TResult">the type of the processor output</typeparam>
 public interface IProcessor<TRequest, TResult>
+	where TRequest : IRequest
 {
 	/// <summary>
 	/// Processes the request and generates the result
