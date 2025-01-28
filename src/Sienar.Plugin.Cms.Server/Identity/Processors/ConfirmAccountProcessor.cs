@@ -13,7 +13,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ConfirmAccountProcessor : IProcessor<ConfirmAccountRequest, bool>
+public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IVerificationCodeManager _vcManager;

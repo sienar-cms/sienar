@@ -10,7 +10,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientLogoutProcessor : IProcessor<LogoutRequest, bool>
+public class ClientLogoutProcessor : IStatusProcessor<LogoutRequest>
 {
 	private readonly IRestClient _client;
 	private readonly AuthStateProvider _authStateProvider;

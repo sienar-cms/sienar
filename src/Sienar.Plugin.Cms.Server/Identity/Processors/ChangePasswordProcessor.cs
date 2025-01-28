@@ -11,7 +11,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ChangePasswordProcessor : IProcessor<ChangePasswordRequest, bool>
+public class ChangePasswordProcessor : IStatusProcessor<ChangePasswordRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IUserAccessor _userAccessor;

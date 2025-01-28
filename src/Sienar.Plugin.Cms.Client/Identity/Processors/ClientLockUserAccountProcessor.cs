@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientLockUserAccountProcessor : IProcessor<LockUserAccountRequest, bool>
+public class ClientLockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
 {
 	private readonly IRestClient _client;
 

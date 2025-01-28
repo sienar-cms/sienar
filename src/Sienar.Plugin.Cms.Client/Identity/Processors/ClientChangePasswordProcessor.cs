@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientChangePasswordProcessor : IProcessor<ChangePasswordRequest, bool>
+public class ClientChangePasswordProcessor : IStatusProcessor<ChangePasswordRequest>
 {
 	private readonly IRestClient _client;
 

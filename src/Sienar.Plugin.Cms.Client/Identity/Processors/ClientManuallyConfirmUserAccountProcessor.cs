@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientManuallyConfirmUserAccountProcessor : IProcessor<ManuallyConfirmUserAccountRequest, bool>
+public class ClientManuallyConfirmUserAccountProcessor : IStatusProcessor<ManuallyConfirmUserAccountRequest>
 {
 	private readonly IRestClient _client;
 

@@ -10,7 +10,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class UnlockUserAccountProcessor : IProcessor<UnlockUserAccountRequest, bool>
+public class UnlockUserAccountProcessor : IStatusProcessor<UnlockUserAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
 

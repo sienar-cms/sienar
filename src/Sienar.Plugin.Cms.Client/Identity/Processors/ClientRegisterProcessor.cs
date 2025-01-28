@@ -10,7 +10,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ClientRegisterProcessor : IProcessor<RegisterRequest, bool>
+public class ClientRegisterProcessor : IStatusProcessor<RegisterRequest>
 {
 	private readonly IRestClient _client;
 

@@ -14,7 +14,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ForgotPasswordProcessor : IProcessor<ForgotPasswordRequest, bool>
+public class ForgotPasswordProcessor : IStatusProcessor<ForgotPasswordRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IAccountEmailManager _emailManager;

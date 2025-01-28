@@ -12,7 +12,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LockUserAccountProcessor : IProcessor<LockUserAccountRequest, bool>
+public class LockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly ILockoutReasonRepository _lockoutReasonRepository;
