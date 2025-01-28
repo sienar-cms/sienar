@@ -76,7 +76,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 		}
 		catch (Exception e)
 		{
-			_logger.LogError(e, "{type} failed to process", typeof(IProcessor<TRequest>));
+			_logger.LogError(e, "{type} failed to process", typeof(IStatusProcessor<TRequest>));
 			return NotifyOfResult(new OperationResult<bool>(OperationStatus.Unknown));
 		}
 

@@ -16,7 +16,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class PersonalDataProcessor : IProcessor<PersonalDataResult>
+public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 {
 	private readonly IUserRepository _userRepository;
 	private readonly IUserAccessor _userAccessor;
