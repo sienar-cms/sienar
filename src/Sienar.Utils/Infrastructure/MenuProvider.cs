@@ -5,4 +5,4 @@
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class MenuProvider : DictionaryProvider<LinkDictionary<MenuLink>>,  IMenuProvider;
+public class MenuProvider : DictionaryProvider<string, LinkDictionary<MenuLink>>,  IMenuProvider;
