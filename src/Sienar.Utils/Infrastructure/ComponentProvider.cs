@@ -1,15 +1,16 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
+using Microsoft.AspNetCore.Components;
 
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class ComponentProvider : IComponentProvider
+public class ComponentProvider
+	: DictionaryProvider<Type, ComponentDictionary>,
+		IComponentProvider
 {
-	public Type? Dashboard { get; set; }
-	public Type? AppbarLeft { get; set; }
-	public Type? AppbarRight { get; set; }
-	public Type? SidebarHeader { get; set; }
-	public Type? SidebarFooter { get; set; }
+	public ComponentDictionary Access<TLayout>()
+		where TLayout : LayoutComponentBase
+		=> Access(typeof(TLayout));
 }

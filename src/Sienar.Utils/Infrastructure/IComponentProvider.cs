@@ -1,34 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Components;
 
 namespace Sienar.Infrastructure;
 
 /// <summary>
 /// A provider to contain references to various components to render in the Sienar UI
 /// </summary>
-public interface IComponentProvider
+public interface IComponentProvider : IDictionaryProvider<Type, ComponentDictionary>
 {
 	/// <summary>
-	/// A component to render in place of the default dashboard UI
+	/// Accesses the specified layout
 	/// </summary>
-	public Type? Dashboard { get; set; }
-
-	/// <summary>
-	/// A component to render on the left side of the appbar on large web screens
-	/// </summary>
-	public Type? AppbarLeft { get; set; }
-
-	/// <summary>
-	/// A component to render on the right side of the appbar on large web screens
-	/// </summary>
-	public Type? AppbarRight { get; set; }
-
-	/// <summary>
-	/// A component to render at the top of the sidebar on dashboard screens
-	/// </summary>
-	public Type? SidebarHeader { get; set; }
-
-	/// <summary>
-	/// A component to render at the bottom of the sidebar on dashboard screens
-	/// </summary>
-	public Type? SidebarFooter { get; set; }
+	/// <typeparam name="TLayout">The type of the layout</typeparam>
+	/// <returns>The component dictionary</returns>
+	ComponentDictionary Access<TLayout>()
+		where TLayout : LayoutComponentBase;
 }
