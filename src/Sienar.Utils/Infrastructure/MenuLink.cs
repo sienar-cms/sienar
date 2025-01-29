@@ -15,7 +15,7 @@ public class MenuLink
 	/// <summary>
 	/// The display text of the link
 	/// </summary>
-	public required string Text { get; set; }
+	public string? Text { get; set; }
 
 	/// <summary>
 	/// The URL the link points to
