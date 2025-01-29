@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Sienar.Infrastructure;
@@ -11,7 +12,7 @@ public interface IMenuGenerator
 	/// <summary>
 	/// Creates a list of authorized <c>TLink</c> instances to be rendered
 	/// </summary>
-	/// <param name="name"></param>
+	/// <param name="name">The name of the menu to create</param>
 	/// <returns></returns>
-	Task<List<MenuLink>> Create(string name);
+	Task<List<MenuLink>> Create(Enum name);
 }

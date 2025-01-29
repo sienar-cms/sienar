@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ public class MenuGenerator : IMenuGenerator
 	}
 
 	/// <inheritdoc />
-	public Task<List<MenuLink>> Create(string name)
+	public Task<List<MenuLink>> Create(Enum name)
 	{
 		var linkDictionary = _provider.Access(name);
 		return ProcessNavLinks(linkDictionary.AggregatePrioritized());
@@ -37,7 +38,7 @@ public class MenuGenerator : IMenuGenerator
 				continue;
 			}
 
-			if (!string.IsNullOrEmpty(link.ChildMenu))
+			if (link.ChildMenu is not null)
 			{
 				link.Sublinks = await Create(link.ChildMenu);
 			}
