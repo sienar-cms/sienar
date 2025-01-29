@@ -12,6 +12,7 @@ public class TestProjectClientPlugin : IPlugin
 	private readonly IApplicationAdapter _adapter;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly IComponentProvider _componentProvider;
+	private readonly IGlobalComponentProvider _globalComponentProvider;
 	private readonly IMenuProvider _menuProvider;
 	private readonly IStyleProvider _styleProvider;
 
@@ -19,12 +20,14 @@ public class TestProjectClientPlugin : IPlugin
 		IApplicationAdapter adapter,
 		IRoutableAssemblyProvider routableAssemblyProvider,
 		IComponentProvider componentProvider,
+		IGlobalComponentProvider globalComponentProvider,
 		IMenuProvider menuProvider,
 		IStyleProvider styleProvider)
 	{
 		_adapter = adapter;
 		_routableAssemblyProvider = routableAssemblyProvider;
 		_componentProvider = componentProvider;
+		_globalComponentProvider = globalComponentProvider;
 		_menuProvider = menuProvider;
 		_styleProvider = styleProvider;
 	}
@@ -42,7 +45,7 @@ public class TestProjectClientPlugin : IPlugin
 
 	private void ConfigureComponents()
 	{
-		_componentProvider.DefaultLayout = typeof(MainAppLayout);
+		_globalComponentProvider.DefaultLayout = typeof(MainAppLayout);
 		_componentProvider.AppbarLeft = typeof(Branding);
 	}
 
