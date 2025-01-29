@@ -9,7 +9,7 @@
 {
 	@if (!_menus[menuName].Any()) continue;
 
-	<MudText Typo="Typo.h5">@menuName</MudText>
+	<MudText Typo="Typo.h5">@menuName.GetDescription()</MudText>
 	<MudDivider Class="mt-1 mb-6"/>
 
 	<div class="d-flex flex-wrap">

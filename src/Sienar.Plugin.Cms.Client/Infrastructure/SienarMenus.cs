@@ -1,4 +1,6 @@
-﻿namespace Sienar.Infrastructure;
+﻿using System.ComponentModel;
+
+namespace Sienar.Infrastructure;
 
 /// <summary>
 /// The menus supported by Sienar CMS out of the box
@@ -28,5 +30,6 @@ public enum SienarMenus
 	/// <summary>
 	/// The user management menu, rendered on the default dashboard homepage
 	/// </summary>
+	[Description("User management")]
 	UserManagement
 }
