@@ -1,15 +1,9 @@
-﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class ComponentProvider : IComponentProvider
-{
-	public Type? Dashboard { get; set; }
-	public Type? AppbarLeft { get; set; }
-	public Type? AppbarRight { get; set; }
-	public Type? SidebarHeader { get; set; }
-	public Type? SidebarFooter { get; set; }
-}
+public class ComponentProvider
+	: DictionaryProvider<Type, Dictionary<Enum, Type>>,
+		IComponentProvider;
