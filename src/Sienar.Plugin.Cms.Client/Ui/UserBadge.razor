@@ -54,7 +54,7 @@
 	/// The names of the menus to render in the user settings menu
 	/// </summary>
 	[Parameter]
-	public required IEnumerable<string> MenuNames { get; set; }
+	public required IEnumerable<Enum> MenuNames { get; set; }
 
 	/// <inheritdoc />
 	protected override async Task OnInitializedAsync()
