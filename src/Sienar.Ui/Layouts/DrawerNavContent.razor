@@ -1,9 +1,8 @@
-﻿@using Sienar.Infrastructure
-@using Sienar.Plugins
-@inject IComponentProvider ComponentProvider
+﻿@inject IComponentProvider ComponentProvider
 
 <div class="flex-grow-1">
-	<OptionalComponent Type="@ComponentProvider.SidebarHeader"/>
+	<OptionalComponent
+		Type="@_components.GetComponent(DashboardLayoutSections.SidebarHeader)"/>
 
 	<MudNavMenu>
 		@for (var i = 0; i < Menus.Count; i++)
@@ -23,16 +22,31 @@
 
 <div>
 	<div class="pa-4">
-		<OptionalComponent Type="@ComponentProvider.SidebarFooter"/>
+		<OptionalComponent
+			Type="@_components.GetComponent(DashboardLayoutSections.SidebarFooter)"/>
 	</div>
 </div>
 
 @code {
+
+	private ComponentDictionary _components = null!;
 
 	/// <summary>
 	/// Contains the grouped menu links to be rendered
 	/// </summary>
 	[Parameter]
     public required List<List<MenuLink>> Menus { get; set; }
+
+	/// <summary>
+	/// The type of the current layout
+	/// </summary>
+	[Parameter]
+    public required Type LayoutType { get; set; }
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		_components = ComponentProvider.Access(LayoutType);
+	}
 
 }

@@ -8,5 +8,6 @@ public class MainAppLayout : DashboardLayoutBase
 	public MainAppLayout()
 	{
 		MenuNames = [Menus.Main];
+		LayoutType = typeof(MainAppLayout);
 	}
 }

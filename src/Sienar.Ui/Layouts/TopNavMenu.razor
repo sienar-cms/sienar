@@ -10,7 +10,8 @@
 	</MudHidden>
 
 	<MudHidden Breakpoint="Breakpoint.MdAndDown">
-		<OptionalComponent Type="@ComponentProvider.AppbarLeft"/>
+		<OptionalComponent
+			Type="@_components.GetComponent(DashboardLayoutSections.AppbarLeft)"/>
 
 		@for (var i = 0; i < Menus.Count; i++)
 		{
@@ -29,7 +30,8 @@
 			}
 		}
 
-		<OptionalComponent Type="ComponentProvider.AppbarRight"/>
+		<OptionalComponent
+			Type="_components.GetComponent(DashboardLayoutSections.AppbarRight)"/>
 	</MudHidden>
 </MudAppBar>
 
@@ -38,6 +40,26 @@
 		Elevation="1"
 		@bind-Open="MenuOpen"
 		Variant="DrawerVariant.Temporary">
-		<DrawerNavContent Menus="Menus"/>
+		<DrawerNavContent
+			Menus="Menus"
+			LayoutType="LayoutType"/>
 	</MudDrawer>
 </MudHidden>
+
+@code {
+
+	private ComponentDictionary _components = null!;
+
+	/// <summary>
+	/// The type of the current layout
+	/// </summary>
+	[Parameter]
+    public required Type LayoutType { get; set; }
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		_components = ComponentProvider.Access(LayoutType);
+	}
+
+}

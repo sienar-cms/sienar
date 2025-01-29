@@ -10,5 +10,6 @@ public class DashboardLayout : DashboardLayoutBase
 			SienarMenus.Main,
 			SienarMenus.Info
 		];
+		LayoutType = typeof(DashboardLayout);
 	}
 }

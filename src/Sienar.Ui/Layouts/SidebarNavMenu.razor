@@ -16,7 +16,9 @@
 	Elevation="1"
 	@bind-Open="Open"
 	Variant="DrawerVariant">
-	<DrawerNavContent Menus="Menus"/>
+	<DrawerNavContent
+		Menus="Menus"
+		LayoutType="LayoutType"/>
 </MudDrawer>
 
 @code {
@@ -45,6 +47,12 @@
 		ReportRate = 250,
 		NotifyOnBreakpointOnly = true
 	};
+
+	/// <summary>
+	/// The type of the layout
+	/// </summary>
+	[Parameter]
+	public required Type LayoutType { get; set; } = null!;
 
 	[Inject]
 	private IBrowserViewportService BrowserViewportService { get; set; } = null!;

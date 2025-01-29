@@ -67,8 +67,10 @@ public class CmsClientPlugin : IPlugin
 
 	private void SetupComponents()
 	{
-		_componentProvider.SidebarHeader ??= typeof(DrawerHeader);
-		_componentProvider.SidebarFooter ??= typeof(DrawerFooter);
+		_componentProvider
+			.Access(typeof(DashboardLayout))
+			.TryAddComponent<DrawerHeader>(DashboardLayoutSections.SidebarHeader)
+			.TryAddComponent<DrawerFooter>(DashboardLayoutSections.SidebarFooter);
 
 		_globalComponentProvider.DefaultLayout ??= typeof(DashboardLayout);
 		_globalComponentProvider.NotFoundView ??= typeof(NotFound);
