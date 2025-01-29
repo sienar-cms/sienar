@@ -1,4 +1,6 @@
-﻿namespace TestProject.Client;
+﻿using System.ComponentModel;
+
+namespace TestProject.Client;
 
 /// <summary>
 /// The test app's supported menus
@@ -28,5 +30,6 @@ public enum Menus
 	/// <summary>
 	/// The menu containing links to operating systems
 	/// </summary>
+	[Description("Operating systems")]
 	OperatingSystems
 }

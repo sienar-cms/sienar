@@ -25,14 +25,12 @@ public static class MenuProviderExtensions
 				new()
 				{
 					Url = "https://google.com",
-					Text = "Social",
 					Icon = Icons.Material.Filled.Apps,
 					ChildMenu = Menus.Social
 				},
 				new()
 				{
 					Url = "https://google.com",
-					Text = "Hobbies",
 					Icon = Icons.Material.Filled.LocalActivity,
 					ChildMenu = Menus.Hobbies
 				}
@@ -60,14 +58,12 @@ public static class MenuProviderExtensions
 				new()
 				{
 					Url = "https://google.com",
-					Text = "Sports",
 					Icon = Icons.Material.Filled.Sports,
 					ChildMenu = Menus.Sports
 				},
 				new()
 				{
 					Url = "https://google.com",
-					Text = "Operating systems",
 					Icon = Icons.Material.Filled.Computer,
 					ChildMenu = Menus.OperatingSystems
 				});
