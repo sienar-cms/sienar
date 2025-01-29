@@ -15,7 +15,7 @@ public class MenuLink
 	/// <summary>
 	/// The display text of the link
 	/// </summary>
-	public required string Text { get; set; }
+	public string? Text { get; set; }
 
 	/// <summary>
 	/// The URL the link points to
@@ -53,7 +53,7 @@ public class MenuLink
 	/// <summary>
 	/// The name of a menu to render as a child menu of this menu, if any
 	/// </summary>
-	public string? ChildMenu { get; set; }
+	public Enum? ChildMenu { get; set; }
 
 	/// <summary>
 	/// A function to execute when the menu link is clicked

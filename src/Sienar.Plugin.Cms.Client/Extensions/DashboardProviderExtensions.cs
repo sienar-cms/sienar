@@ -17,7 +17,7 @@ public static class DashboardProviderExtensions
 		this IMenuProvider self)
 	{
 		self
-			.Access(DashboardMenuNames.UserManagement)
+			.Access(SienarMenus.UserManagement)
 			.AddWithNormalPriority(
 				new MenuLink
 				{

@@ -9,7 +9,7 @@
 {
 	@if (!_menus[menuName].Any()) continue;
 
-	<MudText Typo="Typo.h5">@menuName</MudText>
+	<MudText Typo="Typo.h5">@menuName.GetDescription()</MudText>
 	<MudDivider Class="mt-1 mb-6"/>
 
 	<div class="d-flex flex-wrap">
@@ -29,14 +29,14 @@
 
 @code {
 
-	private readonly Dictionary<string, List<MenuLink>> _allMenus = new();
-	private Dictionary<string, List<MenuLink>> _menus = new();
+	private readonly Dictionary<Enum, List<MenuLink>> _allMenus = new();
+	private Dictionary<Enum, List<MenuLink>> _menus = new();
 
 	[Parameter]
 	public string Name { get; set; } = "Dashboard";
 
 	[Parameter]
-	public required List<string> Categories { get; set; }
+	public required List<Enum> Categories { get; set; }
 
 	[Parameter]
 	public RenderFragment<MenuLink>? LinkTemplate { get; set; }

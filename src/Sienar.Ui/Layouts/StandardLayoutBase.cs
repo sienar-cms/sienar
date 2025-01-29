@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 
 namespace Sienar.Layouts;
 
@@ -10,5 +11,5 @@ public abstract class StandardLayoutBase : LayoutComponentBase
 	/// <summary>
 	/// The menu names to render with this layout
 	/// </summary>
-	protected string[] MenuNames = [];
+	protected Enum[] MenuNames = [];
 }

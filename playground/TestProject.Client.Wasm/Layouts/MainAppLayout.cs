@@ -7,6 +7,6 @@ public class MainAppLayout : DashboardLayoutBase
 	/// <inheritdoc />
 	public MainAppLayout()
 	{
-		MenuNames = [Constants.MenuNames.MainMenu];
+		MenuNames = [Menus.Main];
 	}
 }

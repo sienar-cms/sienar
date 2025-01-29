@@ -16,7 +16,7 @@ public class NavBase : ComponentBase, IDisposable
 	protected bool MenuOpen;
 
 	[Parameter]
-	public required IEnumerable<string> MenuNames { get; set; }
+	public required IEnumerable<Enum> MenuNames { get; set; }
 
 	[Inject]
 	protected IMenuGenerator MenuGenerator { get; set; } = null!;
