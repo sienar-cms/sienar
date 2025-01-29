@@ -8,7 +8,7 @@ public static class MenuProviderExtensions
 	public static void AddMenu(this IMenuProvider self)
 	{
 		self
-			.Access(Constants.MenuNames.MainMenu)
+			.Access(Menus.Main)
 			.AddWithNormalPriority(
 				new()
 				{
@@ -27,19 +27,19 @@ public static class MenuProviderExtensions
 					Url = "https://google.com",
 					Text = "Social",
 					Icon = Icons.Material.Filled.Apps,
-					ChildMenu = Constants.MenuNames.SocialMenu
+					ChildMenu = Menus.Social
 				},
 				new()
 				{
 					Url = "https://google.com",
 					Text = "Hobbies",
 					Icon = Icons.Material.Filled.LocalActivity,
-					ChildMenu = Constants.MenuNames.HobbiesMenu
+					ChildMenu = Menus.Hobbies
 				}
 			);
 
 		self
-			.Access(Constants.MenuNames.SocialMenu)
+			.Access(Menus.Social)
 			.AddWithNormalPriority(
 				new()
 				{
@@ -55,25 +55,25 @@ public static class MenuProviderExtensions
 				});
 
 		self
-			.Access(Constants.MenuNames.HobbiesMenu)
+			.Access(Menus.Hobbies)
 			.AddWithNormalPriority(
 				new()
 				{
 					Url = "https://google.com",
 					Text = "Sports",
 					Icon = Icons.Material.Filled.Sports,
-					ChildMenu = Constants.MenuNames.SportsMenu
+					ChildMenu = Menus.Sports
 				},
 				new()
 				{
 					Url = "https://google.com",
 					Text = "Operating systems",
 					Icon = Icons.Material.Filled.Computer,
-					ChildMenu = Constants.MenuNames.OperatingSystemsMenu
+					ChildMenu = Menus.OperatingSystems
 				});
 
 		self
-			.Access(Constants.MenuNames.SportsMenu)
+			.Access(Menus.Sports)
 			.AddWithNormalPriority(
 				new()
 				{
@@ -95,7 +95,7 @@ public static class MenuProviderExtensions
 				});
 
 		self
-			.Access(Constants.MenuNames.OperatingSystemsMenu)
+			.Access(Menus.OperatingSystems)
 			.AddWithNormalPriority(
 				new()
 				{
