@@ -51,7 +51,7 @@
 		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\Sienar.Ui\Sienar.Ui.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Ui.MudBlazor" Version="0.1.0"/>
+			Include="Sienar.Ui" Version="0.1.0"/>
 	</ItemGroup>
 
 	<ItemGroup>
