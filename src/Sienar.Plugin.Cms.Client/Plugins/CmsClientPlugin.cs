@@ -167,7 +167,7 @@ public class CmsClientPlugin : IPlugin
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
 		builder
-			.AddPlugin<MudBlazorPlugin>()
+			.AddPlugin<BulmaUiPlugin>()
 			.AddPlugin<WasmPlugin>();
 	}
 }
