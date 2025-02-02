@@ -31,7 +31,7 @@ public class CookieSignInManager : ISignInManager
 		{
 			IsPersistent = isPersistent,
 			AllowRefresh = true,
-			IssuedUtc = DateTimeOffset.Now,
+			IssuedUtc = DateTimeOffset.UtcNow,
 			ExpiresUtc = GetExpiration(isPersistent)
 		};
 		var claimsPrincipal = await _principalFactory.CreateAsync(user);
@@ -53,6 +53,6 @@ public class CookieSignInManager : ISignInManager
 			? TimeSpan.FromDays(_loginOptions.PersistentLoginDuration)
 			: TimeSpan.FromHours(_loginOptions.TransientLoginDuration);
 
-		return DateTimeOffset.Now + duration;
+		return DateTimeOffset.UtcNow + duration;
 	}
 }
