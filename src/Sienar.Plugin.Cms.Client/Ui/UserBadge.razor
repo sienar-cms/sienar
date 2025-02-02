@@ -23,14 +23,13 @@
 		</MudText>
 	</div>
 
-	<MudMenu Icon="@Icons.Material.Filled.Settings" Dense>
+	<MudMenu Icon="Icons.Material.Filled.Settings" Dense>
 		@foreach (var menu in _menus)
 		{
 			@foreach (var submenu in menu)
 			{
 				<MudMenuItem
-					Href="@submenu.Url"
-					OnClick="@(e => HandleClick(submenu.OnClick, e))">
+					Href="@submenu.Url">
 					<div class="d-flex align-center">
 						<MudIcon
 							Class="mr-2"

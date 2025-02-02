@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using Sienar.Data;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -25,7 +24,7 @@ public static class MenuProviderExtensions
 				new MenuLink
 				{
 					Text = "Dashboard",
-					Icon = Icons.Material.Filled.Dashboard,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					Url = DashboardUrls.Index,
 					RequireLoggedIn = true
 				});
@@ -46,28 +45,28 @@ public static class MenuProviderExtensions
 				new MenuLink
 				{
 					Text = "Email",
-					Icon = Icons.Material.Filled.Email,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					RequireLoggedIn = true,
 					Url = DashboardUrls.Account.EmailChange.Index
 				},
 				new MenuLink
 				{
 					Text = "Password",
-					Icon = Icons.Material.Filled.Lock,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					RequireLoggedIn = true,
 					Url = DashboardUrls.Account.PasswordChange.Index
 				},
 				new MenuLink
 				{
 					Text = "Personal data",
-					Icon = Icons.Material.Filled.Archive,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					RequireLoggedIn = true,
 					Url = DashboardUrls.Account.PersonalData
 				},
 				new MenuLink
 				{
 					Text = "Delete account",
-					Icon = Icons.Material.Filled.DeleteForever,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					RequireLoggedIn = true,
 					Url = DashboardUrls.Account.Delete
 				});
@@ -78,7 +77,7 @@ public static class MenuProviderExtensions
 				new MenuLink
 				{
 					Text = "Log out",
-					Icon = Icons.Material.Filled.Logout,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					RequireLoggedIn = true,
 					OnClick = async (
 						IStatusService<LogoutRequest> service,
@@ -109,7 +108,7 @@ public static class MenuProviderExtensions
 				new MenuLink
 				{
 					Text = "About",
-					Icon = Icons.Material.Outlined.Info,
+					Icon = string.Empty, // TODO: replace with FontAwesome icon
 					Url = DashboardUrls.About
 				});
 

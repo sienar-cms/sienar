@@ -25,8 +25,8 @@
 
 @code {
 
-	[CascadingParameter]
-	private MudDialogInstance Dialog { get; set; } = null!;
+	// [CascadingParameter]
+	// private MudDialogInstance Dialog { get; set; } = null!;
 
 	[Parameter]
 	public required string Title { get; set; }
@@ -40,14 +40,14 @@
 	[Parameter]
 	public required string CancelText { get; set; }
 
-	[Parameter]
-	public Color MainColor { get; set; } = Color.Primary;
+	// [Parameter]
+	// public Color MainColor { get; set; } = Color.Primary;
+	//
+	// [Parameter]
+	// public Color CancelColor { get; set; } = Color.Secondary;
 
-	[Parameter]
-	public Color CancelColor { get; set; } = Color.Secondary;
+	private void Confirm() {} /*Dialog.Close(DialogResult.Ok(true))*/
 
-	private void Confirm() => Dialog.Close(DialogResult.Ok(true));
-
-	private void Cancel() => Dialog.Cancel();
+	private void Cancel() {} /*Dialog.Cancel()*/
 
 }

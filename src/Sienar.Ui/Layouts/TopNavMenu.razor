@@ -1,10 +1,10 @@
 ﻿@inherits NavBase
 @inject IComponentProvider ComponentProvider
- 
+
 <MudAppBar Elevation="1">
 	<MudHidden Breakpoint="Breakpoint.LgAndUp">
 		<MudIconButton
-			Icon="@Icons.Material.Filled.Menu"
+			Icon="Icons.Material.Filled.Menu"
 			Color="Color.Inherit"
 			OnClick="@ToggleDrawer"/>
 	</MudHidden>
@@ -38,7 +38,6 @@
 <MudHidden Breakpoint="Breakpoint.LgAndUp">
 	<MudDrawer
 		Elevation="1"
-		@bind-Open="MenuOpen"
 		Variant="DrawerVariant.Temporary">
 		<DrawerNavContent
 			Menus="Menus"

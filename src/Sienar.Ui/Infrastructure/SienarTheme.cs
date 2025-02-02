@@ -1,5 +1,3 @@
-﻿using MudBlazor;
+﻿namespace Sienar.Infrastructure;
 
-namespace Sienar.Infrastructure;
-
-public class SienarTheme : MudTheme;
+public class SienarTheme;

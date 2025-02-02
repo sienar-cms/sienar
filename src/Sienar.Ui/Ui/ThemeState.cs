@@ -1,5 +1,4 @@
-﻿using MudBlazor;
-using Sienar.Infrastructure;
+﻿using Sienar.Infrastructure;
 
 namespace Sienar.Ui;
 
@@ -9,7 +8,7 @@ namespace Sienar.Ui;
 public class ThemeState : StateProviderBase
 {
 	private bool _isDarkMode = true;
-	private MudTheme _theme = new();
+	private SienarTheme _theme = new();
 
 	/// <summary>
 	/// Whether the current theme should render in dark mode
@@ -32,7 +31,7 @@ public class ThemeState : StateProviderBase
 	/// <summary>
 	/// The current theme object
 	/// </summary>
-	public MudTheme Theme
+	public SienarTheme Theme
 	{
 		get => _theme;
 		set

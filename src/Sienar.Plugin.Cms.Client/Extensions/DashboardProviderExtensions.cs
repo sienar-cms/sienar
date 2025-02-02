@@ -1,5 +1,4 @@
-﻿using MudBlazor;
-using Sienar.Infrastructure;
+﻿using Sienar.Infrastructure;
 
 namespace Sienar.Extensions;
 
@@ -22,14 +21,14 @@ public static class DashboardProviderExtensions
 				new MenuLink
 				{
 					Text = "Users",
-					Icon = Icons.Material.Filled.SupervisorAccount,
+					Icon = "Icons.Material.Filled.SupervisorAccount", // TODO: Replace with FontAweomse icon
 					Url = DashboardUrls.Users.Index,
 					Roles = [Roles.Admin]
 				},
 				new MenuLink
 				{
 					Text = "Lockout reasons",
-					Icon = Icons.Material.Filled.Lock,
+					Icon = "Icons.Material.Filled.Lock", // TODO: Replace with FontAweomse icon
 					Url = DashboardUrls.LockoutReasons.Index,
 					Roles = [Roles.Admin]
 				});

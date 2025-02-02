@@ -19,7 +19,6 @@
 
 	<Fields>
 		<MudTextField
-			@bind-Value="Model.Password"
 			For="() => Model.Password"
 			InputType="InputType.Password"
 			Label="Confirm your password"/>
@@ -37,8 +36,8 @@
 
 @code {
 
-	[CascadingParameter]
-	private MudDialogInstance Instance { get; set; } = default!;
+	// [CascadingParameter]
+	// private MudDialogInstance Instance { get; set; } = default!;
 
 	private async Task OnSubmit()
 	{
@@ -52,7 +51,7 @@
 
 	private void Close()
 	{
-		Instance.Close();
+		// Instance.Close();
 	}
 
 }

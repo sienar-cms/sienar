@@ -23,7 +23,6 @@
 			<Select
 				T="LockoutReason"
 				Label="Select one or more reasons to lock the user out"
-				@bind-SelectedValues="@_selectedReasons"
 				MultiSelection>
 				@foreach (var reason in _lockoutReasons)
 				{
@@ -69,7 +68,6 @@
 					Option="@LockDuration.Custom">
 					<MudDatePicker
 						Label="Select a date"
-						@bind-Date="_lockEnd"
 						Disabled="_lockDuration != LockDuration.Custom"/>
 				</Radio>
 			</MudRadioGroup>

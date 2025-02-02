@@ -14,11 +14,9 @@
 		FormName="login">
 		<Fields>
 			<Textbox
-				@bind-Value="Model.AccountName"
 				For="() => Model.AccountName"
 				Label="Username or email address"/>
 			<Textbox
-				@bind-Value="Model.Password"
 				For="() => Model.Password"
 				InputType="InputType.Password"
 				Label="Password"/>
@@ -26,10 +24,9 @@
 				Class="mt-4"
 				Color="Color.Primary"
 				UncheckedColor="Color.Default"
-				@bind-Checked="Model.RememberMe"
 				For="() => Model.RememberMe"
 				Label="Remember me"/>
-			<Honeypot @bind-Value="Model.SecretKeyField"/>
+			@* <Honeypot @bind-Value="Model.SecretKeyField"/> *@
 		</Fields>
 
 		<MoreActions>

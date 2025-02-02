@@ -26,7 +26,8 @@
 			<MudList T="string">
 				@foreach (var reason in _result.LockoutReasons)
 				{
-					<MudListItem Icon="@Icons.Material.Filled.Label">
+					@* TODO: replace with FontAwesome icon *@
+					<MudListItem Icon="">
 						@reason.Reason
 					</MudListItem>
 				}

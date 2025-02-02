@@ -1,4 +1,4 @@
-﻿@inherits TablePage<LockoutReason>
+﻿@* @inherits TablePage<LockoutReason> *@
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.LockoutReasons.Index)]
 
@@ -14,14 +14,14 @@
 </MudText>
 
 <Table
-	@ref="Table"
+	@* @ref="Table" *@
 	TableTitle="Lockout reasons"
 	LoadData="Reader.Read">
 	<ToolBarContent>
 		<MudIconButton
 			Color="Color.Primary"
 			Href="@DashboardUrls.LockoutReasons.Add"
-			Icon="@Icons.Material.Filled.Add"/>
+			Icon="Icons.Material.Filled.Add"/>
 	</ToolBarContent>
 
 	<HeaderContent>
@@ -34,19 +34,18 @@
 	</HeaderContent>
 
 	<RowTemplate>
-		<MudTd DataLabel="Reason">@context.Reason</MudTd>
+		<MudTd DataLabel="Reason">@@context.Reason</MudTd>
 
 		<MudTd DataLabel="Actions">
 			<div class="d-flex justify-center">
 				<MudIconButton
 					Color="Color.Primary"
-					Href="@($"{DashboardUrls.LockoutReasons.Index}/{context.Id}")"
-					Icon="@Icons.Material.Filled.RemoveRedEye"
+					Href="@($"{DashboardUrls.LockoutReasons.Index}/{{context.Id}}")"
+					Icon="Icons.Material.Filled.RemoveRedEye"
 					title="View lockout reason"/>
 				<MudIconButton
 					Color="Color.Error"
-					Icon="@Icons.Material.Filled.DeleteForever"
-					OnClick="@(() => DeleteReason(context))"
+					Icon="Icons.Material.Filled.DeleteForever"
 					title="Delete lockout reason"/>
 			</div>
 		</MudTd>
@@ -58,10 +57,10 @@
 	/// <summary>
 	/// Creates a prompt to delete a lockout reason
 	/// </summary>
-	protected Task DeleteReason(LockoutReason reason)
-		=> DeleteEntity(
-			reason.Id,
-			"Delete lockout reason",
-			"Are you sure you want to delete this lockout reason? This cannot be undone!");
+	// protected Task DeleteReason(LockoutReason reason)
+	// 	=> DeleteEntity(
+	// 		reason.Id,
+	// 		"Delete lockout reason",
+	// 		"Are you sure you want to delete this lockout reason? This cannot be undone!");
 
 }
