@@ -11,6 +11,14 @@ namespace Sienar.Ui;
 public class Button : SienarComponentBase
 {
 	private string _tag = "button";
+	private Color _lastColor = ButtonDefaults.Color;
+	private Size _lastSize = ButtonDefaults.Size;
+	private bool _lastResponsive = ButtonDefaults.Responsive;
+	private bool _lastFullWidth = ButtonDefaults.FullWidth;
+	private bool _lastLight = ButtonDefaults.Light;
+	private bool _lastDark = ButtonDefaults.Dark;
+	private bool _lastOutlined = ButtonDefaults.Outlined;
+	private bool _lastLoading = false;
 
 	/// <summary>
 	/// The theme color of the button
@@ -78,6 +86,23 @@ public class Button : SienarComponentBase
 		{
 			_tag = "input";
 		}
+	}
+
+	/// <inheritdoc />
+	protected override void OnParametersSet()
+	{
+		var shouldRerender = false;
+
+		UpdateCachedValue(ref _lastColor, Color, ref shouldRerender);
+		UpdateCachedValue(ref _lastSize, Size, ref shouldRerender);
+		UpdateCachedValue(ref _lastResponsive, Responsive, ref shouldRerender);
+		UpdateCachedValue(ref _lastFullWidth, FullWidth, ref shouldRerender);
+		UpdateCachedValue(ref _lastLight, Light, ref shouldRerender);
+		UpdateCachedValue(ref _lastDark, Dark, ref shouldRerender);
+		UpdateCachedValue(ref _lastOutlined, Outlined, ref shouldRerender);
+		UpdateCachedValue(ref _lastLoading, Loading, ref shouldRerender);
+
+		if (shouldRerender) StateHasChanged();
 	}
 
 	/// <inheritdoc />
