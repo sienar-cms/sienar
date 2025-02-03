@@ -53,13 +53,14 @@ public class ProgressBar : SienarComponentBase
 
 		builder.OpenElement(0, "progress");
 		builder.AddMultipleAttributes(1, Attributes);
-		builder.AddContent(2, $"{progress}%");
+		builder.AddAttribute(2, "class", CreateCssClasses());
+		builder.AddContent(3, $"{progress}%");
 		builder.CloseElement();
 	}
 
-	private void MapClasses()
+	private string CreateCssClasses()
 	{
 		var classes = $"progress is-{Color.GetHtmlValue()} {Size.GetHtmlValue()}";
-		AddCssClass(classes);
+		return MergeCssClasses(classes);
 	}
 }
