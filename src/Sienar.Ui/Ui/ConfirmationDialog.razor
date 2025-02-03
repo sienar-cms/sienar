@@ -1,25 +1,27 @@
-﻿<Card
-	Title="@Title"
-	TitleTag="h2"
-	ThemeColor="MainColor">
+﻿@inherits SienarComponentBase
+
+<Card @attributes="Attributes">
+	<CardHeader
+		TitleTag="h2"
+		Color="MainColor">
+		<Title>@Title</Title>
+	</CardHeader>
 	<CardContent>
-		<MudText>@Question</MudText>
+		@Question
 	</CardContent>
 
 	<CardActions>
-		<MudButton
-			Class="mr-4"
+		<Button
 			Color="MainColor"
-			Variant="Variant.Filled"
-			OnClick="@Confirm">
+			@onclick="@Confirm">
 			@ConfirmText
-		</MudButton>
-		<MudButton
+		</Button>
+		<Button
 			Color="CancelColor"
-			Variant="Variant.Outlined"
-			OnClick="@Cancel">
+			@onclick="@Cancel"
+			Outlined>
 			@CancelText
-		</MudButton>
+		</Button>
 	</CardActions>
 </Card>
 
@@ -40,11 +42,11 @@
 	[Parameter]
 	public required string CancelText { get; set; }
 
-	// [Parameter]
-	// public Color MainColor { get; set; } = Color.Primary;
-	//
-	// [Parameter]
-	// public Color CancelColor { get; set; } = Color.Secondary;
+	[Parameter]
+	public Color MainColor { get; set; } = Color.Primary;
+
+	[Parameter]
+	public Color CancelColor { get; set; } = Color.Secondary;
 
 	private void Confirm() {} /*Dialog.Close(DialogResult.Ok(true))*/
 
