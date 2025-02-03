@@ -20,7 +20,7 @@ public class SienarComponentBase : ComponentBase
 	/// <param name="className">The CSS class name to add</param>
 	protected void AddCssClass(string className)
 	{
-		if (Attributes is null) return;
+		Attributes ??= new Dictionary<string, object>();
 
 		if (Attributes.TryGetValue("class", out var classes))
 		{
