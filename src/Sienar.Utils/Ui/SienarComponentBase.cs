@@ -31,4 +31,37 @@ public class SienarComponentBase : ComponentBase
 			Attributes["class"] = className;
 		}
 	}
+
+	/// <summary>
+	/// Checks if a cached value is different from its current value, and if so, updates the provided <c>ref shouldRerender</c> value to <c>true</c>
+	/// </summary>
+	/// <param name="cachedValue">The cached value to compare</param>
+	/// <param name="newValue">The new value to compare</param>
+	/// <param name="shouldRerender">A <c>ref</c> indicating whether the component should rerender because the values are different</param>
+	/// <typeparam name="T">The type of the values to compare</typeparam>
+	protected static void UpdateCachedValue<T>(
+		ref T cachedValue,
+		T newValue,
+		ref bool shouldRerender)
+	{
+		// We have to check if the cached value is null separately
+		// because we don't want to use a null conditional with a default value
+		if (cachedValue is null)
+		{
+			// Both are null, so do nothing
+			if (newValue is null) return;
+
+			// The new value is different, so overwrite and rerender
+			cachedValue = newValue;
+			shouldRerender = true;
+			return;
+		}
+
+		// The new value is different, so overwrite and rerender
+		if (!cachedValue.Equals(newValue))
+		{
+			cachedValue = newValue;
+			shouldRerender = true;
+		}
+	}
 }
