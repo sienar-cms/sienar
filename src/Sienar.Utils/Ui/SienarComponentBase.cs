@@ -18,18 +18,13 @@ public class SienarComponentBase : ComponentBase
 	/// Adds a CSS class to the <see cref="Attributes"/> dictionary while preserving any existing values
 	/// </summary>
 	/// <param name="className">The CSS class name to add</param>
-	protected void AddCssClass(string className)
+	protected string MergeCssClasses(string className)
 	{
-		Attributes ??= new Dictionary<string, object>();
+		if (Attributes is null) return className;
 
-		if (Attributes.TryGetValue("class", out var classes))
-		{
-			Attributes["class"] = $"{classes} {className}";
-		}
-		else
-		{
-			Attributes["class"] = className;
-		}
+		return Attributes.TryGetValue("class", out var classes)
+			? $"{classes} {className}"
+			: className;
 	}
 
 	/// <summary>
