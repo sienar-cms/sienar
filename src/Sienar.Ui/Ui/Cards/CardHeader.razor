@@ -1,0 +1,66 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<HtmlElement
+	Tag="@Tag"
+	@attributes="Attributes"
+	class="@CreateCssClasses()">
+	<HtmlElement
+		Tag="@TitleTag"
+		class="@CreateTitleCssClasses()">
+		@Title
+	</HtmlElement>
+
+	@Icon
+</HtmlElement>
+
+@code {
+
+	/// <summary>
+	/// The HTML element with which to render the card header
+	/// </summary>
+	[Parameter]
+	public string Tag { get; set; } = CardHeaderDefaults.Tag;
+
+	/// <summary>
+	/// The HTML element with which to render the card title
+	/// </summary>
+	[Parameter]
+	public string TitleTag { get; set; } = CardHeaderDefaults.TitleTag;
+
+	/// <summary>
+	/// The card header theme color
+	/// </summary>
+	[Parameter]
+	public Color? Color { get; set; } = CardHeaderDefaults.Color;
+
+	/// <summary>
+	/// The card title text
+	/// </summary>
+	[Parameter]
+    public RenderFragment? Title { get; set; }
+
+	/// <summary>
+	/// The icon to render
+	/// </summary>
+	[Parameter]
+    public RenderFragment? Icon { get; set; }
+
+	private string CreateCssClasses()
+	{
+		var classes = "card-header";
+		if (Color is not null) classes += $" has-background-{Color.GetHtmlValue()}";
+
+		return MergeCssClasses(classes);
+	}
+
+	private string CreateTitleCssClasses()
+	{
+		var classes = "card-header-title";
+		if (Color is not null) classes += $" has-text-{Color.GetHtmlValue()}-invert";
+
+		return classes;
+	}
+
+}

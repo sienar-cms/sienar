@@ -1,0 +1,26 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<HtmlElement
+	Tag="@Tag"
+	@attributes="Attributes"
+	class="@MergeCssClasses("card-footer")">
+	@ChildContent
+</HtmlElement>
+
+@code {
+
+	/// <summary>
+	/// The HTML element with which to render the card footer
+	/// </summary>
+	[Parameter]
+	public string Tag { get; set; } = CardFooterDefaults.Tag;
+
+	/// <summary>
+	/// The child content to render
+	/// </summary>
+	[Parameter]
+	public required RenderFragment ChildContent { get; set; }
+
+}

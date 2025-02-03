@@ -1,0 +1,38 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<HtmlElement
+	Tag="@Tag"
+	@attributes="Attributes"
+	class="@CreateCssClasses()">
+	@ChildContent
+</HtmlElement>
+
+@code {
+
+	/// <summary>
+	/// The HTML tag with which to render the card actions
+	/// </summary>
+	[Parameter]
+	public string Tag { get; set; } = CardActionsDefaults.Tag;
+
+	/// <summary>
+	/// The size of the card action buttons
+	/// </summary>
+	[Parameter]
+	public Size Size { get; set; } = CardActionsDefaults.Size;
+
+	/// <summary>
+	/// The child content to render
+	/// </summary>
+	[Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+	private string CreateCssClasses()
+	{
+		var classes = $"card-content buttons are-{Size.GetHtmlValue()}";
+		return MergeCssClasses(classes);
+	}
+
+}
