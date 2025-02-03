@@ -69,8 +69,11 @@ public class ProgressBar : SienarComponentBase
 			Attributes["max"] = Max;
 			progress = (int)Math.Floor(Value.Value / Max * 100);
 		}
-
-		MapClasses();
+		else
+		{
+			Attributes.Remove("value");
+			Attributes.Remove("max");
+		}
 
 		builder.OpenElement(0, "progress");
 		builder.AddMultipleAttributes(1, Attributes);
