@@ -12,6 +12,11 @@ namespace Sienar.Ui;
 /// </summary>
 public class ProgressBar : SienarComponentBase
 {
+	private Color _lastColor = ProgressBarDefaults.Color;
+	private Size _lastSize = ProgressBarDefaults.Size;
+	private float? _lastValue = null;
+	private float _lastMax = ProgressBarDefaults.Max;
+
 	/// <summary>
 	/// The color of the progess bar
 	/// </summary>
@@ -35,6 +40,22 @@ public class ProgressBar : SienarComponentBase
 	/// </summary>
 	[Parameter]
 	public float Max { get; set; } = ProgressBarDefaults.Max;
+
+	/// <inheritdoc />
+	protected override void OnParametersSet()
+	{
+		var shouldRerender = false;
+
+		UpdateCachedValue(ref _lastColor, Color, ref shouldRerender);
+		UpdateCachedValue(ref _lastSize, Size, ref shouldRerender);
+		UpdateCachedValue(ref _lastValue, Value, ref shouldRerender);
+		UpdateCachedValue(ref _lastMax, Max, ref shouldRerender);
+
+		if (shouldRerender)
+		{
+			StateHasChanged();
+		}
+	}
 
 	/// <inheritdoc />
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
