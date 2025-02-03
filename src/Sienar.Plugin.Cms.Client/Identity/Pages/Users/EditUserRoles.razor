@@ -15,19 +15,22 @@
 }
 
 <NarrowContainer>
-	<Card Title="@($"Edit {_user.Username}'s roles")">
-    	<CardContent>
-    		@foreach (var role in _roles)
-    		{
-    			<MudSwitch
-				    T="bool"
-				    Value="_roleMap[role.Id]"
-    				ValueChanged="b => UpdateRoleStatus(b, role.Id)"
-    				Color="Color.Primary"
-    				Label="@role.Name"/>
-    		}
-    	</CardContent>
-    </Card>
+	<Card>
+		<CardHeader>
+			<Title>@($"Edit {_user.Username}'s roles")</Title>
+		</CardHeader>
+		<CardContent>
+			@foreach (var role in _roles)
+			{
+				<MudSwitch
+					T="bool"
+					Value="_roleMap[role.Id]"
+					ValueChanged="b => UpdateRoleStatus(b, role.Id)"
+					Color="Color.Primary"
+					Label="@role.Name"/>
+			}
+		</CardContent>
+	</Card>
 </NarrowContainer>
 
 @code {
