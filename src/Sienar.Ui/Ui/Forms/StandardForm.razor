@@ -1,49 +1,49 @@
-﻿@* @namespace Sienar.Ui *@
-@* @typeparam TFormModel *@
-@* @inherits BaseForm<TFormModel> *@
-@* *@
-@* <EditForm *@
-@* 	Model="Model" *@
-@* 	OnValidSubmit="@HandleSubmit" *@
-@* 	FormName="@FormName"> *@
-@* 	<DataAnnotationsValidator/> *@
-@* *@
-@* 	<Card *@
-@* 		Title="@Title" *@
-@* 		TitleTag="@TitleTag" *@
-@* 		ThemeColor="ThemeColor" *@
-@* 		Square="Square" *@
-@* 		Icon="@Icon" *@
-@* 		IconTitle="@IconTitle"> *@
-@* 		<CardContent> *@
-@* 			@Information *@
-@* *@
-@* 			@Fields *@
-@* 		</CardContent> *@
-@* *@
-@* 		<CardActions> *@
-@* 			@if (!HideSubmit) *@
-@* 			{ *@
-@* 				<LoadingButton *@
-@* 					Color="ThemeColor" *@
-@* 					IsLoading="@(Loading || IsLoading)" *@
-@* 					Class="mr-4"> *@
-@* 					@SubmitText *@
-@* 				</LoadingButton> *@
-@* 			} *@
-@* *@
-@* 			@if (ShowReset) *@
-@* 			{ *@
-@* 				<MudButton *@
-@* 					Color="Color.Secondary" *@
-@* 					Variant="Variant.Outlined" *@
-@* 					ButtonType="ButtonType.Reset" *@
-@* 					OnClick="@OnReset" *@
-@* 					Class="mr-3"> *@
-@* 					@ResetText *@
-@* 				</MudButton> *@
-@* 			} *@
-@* 			@MoreActions *@
-@* 		</CardActions> *@
-@* 	</Card> *@
-@* </EditForm> *@
+﻿@namespace Sienar.Ui
+@typeparam TFormModel
+@inherits BaseForm<TFormModel>
+
+<EditForm
+	Model="Model"
+	OnValidSubmit="@HandleSubmit"
+	FormName="@FormName">
+	<DataAnnotationsValidator/>
+
+	<Card>
+		<CardHeader
+			Color="Color"
+			TitleTag="@TitleTag"
+			Icon="Icon">
+			<Title>@Title</Title>
+		</CardHeader>
+
+		@if (Information is not null)
+		{
+			<CardContent>@Information</CardContent>
+		}
+
+		<CardContent>@Fields</CardContent>
+
+		<CardActions>
+			@if (!HideSubmit)
+			{
+				<Button
+					Color="Color"
+					Loading="(Loading || IsLoading)">
+					@SubmitText
+				</Button>
+			}
+
+			@if (ShowReset)
+			{
+				<Button
+					Color="Color.Secondary"
+					@onclick="@OnReset"
+					type="reset"
+					Outlined>
+					@ResetText
+				</Button>
+			}
+			@MoreActions
+		</CardActions>
+	</Card>
+</EditForm>
