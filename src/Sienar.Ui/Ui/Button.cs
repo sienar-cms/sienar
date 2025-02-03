@@ -83,15 +83,14 @@ public class Button : SienarComponentBase
 	/// <inheritdoc />
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
-		MapClasses();
-
 		builder.OpenElement(0, _tag);
 		builder.AddMultipleAttributes(1, Attributes);
-		builder.AddContent(2, ChildContent);
+		builder.AddAttribute(2, "class", CreateCssClasses());
+		builder.AddContent(3, ChildContent);
 		builder.CloseElement();
 	}
 
-	private void MapClasses()
+	private string CreateCssClasses()
 	{
 		var classes = $"button is-{Color.GetHtmlValue()} {Size.GetHtmlValue()}";
 
@@ -103,6 +102,6 @@ public class Button : SienarComponentBase
 		if (Outlined) classes += " is-outlined";
 		if (Loading) classes += " is-loading";
 
-		AddCssClass(classes);
+		return MergeCssClasses(classes);
 	}
 }
