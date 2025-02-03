@@ -63,11 +63,10 @@ public class Icon : SienarComponentBase
 	/// <inheritdoc />
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
-		MapClasses();
-
 		builder.OpenElement(0, "span");
 		builder.AddMultipleAttributes(1, Attributes);
-		builder.AddContent(2, BuildIcon);
+		builder.AddAttribute(2, "class", CreateCssClasses());
+		builder.AddContent(3, BuildIcon);
 		builder.CloseElement();
 	}
 
@@ -81,9 +80,9 @@ public class Icon : SienarComponentBase
 		builder.CloseElement();
 	}
 
-	private void MapClasses()
+	private string CreateCssClasses()
 	{
 		var classes = $"icon {Size.GetHtmlValue()} has-text-{Color.GetHtmlValue()}";
-		AddCssClass(classes);
+		return MergeCssClasses(classes);
 	}
 }
