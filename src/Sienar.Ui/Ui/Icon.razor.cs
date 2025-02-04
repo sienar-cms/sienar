@@ -34,7 +34,7 @@ namespace Sienar.Ui;
 /// &lt;/span&gt;
 /// </code>
 /// </example>
-public class Icon : SienarComponentBase
+public partial class Icon
 {
 	/// <summary>
 	/// The icon style
@@ -60,29 +60,21 @@ public class Icon : SienarComponentBase
 	[Parameter]
 	public required string Name { get; set; }
 
-	/// <inheritdoc />
-	protected override void BuildRenderTree(RenderTreeBuilder builder)
-	{
-		builder.OpenElement(0, "span");
-		builder.AddMultipleAttributes(1, UserAttributes);
-		builder.AddAttribute(2, "class", CreateCssClasses());
-		builder.AddContent(3, BuildIcon);
-		builder.CloseElement();
-	}
-
-	private void BuildIcon(RenderTreeBuilder builder)
-	{
-		builder.OpenElement(0, "i");
-		builder.AddAttribute(
-			1,
-			"class",
-			$"fa-{IconStyle.GetHtmlValue()} fa-{Name}");
-		builder.CloseElement();
-	}
-
-	private string CreateCssClasses()
+	private string CreateWrapperCssClasses()
 	{
 		var classes = $"icon is-{Size.GetHtmlValue()} has-text-{Color.GetHtmlValue()}";
 		return MergeCssClasses(classes);
+	}
+
+	private string CreateIconCssClasses()
+	{
+		var sizeClass = Size switch
+		{
+			Size.Normal => " fa-lg",
+			Size.Medium => " fa-xl",
+			Size.Large => " fa-2xl",
+			_ => string.Empty
+		};
+		return $"fa-{IconStyle.GetHtmlValue()} fa-{Name}{sizeClass}";
 	}
 }
