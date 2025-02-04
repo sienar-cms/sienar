@@ -15,7 +15,7 @@ public static class ButtonDefaults
 	/// <summary>
 	/// The default button size
 	/// </summary>
-	public static Size Size { get; set; } = Size.Normal;
+	public static Size? Size { get; set; } = null;
 
 	/// <summary>
 	/// Whether buttons should be responsive by default

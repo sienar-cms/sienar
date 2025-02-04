@@ -22,7 +22,7 @@ public class Button : SienarComponentBase
 	/// The size of the button
 	/// </summary>
 	[Parameter]
-	public Size Size { get; set; } = ButtonDefaults.Size;
+	public Size? Size { get; set; } = ButtonDefaults.Size;
 
 	/// <summary>
 	/// Whether the button should be responsive
@@ -92,11 +92,12 @@ public class Button : SienarComponentBase
 
 	private string CreateCssClasses()
 	{
-		var classes = $"button is-{Color.GetHtmlValue()} is-{Size.GetHtmlValue()}";
+		var classes = $"button is-{Color.GetHtmlValue()}";
 
 		if (Light) classes += " is-light";
 		else if (Dark) classes += " is-dark";
 
+		if (Size.HasValue) classes += $" is-{Size.GetHtmlValue()}";
 		if (Responsive) classes += " is-responsive";
 		if (FullWidth) classes += " is-fullwidth";
 		if (Outlined) classes += " is-outlined";
