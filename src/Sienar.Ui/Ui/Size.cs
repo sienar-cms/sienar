@@ -10,24 +10,24 @@ public enum Size
 	/// <summary>
 	/// A component with a small size
 	/// </summary>
-	[HtmlValue("is-small")]
+	[HtmlValue("small")]
 	Small,
 
 	/// <summary>
 	/// A component with a normal size (default)
 	/// </summary>
-	[HtmlValue("is-normal")]
+	[HtmlValue("normal")]
 	Normal,
 
 	/// <summary>
 	/// A component with a medium size
 	/// </summary>
-	[HtmlValue("is-medium")]
+	[HtmlValue("medium")]
 	Medium,
 
 	/// <summary>
 	/// A component with a large size
 	/// </summary>
-	[HtmlValue("is-large")]
+	[HtmlValue("large")]
 	Large
 }

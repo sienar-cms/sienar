@@ -92,7 +92,7 @@ public class Button : SienarComponentBase
 
 	private string CreateCssClasses()
 	{
-		var classes = $"button is-{Color.GetHtmlValue()} {Size.GetHtmlValue()}";
+		var classes = $"button is-{Color.GetHtmlValue()} is-{Size.GetHtmlValue()}";
 
 		if (Light) classes += " is-light";
 		else if (Dark) classes += " is-dark";

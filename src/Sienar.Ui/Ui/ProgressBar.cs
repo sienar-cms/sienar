@@ -63,7 +63,7 @@ public class ProgressBar : SienarComponentBase
 
 	private string CreateCssClasses()
 	{
-		var classes = $"progress is-{Color.GetHtmlValue()} {Size.GetHtmlValue()}";
+		var classes = $"progress is-{Color.GetHtmlValue()} is-{Size.GetHtmlValue()}";
 		return MergeCssClasses(classes);
 	}
 }

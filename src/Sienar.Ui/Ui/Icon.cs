@@ -82,7 +82,7 @@ public class Icon : SienarComponentBase
 
 	private string CreateCssClasses()
 	{
-		var classes = $"icon {Size.GetHtmlValue()} has-text-{Color.GetHtmlValue()}";
+		var classes = $"icon is-{Size.GetHtmlValue()} has-text-{Color.GetHtmlValue()}";
 		return MergeCssClasses(classes);
 	}
 }
