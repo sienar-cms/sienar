@@ -47,7 +47,7 @@ public class ButtonGroup : SienarComponentBase
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
 		builder.OpenElement(0, Tag);
-		builder.AddMultipleAttributes(1, Attributes);
+		builder.AddMultipleAttributes(1, UserAttributes);
 		builder.AddAttribute(2, "class", CreateCssClasses());
 		builder.AddContent(3, ChildContent);
 		builder.CloseElement();

@@ -39,23 +39,23 @@ public class ProgressBar : SienarComponentBase
 	/// <inheritdoc />
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
-		Attributes ??= new Dictionary<string, object>();
+		UserAttributes ??= new Dictionary<string, object>();
 		var progress = 0;
 
 		if (Value.HasValue)
 		{
-			Attributes["value"] = Value.Value;
-			Attributes["max"] = Max;
+			UserAttributes["value"] = Value.Value;
+			UserAttributes["max"] = Max;
 			progress = (int)Math.Floor(Value.Value / Max * 100);
 		}
 		else
 		{
-			Attributes.Remove("value");
-			Attributes.Remove("max");
+			UserAttributes.Remove("value");
+			UserAttributes.Remove("max");
 		}
 
 		builder.OpenElement(0, "progress");
-		builder.AddMultipleAttributes(1, Attributes);
+		builder.AddMultipleAttributes(1, UserAttributes);
 		builder.AddAttribute(2, "class", CreateCssClasses());
 		builder.AddContent(3, $"{progress}%");
 		builder.CloseElement();

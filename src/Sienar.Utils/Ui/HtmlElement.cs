@@ -24,7 +24,7 @@ public class HtmlElement : SienarComponentBase
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
 		builder.OpenElement(0, Tag);
-		builder.AddMultipleAttributes(1, Attributes);
+		builder.AddMultipleAttributes(1, UserAttributes);
 		builder.AddContent(2, ChildContent);
 		builder.CloseElement();
 	}

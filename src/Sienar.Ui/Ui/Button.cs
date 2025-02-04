@@ -69,12 +69,12 @@ public class Button : SienarComponentBase
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
-		if (Attributes is null) return;
+		if (UserAttributes is null) return;
 
-		if (Attributes.ContainsKey("href"))
+		if (UserAttributes.ContainsKey("href"))
 		{
 			_tag = "a";
-		} else if (Attributes.ContainsKey("type"))
+		} else if (UserAttributes.ContainsKey("type"))
 		{
 			_tag = "input";
 		}
@@ -84,7 +84,7 @@ public class Button : SienarComponentBase
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
 		builder.OpenElement(0, _tag);
-		builder.AddMultipleAttributes(1, Attributes);
+		builder.AddMultipleAttributes(1, UserAttributes);
 		builder.AddAttribute(2, "class", CreateCssClasses());
 		builder.AddContent(3, ChildContent);
 		builder.CloseElement();

@@ -64,7 +64,7 @@ public class Icon : SienarComponentBase
 	protected override void BuildRenderTree(RenderTreeBuilder builder)
 	{
 		builder.OpenElement(0, "span");
-		builder.AddMultipleAttributes(1, Attributes);
+		builder.AddMultipleAttributes(1, UserAttributes);
 		builder.AddAttribute(2, "class", CreateCssClasses());
 		builder.AddContent(3, BuildIcon);
 		builder.CloseElement();
