@@ -1,0 +1,50 @@
+﻿@inherits SienarComponentBase
+
+<figure
+	@attributes="UserAttributes"
+	class="@CreateFigureCssClasses()">
+	<img
+		src="@Src"
+		alt="@Alt"
+		class="@CreateImageCssClasses()"/>
+</figure>
+
+@code {
+
+	/// <summary>
+	/// The image's <c>src</c> attribute 
+	/// </summary>
+	[Parameter]
+	public required string Src { get; set; }
+
+	/// <summary>
+	/// The image's <c>alt</c> attribute
+	/// </summary>
+	[Parameter]
+    public required string Alt { get; set; }
+
+	/// <summary>
+	/// The size of the image, in either pixels square or aspect ratio
+	/// </summary>
+	[Parameter]
+	public ImageSize? ImageSize { get; set; } = ImageDefaults.ImageSize;
+
+	/// <summary>
+	/// Whether the image should be rounded
+	/// </summary>
+	[Parameter]
+	public bool Rounded { get; set; } = ImageDefaults.Rounded;
+
+	private string CreateFigureCssClasses()
+	{
+		var classes = "image";
+		if (ImageSize.HasValue) classes += $" {ImageSize.GetHtmlValue()}";
+		return MergeCssClasses(classes);
+	}
+
+	private string? CreateImageCssClasses()
+	{
+		return Rounded ? "is-rounded" : null;
+	}
+
+}
