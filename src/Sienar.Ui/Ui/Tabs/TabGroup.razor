@@ -2,10 +2,35 @@
 @namespace Sienar.Ui
 @inherits SienarComponentBase
 
-<div
-	@attributes="UserAttributes"
-	class="@CreateCssClasses()">
-	<ul>
-		@ChildContent
-	</ul>
-</div>
+<CascadingValue Value="@this">
+	<HtmlElement
+		Tag="@Tag"
+		@attributes="UserAttributes"
+		class="@CreateCssClasses()">
+		<ul>
+			@for (var i = 0; i < Tabs.Count; i++)
+			{
+				var index = i;
+				var activeClass = i == Active ? "is-active" : null;
+				var tab = Tabs[i];
+				<li class="@activeClass">
+					<a @onclick="() => SetActive(index)">
+						@if (!string.IsNullOrEmpty(tab.Icon))
+						{
+							<Icon
+								Name="@tab.Icon"
+								Size="Size"/>
+						}
+						<span>@tab.Title</span>
+					</a>
+				</li>
+			}
+		</ul>
+
+		<HtmlElement
+			Tag="@ContentTag"
+			class="@($"px-{PaddingX} py-{PaddingY}")">
+			@ChildContent
+		</HtmlElement>
+	</HtmlElement>
+</CascadingValue>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Components;
 using Sienar.Configuration;
 using Sienar.Extensions;
 
@@ -7,6 +8,23 @@ namespace Sienar.Ui;
 
 public partial class TabGroup
 {
+	/// <summary>
+	/// The tabs registered with the tab group
+	/// </summary>
+	public List<Tab> Tabs { get; } = [];
+
+	/// <summary>
+	/// The HTML tag with which to render the tab group
+	/// </summary>
+	[Parameter]
+	public string Tag { get; set; } = TabGroupDefaults.Tag;
+
+	/// <summary>
+	/// The HTML tag with which to render the tab group content wrapper
+	/// </summary>
+	[Parameter]
+	public string ContentTag { get; set; } = TabGroupDefaults.ContentTag;
+
 	/// <summary>
 	/// The alignment of the tabs
 	/// </summary>
@@ -26,10 +44,34 @@ public partial class TabGroup
 	public TabStyle TabStyle { get; set; } = TabGroupDefaults.TabStyle;
 
 	/// <summary>
+	/// The X-axis padding for the tab body container
+	/// </summary>
+	[Parameter]
+	public byte PaddingX { get; set; } = TabGroupDefaults.PaddingX;
+
+	/// <summary>
+	/// The Y-axis padding for the tab body container
+	/// </summary>
+	[Parameter]
+	public byte PaddingY { get; set; } = TabGroupDefaults.PaddingY;
+
+	/// <summary>
 	/// Whether the tabs should be full width
 	/// </summary>
 	[Parameter]
 	public bool FullWidth { get; set; } = TabGroupDefaults.FullWidth;
+
+	/// <summary>
+	/// The currently active tab
+	/// </summary>
+	[Parameter]
+	public int Active { get; set; }
+
+	/// <summary>
+	/// A callback that is executed when the active tab changes
+	/// </summary>
+	[Parameter]
+	public EventCallback<int> ActiveChanged { get; set; }
 
 	/// <summary>
 	/// The child content to render
@@ -37,9 +79,46 @@ public partial class TabGroup
 	[Parameter]
 	public required RenderFragment ChildContent { get; set; }
 
+	/// <inheritdoc />
+	protected override void OnAfterRender(bool first)
+	{
+		if (first && Tabs.Count > Active)
+		{
+			Tabs[Active].SetActive();
+		} 
+	}
+
+	/// <summary>
+	/// Registers a tab with a tab group
+	/// </summary>
+	/// <param name="tab">The tab to register</param>
+	public void AddTab(Tab tab)
+	{
+		Tabs.Add(tab);
+		StateHasChanged();
+	}
+
+	/// <summary>
+	/// De-registers a tab with a tab group
+	/// </summary>
+	/// <param name="tab">The tab to de-register</param>
+	public void RemoveTab(Tab tab)
+	{
+		if (Tabs.Remove(tab)) StateHasChanged();
+	}
+
+	private void SetActive(int a)
+	{
+		Tabs[Active].SetInactive();
+		Active = a;
+		Tabs[Active].SetActive();
+
+		ActiveChanged.InvokeAsync(a);
+	}
+
 	private string CreateCssClasses()
 	{
-		var classes = $"tabs is-{Size.GetHtmlValue()}";
+		var classes = $"tabs is-flex-direction-column is-{Size.GetHtmlValue()}";
 
 		if (Alignment > Alignment.Left) classes += $" is-{Alignment.GetHtmlValue()}";
 		if (TabStyle > TabStyle.Default) classes += $" {TabStyle.GetHtmlValue()}";
