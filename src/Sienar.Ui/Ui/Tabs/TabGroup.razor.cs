@@ -6,12 +6,10 @@ using Sienar.Extensions;
 // ReSharper disable once CheckNamespace
 namespace Sienar.Ui;
 
-public partial class TabGroup
+public partial class TabGroup : ITabGroup
 {
-	/// <summary>
-	/// The tabs registered with the tab group
-	/// </summary>
-	public List<Tab> Tabs { get; } = [];
+	/// <inheritdoc />
+	public List<ITab> Tabs { get; } = [];
 
 	/// <summary>
 	/// The HTML tag with which to render the tab group
@@ -88,21 +86,15 @@ public partial class TabGroup
 		} 
 	}
 
-	/// <summary>
-	/// Registers a tab with a tab group
-	/// </summary>
-	/// <param name="tab">The tab to register</param>
-	public void AddTab(Tab tab)
+	/// <inheritdoc />
+	public void AddTab(ITab tab)
 	{
 		Tabs.Add(tab);
 		StateHasChanged();
 	}
 
-	/// <summary>
-	/// De-registers a tab with a tab group
-	/// </summary>
-	/// <param name="tab">The tab to de-register</param>
-	public void RemoveTab(Tab tab)
+	/// <inheritdoc />
+	public void RemoveTab(ITab tab)
 	{
 		if (Tabs.Remove(tab)) StateHasChanged();
 	}

@@ -5,7 +5,7 @@ using Sienar.Configuration;
 // ReSharper disable once CheckNamespace
 namespace Sienar.Ui;
 
-public sealed partial class Tab : IDisposable
+public sealed partial class Tab : ITab, IDisposable
 {
 	private bool _lastActive;
 	private bool _active;
@@ -16,15 +16,11 @@ public sealed partial class Tab : IDisposable
 	[Parameter]
 	public string Tag { get; set; } = TabDefaults.Tag;
 
-	/// <summary>
-	/// The tab title to display
-	/// </summary>
+	/// <inheritdoc />
 	[Parameter]
 	public string? Title { get; set; }
 
-	/// <summary>
-	/// The tab icon to display
-	/// </summary>
+	/// <inheritdoc />
 	[Parameter]
 	public string? Icon { get; set; }
 
@@ -35,7 +31,7 @@ public sealed partial class Tab : IDisposable
 	public required RenderFragment ChildContent { get; set; }
 
 	[CascadingParameter]
-	private TabGroup? TabGroup { get; set; }
+	private ITabGroup? TabGroup { get; set; }
 
 	/// <inheritdoc />
 	protected override void OnInitialized()
@@ -43,9 +39,7 @@ public sealed partial class Tab : IDisposable
 		TabGroup?.AddTab(this);
 	}
 
-	/// <summary>
-	/// Informs a tab that it is currently active and should render itself
-	/// </summary>
+	/// <inheritdoc />
 	public void SetActive()
 	{
 		_active = true;
@@ -56,9 +50,7 @@ public sealed partial class Tab : IDisposable
 		}
 	}
 
-	/// <summary>
-	/// Informs a tab that it is currently inactive and should not render itself
-	/// </summary>
+	/// <inheritdoc />
 	public void SetInactive()
 	{
 		_active = false;

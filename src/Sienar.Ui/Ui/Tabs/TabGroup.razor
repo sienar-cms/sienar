@@ -2,7 +2,7 @@
 @namespace Sienar.Ui
 @inherits SienarComponentBase
 
-<CascadingValue Value="@this">
+<CascadingValue Value="@(this as ITabGroup)">
 	<HtmlElement
 		Tag="@Tag"
 		@attributes="UserAttributes"
