@@ -1,22 +1,3 @@
 ﻿@page "/"
-@inject ILogger<Index> Logger
 
-<Dropdown
-	Title="Just a menu"
-	Icon="gear">
-	<Button @onclick="@(() => Logger.LogInformation("clicked"))">Click me!</Button>
-	<Button href="/dashboard/account/login">
-		Log in
-	</Button>
-</Dropdown>
-
-<Dropdown
-	Title="Just a hoverable menu"
-	Hoverable
-	Right
-	Color="Color.Primary">
-	<Button @onclick="@(() => Logger.LogInformation("clicked again"))">Click me too!</Button>
-	<Button href="/dashboard/account/login">
-		Log in elsewhere
-	</Button>
-</Dropdown>
+<h1 class="title">Playground</h1>
