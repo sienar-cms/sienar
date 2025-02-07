@@ -1,0 +1,33 @@
+﻿@inherits SienarComponentBase
+
+<div class="@CreateCssClasses()">
+	<div class="dropdown-trigger">
+		<Button
+			@onclick="@ToggleMenu"
+			Color="@Color">
+			@if (!string.IsNullOrEmpty(Icon))
+			{
+				<Icon Name="@Icon"/>
+			}
+			@if (!string.IsNullOrEmpty(Title))
+			{
+				<span>@Title</span>
+			}
+		</Button>
+	</div>
+
+	@if (_open)
+	{
+		<div
+			class="is-fullscreen-backdrop"
+			@onclick="@CloseMenu"></div>
+	}
+
+	<div class="dropdown-menu">
+		<div class="dropdown-content">
+			<CascadingValue Value="@this">
+				@ChildContent
+			</CascadingValue>
+		</div>
+	</div>
+</div>

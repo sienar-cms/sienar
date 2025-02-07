@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using Sienar.Configuration;
 using Sienar.Extensions;
 
@@ -9,7 +9,7 @@ namespace Sienar.Ui;
 /// <summary>
 /// A Bulma-styled HTML <c>&lt;button&gt;</c> element
 /// </summary>
-public class Button : SienarComponentBase
+public partial class Button
 {
 	private string _tag = "button";
 
@@ -17,7 +17,7 @@ public class Button : SienarComponentBase
 	/// The theme color of the button
 	/// </summary>
 	[Parameter]
-	public Color Color { get; set; } = ButtonDefaults.Color;
+	public Color? Color { get; set; } = ButtonDefaults.Color;
 
 	/// <summary>
 	/// The size of the button
@@ -67,6 +67,9 @@ public class Button : SienarComponentBase
 	[Parameter]
 	public required RenderFragment? ChildContent { get; set; }
 
+	[CascadingParameter]
+	private Dropdown? Dropdown { get; set; }
+
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
@@ -81,14 +84,17 @@ public class Button : SienarComponentBase
 		}
 	}
 
-	/// <inheritdoc />
-	protected override void BuildRenderTree(RenderTreeBuilder builder)
+	private void HandleClicked(MouseEventArgs e)
 	{
-		builder.OpenElement(0, _tag);
-		builder.AddMultipleAttributes(1, UserAttributes);
-		builder.AddAttribute(2, "class", CreateCssClasses());
-		builder.AddContent(3, ChildContent);
-		builder.CloseElement();
+		if (UserAttributes is not null)
+		{
+			if (UserAttributes.TryGetValue("onclick", out var onclick))
+			{
+				((EventCallback<MouseEventArgs>)onclick).InvokeAsync(e);
+			}
+		}
+
+		Dropdown?.CloseMenu();
 	}
 
 	private string CreateCssClasses()
@@ -103,6 +109,8 @@ public class Button : SienarComponentBase
 		if (FullWidth) classes += " is-fullwidth";
 		if (Outlined) classes += " is-outlined";
 		if (Loading) classes += " is-loading";
+
+		if (Dropdown is not null) classes += " dropdown-item";
 
 		return MergeCssClasses(classes);
 	}

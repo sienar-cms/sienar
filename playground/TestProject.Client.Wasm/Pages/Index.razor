@@ -1,27 +1,23 @@
 ﻿@page "/"
+@using Microsoft.Extensions.Logging
+@inject ILogger<Index> Logger
 
-<TabGroup
-	Alignment="Alignment.Centered"
-	Size="Size.Medium"
-	TabStyle="TabStyle.Boxed">
-	<Tab
-		Title="Pictures"
-		Icon="image">
-		<p>Sorry, there are no pictures to display.</p>
-	</Tab>
-	<Tab
-		Title="Music"
-		Icon="music">
-		<p>Sorry, there is no music to play.</p>
-	</Tab>
-	<Tab
-		Title="Videos"
-		icon="film">
-		<p>Sorry, there are no videos to play.</p>
-	</Tab>
-	<Tab
-		Title="Documents"
-		Icon="file-alt">
-		<p>Sorry, there are no documents to display.</p>
-	</Tab>
-</TabGroup>
+<Dropdown
+	Title="Just a menu"
+	Icon="gear">
+	<Button @onclick="@(() => Logger.LogInformation("clicked"))">Click me!</Button>
+	<Button href="/dashboard/account/login">
+		Log in
+	</Button>
+</Dropdown>
+
+<Dropdown
+	Title="Just a hoverable menu"
+	Hoverable
+	Right
+	Color="Color.Primary">
+	<Button @onclick="@(() => Logger.LogInformation("clicked again"))">Click me too!</Button>
+	<Button href="/dashboard/account/login">
+		Log in elsewhere
+	</Button>
+</Dropdown>

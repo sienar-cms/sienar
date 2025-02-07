@@ -10,7 +10,7 @@ public static class ButtonDefaults
 	/// <summary>
 	/// The default button color
 	/// </summary>
-	public static Color Color { get; set; } = Color.Primary;
+	public static Color? Color { get; set; } = Sienar.Ui.Color.Primary;
 
 	/// <summary>
 	/// The default button size
