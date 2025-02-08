@@ -1,0 +1,25 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<li @attributes="UserAttributes">
+	<a
+		class="is-flex is-align-items-center"
+		@onclick="@Toggle">
+		@if (!string.IsNullOrEmpty(Icon))
+		{
+			<Icon
+				Name="@Icon"
+				class="mr-2"/>
+		}
+
+		<span class="is-flex-grow-1">@Title</span>
+
+		<Icon
+			Name="@(_open ? "chevron-up" : "chevron-down")"
+			class="ml-2"/>
+	</a>
+	<ul class="@CreateListCssClasses()">
+		@ChildContent
+	</ul>
+</li>

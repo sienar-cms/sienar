@@ -27,3 +27,12 @@
 	left: 0;
 	right: 0;
 }
+
+/*********************
+ ** Bulma overrides **
+ ********************/
+
+/* Remove right-margin from nested .menu-list */
+.menu-list li ul {
+	margin: var(--bulma-menu-nested-list-margin) 0 var(--bulma-menu-nested-list-margin) var(--bulma-menu-nested-list-margin);
+}

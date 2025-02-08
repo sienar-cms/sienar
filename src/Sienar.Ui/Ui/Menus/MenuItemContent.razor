@@ -1,0 +1,12 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+@if (!string.IsNullOrEmpty(Icon))
+{
+	<Icon
+		Name="@Icon"
+		class="mr-2"/>
+}
+
+<span>@Text</span>

@@ -1,0 +1,28 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<li>
+	@if (_isLink)
+	{
+		<NavLink
+			ActiveClass="is-active"
+			Match="NavLinkMatch.All"
+			href="@Href"
+			class="@_classes">
+			<MenuItemContent
+				Text="@Text"
+				Icon="@Icon"/>
+		</NavLink>
+	}
+	else
+	{
+		<button
+			@attributes="UserAttributes"
+			class="@_classes">
+			<MenuItemContent
+				Text="@Text"
+				Icon="@Icon"/>
+		</button>
+	}
+</li>

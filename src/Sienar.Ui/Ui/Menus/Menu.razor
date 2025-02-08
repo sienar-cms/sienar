@@ -1,0 +1,12 @@
+﻿@* ReSharper disable once CheckNamespace *@
+@namespace Sienar.Ui
+@inherits SienarComponentBase
+
+<HtmlElement
+	Tag="@Tag"
+	@attributes="UserAttributes"
+	class="@MergeCssClasses("menu")">
+	<ul class="menu-list">
+		@ChildContent
+	</ul>
+</HtmlElement>
