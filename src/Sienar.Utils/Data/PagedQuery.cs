@@ -14,7 +14,7 @@ public class PagedQuery<TModel>
 	/// <summary>
 	/// Represents the items in the current page of results
 	/// </summary>
-	public IEnumerable<TModel> Items { get; set; } = Array.Empty<TModel>();
+	public ICollection<TModel> Items { get; set; } = Array.Empty<TModel>();
 
 	/// <summary>
 	/// Represents the total number of items across all pages of results
@@ -31,7 +31,7 @@ public class PagedQuery<TModel>
 	/// </summary>
 	/// <param name="items">the results on the current page</param>
 	/// <param name="totalCount">the total number of items in the database that match the query</param>
-	public PagedQuery(IEnumerable<TModel> items, int totalCount)
+	public PagedQuery(ICollection<TModel> items, int totalCount)
 	{
 		Items = items;
 		TotalCount = totalCount;
