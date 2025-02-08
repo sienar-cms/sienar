@@ -62,10 +62,22 @@ public partial class Button
 	public bool Loading { get; set; }
 
 	/// <summary>
+	/// The icon to render with the button
+	/// </summary>
+	[Parameter]
+	public string? Icon { get; set; }
+
+	/// <summary>
+	/// The display text to render with the button
+	/// </summary>
+	[Parameter]
+	public string? Text { get; set; }
+
+	/// <summary>
 	/// The child content
 	/// </summary>
 	[Parameter]
-	public required RenderFragment? ChildContent { get; set; }
+	public RenderFragment? ChildContent { get; set; }
 
 	[CascadingParameter]
 	private Dropdown? Dropdown { get; set; }
