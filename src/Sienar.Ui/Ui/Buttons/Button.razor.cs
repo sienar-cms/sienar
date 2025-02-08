@@ -70,6 +70,9 @@ public partial class Button
 	[CascadingParameter]
 	private Dropdown? Dropdown { get; set; }
 
+	[CascadingParameter]
+	private CardHeader? CardHeader { get; set; }
+
 	/// <inheritdoc />
 	protected override void OnInitialized()
 	{
@@ -99,6 +102,12 @@ public partial class Button
 
 	private string CreateCssClasses()
 	{
+		// If the button is in a <CardHeader>, it should just be a card icon button
+		if (CardHeader is not null)
+		{
+			return MergeCssClasses("card-header-icon");
+		}
+
 		var classes = $"button is-{Color.GetHtmlValue()}";
 
 		if (Light) classes += " is-light";
