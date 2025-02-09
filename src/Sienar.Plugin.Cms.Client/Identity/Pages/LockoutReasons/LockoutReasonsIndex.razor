@@ -14,24 +14,25 @@
 </MudText>
 
 <Table
+	TItem="LockoutReason"
 	@* @ref="Table" *@
-	TableTitle="Lockout reasons"
-	LoadData="Reader.Read">
-	<ToolBarContent>
-		<MudIconButton
-			Color="Color.Primary"
-			Href="@DashboardUrls.LockoutReasons.Add"
-			Icon="Icons.Material.Filled.Add"/>
-	</ToolBarContent>
-
-	<HeaderContent>
-		<SortLabel For="(LockoutReason r) => r.Reason">Reason</SortLabel>
-		<MudTh>
-			<div class="d-flex justify-center">
-				Actions
-			</div>
-		</MudTh>
-	</HeaderContent>
+	TableTitle="Lockout reasons">
+	@* LoadData="Reader.Read"> *@
+	@* <ToolBarContent> *@
+	@* 	<MudIconButton *@
+	@* 		Color="Color.Primary" *@
+	@* 		Href="@DashboardUrls.LockoutReasons.Add" *@
+	@* 		Icon="Icons.Material.Filled.Add"/> *@
+	@* </ToolBarContent> *@
+	@* *@
+	@* <HeaderContent> *@
+	@* 	<SortLabel For="(LockoutReason r) => r.Reason">Reason</SortLabel> *@
+	@* 	<MudTh> *@
+	@* 		<div class="d-flex justify-center"> *@
+	@* 			Actions *@
+	@* 		</div> *@
+	@* 	</MudTh> *@
+	@* </HeaderContent> *@
 
 	<RowTemplate>
 		<MudTd DataLabel="Reason">@@context.Reason</MudTd>

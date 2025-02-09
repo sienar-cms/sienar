@@ -16,7 +16,7 @@
 						<div class="field has-addons">
 							<div class="control has-icons-left">
 								<input
-									@bind="@_searchTerm"
+									@bind="@SearchTerm"
 									@bind:event="oninput"
 									@bind:after="@RefreshTable"
 									class="input"/>
@@ -27,7 +27,7 @@
 									Color="@null"
 									Icon="times"
 									@onclick="@ResetSearch"
-									disabled="@(string.IsNullOrEmpty(_searchTerm))"/>
+									disabled="@(string.IsNullOrEmpty(SearchTerm))"/>
 							</div>
 						</div>
 					</div>
@@ -37,45 +37,47 @@
 	</CardHeader>
 
 	<CardContent>
-		<table
-			@attributes="UserAttributes"
-			class="@CreateCssClasses()">
-			<thead>
-			@HeaderContent
-			</thead>
+		<CascadingValue Value="@this">
+			<table
+				@attributes="UserAttributes"
+				class="@CreateCssClasses()">
+				<thead>
+				@HeaderContent
+				</thead>
 
-			<tbody>
-			@if (_loading)
-			{
-				<tr>
-					<td class="p-6" colspan="9999">
-						<ProgressBar/>
-					</td>
-				</tr>
-			}
-			else if (!_items.Any())
-			{
-				<tr>
-					<td class="p-6" colspan="9999">
-						@if (NoRecordsContent is not null)
-						{
-							@NoRecordsContent
-						}
-						else
-						{
-							<p class="has-text-centered">There is no data to display</p>
-						}
-					</td>
-				</tr>
-			}
-			else
-			{
-				@foreach (var item in _items)
+				<tbody>
+				@if (_loading)
 				{
-					@RowTemplate(item)
+					<tr>
+						<td class="p-6" colspan="9999">
+							<ProgressBar/>
+						</td>
+					</tr>
 				}
-			}
-			</tbody>
-		</table>
+				else if (!_items.Any())
+				{
+					<tr>
+						<td class="p-6" colspan="9999">
+							@if (NoRecordsContent is not null)
+							{
+								@NoRecordsContent
+							}
+							else
+							{
+								<p class="has-text-centered">There is no data to display</p>
+							}
+						</td>
+					</tr>
+				}
+				else
+				{
+					@foreach (var item in _items)
+					{
+						@RowTemplate(item)
+					}
+				}
+				</tbody>
+			</table>
+		</CascadingValue>
 	</CardContent>
 </Card>

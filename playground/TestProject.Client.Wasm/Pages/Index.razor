@@ -1,3 +1,57 @@
 ﻿@page "/"
+@inject ILogger<Index> Logger
 
-<h1 class="title">Playground</h1>
+<div class="p-6">
+	<h1 class="title">Playground</h1>
+
+	<Table
+		Bordered
+		Striped
+		Narrow
+		Hoverable
+		FullWidth
+		LoadData="@_reader.Read">
+		<TitleContent>
+			<h1>British football BS</h1>
+		</TitleContent>
+		<IconContent>
+			<Button
+				Icon="plus"
+				@onclick="@(() => Logger.LogInformation("I was clicked!"))"/>
+		</IconContent>
+		<HeaderContent>
+			<tr>
+				<SortLabel For="c => c.Name"/>
+				<SortLabel For="c => c.TotalGames"/>
+				<SortLabel For="c => c.Wins"/>
+				<SortLabel For="c => c.Draws"/>
+				<SortLabel For="c => c.Losses"/>
+				<SortLabel For="c => c.GoalsFor"/>
+				<SortLabel For="c => c.GoalsAgainst"/>
+				<th>Goal difference</th>
+				<SortLabel For="c => c.Points"/>
+				<th>Qualification or relegation</th>
+			</tr>
+		</HeaderContent>
+		<RowTemplate>
+			<tr>
+				<td>@context.Name</td>
+				<td>@context.TotalGames</td>
+				<td>@context.Wins</td>
+				<td>@context.Draws</td>
+				<td>@context.Losses</td>
+				<td>@context.GoalsFor</td>
+				<td>@context.GoalsAgainst</td>
+				<td>@($"{context.GoalsFor - context.GoalsAgainst:+#;-#;0}")</td>
+				<td>@context.Points</td>
+				<td>@context.Qualification</td>
+			</tr>
+		</RowTemplate>
+	</Table>
+</div>
+
+@code {
+
+	private readonly IEntityReader<FootballClub> _reader = new FootballClubRepo();
+	
+}

@@ -1,31 +1,47 @@
+@using System.ComponentModel
 @using System.Linq.Expressions
+@using System.Reflection
 @namespace Sienar.Ui
 @typeparam TItem
 
-<MudTh>
-	<MudTableSortLabel
-		SortBy="@For.Compile()"
-		SortLabel="@_sortLabel">
-		@if (ChildContent is not null)
-		{
-			@ChildContent
-		}
-		else
-		{
-			@_sortLabel
-		}
-	</MudTableSortLabel>
-</MudTh>
+<th @onclick="@HandleSort">
+	@if (ChildContent is not null)
+	{
+		@ChildContent
+	}
+	else
+	{
+		@_displayName
+	}
+
+	<Icon Name="@GetIconName()"/>
+</th>
 
 @code {
 
+	private string _sortLabel = string.Empty;
+	private string _displayName = string.Empty;
+
+	/// <summary>
+	/// The default sort direction
+	/// </summary>
+	[Parameter]
+	public SortDirection SortDirection { get; set; } = SortDirection.None;
+
+	/// <summary>
+	/// The child content to render
+	/// </summary>
 	[Parameter]
 	public RenderFragment? ChildContent { get; set; }
 
+	/// <summary>
+	/// The property for which this label should sort
+	/// </summary>
 	[Parameter]
 	public required Expression<Func<TItem, object>> For { get; set; }
 
-	private string _sortLabel = string.Empty;
+	[CascadingParameter]
+	private Table<TItem> Table { get; set; } = null!;
 
 	/// <inheritdoc />
 	protected override void OnInitialized()
@@ -38,12 +54,37 @@
 			UnaryExpression unary => (unary.Operand as MemberExpression)?.Member,
 			_ => throw exception
 		};
+
 		if (m is null)
 		{
 			throw exception;
 		}
 
 		_sortLabel = m.Name;
+		_displayName = m
+			.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? _sortLabel;
+	}
+
+	private async Task HandleSort()
+	{
+		SortDirection = SortDirection is SortDirection.Descending
+			? SortDirection.None
+			: SortDirection++;
+		Table.SortDirection = SortDirection;
+		Table.SortColumn = SortDirection is SortDirection.None
+			? null
+			: _sortLabel;
+		await Table.RefreshTable();
+	}
+
+	private string GetIconName()
+	{
+		return SortDirection switch
+		{
+			SortDirection.Ascending => "chevron-up",
+			SortDirection.Descending => "chevron-down",
+			_ => "chevron-right"
+		};
 	}
 
 }

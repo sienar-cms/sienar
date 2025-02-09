@@ -2,21 +2,35 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Sienar.Configuration;
 using Sienar.Data;
 
 // ReSharper disable once CheckNamespace
 namespace Sienar.Ui;
 
+[CascadingTypeParameter(nameof(TItem))]
 public partial class Table<TItem>
 {
 	private bool _loading;
-	private SortDirection _sortDirection;
-	private string? _sortColumn;
-	private string? _searchTerm;
 	private int _page;
 	private int _pageSize;
 	private ICollection<TItem> _items = [];
+
+	/// <summary>
+	/// The current sort direction
+	/// </summary>
+	public SortDirection SortDirection { get; set; }
+
+	/// <summary>
+	/// The current search term
+	/// </summary>
+	public string? SearchTerm { get; set; }
+
+	/// <summary>
+	/// The current sort column
+	/// </summary>
+	public string? SortColumn { get; set; }
 
 	/// <summary>
 	/// The title of the table
@@ -126,6 +140,43 @@ public partial class Table<TItem>
 	[Parameter]
 	public RenderFragment? NoRecordsContent { get; set; }
 
+	[Inject]
+	private ILogger<Table<TItem>> Logger { get; set; } = null!;
+
+	/// <summary>
+	/// Reloads the table data
+	/// </summary>
+	public async Task RefreshTable()
+	{
+		_loading = true;
+		StateHasChanged();
+
+		var filter = new Filter
+		{
+			SortDescending = SortDirection == SortDirection.Descending,
+			Page = _page + 1, // MudBlazor is 0-indexed
+			PageSize = RowsPerPage = _pageSize
+		};
+
+		if (SortDirection != SortDirection.None &&
+			!string.IsNullOrWhiteSpace(SortColumn))
+		{
+			filter.SortName = SortColumn;
+		}
+
+		if (!string.IsNullOrWhiteSpace(SearchTerm))
+		{
+			filter.SearchTerm = SearchTerm;
+		}
+
+		var result = await LoadData(filter);
+		_loading = false;
+
+		_items = result.Result?.Items ?? [];
+
+		StateHasChanged();
+	}
+
 	/// <inheritdoc />
 	protected override async Task OnInitializedAsync()
 	{
@@ -145,40 +196,9 @@ public partial class Table<TItem>
 		return MergeCssClasses(classes);
 	}
 
-	private async Task RefreshTable()
-	{
-		_loading = true;
-		StateHasChanged();
-
-		var filter = new Filter
-		{
-			SortDescending = _sortDirection == SortDirection.Descending,
-			Page = _page + 1, // MudBlazor is 0-indexed
-			PageSize = RowsPerPage = _pageSize
-		};
-
-		if (_sortDirection != SortDirection.None &&
-			!string.IsNullOrWhiteSpace(_sortColumn))
-		{
-			filter.SortName = _sortColumn;
-		}
-
-		if (!string.IsNullOrWhiteSpace(_searchTerm))
-		{
-			filter.SearchTerm = _searchTerm;
-		}
-
-		var result = await LoadData(filter);
-		_loading = false;
-
-		_items = result.Result?.Items ?? [];
-
-		StateHasChanged();
-	}
-
 	private void ResetSearch()
 	{
-		_searchTerm = null;
+		SearchTerm = null;
 		_ = RefreshTable();
 	}
 }
