@@ -5,14 +5,17 @@ export default function Dashboard() {
 		<div>
 			<Button
 				href='/dashboard/account/login'
-				className='just-a-class'
-				color='primary'>
-				Click me!
+			>
+				Click me!!
 			</Button>
-			<Button className='just-another-class'>e
+			<Button
+				className='just-another-class'
+			>
 				Not me, you idiot, HIM!
 			</Button>
-			<Button to='/dashboard/account/login'>
+			<Button
+				to='/dashboard/account/login'
+			>
 				Login in with React Router
 			</Button>
 		</div>
