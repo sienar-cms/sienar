@@ -16,8 +16,8 @@ public class DefaultAuthenticationBuilderConfigurer
 			CookieAuthenticationDefaults.AuthenticationScheme,
 			o =>
 			{
-				o.LoginPath = DashboardUrls.Account.Login;
-				o.AccessDeniedPath = DashboardUrls.Account.Forbidden;
+				o.LoginPath = "/dashboard/account/login";
+				o.AccessDeniedPath = "/dashboard/account/forbidden";
 			});
 	}
 }

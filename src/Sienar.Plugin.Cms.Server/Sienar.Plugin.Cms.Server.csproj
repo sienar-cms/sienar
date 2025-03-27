@@ -31,18 +31,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="MimeMapping" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Web" Version="0.1.1"/>
-		<ProjectReference
-			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj" />
-		<PackageReference
-			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Cms.Core" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>
