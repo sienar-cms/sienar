@@ -10,7 +10,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Sienar.Plugin.Cms.Server\Sienar.Plugin.Cms.Server.csproj" />
 		<ProjectReference Include="..\..\src\Sienar.Plugin.MailKit\Sienar.Plugin.MailKit.csproj" />
-		<ProjectReference Include="..\TestProject.Client.Wasm\TestProject.Client.Wasm.csproj" />
 		<ProjectReference Include="..\TestProject.Data\TestProject.Data.csproj" />
 	</ItemGroup>
 
