@@ -24,7 +24,6 @@ public class TestProjectServerPlugin : IPlugin
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
 		builder
-			.AddPlugin<BlazorPlugin>()
 			.AddPlugin<CmsServerPlugin>()
 			.AddPlugin<SienarCmsEfRepositoriesPlugin<AppDbContext>>();
 	}

@@ -36,4 +36,12 @@
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Ui\OptionalComponent.razor" />
+	  <UpToDateCheckInput Remove="Ui\SienarHead.razor" />
+	  <UpToDateCheckInput Remove="Ui\SienarRoutes.razor" />
+	  <UpToDateCheckInput Remove="Ui\Username.razor" />
+	  <UpToDateCheckInput Remove="Ui\_Imports.razor" />
+	</ItemGroup>
+
 </Project>
