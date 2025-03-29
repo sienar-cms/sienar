@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Extensions;
 using Sienar.Plugins;
@@ -17,11 +19,6 @@ public sealed class SienarAppBuilder
 	private readonly List<Action<IServiceCollection>> _serviceRegistrars = [];
 
 	/// <summary>
-	/// The adapter that abstracts calls to the underlying, framework-specific application builder
-	/// </summary>
-	public IApplicationAdapter? Adapter = null;
-
-	/// <summary>
 	/// Services that are only used at application startup for configuration by Sienar
 	/// </summary>
 	public readonly IServiceCollection StartupServices;
@@ -32,6 +29,11 @@ public sealed class SienarAppBuilder
 	public readonly string[] StartupArgs;
 
 	/// <summary>
+	/// The underlying <see cref="WebApplicationBuilder"/>
+	/// </summary>
+	public readonly WebApplicationBuilder Builder;
+
+	/// <summary>
 	/// Creates a new <see cref="SienarAppBuilder"/> and registers core Sienar services on its startup service collection
 	/// </summary>
 	/// <param name="args">The runtime arguments supplied to <c>Program.Main()</c></param>
@@ -39,12 +41,19 @@ public sealed class SienarAppBuilder
 	{
 		StartupServices = new ServiceCollection();
 		StartupArgs = args ?? Environment.GetCommandLineArgs();
+		Builder = WebApplication.CreateBuilder(StartupArgs);
 
 		StartupServices
+			.AddSingleton(Builder)
+			.AddSingleton(Builder.Environment)
+			.AddSingleton<IConfiguration>(Builder.Configuration)
 			.AddSingleton<IMenuProvider, MenuProvider>()
 			.AddSingleton<IPluginDataProvider, PluginDataProvider>()
 			.AddSingleton<IScriptProvider, ScriptProvider>()
-			.AddSingleton<IStyleProvider, StyleProvider>();
+			.AddSingleton<IStyleProvider, StyleProvider>()
+			.AddSingleton<MiddlewareProvider>();
+
+		AddPlugin<WebArchitecturePlugin>();
 	}
 
 	/// <summary>
@@ -110,19 +119,13 @@ public sealed class SienarAppBuilder
 	/// Builds the final application and returns it
 	/// </summary>
 	/// <returns>The new application</returns>
-	public TApp Build<TApp>()
+	public WebApplication Build()
 	{
-		if (Adapter is null)
-		{
-			throw new InvalidOperationException($"You must register an {nameof(IApplicationAdapter)} before calling {nameof(Build)}.");
-		}
-
-		Adapter.Create(StartupArgs, StartupServices);
-		Adapter.AddServices(s => s.AddSienarCoreUtilities());
+		Builder.Services.AddSienarCoreUtilities();
 
 		foreach (var registrar in _serviceRegistrars)
 		{
-			Adapter.AddServices(registrar);
+			registrar(Builder.Services);
 		}
 
 		var container = StartupServices.BuildServiceProvider();
@@ -135,6 +138,25 @@ public sealed class SienarAppBuilder
 			plugin.Configure();
 		}
 
-		return (TApp)Adapter.Build(sp);
+		Builder.Services
+			.AddSingleton(
+				sp.GetRequiredService<IMenuProvider>())
+			.AddSingleton(
+				sp.GetRequiredService<IPluginDataProvider>())
+			.AddSingleton(
+				sp.GetRequiredService<IScriptProvider>())
+			.AddSingleton(
+				sp.GetRequiredService<IStyleProvider>());
+
+		var app = Builder.Build();
+
+		var middlewareProvider = sp.GetRequiredService<MiddlewareProvider>();
+
+		foreach (var middleware in middlewareProvider.AggregatePrioritized())
+		{
+			middleware(app);
+		}
+
+		return app;
 	}
 }

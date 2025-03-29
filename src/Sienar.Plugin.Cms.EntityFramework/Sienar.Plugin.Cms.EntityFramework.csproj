@@ -25,9 +25,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference
-			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Architecture.EntityFramework" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\Sienar.Plugin.Cms.Server\Sienar.Plugin.Cms.Server.csproj"/>

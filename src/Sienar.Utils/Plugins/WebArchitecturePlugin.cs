@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Sienar.Infrastructure;
 
 namespace Sienar.Plugins;
@@ -21,6 +24,8 @@ public class WebArchitecturePlugin : IPlugin
 	private readonly IConfigurer<AntiforgeryOptions>? _antiforgeryConfigurer;
 	private readonly IConfigurer<CorsOptions>? _corsConfigurer;
 	private readonly IConfigurer<CorsPolicyBuilder>? _corsPolicyBuilder;
+	private readonly IConfigurer<MvcOptions>? _mvcConfigurer;
+	private readonly IEnumerable<IConfigurer<IMvcBuilder>> _additionalMvcConfigurers;
 
 	/// <summary>
 	/// Creates a new instance of <c>WebArchitecturePlugin</c>
@@ -28,12 +33,14 @@ public class WebArchitecturePlugin : IPlugin
 	public WebArchitecturePlugin(
 		WebApplicationBuilder builder,
 		MiddlewareProvider middlewareProvider,
+		IEnumerable<IConfigurer<IMvcBuilder>> additionalMvcConfigurers,
 		IConfigurer<AuthorizationOptions>? authorizationConfigurer = null,
 		IConfigurer<AuthenticationOptions>? authenticationConfigurer = null,
 		IConfigurer<AuthenticationBuilder>? authenticationBuilderConfigurer = null,
 		IConfigurer<AntiforgeryOptions>? antiforgeryConfigurer = null,
 		IConfigurer<CorsOptions>? corsConfigurer = null,
-		IConfigurer<CorsPolicyBuilder>? corsPolicyBuilder = null)
+		IConfigurer<CorsPolicyBuilder>? corsPolicyBuilder = null,
+		IConfigurer<MvcOptions>? mvcConfigurer = null)
 	{
 		_builder = builder;
 		_middlewareProvider = middlewareProvider;
@@ -43,6 +50,8 @@ public class WebArchitecturePlugin : IPlugin
 		_antiforgeryConfigurer = antiforgeryConfigurer;
 		_corsConfigurer = corsConfigurer;
 		_corsPolicyBuilder = corsPolicyBuilder;
+		_mvcConfigurer = mvcConfigurer;
+		_additionalMvcConfigurers = additionalMvcConfigurers;
 	}
 
 	/// <inheritdoc />
@@ -50,6 +59,7 @@ public class WebArchitecturePlugin : IPlugin
 	{
 		ConfigureAuth();
 		ConfigureCors();
+		ConfigureMvc();
 
 		_middlewareProvider.AddWithPriority(
 			Priority.Highest,
@@ -116,5 +126,42 @@ public class WebArchitecturePlugin : IPlugin
 					}
 				});
 		}
+	}
+
+	private void ConfigureMvc()
+	{
+		_builder.Services
+			.AddEndpointsApiExplorer()
+			.AddSwaggerGen()
+			.AddScoped<ICsrfTokenRefresher, CsrfTokenRefresher>()
+			.AddScoped<IOperationResultMapper, OperationResultMapper>();
+
+		var mvcBuilder = _builder.Services.AddMvc(
+			o => _mvcConfigurer?.Configure(o));
+
+		foreach (var configurer in _additionalMvcConfigurers)
+		{
+			configurer.Configure(mvcBuilder);
+		}
+
+		_middlewareProvider.AddWithPriority(
+			Priority.High,
+			app =>
+			{
+				if (app.Environment.IsDevelopment())
+				{
+					app
+						.UseSwagger()
+						.UseSwaggerUI();
+				}
+			});
+
+		_middlewareProvider.AddWithPriority(
+			Priority.Lowest,
+			app =>
+			{
+				app.MapControllers();
+				app.MapRazorPages();
+			});
 	}
 }

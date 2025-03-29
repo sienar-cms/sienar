@@ -154,8 +154,6 @@ public class CmsServerPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<MvcPlugin>();
-
 		builder.StartupServices
 			.TryAddConfigurer<DefaultAuthorizationConfigurer>()
 			.TryAddConfigurer<DefaultAuthenticationConfigurer>()
