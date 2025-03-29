@@ -9,11 +9,11 @@ namespace Sienar.Infrastructure;
 /// <exclude />
 public class OperationResultMapper : IOperationResultMapper
 {
-	private readonly IReadableNotificationService _notifier;
+	private readonly INotificationService _notifier;
 	private readonly IHttpContextAccessor _contextAccessor;
 
 	public OperationResultMapper(
-		IReadableNotificationService notifier,
+		INotificationService notifier,
 		IHttpContextAccessor contextAccessor)
 	{
 		_notifier = notifier;
