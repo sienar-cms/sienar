@@ -7,8 +7,8 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugin.Cms.Server</PackageId>
-		<Title>Sienar.Plugin.Cms.Server.Core</Title>
+		<PackageId>Sienar.Plugin.Cms</PackageId>
+		<Title>Sienar.Plugin.Cms</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>

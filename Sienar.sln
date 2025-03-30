@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EDD39A85-CD11-4469-A8AB-0364DC3232D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms.Server", "src\Sienar.Plugin.Cms.Server\Sienar.Plugin.Cms.Server.csproj", "{BEDF8CB9-C278-4225-ADF3-36AE0C44F7D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.Cms", "src\Sienar.Plugin.Cms\Sienar.Plugin.Cms.csproj", "{BEDF8CB9-C278-4225-ADF3-36AE0C44F7D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugin.MailKit", "src\Sienar.Plugin.MailKit\Sienar.Plugin.MailKit.csproj", "{30C573D1-4A83-4255-9387-B3CF75CDBCA9}"
 EndProject
