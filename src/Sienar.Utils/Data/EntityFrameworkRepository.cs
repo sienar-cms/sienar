@@ -17,7 +17,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	where TEntity : EntityBase
 	where TContext : DbContext
 {
-	protected readonly IEntityFrameworkFilterProcessor<TEntity> FilterProcessor;
+	protected readonly IFilterProcessor<TEntity> FilterProcessor;
 
 	/// <summary>
 	/// The <see cref="DbContext"/> backing this repository
@@ -32,7 +32,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	/// <exclude />
 	public EntityFrameworkRepository(
 		TContext context,
-		IEntityFrameworkFilterProcessor<TEntity> filterProcessor)
+		IFilterProcessor<TEntity> filterProcessor)
 	{
 		Context = context;
 		FilterProcessor = filterProcessor;
@@ -107,7 +107,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 			.FirstOrDefaultAsync();
 
 	/// <summary>
-	/// Calls the appropriate methods of an <see cref="IEntityFrameworkFilterProcessor{TEntity}"/> against a <see cref="Filter"/>
+	/// Calls the appropriate methods of an <see cref="IFilterProcessor{TEntity}"/> against a <see cref="Filter"/>
 	/// </summary>
 	/// <param name="filter">the filter</param>
 	/// <param name="predicate">an optional additional search predicate</param>

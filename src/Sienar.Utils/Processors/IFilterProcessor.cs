@@ -10,7 +10,7 @@ namespace Sienar.Processors;
 /// A processor which converts a <see cref="Filter"/> into EF queries for the given <c>TEntity</c>
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public interface IEntityFrameworkFilterProcessor<TEntity>
+public interface IFilterProcessor<TEntity>
 {
 	/// <summary>
 	/// Applies included entities to the <see cref="IQueryable"/>

@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class SienarRoleFilterProcessor : IEntityFrameworkFilterProcessor<SienarRole>
+public class SienarRoleFilterProcessor : IFilterProcessor<SienarRole>
 {
 	public IQueryable<SienarRole> Search(IQueryable<SienarRole> dataset, Filter filter) => dataset;
 

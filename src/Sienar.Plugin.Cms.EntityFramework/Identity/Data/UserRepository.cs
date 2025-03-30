@@ -13,7 +13,7 @@ public class UserRepository<TContext>
 {
 	public UserRepository(
 		TContext context,
-		IEntityFrameworkFilterProcessor<SienarUser> filterProcessor)
+		IFilterProcessor<SienarUser> filterProcessor)
 		: base(context, filterProcessor) {}
 
 	/// <inheritdoc />

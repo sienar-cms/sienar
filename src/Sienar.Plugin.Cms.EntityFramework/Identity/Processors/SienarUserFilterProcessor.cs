@@ -11,7 +11,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class SienarUserFilterProcessor : IEntityFrameworkFilterProcessor<SienarUser>
+public class SienarUserFilterProcessor : IFilterProcessor<SienarUser>
 {
 	public IQueryable<SienarUser> Search(IQueryable<SienarUser> dataset, Filter filter)
 	{

@@ -465,7 +465,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddEntityFrameworkEntityWithDefaultRepository<TEntity, TFilterProcessor, TContext>(
 		this IServiceCollection self)
 		where TEntity : EntityBase
-		where TFilterProcessor : class, IEntityFrameworkFilterProcessor<TEntity>
+		where TFilterProcessor : class, IFilterProcessor<TEntity>
 		where TContext : DbContext
 		=> AddEntityFrameworkEntity<TEntity, TFilterProcessor, EntityFrameworkRepository<TEntity, TContext>>(self);
 
@@ -480,7 +480,7 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddEntityFrameworkEntity<TEntity, TFilterProcessor, TRepository>(
 		this IServiceCollection self)
 		where TEntity : EntityBase
-		where TFilterProcessor : class, IEntityFrameworkFilterProcessor<TEntity>
+		where TFilterProcessor : class, IFilterProcessor<TEntity>
 		where TRepository : class, IRepository<TEntity>
 		=> AddEntityFrameworkEntity<TEntity, TFilterProcessor, IRepository<TEntity>, TRepository>(self);
 
@@ -496,13 +496,13 @@ public static class SienarUtilsServiceCollectionExtensions
 	public static IServiceCollection AddEntityFrameworkEntity<TEntity, TFilterProcessor, TRepository, TRepositoryImplementation>(
 		this IServiceCollection self)
 		where TEntity : EntityBase
-		where TFilterProcessor : class, IEntityFrameworkFilterProcessor<TEntity>
+		where TFilterProcessor : class, IFilterProcessor<TEntity>
 		where TRepository : class, IRepository<TEntity>
 		where TRepositoryImplementation : class, TRepository
 	{
 		self.TryAddScoped<IBeforeAction<TEntity>, ConcurrencyStampUpdateHook<TEntity>>();
 		self.TryAddScoped<IStateValidator<TEntity>, ConcurrencyStampValidator<TEntity>>();
-		self.TryAddScoped<IEntityFrameworkFilterProcessor<TEntity>, TFilterProcessor>();
+		self.TryAddScoped<IFilterProcessor<TEntity>, TFilterProcessor>();
 		self.TryAddScoped<TRepository, TRepositoryImplementation>();
 
 		if (typeof(TRepository) != typeof(IRepository<TEntity>))

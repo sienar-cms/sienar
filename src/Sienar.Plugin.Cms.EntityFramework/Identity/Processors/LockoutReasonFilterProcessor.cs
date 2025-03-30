@@ -9,7 +9,7 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LockoutReasonFilterProcessor : IEntityFrameworkFilterProcessor<LockoutReason>
+public class LockoutReasonFilterProcessor : IFilterProcessor<LockoutReason>
 {
 	public IQueryable<LockoutReason> Search(IQueryable<LockoutReason> dataset, Filter filter)
 		=> string.IsNullOrEmpty(filter.SearchTerm)

@@ -15,7 +15,7 @@ public class LockoutReasonRepository<TContext> : EntityFrameworkRepository<Locko
 	/// <inheritdoc />
 	public LockoutReasonRepository(
 		TContext context,
-		IEntityFrameworkFilterProcessor<LockoutReason> filterProcessor)
+		IFilterProcessor<LockoutReason> filterProcessor)
 		: base(context, filterProcessor) {}
 
 	/// <inheritdoc />

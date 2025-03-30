@@ -6,7 +6,7 @@ using Sienar.Processors;
 
 namespace Sienar.Media.Processors;
 
-public class UploadFilterProcessor : IEntityFrameworkFilterProcessor<Upload>
+public class UploadFilterProcessor : IFilterProcessor<Upload>
 {
 	/// <inheritdoc />
 	public IQueryable<Upload> Search(IQueryable<Upload> dataset, Filter filter)
