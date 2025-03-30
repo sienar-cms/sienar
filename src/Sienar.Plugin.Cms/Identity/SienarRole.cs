@@ -10,7 +10,7 @@ public class SienarRole : EntityBase
 	/// <summary>
 	/// Represents the name of the role
 	/// </summary>
-	public required string Name { get; set; }
+	public string Name { get; set; } = string.Empty;
 
 	/// <summary>
 	/// Represents the normalized name of the role
