@@ -1,34 +1,35 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
-using Sienar.Identity.Data;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
+public class ResetPasswordProcessor<TContext> : IStatusProcessor<ResetPasswordRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IPasswordManager _passwordManager;
 	private readonly IVerificationCodeManager _vcManager;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly SienarOptions _options;
 
 	public ResetPasswordProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		IPasswordManager passwordManager,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
 		IOptions<SienarOptions> options)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_passwordManager = passwordManager;
 		_vcManager = vcManager;
 		_emailManager = emailManager;
@@ -37,7 +38,7 @@ public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
 
 	public async Task<OperationResult<bool>> Process(ResetPasswordRequest request)
 	{
-		var user = await _userRepository.Read(request.UserId);
+		var user = await _context.FindAsync<SienarUser>(request.UserId);
 		if (user == null)
 		{
 			return new(

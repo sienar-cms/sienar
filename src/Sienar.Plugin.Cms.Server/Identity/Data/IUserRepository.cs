@@ -8,7 +8,7 @@ namespace Sienar.Identity.Data;
 /// <summary>
 /// Adds additional methods for querying <see cref="SienarUser"/> database entries
 /// </summary>
-public interface IUserRepository : IRepository<SienarUser>
+public interface IUserRepositorya
 {
 	/// <summary>
 	/// Gets a user by either username or email address

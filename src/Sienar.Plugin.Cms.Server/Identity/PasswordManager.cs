@@ -1,22 +1,23 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Sienar.Identity.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sienar.Identity;
 
 /// <exclude />
-public class PasswordManager : IPasswordManager
+public class PasswordManager<TContext> : IPasswordManager
+	where TContext : DbContext
 {
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 
 	public PasswordManager(
 		IPasswordHasher<SienarUser> passwordHasher,
-		IUserRepository userRepository)
+		TContext context)
 	{
 		_passwordHasher = passwordHasher;
-		_userRepository = userRepository;
+		_context = context;
 	}
 
 	/// <inheritdoc />
@@ -25,7 +26,8 @@ public class PasswordManager : IPasswordManager
 		string newPassword)
 	{
 		user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
-		await _userRepository.Update(user);
+		_context.Update(user);
+		await _context.SaveChangesAsync();
 	}
 
 	/// <inheritdoc />
@@ -44,7 +46,8 @@ public class PasswordManager : IPasswordManager
 		if (verification == PasswordVerificationResult.SuccessRehashNeeded)
 		{
 			user.PasswordHash = _passwordHasher.HashPassword(user, password);
-			await _userRepository.Update(user);
+			_context.Update(user);
+			await _context.SaveChangesAsync();
 		}
 
 		return true;

@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -8,31 +9,35 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Data;
-using Sienar.Identity.Data;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ForgotPasswordProcessor : IStatusProcessor<ForgotPasswordRequest>
+public class ForgotPasswordProcessor<TContext> : IStatusProcessor<ForgotPasswordRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly SienarOptions _options;
 
 	public ForgotPasswordProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		IAccountEmailManager emailManager,
 		IOptions<SienarOptions> options)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_emailManager = emailManager;
 		_options = options.Value;
 	}
 
 	public async Task<OperationResult<bool>> Process(ForgotPasswordRequest request)
 	{
-		var user = await _userRepository.ReadUserByNameOrEmail(request.AccountName);
+		var normalizedAccountName = request.AccountName.ToUpperInvariant();
+		var user = await _context
+			.Set<SienarUser>()
+			.FirstOrDefaultAsync(u => u.NormalizedUsername == normalizedAccountName
+				|| u.NormalizedEmail == normalizedAccountName);
 
 		// If the user doesn't exist, they don't need to know
 		// Just return success

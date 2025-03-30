@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
@@ -11,21 +12,22 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
+public class DeleteAccountProcessor<TContext> : IStatusProcessor<DeleteAccountRequest>
+	where TContext : DbContext
 {
 	private readonly IUserAccessor _userAccessor;
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IPasswordManager _passwordManager;
 	private readonly ISignInManager _signInManager;
 
 	public DeleteAccountProcessor(
 		IUserAccessor userAccessor,
-		IUserRepository userRepository,
+		TContext context,
 		IPasswordManager passwordManager,
 		ISignInManager signInManager)
 	{
 		_userAccessor = userAccessor;
-		_userRepository = userRepository;
+		_context = context;
 		_passwordManager = passwordManager;
 		_signInManager = signInManager;
 	}
@@ -40,7 +42,7 @@ public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 				message: CmsErrors.Account.LoginRequired);
 		}
 
-		var user = await _userRepository.Read(userId.Value);
+		var user = await _context.FindAsync<SienarUser>(userId.Value);
 		if (user is null)
 		{
 			return new(
@@ -55,19 +57,12 @@ public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 				message: CmsErrors.Account.LoginFailedInvalid);
 		}
 
-		var deleted = await _userRepository.Delete(user.Id);
-		if (deleted)
-		{
-			await _signInManager.SignOut();
-			return new(
-				OperationStatus.Success,
-				true,
-				"Account deleted successfully");
-		}
-
+		_context.Remove(user.Id);
+		await _context.SaveChangesAsync();
+		await _signInManager.SignOut();
 		return new(
-			OperationStatus.Unknown,
-			false,
-			StatusMessages.Database.QueryFailed);
+			OperationStatus.Success,
+			true,
+			"Account deleted successfully");
 	}
 }

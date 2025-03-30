@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -13,20 +14,21 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
+public class ConfirmAccountProcessor<TContext> : IStatusProcessor<ConfirmAccountRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IVerificationCodeManager _vcManager;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly SienarOptions _options;
 
 	public ConfirmAccountProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		IVerificationCodeManager vcManager,
 		IAccountEmailManager emailManager,
 		IOptions<SienarOptions> options)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_vcManager = vcManager;
 		_emailManager = emailManager;
 		_options = options.Value;
@@ -34,7 +36,7 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 
 	public async Task<OperationResult<bool>> Process(ConfirmAccountRequest request)
 	{
-		var user = await _userRepository.Read(request.UserId);
+		var user = await _context.FindAsync<SienarUser>(request.UserId);
 		if (user is null)
 		{
 			return new(
@@ -75,14 +77,12 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 
 		// Code was valid
 		user.EmailConfirmed = true;
-		return await _userRepository.Update(user)
-			? new(
-				OperationStatus.Success,
-				true,
-				"Account confirmed successfully")
-			: new(
-				OperationStatus.Unknown,
-				false,
-				StatusMessages.Database.QueryFailed);
+		_context.Update(user);
+		await _context.SaveChangesAsync();
+
+		return new(
+			OperationStatus.Success,
+			true,
+			"Account confirmed successfully");
 	}
 }

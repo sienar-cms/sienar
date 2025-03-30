@@ -3,6 +3,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
@@ -17,11 +18,13 @@ using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Media;
 using Sienar.Media.Hooks;
+using Sienar.Media.Processors;
 
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class CmsServerPlugin : IPlugin
+public class CmsServerPlugin<TContext> : IPlugin
+	where TContext : DbContext
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly IPluginDataProvider _pluginDataProvider;
@@ -54,7 +57,7 @@ public class CmsServerPlugin : IPlugin
 		services.AddHttpContextAccessor();
 
 		services.TryAddScoped<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
-		services.TryAddScoped<IPasswordManager, PasswordManager>();
+		services.TryAddScoped<IPasswordManager, PasswordManager<TContext>>();
 		services.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 		services.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
 
@@ -67,51 +70,57 @@ public class CmsServerPlugin : IPlugin
 		services.TryAddScoped<IAccountEmailMessageFactory, AccountEmailMessageFactory>();
 		services.TryAddScoped<IAccountEmailManager, AccountEmailManager>();
 		services.TryAddScoped<IAccountUrlProvider, AccountUrlProvider>();
+		services.TryAddScoped<IVerificationCodeManager, VerificationCodeManager<TContext>>();
 
 		// CRUD
 		services
+			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor, TContext>()
 			.AddAccessValidator<SienarUser, UserIsAdminAccessValidator<SienarUser>>()
 			.AddBeforeActionHook<SienarUser, UserMapNormalizedFieldsHook>()
 			.AddBeforeActionHook<SienarUser, UserPasswordUpdateHook>()
-			.AddStateValidator<SienarUser, EnsureAccountInfoUniqueValidator>()
-			.AddBeforeActionHook<SienarUser, RemoveUserRelatedEntitiesHook>()
-			.AddBeforeActionHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
+			.AddBeforeActionHook<SienarUser, FetchNotUpdatedUserPropertiesHook<TContext>>()
+			.AddStateValidator<SienarUser, EnsureAccountInfoUniqueValidator<TContext>>()
+			.AddBeforeActionHook<SienarUser, RemoveUserRelatedEntitiesHook<TContext>>()
 
 		// Security
-			.AddProcessor<LoginRequest, LoginResult, LoginProcessor>()
+			.AddEntityFrameworkEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
+			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
+			.AddBeforeActionHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
+
+			.AddProcessor<LoginRequest, LoginResult, LoginProcessor<TContext>>()
 			.AddStatusProcessor<LogoutRequest, LogoutProcessor>()
-			.AddResultProcessor<PersonalDataResult, PersonalDataProcessor>()
-			.AddStatusProcessor<AddUserToRoleRequest, UserRoleChangeProcessor>()
+			.AddResultProcessor<PersonalDataResult, PersonalDataProcessor<TContext>>()
+			.AddStatusProcessor<AddUserToRoleRequest, UserRoleChangeProcessor<TContext>>()
 			.AddAccessValidator<AddUserToRoleRequest, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
-			.AddStatusProcessor<RemoveUserFromRoleRequest, UserRoleChangeProcessor>()
+			.AddStatusProcessor<RemoveUserFromRoleRequest, UserRoleChangeProcessor<TContext>>()
 			.AddAccessValidator<RemoveUserFromRoleRequest, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>()
-			.AddStatusProcessor<LockUserAccountRequest, LockUserAccountProcessor>()
+			.AddStatusProcessor<LockUserAccountRequest, LockUserAccountProcessor<TContext>>()
 			.AddAccessValidator<LockUserAccountRequest, UserIsAdminAccessValidator<LockUserAccountRequest>>()
-			.AddStatusProcessor<UnlockUserAccountRequest, UnlockUserAccountProcessor>()
+			.AddStatusProcessor<UnlockUserAccountRequest, UnlockUserAccountProcessor<TContext>>()
 			.AddAccessValidator<UnlockUserAccountRequest, UserIsAdminAccessValidator<UnlockUserAccountRequest>>()
-			.AddStatusProcessor<ManuallyConfirmUserAccountRequest, ManuallyConfirmUserAccountProcessor>()
+			.AddStatusProcessor<ManuallyConfirmUserAccountRequest, ManuallyConfirmUserAccountProcessor<TContext>>()
 			.AddAccessValidator<ManuallyConfirmUserAccountRequest, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>()
-			.AddStatusProcessor<ChangePasswordRequest, ChangePasswordProcessor>()
-			.AddStatusProcessor<ForgotPasswordRequest, ForgotPasswordProcessor>()
-			.AddStatusProcessor<ResetPasswordRequest, ResetPasswordProcessor>()
+			.AddStatusProcessor<ChangePasswordRequest, ChangePasswordProcessor<TContext>>()
+			.AddStatusProcessor<ForgotPasswordRequest, ForgotPasswordProcessor<TContext>>()
+			.AddStatusProcessor<ResetPasswordRequest, ResetPasswordProcessor<TContext>>()
 			.AddResultProcessor<AccountDataResult, GetAccountDataProcessor>()
 			.AddStatusProcessor<AccessTokenRequest, AccessTokenProcessor>()
-			.AddProcessor<AccountLockoutRequest, AccountLockoutResult, GetLockoutReasonsProcessor>()
+			.AddProcessor<AccountLockoutRequest, AccountLockoutResult, GetLockoutReasonsProcessor<TContext>>()
 
 		// Registration
 			.AddStateValidator<RegisterRequest, RegistrationOpenValidator>()
 			.AddStateValidator<RegisterRequest, AcceptTosValidator>()
-			.AddStateValidator<RegisterRequest, EnsureAccountInfoUniqueValidator>()
-			.AddStatusProcessor<RegisterRequest, RegisterProcessor>()
+			.AddStateValidator<RegisterRequest, EnsureAccountInfoUniqueValidator<TContext>>()
+			.AddStatusProcessor<RegisterRequest, RegisterProcessor<TContext>>()
 
 		// Email
-			.AddStatusProcessor<ConfirmAccountRequest, ConfirmAccountProcessor>()
-			.AddStatusProcessor<InitiateEmailChangeRequest, InitiateEmailChangeProcessor>()
-			.AddStatusProcessor<PerformEmailChangeRequest, PerformEmailChangeProcessor>()
+			.AddStatusProcessor<ConfirmAccountRequest, ConfirmAccountProcessor<TContext>>()
+			.AddStatusProcessor<InitiateEmailChangeRequest, InitiateEmailChangeProcessor<TContext>>()
+			.AddStatusProcessor<PerformEmailChangeRequest, PerformEmailChangeProcessor<TContext>>()
 
 		// Personal data
-			.AddBeforeActionHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook>()
-			.AddStatusProcessor<DeleteAccountRequest, DeleteAccountProcessor>();
+			.AddBeforeActionHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook<TContext>>()
+			.AddStatusProcessor<DeleteAccountRequest, DeleteAccountProcessor<TContext>>();
 
 
 		/********
@@ -127,6 +136,8 @@ public class CmsServerPlugin : IPlugin
 
 		services.TryAddScoped<IMediaDirectoryMapper, MediaDirectoryMapper>();
 		services.TryAddScoped<IMediaManager, MediaManager>();
+
+		services.AddEntityFrameworkEntity<Upload, UploadFilterProcessor, TContext>();
 
 		services
 			.AddAccessValidator<Upload, VerifyUserCanReadFileHook>()

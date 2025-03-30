@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
@@ -10,11 +11,12 @@ using Sienar.Infrastructure;
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
+public class EntityWriter<TEntity, TContext> : ServiceBase, IEntityWriter<TEntity>
 	where TEntity : EntityBase
+	where TContext : DbContext
 {
-	private readonly IRepository<TEntity> _repository;
-	private readonly ILogger<EntityWriter<TEntity>> _logger;
+	private readonly TContext _context;
+	private readonly ILogger<EntityWriter<TEntity, TContext>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
 	private readonly IBeforeActionService<TEntity> _beforeHooks;
@@ -22,15 +24,15 @@ public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 
 	public EntityWriter(
 		INotificationService notifier,
-		IRepository<TEntity> repository,
-		ILogger<EntityWriter<TEntity>> logger,
+		TContext context,
+		ILogger<EntityWriter<TEntity, TContext>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
 		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)
 		: base(notifier)
 	{
-		_repository = repository;
+		_context = context;
 		_logger = logger;
 		_accessValidator = accessValidator;
 		_stateValidator = stateValidator;
@@ -72,7 +74,8 @@ public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 
 		try
 		{
-			await _repository.Create(model);
+			await _context.AddAsync(model);
+			await _context.SaveChangesAsync();
 		}
 		catch (Exception e)
 		{
@@ -126,7 +129,8 @@ public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 
 		try
 		{
-			await _repository.Update(model);
+			_context.Update(model);
+			await _context.SaveChangesAsync();
 		}
 		catch (Exception e)
 		{

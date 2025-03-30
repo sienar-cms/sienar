@@ -1,7 +1,9 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
@@ -9,16 +11,16 @@ using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Data;
-using Sienar.Identity.Data;
 using Sienar.Identity.Results;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
+public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _repository;
+	private readonly TContext _context;
 	private readonly IPasswordManager _passwordManager;
 	private readonly ISignInManager _signInManager;
 	private readonly IAccountEmailManager _emailManager;
@@ -27,7 +29,7 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 	private readonly SienarOptions _appOptions;
 
 	public LoginProcessor(
-		IUserRepository repository,
+		TContext context,
 		IPasswordManager passwordManager,
 		ISignInManager signInManager,
 		IAccountEmailManager emailManager,
@@ -35,7 +37,7 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
 	{
-		_repository = repository;
+		_context = context;
 		_passwordManager = passwordManager;
 		_signInManager = signInManager;
 		_emailManager = emailManager;
@@ -46,9 +48,14 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 
 	public async Task<OperationResult<LoginResult?>> Process(LoginRequest request)
 	{
-		var user = await _repository.ReadUserByNameOrEmail(
-			request.AccountName,
-			Filter.WithIncludes(nameof(SienarUser.Roles)));
+		var normalizedAccountName = request.AccountName.ToUpperInvariant();
+		var user = await _context
+			.Set<SienarUser>()
+			.Where(u => u.NormalizedUsername == normalizedAccountName
+				|| u.NormalizedEmail == normalizedAccountName)
+			.Include(u => u.Roles)
+			.FirstOrDefaultAsync();
+
 		if (user == null)
 		{
 			return new(
@@ -78,7 +85,8 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 				user.LockoutEnd = DateTime.UtcNow + _loginOptions.LockoutTimespan;
 				var code = await _vcManager.CreateCode(user, VerificationCodeTypes.ViewLockoutReasons);
 
-				await _repository.Update(user);
+				_context.Update(user);
+				await _context.SaveChangesAsync();
 				await _emailManager.SendAccountLockedEmail(user);
 				return new(
 					OperationStatus.Unauthorized,
@@ -90,7 +98,8 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 					message: CmsErrors.Account.LoginFailedLocked);
 			}
 
-			await _repository.Update(user);
+			_context.Update(user);
+			await _context.SaveChangesAsync();
 
 			return new(
 				OperationStatus.Unauthorized,
@@ -118,7 +127,8 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 		// User is authenticated and able to log in
 		user.LoginFailedCount = 0;
 		user.LockoutEnd = null;
-		await _repository.Update(user);
+		_context.Update(user);
+		await _context.SaveChangesAsync();
 
 		// Save the token to the token cache
 		await _signInManager.SignIn(user, request.RememberMe);

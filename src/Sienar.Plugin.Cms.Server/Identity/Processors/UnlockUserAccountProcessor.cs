@@ -1,29 +1,34 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
-using Sienar.Identity.Data;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class UnlockUserAccountProcessor : IStatusProcessor<UnlockUserAccountRequest>
+public class UnlockUserAccountProcessor<TContext> : IStatusProcessor<UnlockUserAccountRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 
-	public UnlockUserAccountProcessor(IUserRepository userRepository)
+	public UnlockUserAccountProcessor(TContext context)
 	{
-		_userRepository = userRepository;
+		_context = context;
 	}
 
 	public async Task<OperationResult<bool>> Process(UnlockUserAccountRequest request)
 	{
-		var user = await _userRepository.Read(
-			request.UserId,
-			Filter.WithIncludes(nameof(SienarUser.LockoutReasons)));
+		var user = await _context
+			.Set<SienarUser>()
+			.Where(u => u.Id == request.UserId)
+			.Include(u => u.LockoutReasons)
+			.FirstOrDefaultAsync();
+
 		if (user is null)
 		{
 			return new(
@@ -33,14 +38,12 @@ public class UnlockUserAccountProcessor : IStatusProcessor<UnlockUserAccountRequ
 
 		user.LockoutEnd = null;
 		user.LockoutReasons.Clear();
+		_context.Update(user);
+		await _context.SaveChangesAsync();
 
-		return await _userRepository.Update(user)
-			? new(
-				OperationStatus.Success,
-				true,
-				$"User {user.Username}'s account was unlocked successfully")
-			: new(
-				OperationStatus.Unknown,
-				message: StatusMessages.Database.QueryFailed);
+		return new(
+			OperationStatus.Success,
+			true,
+			$"User {user.Username}'s account was unlocked successfully");
 	}
 }

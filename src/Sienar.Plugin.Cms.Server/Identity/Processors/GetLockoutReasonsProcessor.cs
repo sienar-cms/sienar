@@ -1,10 +1,11 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Data;
 using Sienar.Errors;
-using Sienar.Identity.Data;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Processors;
@@ -12,26 +13,31 @@ using Sienar.Processors;
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class GetLockoutReasonsProcessor
+public class GetLockoutReasonsProcessor<TContext>
 	: IProcessor<AccountLockoutRequest, AccountLockoutResult>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepo;
+	private readonly TContext _context;
 	private readonly IVerificationCodeManager _vcManager;
 
 	public GetLockoutReasonsProcessor(
-		IUserRepository userRepo,
+		TContext context,
 		IVerificationCodeManager vcManager)
 	{
-		_userRepo = userRepo;
+		_context = context;
 		_vcManager = vcManager;
 	}
 
 	public async Task<OperationResult<AccountLockoutResult?>> Process(
 		AccountLockoutRequest request)
 	{
-		var user = await _userRepo.Read(
-			request.UserId,
-			Filter.WithIncludes("VerificationCodes", "LockoutReasons"));
+		var user = await _context
+			.Set<SienarUser>()
+			.Where(u => u.Id == request.UserId)
+			.Include(u => u.VerificationCodes)
+			.Include(u => u.LockoutReasons)
+			.FirstOrDefaultAsync();
+
 		if (user is null)
 		{
 			return new(

@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Sienar.Data;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
 using Sienar.Hooks;
@@ -13,19 +15,21 @@ using Sienar.Media;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
+public class RemoveUserRelatedEntitiesHook<TContext> :
+	IBeforeAction<SienarUser>,
 	IBeforeAction<DeleteAccountRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IEntityDeleter<Upload> _mediaDeleter;
 	private readonly IUserAccessor _userAccessor;
 
 	public RemoveUserRelatedEntitiesHook(
-		IUserRepository userRepository,
+		TContext context,
 		IEntityDeleter<Upload> mediaDeleter,
 		IUserAccessor userAccessor)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_mediaDeleter = mediaDeleter;
 		_userAccessor = userAccessor;
 	}
@@ -46,14 +50,20 @@ public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
 		if (action != ActionType.StatusAction) return;
 
 		var userId = (await _userAccessor.GetUserId())!;
-		var user = (await _userRepository.Read(userId.Value))!;
+		var user = (await _context.FindAsync<SienarUser>(userId.Value))!;
 		await HandleCore(user);
 	}
 
 	private async Task HandleCore(SienarUser entity)
 	{
-		await _userRepository.LoadVerificationCodes(entity);
-		await _userRepository.LoadMedia(entity);
+		await _context
+			.Entry(entity)
+			.Collection(u => u.VerificationCodes)
+			.LoadAsync();
+		await _context
+			.Entry(entity)
+			.Collection(u => u.Media)
+			.LoadAsync();
 
 		entity.VerificationCodes.Clear();
 
@@ -78,6 +88,7 @@ public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
 			await _mediaDeleter.Delete(id);
 		}
 
-		await _userRepository.Update(entity);
+		_context.Update(entity);
+		await _context.SaveChangesAsync();
 	}
 }

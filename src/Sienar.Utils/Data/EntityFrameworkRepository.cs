@@ -9,11 +9,11 @@ using Sienar.Processors;
 namespace Sienar.Data;
 
 /// <summary>
-/// An <see cref="IRepository{TEntity}"/> that supports Entity Framework datastores
+/// A repository that supports Entity Framework datastores
 /// </summary>
 /// <typeparam name="TEntity">the type of the entity</typeparam>
 /// <typeparam name="TContext">the type of the database context</typeparam>
-public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
+public class EntityFrameworkRepository<TEntity, TContext>
 	where TEntity : EntityBase
 	where TContext : DbContext
 {
@@ -70,33 +70,6 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 		return new(
 			await entries.ToListAsync(),
 			await countEntries.CountAsync());
-	}
-
-	/// <inheritdoc />
-	public async Task<Guid> Create(TEntity entity)
-	{
-		await EntitySet.AddAsync(entity);
-		await Context.SaveChangesAsync();
-		return entity.Id;
-	}
-
-	/// <inheritdoc />
-	public async Task<bool> Update(TEntity entity)
-	{
-		EntitySet.Update(entity);
-		await Context.SaveChangesAsync();
-		return true;
-	}
-
-	/// <inheritdoc />
-	public async Task<bool> Delete(Guid id)
-	{
-		var entity = await EntitySet.FindAsync(id);
-		if (entity is null) return false;
-
-		EntitySet.Remove(entity);
-		await Context.SaveChangesAsync();
-		return true;
 	}
 
 	/// <inheritdoc />

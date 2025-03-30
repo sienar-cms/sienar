@@ -8,7 +8,7 @@ namespace Sienar.Identity.Data;
 /// <summary>
 /// Adds additional methods for querying <see cref="LockoutReason"/> database entries
 /// </summary>
-public interface ILockoutReasonRepository : IRepository<LockoutReason>
+public interface ILockoutReasonRepositorya
 {
 	/// <summary>
 	/// Reads multiple lockout reasons using an enumerable of their IDs

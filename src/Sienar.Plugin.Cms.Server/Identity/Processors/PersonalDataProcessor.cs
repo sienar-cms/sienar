@@ -5,29 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Data;
-using Sienar.Identity.Data;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
+public class PersonalDataProcessor<TContext> : IResultProcessor<PersonalDataResult>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IUserAccessor _userAccessor;
 	private readonly IEnumerable<IUserPersonalDataRetriever> _personalDataRetrievers;
 
 	public PersonalDataProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		IUserAccessor userAccessor,
 		IEnumerable<IUserPersonalDataRetriever> personalDataRetrievers)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_userAccessor = userAccessor;
 		_personalDataRetrievers = personalDataRetrievers;
 	}
@@ -42,7 +43,7 @@ public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 				message: CmsErrors.Account.LoginRequired);
 		}
 
-		var user = await _userRepository.Read(userId.Value);
+		var user = await _context.FindAsync<SienarUser>(userId.Value);
 		if (user is null)
 		{
 			return new(

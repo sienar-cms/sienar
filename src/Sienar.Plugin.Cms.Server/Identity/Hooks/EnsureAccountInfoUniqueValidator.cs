@@ -2,27 +2,28 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
 using Sienar.Infrastructure;
 using Sienar.Hooks;
-using Sienar.Identity.Data;
 
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
+public class EnsureAccountInfoUniqueValidator<TContext> : IStateValidator<SienarUser>,
 	IStateValidator<RegisterRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly INotificationService _notifier;
 
 	public EnsureAccountInfoUniqueValidator(
-		IUserRepository userRepository,
+		TContext context,
 		INotificationService notifier)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_notifier = notifier;
 	}
 
@@ -46,19 +47,37 @@ public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 		string? pendingEmail = null,
 		Guid id = default)
 	{
-		if (await _userRepository.UsernameIsTaken(id, username))
+		var normalizedUsername = username.ToUpperInvariant();
+		var usernameIsTaken = await _context
+			.Set<SienarUser>()
+			.CountAsync(u => u.Id != id
+				&& u.NormalizedUsername == normalizedUsername) > 0;
+		if (usernameIsTaken)
 		{
 			_notifier.Error(CmsErrors.Account.UsernameTaken);
 			return OperationStatus.Conflict;
 		}
 
-		if (await _userRepository.EmailIsTaken(id, email) ||
-			(!string.IsNullOrEmpty(pendingEmail) && await _userRepository.EmailIsTaken(id, pendingEmail)))
+		var normalizedEmail = email.ToUpperInvariant();
+		var normalizedPendingEmail = pendingEmail?.ToUpperInvariant();
+		var emailIsTaken = await CheckIsEmailTaken(id, normalizedEmail) || (!string.IsNullOrEmpty(normalizedPendingEmail) && await CheckIsEmailTaken(id, normalizedPendingEmail));
+		if (emailIsTaken)
 		{
 			_notifier.Error(CmsErrors.Account.EmailTaken);
 			return OperationStatus.Conflict;
 		}
 
 		return OperationStatus.Success;
+	}
+
+	private async Task<bool> CheckIsEmailTaken(
+		Guid id,
+		string email)
+	{
+		return await _context
+			.Set<SienarUser>()
+			.CountAsync(
+				u => u.Id != id
+					&& (u.Email == email || u.PendingEmail == email)) > 0;
 	}
 }
