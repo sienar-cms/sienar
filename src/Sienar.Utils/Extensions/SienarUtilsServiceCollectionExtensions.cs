@@ -462,13 +462,16 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <returns>the service collection</returns>
 	public static IServiceCollection AddEntityFrameworkEntity<TEntity, TFilterProcessor, TContext>(
 		this IServiceCollection self)
-		where TEntity : EntityBase
+		where TEntity : EntityBase, new()
 		where TFilterProcessor : class, IFilterProcessor<TEntity>
 		where TContext : DbContext
 	{
 		self.TryAddScoped<IBeforeAction<TEntity>, ConcurrencyStampUpdateHook<TEntity>>();
 		self.TryAddScoped<IStateValidator<TEntity>, ConcurrencyStampValidator<TEntity, TContext>>();
 		self.TryAddScoped<IFilterProcessor<TEntity>, TFilterProcessor>();
+		self.TryAddScoped<IEntityReader<TEntity>, EntityReader<TEntity, TContext>>();
+		self.TryAddScoped<IEntityWriter<TEntity>, EntityWriter<TEntity, TContext>>();
+		self.TryAddScoped<IEntityDeleter<TEntity>, EntityDeleter<TEntity, TContext>>();
 
 		return self;
 	}
