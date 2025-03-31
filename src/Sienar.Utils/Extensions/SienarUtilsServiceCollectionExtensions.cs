@@ -457,10 +457,9 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TEntity">the type of the entity</typeparam>
 	/// <typeparam name="TFilterProcessor">the type of the filter processor</typeparam>
-	/// <typeparam name="TRepository">the service type of the repository</typeparam>
-	/// <typeparam name="TRepositoryImplementation">the implementation type of the repository</typeparam>
+	/// <typeparam name="TContext">the type of the DbContext</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddEntityFrameworkEntity<TEntity, TFilterProcessor, TContext>(
+	public static IServiceCollection AddEntity<TEntity, TFilterProcessor, TContext>(
 		this IServiceCollection self)
 		where TEntity : EntityBase, new()
 		where TFilterProcessor : class, IFilterProcessor<TEntity>

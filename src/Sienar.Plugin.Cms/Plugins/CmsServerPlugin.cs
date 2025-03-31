@@ -74,7 +74,7 @@ public class CmsServerPlugin<TContext> : IPlugin
 
 		// CRUD
 		services
-			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor, TContext>()
+			.AddEntity<SienarUser, SienarUserFilterProcessor, TContext>()
 			.AddAccessValidator<SienarUser, UserIsAdminAccessValidator<SienarUser>>()
 			.AddBeforeActionHook<SienarUser, UserMapNormalizedFieldsHook>()
 			.AddBeforeActionHook<SienarUser, UserPasswordUpdateHook>()
@@ -83,8 +83,8 @@ public class CmsServerPlugin<TContext> : IPlugin
 			.AddBeforeActionHook<SienarUser, RemoveUserRelatedEntitiesHook<TContext>>()
 
 		// Security
-			.AddEntityFrameworkEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
-			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
+			.AddEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
+			.AddEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
 			.AddBeforeActionHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
 
 			.AddProcessor<LoginRequest, LoginResult, LoginProcessor<TContext>>()
@@ -137,7 +137,7 @@ public class CmsServerPlugin<TContext> : IPlugin
 		services.TryAddScoped<IMediaDirectoryMapper, MediaDirectoryMapper>();
 		services.TryAddScoped<IMediaManager, MediaManager>();
 
-		services.AddEntityFrameworkEntity<Upload, UploadFilterProcessor, TContext>();
+		services.AddEntity<Upload, UploadFilterProcessor, TContext>();
 
 		services
 			.AddAccessValidator<Upload, VerifyUserCanReadFileHook>()
