@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
@@ -10,11 +11,12 @@ using Sienar.Infrastructure;
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
+public class EntityDeleter<TEntity, TContext> : ServiceBase, IEntityDeleter<TEntity>
 	where TEntity : EntityBase
+	where TContext : DbContext
 {
-	private readonly IRepository<TEntity> _repository;
-	private readonly ILogger<EntityDeleter<TEntity>> _logger;
+	private readonly TContext _context;
+	private readonly ILogger<EntityDeleter<TEntity, TContext>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
 	private readonly IBeforeActionService<TEntity> _beforeHooks;
@@ -22,15 +24,15 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 
 	public EntityDeleter(
 		INotificationService notifier,
-		IRepository<TEntity> repository,
-		ILogger<EntityDeleter<TEntity>> logger,
+		TContext context,
+		ILogger<EntityDeleter<TEntity, TContext>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
 		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)
 		: base(notifier)
 	{
-		_repository = repository;
+		_context = context;
 		_logger = logger;
 		_accessValidator = accessValidator;
 		_stateValidator = stateValidator;
@@ -43,7 +45,7 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 		TEntity? entity;
 		try
 		{
-			entity = await _repository.Read(id);
+			entity = await _context.FindAsync<TEntity>(id);
 			if (entity is null)
 			{
 				return NotifyOfResult(new OperationResult<bool>(
@@ -93,7 +95,8 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 
 		try
 		{
-			await _repository.Delete(entity.Id);
+			_context.Remove(entity.Id);
+			await _context.SaveChangesAsync();
 		}
 		catch (Exception e)
 		{

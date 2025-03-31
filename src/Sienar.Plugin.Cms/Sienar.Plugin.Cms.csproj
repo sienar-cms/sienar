@@ -1,17 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Sienar</RootNamespace>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Utils</PackageId>
-		<Title>Sienar.Utils</Title>
+		<PackageId>Sienar.Plugin.Cms</PackageId>
+		<Title>Sienar.Plugin.Cms</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>Contains the Sienar utilities used to create apps with a core set of features, such as menu generation, enqueueing scripts and styles, CRUD data stores, base Blazor components, and more.</Description>
+		<Description>The CMS portion of Sienar applications</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
 		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -26,12 +27,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="MimeMapping" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Utils" Version="0.1.1"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Utils\Sienar.Utils.csproj"/>
 	</ItemGroup>
 
 </Project>

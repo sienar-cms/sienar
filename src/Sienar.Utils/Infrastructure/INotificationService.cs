@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sienar.Data;
 
 namespace Sienar.Infrastructure;
@@ -37,4 +38,9 @@ public interface INotificationService
 	/// </summary>
 	/// <param name="notification">The notification to display</param>
 	void Notify(Notification notification);
+
+	/// <summary>
+	/// The list of notifications registered in the notification service
+	/// </summary>
+	List<Notification> Notifications { get; }
 }

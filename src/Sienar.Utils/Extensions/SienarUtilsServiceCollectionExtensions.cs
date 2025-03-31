@@ -2,16 +2,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Sienar.Data;
 using Sienar.Email;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 using Sienar.Services;
-using Sienar.Ui;
 
 namespace Sienar.Extensions;
 
@@ -28,9 +29,6 @@ public static class SienarUtilsServiceCollectionExtensions
 	[ExcludeFromCodeCoverage]
 	public static IServiceCollection AddSienarCoreUtilities(this IServiceCollection self)
 	{
-		self.TryAddScoped(typeof(IEntityReader<>), typeof(EntityReader<>));
-		self.TryAddScoped(typeof(IEntityWriter<>), typeof(EntityWriter<>));
-		self.TryAddScoped(typeof(IEntityDeleter<>), typeof(EntityDeleter<>));
 		self.TryAddScoped(typeof(IStatusService<>), typeof(StatusService<>));
 		self.TryAddScoped(typeof(IService<,>), typeof(Service<,>));
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
@@ -40,6 +38,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.TryAddScoped<INotificationService, DefaultNotificationService>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
 		self.TryAddScoped<AuthStateProvider>();
 		self.TryAddScoped<AuthenticationStateProvider>(
@@ -339,16 +338,6 @@ public static class SienarUtilsServiceCollectionExtensions
 			true);
 
 	/// <summary>
-	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="T">The type of the startup task</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStartupTask<T>(this IServiceCollection self)
-		where T : class, IBeforeTask<SienarStartupActor>
-		=> self.AddScoped<IBeforeTask<SienarStartupActor>, T>();
-
-	/// <summary>
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
@@ -461,6 +450,30 @@ public static class SienarUtilsServiceCollectionExtensions
 			typeof(IResultProcessor<>),
 			ServiceLifetime.Scoped,
 			true);
+
+	/// <summary>
+	/// Adds the necessary services to use an entity via an EF repository
+	/// </summary>
+	/// <param name="self">the service collection</param>
+	/// <typeparam name="TEntity">the type of the entity</typeparam>
+	/// <typeparam name="TFilterProcessor">the type of the filter processor</typeparam>
+	/// <typeparam name="TContext">the type of the DbContext</typeparam>
+	/// <returns>the service collection</returns>
+	public static IServiceCollection AddEntity<TEntity, TFilterProcessor, TContext>(
+		this IServiceCollection self)
+		where TEntity : EntityBase, new()
+		where TFilterProcessor : class, IFilterProcessor<TEntity>
+		where TContext : DbContext
+	{
+		self.TryAddScoped<IBeforeAction<TEntity>, ConcurrencyStampUpdateHook<TEntity>>();
+		self.TryAddScoped<IStateValidator<TEntity>, ConcurrencyStampValidator<TEntity, TContext>>();
+		self.TryAddScoped<IFilterProcessor<TEntity>, TFilterProcessor>();
+		self.TryAddScoped<IEntityReader<TEntity>, EntityReader<TEntity, TContext>>();
+		self.TryAddScoped<IEntityWriter<TEntity>, EntityWriter<TEntity, TContext>>();
+		self.TryAddScoped<IEntityDeleter<TEntity>, EntityDeleter<TEntity, TContext>>();
+
+		return self;
+	}
 
 	private static IServiceCollection AddImplementationAsInterface(
 		this IServiceCollection self,
