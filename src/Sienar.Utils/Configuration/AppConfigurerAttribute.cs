@@ -1,7 +1,8 @@
 ﻿using System;
+using Sienar.Infrastructure;
 using Sienar.Plugins;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Configuration;
 
 /// <summary>
 /// Marks a method as suitable for configuring the <see cref="SienarAppBuilder"/> during app creation

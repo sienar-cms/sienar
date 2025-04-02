@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sienar.Configuration;
 using Sienar.Extensions;
 using Sienar.Menus;
 using Sienar.Plugins;

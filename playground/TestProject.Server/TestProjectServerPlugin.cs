@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Plugins;
 using TestProject.Data;
