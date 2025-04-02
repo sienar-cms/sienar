@@ -2,9 +2,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Sienar.Data;
+using Sienar.Hooks;
 
-namespace Sienar.Hooks;
+namespace Sienar.Data;
 
 /// <exclude />
 public class ConcurrencyStampUpdateHook<TEntity> : IBeforeAction<TEntity>

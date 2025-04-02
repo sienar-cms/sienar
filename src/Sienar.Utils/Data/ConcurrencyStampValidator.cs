@@ -4,10 +4,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Sienar.Data;
+using Sienar.Hooks;
 using Sienar.Infrastructure;
 
-namespace Sienar.Hooks;
+namespace Sienar.Data;
 
 /// <exclude />
 public class ConcurrencyStampValidator<TEntity, TContext> : IStateValidator<TEntity>
