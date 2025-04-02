@@ -4,11 +4,11 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
+using Sienar.Services;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
 public class EntityDeleter<TEntity, TContext> : ServiceBase, IEntityDeleter<TEntity>

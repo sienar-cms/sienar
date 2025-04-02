@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
+using Sienar.Services;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
 public class EntityReader<TEntity, TContext> : ServiceBase, IEntityReader<TEntity>

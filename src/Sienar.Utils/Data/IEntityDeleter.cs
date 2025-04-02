@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sienar.Data;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <summary>
 /// A service to delete instances of <c>TEntity</c> from the appropriate repository
