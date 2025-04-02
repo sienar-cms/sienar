@@ -8,7 +8,7 @@ using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 
-namespace Sienar.Services;
+namespace Sienar.Security;
 
 /// <exclude />
 public class AccessValidatorService<T> : IAccessValidatorService<T>

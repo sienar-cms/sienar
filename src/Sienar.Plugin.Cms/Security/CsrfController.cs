@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <exclude />
 [ApiController]

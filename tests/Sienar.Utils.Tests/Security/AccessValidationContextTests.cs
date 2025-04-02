@@ -1,6 +1,6 @@
-﻿using Sienar.Infrastructure;
+﻿using Sienar.Security;
 
-namespace Sienar.Utils.Tests.Infrastructure;
+namespace Sienar.Utils.Tests.Security;
 
 public class AccessValidationContextTests
 {

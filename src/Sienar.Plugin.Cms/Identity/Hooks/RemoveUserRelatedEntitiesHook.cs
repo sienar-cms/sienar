@@ -11,6 +11,7 @@ using Sienar.Hooks;
 using Sienar.Identity.Data;
 using Sienar.Services;
 using Sienar.Media;
+using Sienar.Security;
 
 namespace Sienar.Identity.Hooks;
 

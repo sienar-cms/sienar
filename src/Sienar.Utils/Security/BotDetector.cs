@@ -3,7 +3,7 @@
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <exclude />
 public class BotDetector : IBotDetector

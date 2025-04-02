@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <summary>
 /// Accesses the current user's information

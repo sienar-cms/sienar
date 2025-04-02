@@ -2,7 +2,7 @@
 using Sienar.Data;
 using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Security;
 
 /// <summary>
 /// Runs access validation hooks for a hookable request

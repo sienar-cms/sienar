@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sienar.Extensions;
-using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Menus;
 

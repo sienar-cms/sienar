@@ -1,6 +1,6 @@
 ﻿using Sienar.Infrastructure;
 
-namespace Sienar.Hooks;
+namespace Sienar.Security;
 
 public class UserIsAdminAccessValidator<T> : UserInRoleAccessValidator<T>
 {

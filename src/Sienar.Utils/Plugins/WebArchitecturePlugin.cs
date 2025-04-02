@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Plugins;
 

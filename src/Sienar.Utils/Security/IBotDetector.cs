@@ -1,6 +1,6 @@
 ﻿using Sienar.Data;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <summary>
 /// (Hopefully) detects bots

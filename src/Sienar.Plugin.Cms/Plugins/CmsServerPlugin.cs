@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Extensions;
-using Sienar.Hooks;
 using Sienar.Identity;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
@@ -19,6 +18,7 @@ using Sienar.Infrastructure;
 using Sienar.Media;
 using Sienar.Media.Hooks;
 using Sienar.Media.Processors;
+using Sienar.Security;
 
 namespace Sienar.Plugins;
 

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Sienar.Infrastructure;
 using Sienar.Hooks;
+using Sienar.Security;
 
 namespace Sienar.Media.Hooks;
 
