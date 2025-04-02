@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Configuration;
 
 /// <exclude />
 public class DefaultAuthorizationConfigurer : IConfigurer<AuthorizationOptions>

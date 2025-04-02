@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Configuration;
 
 /// <exclude />
 public class DefaultAuthenticationConfigurer : IConfigurer<AuthenticationOptions>

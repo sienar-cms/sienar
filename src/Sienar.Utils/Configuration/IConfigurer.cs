@@ -1,7 +1,6 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Configuration;
 
 /// <summary>
 /// Used by Sienar to configure a service or middleware that is generally configured by an <see cref="Action{T}"/>
