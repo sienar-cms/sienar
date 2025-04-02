@@ -1,21 +1,22 @@
 ﻿using System.Threading.Tasks;
-using Sienar.Hooks;
+using Sienar.Data;
 
-namespace Sienar.Services;
+namespace Sienar.Hooks;
 
 /// <summary>
-/// Runs after-action hooks for a hookable request
+/// Runs before-action hooks for a hookable request
 /// </summary>
 /// <typeparam name="T">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IAfterActionService<T>
+public interface IBeforeActionService<T>
 {
 	/// <summary>
-	///  Runs all after-action hooks for a hookable request
+	/// Runs all before-action hooks for a hookable request
 	/// </summary>
 	/// <param name="input">the request or entity</param>
 	/// <param name="action">the action type</param>
-	Task Run(
+	/// <returns>an operation result representing whether the hooks allow the process to continue</returns>
+	Task<OperationResult<bool>> Run(
 		T input,
 		ActionType action);
 }

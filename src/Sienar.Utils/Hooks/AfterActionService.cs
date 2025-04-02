@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Hooks;
 
 /// <exclude />
 public class AfterActionService<T> : IAfterActionService<T>
