@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Html;
 
 /// <summary>
 /// Represents an HTML-friendly version of an enum member name

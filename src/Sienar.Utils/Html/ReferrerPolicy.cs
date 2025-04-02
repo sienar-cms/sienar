@@ -1,4 +1,4 @@
-﻿namespace Sienar.Infrastructure;
+﻿namespace Sienar.Html;
 
 /// <summary>
 /// Represents possible values of the <c>referrerpolicy</c> HTML attribute

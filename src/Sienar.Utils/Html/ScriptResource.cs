@@ -1,4 +1,4 @@
-﻿namespace Sienar.Infrastructure;
+﻿namespace Sienar.Html;
 
 /// <summary>
 /// Contains the data needed to create HTML <c>&lt;script&gt;</c> tags

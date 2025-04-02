@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Configuration;
 using Sienar.Extensions;
+using Sienar.Html;
 using Sienar.Menus;
 using Sienar.Plugins;
 

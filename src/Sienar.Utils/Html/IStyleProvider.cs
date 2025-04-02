@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Html;
 
 /// <summary>
 /// A container for <see cref="StyleResource"/> instances that should be rendered on each page
