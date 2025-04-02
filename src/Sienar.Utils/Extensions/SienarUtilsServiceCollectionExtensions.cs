@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,9 +39,6 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<INotificationService, DefaultNotificationService>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
-		self.TryAddScoped<AuthStateProvider>();
-		self.TryAddScoped<AuthenticationStateProvider>(
-			sp => sp.GetRequiredService<AuthStateProvider>());
 
 		return self;
 	}
