@@ -20,8 +20,8 @@ public class EntityDeleter<TEntity, TContext> : ServiceBase, IEntityDeleter<TEnt
 	private readonly ILogger<EntityDeleter<TEntity, TContext>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeActionService<TEntity> _beforeHooks;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IBeforeActionRunner<TEntity> _beforeHooks;
+	private readonly IAfterActionRunner<TEntity> _afterHooks;
 
 	public EntityDeleter(
 		INotificationService notifier,
@@ -29,8 +29,8 @@ public class EntityDeleter<TEntity, TContext> : ServiceBase, IEntityDeleter<TEnt
 		ILogger<EntityDeleter<TEntity, TContext>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeActionService<TEntity> beforeHooks,
-		IAfterActionService<TEntity> afterHooks)
+		IBeforeActionRunner<TEntity> beforeHooks,
+		IAfterActionRunner<TEntity> afterHooks)
 		: base(notifier)
 	{
 		_context = context;

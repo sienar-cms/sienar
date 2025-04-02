@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 namespace Sienar.Hooks;
 
 /// <exclude />
-public class AfterActionService<T> : IAfterActionService<T>
+public class AfterActionRunner<T> : IAfterActionRunner<T>
 {
 	private readonly IEnumerable<IAfterAction<T>> _hooks;
-	private readonly ILogger<IAfterActionService<T>> _logger;
+	private readonly ILogger<IAfterActionRunner<T>> _logger;
 
-	public AfterActionService(
+	public AfterActionRunner(
 		IEnumerable<IAfterAction<T>> hooks,
-		ILogger<IAfterActionService<T>> logger)
+		ILogger<IAfterActionRunner<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;

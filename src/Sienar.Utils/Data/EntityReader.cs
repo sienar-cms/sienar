@@ -23,7 +23,7 @@ public class EntityReader<TEntity, TContext> : ServiceBase, IEntityReader<TEntit
 	private readonly IFilterProcessor<TEntity> _filterProcessor;
 	private readonly ILogger<EntityReader<TEntity, TContext>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IAfterActionRunner<TEntity> _afterHooks;
 
 	private DbSet<TEntity> EntitySet => _context.Set<TEntity>();
 
@@ -33,7 +33,7 @@ public class EntityReader<TEntity, TContext> : ServiceBase, IEntityReader<TEntit
 		IFilterProcessor<TEntity> filterProcessor,
 		ILogger<EntityReader<TEntity, TContext>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
-		IAfterActionService<TEntity> afterHooks)
+		IAfterActionRunner<TEntity> afterHooks)
 		: base(notifier)
 	{
 		_context = context;

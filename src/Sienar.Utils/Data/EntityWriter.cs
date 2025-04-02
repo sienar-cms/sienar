@@ -20,8 +20,8 @@ public class EntityWriter<TEntity, TContext> : ServiceBase, IEntityWriter<TEntit
 	private readonly ILogger<EntityWriter<TEntity, TContext>> _logger;
 	private readonly IAccessValidatorService<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeActionService<TEntity> _beforeHooks;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IBeforeActionRunner<TEntity> _beforeHooks;
+	private readonly IAfterActionRunner<TEntity> _afterHooks;
 
 	public EntityWriter(
 		INotificationService notifier,
@@ -29,8 +29,8 @@ public class EntityWriter<TEntity, TContext> : ServiceBase, IEntityWriter<TEntit
 		ILogger<EntityWriter<TEntity, TContext>> logger,
 		IAccessValidatorService<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeActionService<TEntity> beforeHooks,
-		IAfterActionService<TEntity> afterHooks)
+		IBeforeActionRunner<TEntity> beforeHooks,
+		IAfterActionRunner<TEntity> afterHooks)
 		: base(notifier)
 	{
 		_context = context;
