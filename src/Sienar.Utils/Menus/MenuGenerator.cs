@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sienar.Extensions;
+using Sienar.Infrastructure;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Menus;
 
 /// <exclude />
 public class MenuGenerator : IMenuGenerator

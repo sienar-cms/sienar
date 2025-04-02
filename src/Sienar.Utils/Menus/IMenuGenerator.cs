@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Menus;
 
 /// <summary>
 /// Generates a list of <see cref="MenuLink">menu links</see> the user is authorized to see
