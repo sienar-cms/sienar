@@ -4,20 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
-public class StateValidatorService<T> : IStateValidatorService<T>
+public class DefaultStateValidatorRunner<T> : IStateValidatorRunner<T>
 {
 	private readonly IEnumerable<IStateValidator<T>> _validators;
-	private readonly ILogger<IStateValidatorService<T>> _logger;
+	private readonly ILogger<IStateValidatorRunner<T>> _logger;
 
-	public StateValidatorService(
+	public DefaultStateValidatorRunner(
 		IEnumerable<IStateValidator<T>> validators,
-		ILogger<IStateValidatorService<T>> logger)
+		ILogger<IStateValidatorRunner<T>> logger)
 	{
 		_validators = validators;
 		_logger = logger;

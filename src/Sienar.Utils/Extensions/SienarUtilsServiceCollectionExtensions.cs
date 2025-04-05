@@ -35,7 +35,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IService<,>), typeof(Service<,>));
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
 		self.TryAddScoped(typeof(IAccessValidatorService<>), typeof(AccessValidatorService<>));
-		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
+		self.TryAddScoped(typeof(IStateValidatorRunner<>), typeof(DefaultStateValidatorRunner<>));
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(BeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(AfterActionRunner<>));
 		self.TryAddScoped<IBotDetector, BotDetector>();
