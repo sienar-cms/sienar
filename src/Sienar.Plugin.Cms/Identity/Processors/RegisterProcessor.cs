@@ -10,6 +10,7 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
 using Sienar.Data;
+using Sienar.Identity.Login;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;

@@ -9,13 +9,11 @@ using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
-using Sienar.Identity.Requests;
 using Sienar.Data;
-using Sienar.Identity.Results;
 using Sienar.Identity.VerificationCodes;
 using Sienar.Processors;
 
-namespace Sienar.Identity.Processors;
+namespace Sienar.Identity.Login;
 
 /// <exclude />
 public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
@@ -61,7 +59,7 @@ public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.LoginFailedNotFound);
+				message: LoginErrors.NotFound);
 		}
 
 		if (user.IsLockedOut())
@@ -96,7 +94,7 @@ public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
 						UserId = user.Id,
 						VerificationCode = code.Code
 					},
-					message: CmsErrors.Account.LoginFailedLocked);
+					message: LoginErrors.Locked);
 			}
 
 			_context.Update(user);
@@ -104,7 +102,7 @@ public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
 
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: LoginErrors.Invalid);
 		}
 
 		// Still check if email is confirmed no matter what
@@ -117,12 +115,12 @@ public class LoginProcessor<TContext> : IProcessor<LoginRequest, LoginResult>
 				await _emailManager.SendWelcomeEmail(user);
 				return new(
 					OperationStatus.Unauthorized,
-					message: CmsErrors.Account.LoginFailedNotConfirmed);
+					message: LoginErrors.NotConfirmed);
 			}
 
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedNotConfirmedEmailDisabled);
+				message: LoginErrors.NotConfirmedEmailDisabled);
 		}
 
 		// User is authenticated and able to log in

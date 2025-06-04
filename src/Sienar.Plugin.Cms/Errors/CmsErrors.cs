@@ -12,11 +12,6 @@ public static class CmsErrors
 		public const string UsernameTaken = "That username is already taken.";
 		public const string EmailTaken = "That email address is already taken. Do you need to reset your password instead?";
 		public const string LoginRequired = "You must be logged in to perform that action.";
-		public const string LoginFailedNotFound = "No account with those credentials was found.";
-		public const string LoginFailedInvalid = "Invalid credentials supplied.";
-		public const string LoginFailedNotConfirmed = "You have not confirmed your email address. Please check your email for a confirmation link and click it to confirm your email address.";
-		public const string LoginFailedNotConfirmedEmailDisabled = "You have not confirmed your email address. We cannot resend your confirmation code because the website administrator has disabled email.";
-		public const string LoginFailedLocked = "You have failed to log in too many times.";
 		public const string AccountLocked = "Your account has been locked.";
 		public const string AccountDeleted = "Your account has been deleted.";
 

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Login;
 
 public interface ISignInManager
 {

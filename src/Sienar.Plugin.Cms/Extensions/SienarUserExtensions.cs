@@ -1,6 +1,7 @@
 ﻿using System;
 using Sienar.Configuration;
 using Sienar.Identity;
+using Sienar.Identity.Login;
 
 namespace Sienar.Extensions;
 

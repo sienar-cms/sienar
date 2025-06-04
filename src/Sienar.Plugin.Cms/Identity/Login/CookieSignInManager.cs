@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.Login;
 
 public class CookieSignInManager : ISignInManager
 {

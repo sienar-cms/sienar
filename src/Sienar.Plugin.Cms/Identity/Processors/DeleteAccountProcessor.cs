@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Data;
-using Sienar.Identity.Data;
+using Sienar.Identity.Login;
 using Sienar.Processors;
 using Sienar.Security;
 
@@ -55,7 +54,7 @@ public class DeleteAccountProcessor<TContext> : IStatusProcessor<DeleteAccountRe
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: LoginErrors.Invalid);
 		}
 
 		_context.Remove(user.Id);

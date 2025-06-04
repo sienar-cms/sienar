@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Sienar.Data;
 using Sienar.Services;
 
-namespace Sienar.Identity.Requests;
+namespace Sienar.Identity.Login;
 
 public class LoginRequest : Honeypot, IRequest
 {

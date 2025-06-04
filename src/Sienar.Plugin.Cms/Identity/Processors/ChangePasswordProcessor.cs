@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Data;
+using Sienar.Identity.Login;
 using Sienar.Processors;
 using Sienar.Security;
 
@@ -51,7 +51,7 @@ public class ChangePasswordProcessor<TContext> : IStatusProcessor<ChangePassword
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: LoginErrors.Invalid);
 		}
 
 		await _passwordManager.UpdatePassword(user, request.NewPassword);

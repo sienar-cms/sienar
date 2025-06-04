@@ -12,6 +12,7 @@ using Sienar.Extensions;
 using Sienar.Identity;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.LockoutReasons;
+using Sienar.Identity.Login;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;

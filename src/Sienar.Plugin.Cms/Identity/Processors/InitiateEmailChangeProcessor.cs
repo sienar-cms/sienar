@@ -8,8 +8,8 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Data;
+using Sienar.Identity.Login;
 using Sienar.Processors;
 using Sienar.Security;
 
@@ -64,7 +64,7 @@ public class InitiateEmailChangeProcessor<TContext> : IStatusProcessor<InitiateE
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: LoginErrors.Invalid);
 		}
 
 		var shouldSendConfirmationEmail = SienarUserExtensions.ShouldSendEmailConfirmationEmail(

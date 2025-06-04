@@ -1,7 +1,7 @@
 ﻿using System;
 using Sienar.Services;
 
-namespace Sienar.Identity.Results;
+namespace Sienar.Identity.Login;
 
 /// <summary>
 /// Represents the result of a login operation
