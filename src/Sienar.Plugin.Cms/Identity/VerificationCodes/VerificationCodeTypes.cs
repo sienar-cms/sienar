@@ -1,4 +1,4 @@
-﻿namespace Sienar.Identity;
+﻿namespace Sienar.Identity.VerificationCodes;
 
 /// <summary>
 /// A group of constants that identify various types of verification codes

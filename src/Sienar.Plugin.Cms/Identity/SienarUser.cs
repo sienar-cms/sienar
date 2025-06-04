@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Sienar.Data;
 using Sienar.Identity.LockoutReasons;
+using Sienar.Identity.VerificationCodes;
 using Sienar.Media;
 
 namespace Sienar.Identity;

@@ -1,4 +1,4 @@
-﻿namespace Sienar.Identity;
+﻿namespace Sienar.Identity.VerificationCodes;
 
 public enum VerificationCodeStatus
 {

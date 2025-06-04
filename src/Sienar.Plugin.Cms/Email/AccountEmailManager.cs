@@ -4,6 +4,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Sienar.Identity;
+using Sienar.Identity.VerificationCodes;
 
 namespace Sienar.Email;
 

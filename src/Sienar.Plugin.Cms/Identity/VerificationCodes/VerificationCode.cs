@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Sienar.Data;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.VerificationCodes;
 
 [EntityName(Singular = "verification code", Plural = "verification codes")]
 public class VerificationCode : EntityBase

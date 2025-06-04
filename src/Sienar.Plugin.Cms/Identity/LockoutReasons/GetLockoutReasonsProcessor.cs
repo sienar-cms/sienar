@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Sienar.Data;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
+using Sienar.Identity.VerificationCodes;
 using Sienar.Processors;
 
 namespace Sienar.Identity.LockoutReasons;

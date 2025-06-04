@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sienar.Identity;
+using Sienar.Identity.VerificationCodes;
 
 namespace Sienar.Email;
 

@@ -8,6 +8,7 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
+using Sienar.Identity.VerificationCodes;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;

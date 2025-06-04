@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.VerificationCodes;
 
 public class VerificationCodeManager<TContext> : IVerificationCodeManager
 	where TContext : DbContext

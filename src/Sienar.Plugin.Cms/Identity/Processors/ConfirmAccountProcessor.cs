@@ -9,6 +9,7 @@ using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
 using Sienar.Identity.Data;
+using Sienar.Identity.VerificationCodes;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;

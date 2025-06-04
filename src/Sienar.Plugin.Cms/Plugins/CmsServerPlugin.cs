@@ -15,6 +15,7 @@ using Sienar.Identity.LockoutReasons;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
+using Sienar.Identity.VerificationCodes;
 using Sienar.Infrastructure;
 using Sienar.Media;
 using Sienar.Media.Hooks;

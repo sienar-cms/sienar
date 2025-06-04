@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.VerificationCodes;
 
 public interface IVerificationCodeManager
 {
