@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sienar.Services;
 
-namespace Sienar.Identity.Results;
+namespace Sienar.Identity.LockoutReasons;
 
 public class AccountLockoutResult : IResult
 {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Sienar.Identity;
+using Sienar.Identity.LockoutReasons;
 
 namespace Sienar.Email;
 

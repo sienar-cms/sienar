@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Sienar.Identity.Data;
+namespace Sienar.Identity.LockoutReasons;
 
 internal class LockoutReasonEntityConfigurer : IEntityTypeConfiguration<LockoutReason>
 {

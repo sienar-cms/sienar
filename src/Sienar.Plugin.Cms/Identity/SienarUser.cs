@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Sienar.Data;
+using Sienar.Identity.LockoutReasons;
 using Sienar.Media;
 
 namespace Sienar.Identity;

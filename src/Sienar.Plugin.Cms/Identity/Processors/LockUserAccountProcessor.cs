@@ -8,6 +8,7 @@ using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
 using Sienar.Email;
+using Sienar.Identity.LockoutReasons;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
@@ -50,7 +51,7 @@ public class LockUserAccountProcessor<TContext> : IStatusProcessor<LockUserAccou
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.LockoutReason.NotFound);
+				message: LockoutReasonErrors.NotFound);
 		}
 
 		user.LockoutReasons.AddRange(reasons);

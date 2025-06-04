@@ -8,7 +8,7 @@ using Sienar.Data;
 using Sienar.Infrastructure;
 using Sienar.Services;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.LockoutReasons;
 
 /// <exclude />
 [ApiController]

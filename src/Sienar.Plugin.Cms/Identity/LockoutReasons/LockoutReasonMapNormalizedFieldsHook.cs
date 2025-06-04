@@ -3,7 +3,7 @@
 using System.Threading.Tasks;
 using Sienar.Hooks;
 
-namespace Sienar.Identity.Hooks;
+namespace Sienar.Identity.LockoutReasons;
 
 /// <exclude />
 public class LockoutReasonMapNormalizedFieldsHook : IBeforeAction<LockoutReason>

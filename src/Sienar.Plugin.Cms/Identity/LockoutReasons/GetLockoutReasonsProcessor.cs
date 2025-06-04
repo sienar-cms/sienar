@@ -7,10 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Sienar.Data;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
-using Sienar.Identity.Results;
 using Sienar.Processors;
 
-namespace Sienar.Identity.Processors;
+namespace Sienar.Identity.LockoutReasons;
 
 /// <exclude />
 public class GetLockoutReasonsProcessor<TContext>

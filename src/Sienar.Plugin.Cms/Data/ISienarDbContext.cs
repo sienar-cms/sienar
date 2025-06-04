@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sienar.Identity;
+using Sienar.Identity.LockoutReasons;
 using Sienar.Infrastructure;
 using Sienar.Media;
 

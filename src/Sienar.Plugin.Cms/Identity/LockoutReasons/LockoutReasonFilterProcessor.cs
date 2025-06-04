@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using Sienar.Data;
 using Sienar.Processors;
 
-namespace Sienar.Identity.Processors;
+namespace Sienar.Identity.LockoutReasons;
 
 /// <exclude />
 public class LockoutReasonFilterProcessor : IFilterProcessor<LockoutReason>

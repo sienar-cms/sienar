@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Sienar.Data;
 
-namespace Sienar.Identity;
+namespace Sienar.Identity.LockoutReasons;
 
 [EntityName(Singular = "lockout reason", Plural = "lockout reasons")]
 public class LockoutReason : EntityBase

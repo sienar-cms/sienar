@@ -34,11 +34,6 @@ public static class CmsErrors
 		public const string NoPendingEmail = "You do not have a pending email change";
 	}
 
-	public static class LockoutReason
-	{
-		public const string NotFound = "One or more lockout reasons could not be found.";
-	}
-
 	public static class Roles
 	{
 		public const string NotFound = "The specified role was not found.";
