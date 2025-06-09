@@ -107,7 +107,6 @@ public class CmsServerPlugin<TContext> : IPlugin
 			.AddStatusProcessor<ForgotPasswordRequest, ForgotPasswordProcessor<TContext>>()
 			.AddStatusProcessor<ResetPasswordRequest, ResetPasswordProcessor<TContext>>()
 			.AddResultProcessor<AccountDataResult, GetAccountDataProcessor>()
-			.AddStatusProcessor<AccessTokenRequest, AccessTokenProcessor>()
 			.AddProcessor<AccountLockoutRequest, AccountLockoutResult, GetLockoutReasonsProcessor<TContext>>()
 
 		// Registration
