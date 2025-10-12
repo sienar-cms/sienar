@@ -2,14 +2,14 @@
 using Sienar.Data;
 using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Security;
 
 /// <summary>
 /// Runs access validation hooks for a hookable request
 /// </summary>
 /// <typeparam name="T">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IAccessValidatorService<T>
+public interface IAccessValidationRunner<T>
 {
 	/// <summary>
 	/// Runs all access validation hooks for a hookable request

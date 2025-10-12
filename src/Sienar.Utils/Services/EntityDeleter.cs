@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Services;
 
@@ -15,7 +16,7 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 {
 	private readonly IRepository<TEntity> _repository;
 	private readonly ILogger<EntityDeleter<TEntity>> _logger;
-	private readonly IAccessValidatorService<TEntity> _accessValidator;
+	private readonly IAccessValidationRunner<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
 	private readonly IBeforeActionService<TEntity> _beforeHooks;
 	private readonly IAfterActionService<TEntity> _afterHooks;
@@ -24,7 +25,7 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<EntityDeleter<TEntity>> logger,
-		IAccessValidatorService<TEntity> accessValidator,
+		IAccessValidationRunner<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
 		IBeforeActionService<TEntity> beforeHooks,
 		IAfterActionService<TEntity> afterHooks)

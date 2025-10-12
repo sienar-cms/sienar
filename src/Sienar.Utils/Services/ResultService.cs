@@ -7,6 +7,7 @@ using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
+using Sienar.Security;
 
 namespace Sienar.Services;
 
@@ -16,13 +17,13 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 	where TResult : IResult
 {
 	private readonly ILogger<ResultService<TResult>> _logger;
-	private readonly IAccessValidatorService<TResult> _accessValidator;
+	private readonly IAccessValidationRunner<TResult> _accessValidator;
 	private readonly IAfterActionService<TResult> _afterHooks;
 	private readonly IResultProcessor<TResult> _processor;
 
 	public ResultService(
 		ILogger<ResultService<TResult>> logger,
-		IAccessValidatorService<TResult> accessValidator,
+		IAccessValidationRunner<TResult> accessValidator,
 		IAfterActionService<TResult> afterHooks,
 		IResultProcessor<TResult> processor,
 		INotificationService notifier)

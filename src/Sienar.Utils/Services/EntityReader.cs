@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Services;
 
@@ -15,14 +16,14 @@ public class EntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 {
 	private readonly IRepository<TEntity> _repository;
 	private readonly ILogger<EntityReader<TEntity>> _logger;
-	private readonly IAccessValidatorService<TEntity> _accessValidator;
+	private readonly IAccessValidationRunner<TEntity> _accessValidator;
 	private readonly IAfterActionService<TEntity> _afterHooks;
 
 	public EntityReader(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<EntityReader<TEntity>> logger,
-		IAccessValidatorService<TEntity> accessValidator,
+		IAccessValidationRunner<TEntity> accessValidator,
 		IAfterActionService<TEntity> afterHooks)
 		: base(notifier)
 	{

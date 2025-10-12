@@ -11,6 +11,7 @@ using Sienar.Email;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
+using Sienar.Security;
 using Sienar.Services;
 using Sienar.Ui;
 
@@ -35,11 +36,11 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IStatusService<>), typeof(StatusService<>));
 		self.TryAddScoped(typeof(IService<,>), typeof(Service<,>));
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
-		self.TryAddScoped(typeof(IAccessValidatorService<>), typeof(AccessValidatorService<>));
+		self.TryAddScoped(typeof(IAccessValidationRunner<>), typeof(DefaultAccessValidationRunner<>));
 		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
 		self.TryAddScoped(typeof(IBeforeActionService<>), typeof(BeforeActionService<>));
 		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
-		self.TryAddScoped<IBotDetector, BotDetector>();
+		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
 		self.TryAddScoped<AuthStateProvider>();

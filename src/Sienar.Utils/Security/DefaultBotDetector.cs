@@ -3,14 +3,14 @@
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <exclude />
-public class BotDetector : IBotDetector
+public class DefaultBotDetector : IBotDetector
 {
-	private readonly ILogger<BotDetector> _logger;
+	private readonly ILogger<DefaultBotDetector> _logger;
 
-	public BotDetector(ILogger<BotDetector> logger)
+	public DefaultBotDetector(ILogger<DefaultBotDetector> logger)
 	{
 		_logger = logger;
 	}

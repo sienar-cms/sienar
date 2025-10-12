@@ -1,4 +1,5 @@
 ﻿using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Hooks;
 

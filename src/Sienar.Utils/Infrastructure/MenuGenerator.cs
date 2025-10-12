@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sienar.Extensions;
+using Sienar.Security;
 
 namespace Sienar.Infrastructure;
 
@@ -41,7 +42,7 @@ public class MenuGenerator : IMenuGenerator
 
 			if (link.ChildMenu is not null)
 			{
-				link.Text ??= link.ChildMenu?.GetDescription();
+				link.Text ??= link.ChildMenu.GetDescription();
 				link.Sublinks = await Create(link.ChildMenu);
 			}
 

@@ -7,6 +7,7 @@ using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Processors;
+using Sienar.Security;
 
 namespace Sienar.Services;
 
@@ -16,7 +17,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 {
 	private readonly ILogger<StatusService<TRequest>> _logger;
 	private readonly IBotDetector _botDetector;
-	private readonly IAccessValidatorService<TRequest> _accessValidator;
+	private readonly IAccessValidationRunner<TRequest> _accessValidator;
 	private readonly IStateValidatorService<TRequest> _stateValidator;
 	private readonly IBeforeActionService<TRequest> _beforeHooks;
 	private readonly IAfterActionService<TRequest> _afterHooks;
@@ -25,7 +26,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 	public StatusService(
 		ILogger<StatusService<TRequest>> logger,
 		IBotDetector botDetector,
-		IAccessValidatorService<TRequest> accessValidator,
+		IAccessValidationRunner<TRequest> accessValidator,
 		IStateValidatorService<TRequest> stateValidator,
 		IBeforeActionService<TRequest> beforeHooks,
 		IAfterActionService<TRequest> afterHooks,

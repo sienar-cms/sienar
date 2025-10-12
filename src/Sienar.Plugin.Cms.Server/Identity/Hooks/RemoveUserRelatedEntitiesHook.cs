@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sienar.Identity.Requests;
-using Sienar.Infrastructure;
 using Sienar.Hooks;
 using Sienar.Identity.Data;
 using Sienar.Services;
 using Sienar.Media;
+using Sienar.Security;
 
 namespace Sienar.Identity.Hooks;
 

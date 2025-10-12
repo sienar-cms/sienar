@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Infrastructure;
+using Sienar.Security;
 
 namespace Sienar.Plugins;
 

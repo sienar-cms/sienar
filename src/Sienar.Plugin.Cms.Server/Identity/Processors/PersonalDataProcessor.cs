@@ -12,6 +12,7 @@ using Sienar.Infrastructure;
 using Sienar.Data;
 using Sienar.Identity.Data;
 using Sienar.Processors;
+using Sienar.Security;
 
 namespace Sienar.Identity.Processors;
 

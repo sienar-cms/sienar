@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
-using Sienar.Infrastructure;
 
-namespace Sienar.Services;
+namespace Sienar.Security;
 
 /// <exclude />
-public class AccessValidatorService<T> : IAccessValidatorService<T>
+public class DefaultAccessValidationRunner<T> : IAccessValidationRunner<T>
 {
 	private readonly IEnumerable<IAccessValidator<T>> _validators;
-	private readonly ILogger<IAccessValidatorService<T>> _logger;
+	private readonly ILogger<IAccessValidationRunner<T>> _logger;
 
-	public AccessValidatorService(
+	public DefaultAccessValidationRunner(
 		IEnumerable<IAccessValidator<T>> validators,
-		ILogger<IAccessValidatorService<T>> logger)
+		ILogger<IAccessValidationRunner<T>> logger)
 	{
 		_validators = validators;
 		_logger = logger;

@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Security;
 
 /// <summary>
 /// A Blazor-based implementation of <see cref="IUserAccessor"/>

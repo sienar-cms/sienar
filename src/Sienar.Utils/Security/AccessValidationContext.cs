@@ -1,4 +1,4 @@
-﻿namespace Sienar.Infrastructure;
+﻿namespace Sienar.Security;
 
 /// <summary>
 /// Used to track access requests that should fail by default and require explicit approval

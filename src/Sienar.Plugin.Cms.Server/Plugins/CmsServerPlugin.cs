@@ -17,6 +17,7 @@ using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Media;
 using Sienar.Media.Hooks;
+using Sienar.Security;
 
 namespace Sienar.Plugins;
 
