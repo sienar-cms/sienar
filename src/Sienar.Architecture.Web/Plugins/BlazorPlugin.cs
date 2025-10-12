@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.Extensions.DependencyInjection;
+using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Ui;
 

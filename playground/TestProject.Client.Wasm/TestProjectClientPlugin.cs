@@ -1,4 +1,5 @@
-﻿using Sienar.Extensions;
+﻿using Sienar.Configuration;
+using Sienar.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
 using Sienar.Plugins;
