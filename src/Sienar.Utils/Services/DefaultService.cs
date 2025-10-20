@@ -12,11 +12,11 @@ using Sienar.Security;
 namespace Sienar.Services;
 
 /// <exclude />
-public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResult>
+public class DefaultService<TRequest, TResult> : ServiceBase, IService<TRequest, TResult>
 	where TRequest : IRequest
 	where TResult : IResult
 {
-	private readonly ILogger<Service<TRequest, TResult>> _logger;
+	private readonly ILogger<DefaultService<TRequest, TResult>> _logger;
 	private readonly IBotDetector _botDetector;
 	private readonly IAccessValidationRunner<TRequest> _accessValidator;
 	private readonly IStateValidationRunner<TRequest> _stateValidator;
@@ -24,8 +24,8 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 	private readonly IAfterActionRunner<TRequest> _afterHooks;
 	private readonly IProcessor<TRequest, TResult> _processor;
 
-	public Service(
-		ILogger<Service<TRequest, TResult>> logger,
+	public DefaultService(
+		ILogger<DefaultService<TRequest, TResult>> logger,
 		IBotDetector botDetector,
 		IAccessValidationRunner<TRequest> accessValidator,
 		IStateValidationRunner<TRequest> stateValidator,

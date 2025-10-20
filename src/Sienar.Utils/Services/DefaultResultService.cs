@@ -13,16 +13,16 @@ namespace Sienar.Services;
 
 /// <exclude />
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-public class ResultService<TResult> : ServiceBase, IResultService<TResult>
+public class DefaultResultService<TResult> : ServiceBase, IResultService<TResult>
 	where TResult : IResult
 {
-	private readonly ILogger<ResultService<TResult>> _logger;
+	private readonly ILogger<DefaultResultService<TResult>> _logger;
 	private readonly IAccessValidationRunner<TResult> _accessValidator;
 	private readonly IAfterActionRunner<TResult> _afterHooks;
 	private readonly IResultProcessor<TResult> _processor;
 
-	public ResultService(
-		ILogger<ResultService<TResult>> logger,
+	public DefaultResultService(
+		ILogger<DefaultResultService<TResult>> logger,
 		IAccessValidationRunner<TResult> accessValidator,
 		IAfterActionRunner<TResult> afterHooks,
 		IResultProcessor<TResult> processor,
