@@ -1,7 +1,7 @@
 ﻿namespace Sienar.Hooks;
 
 /// <summary>
-/// The <see cref="ActionType"/> enum represents different types of actions that can be performed by services
+/// Represents different types of actions that can be performed by services
 /// </summary>
 public enum ActionType
 {
@@ -38,10 +38,10 @@ public enum ActionType
 	/// <summary>
 	/// Represents a general action that accepts an input and returns a <c>bool</c> to indicate its success status
 	/// </summary>
-	StatusAction,
+	Status,
 
 	/// <summary>
 	/// Represents a general action that accepts no input and returns an output on success
 	/// </summary>
-	ResultAction
+	Result
 }

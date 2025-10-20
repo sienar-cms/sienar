@@ -43,7 +43,7 @@ public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
 		DeleteAccountRequest request,
 		ActionType action)
 	{
-		if (action != ActionType.StatusAction) return;
+		if (action != ActionType.Status) return;
 
 		var userId = (await _userAccessor.GetUserId())!;
 		var user = (await _userRepository.Read(userId.Value))!;

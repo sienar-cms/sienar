@@ -38,7 +38,7 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 	public virtual async Task<OperationResult<TResult?>> Execute()
 	{
 		// Run access validation
-		var accessValidationResult = await _accessValidator.Validate(default, ActionType.ResultAction);
+		var accessValidationResult = await _accessValidator.Validate(default, ActionType.Result);
 		if (!accessValidationResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<TResult?>(
@@ -60,7 +60,7 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 
 		if (result.Status is OperationStatus.Success && result.Result is not null)
 		{
-			await _afterHooks.Run(result.Result, ActionType.ResultAction);
+			await _afterHooks.Run(result.Result, ActionType.Result);
 		}
 
 		return NotifyOfResult(result);

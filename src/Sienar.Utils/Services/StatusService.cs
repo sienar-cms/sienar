@@ -52,21 +52,21 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 		}
 
 		// Run access validation
-		var result = await _accessValidator.Validate(request, ActionType.StatusAction);
+		var result = await _accessValidator.Validate(request, ActionType.Status);
 		if (!result.Result)
 		{
 			return NotifyOfResult(result);
 		}
 
 		// Run state validation
-		result = await _stateValidator.Validate(request, ActionType.StatusAction);
+		result = await _stateValidator.Validate(request, ActionType.Status);
 		if (!result.Result)
 		{
 			return NotifyOfResult(result);
 		}
 
 		// Run before hooks
-		result = await _beforeHooks.Run(request, ActionType.StatusAction);
+		result = await _beforeHooks.Run(request, ActionType.Status);
 		if (!result.Result)
 		{
 			return NotifyOfResult(result);
@@ -84,7 +84,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 
 		if (result.Status is OperationStatus.Success)
 		{
-			await _afterHooks.Run(request, ActionType.StatusAction);
+			await _afterHooks.Run(request, ActionType.Status);
 		}
 
 		return NotifyOfResult(result);
