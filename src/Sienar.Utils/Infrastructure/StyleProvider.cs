@@ -5,4 +5,4 @@ using System.Collections.Generic;
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class StyleProvider : List<StyleResource>, IStyleProvider;
+public class StyleProvider : List<StyleResource>;

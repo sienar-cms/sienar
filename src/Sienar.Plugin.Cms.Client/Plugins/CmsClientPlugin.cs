@@ -25,8 +25,8 @@ public class CmsClientPlugin : IPlugin
 	private readonly IMenuProvider _menuProvider;
 	private readonly IPluginDataProvider _pluginDataProvider;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
-	private readonly IScriptProvider _scriptProvider;
-	private readonly IStyleProvider _styleProvider;
+	private readonly ScriptProvider _scriptProvider;
+	private readonly StyleProvider _styleProvider;
 
 	/// <summary>
 	/// Creates a new instance of <c>CmsClientPlugin</c>
@@ -39,8 +39,8 @@ public class CmsClientPlugin : IPlugin
 		IMenuProvider menuProvider,
 		IPluginDataProvider pluginDataProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider,
-		IScriptProvider scriptProvider,
-		IStyleProvider styleProvider)
+		ScriptProvider scriptProvider,
+		StyleProvider styleProvider)
 	{
 		_adapter = adapter;
 		_configuration = configuration;

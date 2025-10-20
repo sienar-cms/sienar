@@ -16,7 +16,7 @@ public class TestProjectClientPlugin : IPlugin
 	private readonly IComponentProvider _componentProvider;
 	private readonly IGlobalComponentProvider _globalComponentProvider;
 	private readonly IMenuProvider _menuProvider;
-	private readonly IStyleProvider _styleProvider;
+	private readonly StyleProvider _styleProvider;
 
 	public TestProjectClientPlugin(
 		IApplicationAdapter adapter,
@@ -24,7 +24,7 @@ public class TestProjectClientPlugin : IPlugin
 		IComponentProvider componentProvider,
 		IGlobalComponentProvider globalComponentProvider,
 		IMenuProvider menuProvider,
-		IStyleProvider styleProvider)
+		StyleProvider styleProvider)
 	{
 		_adapter = adapter;
 		_routableAssemblyProvider = routableAssemblyProvider;

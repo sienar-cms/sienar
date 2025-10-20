@@ -5,4 +5,4 @@ using System.Collections.Generic;
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class ScriptProvider : List<ScriptResource>, IScriptProvider;
+public class ScriptProvider : List<ScriptResource>;

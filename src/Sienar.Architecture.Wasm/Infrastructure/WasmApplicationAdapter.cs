@@ -43,8 +43,8 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton(sp.GetRequiredService<IMenuProvider>())
 			.AddSingleton(sp.GetRequiredService<IPluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IRoutableAssemblyProvider>())
-			.AddSingleton(sp.GetRequiredService<IScriptProvider>())
-			.AddSingleton(sp.GetRequiredService<IStyleProvider>());
+			.AddSingleton(sp.GetRequiredService<ScriptProvider>())
+			.AddSingleton(sp.GetRequiredService<StyleProvider>());
 
 		return Builder.Build();
 	}

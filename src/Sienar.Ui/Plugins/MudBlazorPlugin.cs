@@ -10,8 +10,8 @@ namespace Sienar.Plugins;
 public class MudBlazorPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
-	private readonly IScriptProvider _scriptProvider;
-	private readonly IStyleProvider _styleProvider;
+	private readonly ScriptProvider _scriptProvider;
+	private readonly StyleProvider _styleProvider;
 	private readonly IConfigurer<MudServicesConfiguration>? _mudConfigurer;
 
 	/// <summary>
@@ -19,8 +19,8 @@ public class MudBlazorPlugin : IPlugin
 	/// </summary>
 	public MudBlazorPlugin(
 		IApplicationAdapter adapter,
-		IScriptProvider scriptProvider,
-		IStyleProvider styleProvider,
+		ScriptProvider scriptProvider,
+		StyleProvider styleProvider,
 		IConfigurer<MudServicesConfiguration>? mudConfigurer = null)
 	{
 		_adapter = adapter;
