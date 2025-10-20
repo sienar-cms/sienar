@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sienar.Data;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <summary>
 /// A service to read instances of <c>TEntity</c> from the appropriate repository
 /// </summary>
-/// <typeparam name="TEntity"></typeparam>
+/// <typeparam name="TEntity">the type of the entity</typeparam>
 public interface IEntityReader<TEntity>
 {
 	/// <summary>

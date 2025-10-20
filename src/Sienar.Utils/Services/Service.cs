@@ -19,7 +19,7 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 	private readonly ILogger<Service<TRequest, TResult>> _logger;
 	private readonly IBotDetector _botDetector;
 	private readonly IAccessValidationRunner<TRequest> _accessValidator;
-	private readonly IStateValidatorService<TRequest> _stateValidator;
+	private readonly IStateValidationRunner<TRequest> _stateValidator;
 	private readonly IBeforeActionRunner<TRequest> _beforeHooks;
 	private readonly IAfterActionRunner<TRequest> _afterHooks;
 	private readonly IProcessor<TRequest, TResult> _processor;
@@ -28,7 +28,7 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 		ILogger<Service<TRequest, TResult>> logger,
 		IBotDetector botDetector,
 		IAccessValidationRunner<TRequest> accessValidator,
-		IStateValidatorService<TRequest> stateValidator,
+		IStateValidationRunner<TRequest> stateValidator,
 		IBeforeActionRunner<TRequest> beforeHooks,
 		IAfterActionRunner<TRequest> afterHooks,
 		IProcessor<TRequest, TResult> processor,

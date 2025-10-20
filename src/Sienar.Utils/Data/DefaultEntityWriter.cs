@@ -3,12 +3,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Security;
+using Sienar.Services;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
 public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
@@ -17,26 +17,26 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 	private readonly IRepository<TEntity> _repository;
 	private readonly ILogger<DefaultEntityWriter<TEntity>> _logger;
 	private readonly IAccessValidationRunner<TEntity> _accessValidator;
-	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeActionRunner<TEntity> _beforeHooks;
-	private readonly IAfterActionRunner<TEntity> _afterHooks;
+	private readonly IStateValidationRunner<TEntity> _stateValidationRunner;
+	private readonly IBeforeActionRunner<TEntity> _beforeActionRunner;
+	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
 	public DefaultEntityWriter(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityWriter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,
-		IStateValidatorService<TEntity> stateValidator,
-		IBeforeActionRunner<TEntity> beforeHooks,
-		IAfterActionRunner<TEntity> afterHooks)
+		IStateValidationRunner<TEntity> stateValidationRunner,
+		IBeforeActionRunner<TEntity> beforeActionRunner,
+		IAfterActionRunner<TEntity> afterActionRunner)
 		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
 		_accessValidator = accessValidator;
-		_stateValidator = stateValidator;
-		_beforeHooks = beforeHooks;
-		_afterHooks = afterHooks;
+		_stateValidationRunner = stateValidationRunner;
+		_beforeActionRunner = beforeActionRunner;
+		_afterActionRunner = afterActionRunner;
 	}
 
 	public async Task<OperationResult<Guid?>> Create(TEntity model)
@@ -52,7 +52,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run state validation
-		var stateValidationResult = await _stateValidator.Validate(model, ActionType.Create);
+		var stateValidationResult = await _stateValidationRunner.Validate(model, ActionType.Create);
 		if (!stateValidationResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<Guid?>(
@@ -62,7 +62,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run before hooks
-		var beforeHooksResult = await _beforeHooks.Run(model, ActionType.Create);
+		var beforeHooksResult = await _beforeActionRunner.Run(model, ActionType.Create);
 		if (!beforeHooksResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<Guid?>(
@@ -85,7 +85,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run after hooks
-		await _afterHooks.Run(model, ActionType.Create);
+		await _afterActionRunner.Run(model, ActionType.Create);
 
 		return NotifyOfResult(new OperationResult<Guid?>(
 			OperationStatus.Success,
@@ -106,7 +106,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run state validation
-		var stateValidationResult = await _stateValidator.Validate(model, ActionType.Update);
+		var stateValidationResult = await _stateValidationRunner.Validate(model, ActionType.Update);
 		if (!stateValidationResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<bool>(
@@ -116,7 +116,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run before hooks
-		var beforeHooksResult = await _beforeHooks.Run(model, ActionType.Update);
+		var beforeHooksResult = await _beforeActionRunner.Run(model, ActionType.Update);
 		if (!beforeHooksResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<bool>(
@@ -139,7 +139,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		}
 
 		// Run after hooks
-		await _afterHooks.Run(model, ActionType.Update);
+		await _afterActionRunner.Run(model, ActionType.Update);
 
 		return NotifyOfResult(new OperationResult<bool>(
 			OperationStatus.Success,

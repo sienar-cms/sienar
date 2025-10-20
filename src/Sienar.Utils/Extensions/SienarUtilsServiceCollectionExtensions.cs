@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
+using Sienar.Data;
 using Sienar.Email;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
@@ -37,7 +38,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IService<,>), typeof(Service<,>));
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
 		self.TryAddScoped(typeof(IAccessValidationRunner<>), typeof(DefaultAccessValidationRunner<>));
-		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
+		self.TryAddScoped(typeof(IStateValidationRunner<>), typeof(DefaultStateValidationRunner<>));
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(BeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(AfterActionRunner<>));
 		self.TryAddScoped<IBotDetector, DefaultBotDetector>();

@@ -3,12 +3,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Security;
+using Sienar.Services;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
 public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
@@ -17,7 +17,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 	private readonly IRepository<TEntity> _repository;
 	private readonly ILogger<DefaultEntityDeleter<TEntity>> _logger;
 	private readonly IAccessValidationRunner<TEntity> _accessValidator;
-	private readonly IStateValidatorService<TEntity> _stateValidator;
+	private readonly IStateValidationRunner<TEntity> _stateValidationRunner;
 	private readonly IBeforeActionRunner<TEntity> _beforeActionRunner;
 	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
@@ -26,7 +26,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityDeleter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,
-		IStateValidatorService<TEntity> stateValidator,
+		IStateValidationRunner<TEntity> stateValidationRunner,
 		IBeforeActionRunner<TEntity> beforeActionRunner,
 		IAfterActionRunner<TEntity> afterActionRunner)
 		: base(notifier)
@@ -34,7 +34,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 		_repository = repository;
 		_logger = logger;
 		_accessValidator = accessValidator;
-		_stateValidator = stateValidator;
+		_stateValidationRunner = stateValidationRunner;
 		_beforeActionRunner = beforeActionRunner;
 		_afterActionRunner = afterActionRunner;
 	}
@@ -73,7 +73,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 		}
 
 		// Run state validation
-		var stateValidationResult = await _stateValidator.Validate(entity, ActionType.Delete);
+		var stateValidationResult = await _stateValidationRunner.Validate(entity, ActionType.Delete);
 		if (!stateValidationResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<bool>(

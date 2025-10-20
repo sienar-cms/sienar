@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Sienar.Data;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 // ReSharper disable once TypeParameterCanBeVariant
 /// <summary>
 /// A service to write or update instances of <c>TEntity</c> in the appropriate repository
 /// </summary>
-/// <typeparam name="TEntity"></typeparam>
+/// <typeparam name="TEntity">the type of the entity</typeparam>
 public interface IEntityWriter<TEntity>
 {
 	/// <summary>

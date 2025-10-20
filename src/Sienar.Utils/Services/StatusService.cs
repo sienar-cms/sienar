@@ -18,7 +18,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 	private readonly ILogger<StatusService<TRequest>> _logger;
 	private readonly IBotDetector _botDetector;
 	private readonly IAccessValidationRunner<TRequest> _accessValidator;
-	private readonly IStateValidatorService<TRequest> _stateValidator;
+	private readonly IStateValidationRunner<TRequest> _stateValidator;
 	private readonly IBeforeActionRunner<TRequest> _beforeHooks;
 	private readonly IAfterActionRunner<TRequest> _afterHooks;
 	private readonly IStatusProcessor<TRequest> _processor;
@@ -27,7 +27,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 		ILogger<StatusService<TRequest>> logger,
 		IBotDetector botDetector,
 		IAccessValidationRunner<TRequest> accessValidator,
-		IStateValidatorService<TRequest> stateValidator,
+		IStateValidationRunner<TRequest> stateValidator,
 		IBeforeActionRunner<TRequest> beforeHooks,
 		IAfterActionRunner<TRequest> afterHooks,
 		IStatusProcessor<TRequest> processor,

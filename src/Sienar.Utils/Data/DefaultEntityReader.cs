@@ -3,12 +3,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Data;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Security;
+using Sienar.Services;
 
-namespace Sienar.Services;
+namespace Sienar.Data;
 
 /// <exclude />
 public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
@@ -16,21 +16,21 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 {
 	private readonly IRepository<TEntity> _repository;
 	private readonly ILogger<DefaultEntityReader<TEntity>> _logger;
-	private readonly IAccessValidationRunner<TEntity> _accessValidator;
-	private readonly IAfterActionRunner<TEntity> _afterHooks;
+	private readonly IAccessValidationRunner<TEntity> _accessValidationRunner;
+	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
 	public DefaultEntityReader(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityReader<TEntity>> logger,
-		IAccessValidationRunner<TEntity> accessValidator,
-		IAfterActionRunner<TEntity> afterHooks)
+		IAccessValidationRunner<TEntity> accessValidationRunner,
+		IAfterActionRunner<TEntity> afterActionRunner)
 		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
-		_accessValidator = accessValidator;
-		_afterHooks = afterHooks;
+		_accessValidationRunner = accessValidationRunner;
+		_afterActionRunner = afterActionRunner;
 	}
 
 	public async Task<OperationResult<TEntity?>> Read(
@@ -60,7 +60,7 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 		}
 
 		// Run access validation
-		var accessValidationResult = await _accessValidator.Validate(entity, ActionType.Read);
+		var accessValidationResult = await _accessValidationRunner.Validate(entity, ActionType.Read);
 		if (!accessValidationResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<TEntity?>(
@@ -69,7 +69,7 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 				StatusMessages.Crud<TEntity>.NoPermission()));
 		}
 
-		await _afterHooks.Run(entity, ActionType.Read);
+		await _afterActionRunner.Run(entity, ActionType.Read);
 		return NotifyOfResult(new OperationResult<TEntity?>(result: entity));
 	}
 
@@ -92,7 +92,7 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 
 		foreach (var entity in queryResult.Items)
 		{
-			await _afterHooks.Run(entity, ActionType.ReadAll);
+			await _afterActionRunner.Run(entity, ActionType.ReadAll);
 		}
 
 		return NotifyOfResult(new OperationResult<PagedQuery<TEntity>>(result: queryResult));
