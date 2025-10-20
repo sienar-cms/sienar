@@ -32,12 +32,12 @@ public class RestfulRepository<TEntity> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<PagedQuery<TEntity>> Read(Filter? filter = null)
+	public async Task<PagedQueryResult<TEntity>> Read(Filter? filter = null)
 	{
-		var response = await _client.Get<PagedQuery<TEntity>>(
+		var response = await _client.Get<PagedQueryResult<TEntity>>(
 			_urlProvider.GenerateReadUrl(),
 			filter);
-		return response.Result ?? new PagedQuery<TEntity>();
+		return response.Result ?? new PagedQueryResult<TEntity>();
 	}
 
 	/// <inheritdoc />

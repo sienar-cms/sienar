@@ -89,7 +89,7 @@
 	public required RenderFragment<TItem> RowTemplate { get; set; }
 
 	[Parameter]
-	public required Func<Filter?, Task<OperationResult<PagedQuery<TItem>>>> LoadData { get; set; }
+	public required Func<Filter?, Task<OperationResult<PagedQueryResult<TItem>>>> LoadData { get; set; }
 
 	private MudTable<TItem> TableRef { get; set; } = null!;
 	private bool _loading;

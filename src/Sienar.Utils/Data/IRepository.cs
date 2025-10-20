@@ -21,8 +21,8 @@ public interface IRepository<TEntity>
 	/// Reads all entities from the datastore that satisfy the provided filter
 	/// </summary>
 	/// <param name="filter">a <see cref="Filter"/> to specify included results</param>
-	/// <returns>a <see cref="PagedQuery{TModel}"/> of entities matching the provided filter</returns>
-	Task<PagedQuery<TEntity>> Read(Filter? filter = null);
+	/// <returns>a <see cref="PagedQueryResult{TModel}"/> of entities matching the provided filter</returns>
+	Task<PagedQueryResult<TEntity>> Read(Filter? filter = null);
 
 	/// <summary>
 	/// Creates a new entity in the datastore

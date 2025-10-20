@@ -73,9 +73,9 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 		return NotifyOfResult(new OperationResult<TEntity?>(result: entity));
 	}
 
-	public async Task<OperationResult<PagedQuery<TEntity>>> Read(Filter? filter = null)
+	public async Task<OperationResult<PagedQueryResult<TEntity>>> Read(Filter? filter = null)
 	{
-		PagedQuery<TEntity> queryResult;
+		PagedQueryResult<TEntity> queryResult;
 
 		try
 		{
@@ -84,9 +84,9 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return NotifyOfResult(new OperationResult<PagedQuery<TEntity>>(
+			return NotifyOfResult(new OperationResult<PagedQueryResult<TEntity>>(
 				OperationStatus.Unknown,
-				new PagedQuery<TEntity>(),
+				new PagedQueryResult<TEntity>(),
 				StatusMessages.Crud<TEntity>.ReadMultipleFailed()));
 		}
 
@@ -95,6 +95,6 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 			await _afterActionRunner.Run(entity, ActionType.ReadAll);
 		}
 
-		return NotifyOfResult(new OperationResult<PagedQuery<TEntity>>(result: queryResult));
+		return NotifyOfResult(new OperationResult<PagedQueryResult<TEntity>>(result: queryResult));
 	}
 }

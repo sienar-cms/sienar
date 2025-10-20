@@ -50,7 +50,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<PagedQuery<TEntity>> Read(Filter? filter = null)
+	public async Task<PagedQueryResult<TEntity>> Read(Filter? filter = null)
 	{
 		filter = FilterProcessor.ModifyFilter(filter, ActionType.ReadAll);
 		IQueryable<TEntity> entries;

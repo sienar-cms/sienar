@@ -24,5 +24,5 @@ public interface IEntityReader<TEntity>
 	/// </summary>
 	/// <param name="filter">A <see cref="Filter"/> to specify included results</param>
 	/// <returns>a list of all entities in the database</returns>
-	Task<OperationResult<PagedQuery<TEntity>>> Read(Filter? filter = null);
+	Task<OperationResult<PagedQueryResult<TEntity>>> Read(Filter? filter = null);
 }

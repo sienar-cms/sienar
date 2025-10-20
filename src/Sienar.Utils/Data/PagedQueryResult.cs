@@ -9,7 +9,7 @@ namespace Sienar.Data;
 /// </summary>
 /// <typeparam name="TModel"></typeparam>
 [ExcludeFromCodeCoverage]
-public class PagedQuery<TModel>
+public class PagedQueryResult<TModel>
 {
 	/// <summary>
 	/// Represents the items in the current page of results
@@ -24,14 +24,14 @@ public class PagedQuery<TModel>
 	/// <summary>
 	/// Creates an empty <c>PagedQuery</c>
 	/// </summary>
-	public PagedQuery() {}
+	public PagedQueryResult() {}
 
 	/// <summary>
 	/// Creates a <c>PagedQuery</c> that has been populated with results
 	/// </summary>
 	/// <param name="items">the results on the current page</param>
 	/// <param name="totalCount">the total number of items in the database that match the query</param>
-	public PagedQuery(IEnumerable<TModel> items, int totalCount)
+	public PagedQueryResult(IEnumerable<TModel> items, int totalCount)
 	{
 		Items = items;
 		TotalCount = totalCount;
