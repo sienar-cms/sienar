@@ -8,6 +8,7 @@ namespace Sienar.Processors;
 /// <summary>
 /// A processor which accepts no input and returns a <see cref="OperationResult{TResult}"/>
 /// </summary>
+/// <typeparam name="TResult">The type of the processor output</typeparam>
 public interface IResultProcessor<TResult> where TResult : IResult
 {
 	/// <summary>
