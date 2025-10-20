@@ -14,7 +14,7 @@ namespace Sienar.Identity;
 [ApiController]
 [Route("/api/lockout-reasons")]
 [Authorize(Roles = Roles.Admin)]
-public class LockoutReasonController : ServiceController
+public class LockoutReasonController : SienarController
 {
 	public LockoutReasonController(IOperationResultMapper mapper)
 		: base(mapper) {}

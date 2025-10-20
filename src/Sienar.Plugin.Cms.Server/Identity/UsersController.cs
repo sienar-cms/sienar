@@ -15,7 +15,7 @@ namespace Sienar.Identity;
 [ApiController]
 [Route("/api/users")]
 [Authorize(Roles = Roles.Admin)]
-public class UsersController : ServiceController
+public class UsersController : SienarController
 {
 	public UsersController(IOperationResultMapper mapper)
 		: base(mapper) {}

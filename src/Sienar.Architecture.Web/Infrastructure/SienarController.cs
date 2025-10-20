@@ -8,12 +8,12 @@ namespace Sienar.Infrastructure;
 /// <summary>
 /// A controller that wraps around Sienar services to return information from an API endpoint in a consistent way
 /// </summary>
-public class ServiceController : ControllerBase
+public class SienarController : ControllerBase
 {
 	private readonly IOperationResultMapper _mapper;
 
 	/// <inheritdoc />
-	protected ServiceController(IOperationResultMapper mapper)
+	protected SienarController(IOperationResultMapper mapper)
 	{
 		_mapper = mapper;
 	}
