@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Extensions;
+using Sienar.Html;
 using Sienar.Identity;
 using Sienar.Identity.Data;
 using Sienar.Identity.Processors;

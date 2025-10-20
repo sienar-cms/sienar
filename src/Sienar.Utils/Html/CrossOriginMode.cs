@@ -1,4 +1,4 @@
-﻿namespace Sienar.Infrastructure;
+﻿namespace Sienar.Html;
 
 /// <summary>
 /// Represents the possible values of the <c>crossorigin</c> HTML attribute

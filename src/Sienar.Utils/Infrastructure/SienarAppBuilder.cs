@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Configuration;
 using Sienar.Extensions;
+using Sienar.Html;
 using Sienar.Plugins;
 
 namespace Sienar.Infrastructure;

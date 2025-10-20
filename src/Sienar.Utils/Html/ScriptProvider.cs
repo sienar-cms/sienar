@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Html;
 
 /// <exclude />
-public class StyleProvider : List<StyleResource>;
+public class ScriptProvider : List<ScriptResource>;
