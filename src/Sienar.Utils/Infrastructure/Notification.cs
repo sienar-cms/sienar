@@ -1,4 +1,4 @@
-﻿namespace Sienar.Data;
+﻿namespace Sienar.Infrastructure;
 
 /// <summary>
 /// Represents a serialized notification for transmission across a REST API

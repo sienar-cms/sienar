@@ -1,4 +1,4 @@
-﻿namespace Sienar.Data;
+﻿namespace Sienar.Infrastructure;
 
 /// <summary>
 /// Represents different types of notifications
