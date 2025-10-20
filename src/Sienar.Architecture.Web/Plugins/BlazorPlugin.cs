@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Configuration;
 using Sienar.Infrastructure;
+using Sienar.Security;
 using Sienar.Ui;
 
 namespace Sienar.Plugins;

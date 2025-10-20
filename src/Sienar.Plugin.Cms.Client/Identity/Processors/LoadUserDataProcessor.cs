@@ -7,6 +7,7 @@ using Sienar.Hooks;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Processors;
+using Sienar.Security;
 using Sienar.Ui;
 
 namespace Sienar.Identity.Processors;
