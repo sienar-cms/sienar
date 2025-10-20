@@ -20,7 +20,7 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
 	public DefaultEntityReader(
-		INotificationService notifier,
+		INotifier notifier,
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityReader<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidationRunner,

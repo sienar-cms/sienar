@@ -20,7 +20,7 @@ public class CookieRestClient : IRestClient
 	private readonly HttpClient _client;
 	private readonly IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> _beforeActionHooks;
 	private readonly IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> _afterActionHooks;
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 	private readonly ILogger<CookieRestClient> _logger;
 	private readonly JsonSerializerOptions _jsonOptions;
 
@@ -29,7 +29,7 @@ public class CookieRestClient : IRestClient
 		HttpClient client,
 		IEnumerable<IBeforeTask<RestClientRequest<CookieRestClient>>> beforeActionHooks,
 		IEnumerable<IAfterTask<RestClientResponse<CookieRestClient>>> afterActionHooks,
-		INotificationService notifier,
+		INotifier notifier,
 		ILogger<CookieRestClient> logger)
 	{
 		_client = client;

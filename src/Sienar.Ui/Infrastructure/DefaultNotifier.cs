@@ -4,11 +4,11 @@ using Sienar.Data;
 
 namespace Sienar.Infrastructure;
 
-public class NotificationService : INotificationService
+public class DefaultNotifier : INotifier
 {
 	private readonly ISnackbar _snackbar;
 
-	public NotificationService(ISnackbar snackbar)
+	public DefaultNotifier(ISnackbar snackbar)
 	{
 		_snackbar = snackbar;
 	}

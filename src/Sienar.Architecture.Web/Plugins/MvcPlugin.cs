@@ -41,9 +41,9 @@ public class MvcPlugin : IPlugin
 			.AddEndpointsApiExplorer()
 			.AddSwaggerGen()
 			.AddScoped<ICsrfTokenRefresher, CsrfTokenRefresher>()
-			.AddScoped<IReadableNotificationService, RestNotificationService>()
-			.AddScoped<INotificationService>(
-				sp => sp.GetRequiredService<IReadableNotificationService>())
+			.AddScoped<IReadableNotifier, RestNotifier>()
+			.AddScoped<INotifier>(
+				sp => sp.GetRequiredService<IReadableNotifier>())
 			.AddScoped<IOperationResultMapper, OperationResultMapper>();
 
 		// Add and configure MVC

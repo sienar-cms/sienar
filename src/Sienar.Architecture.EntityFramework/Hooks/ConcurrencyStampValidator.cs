@@ -12,11 +12,11 @@ public class ConcurrencyStampValidator<TEntity> : IStateValidator<TEntity>
 	where TEntity : EntityBase
 {
 	private readonly IRepository<TEntity> _repository;
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 
 	public ConcurrencyStampValidator(
 		IRepository<TEntity> repository,
-		INotificationService notifier)
+		INotifier notifier)
 	{
 		_repository = repository;
 		_notifier = notifier;

@@ -10,11 +10,11 @@ public class UploadFileHook : IBeforeAction<Upload>
 {
 	private readonly IMediaManager _mediaManager;
 	private readonly ILogger<UploadFileHook> _logger;
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 	public UploadFileHook(
 		IMediaManager mediaManager,
 		ILogger<UploadFileHook> logger,
-		INotificationService notifier)
+		INotifier notifier)
 	{
 		_mediaManager = mediaManager;
 		_logger = logger;

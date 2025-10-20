@@ -6,7 +6,7 @@ namespace Sienar.Infrastructure;
 /// <summary>
 /// Supplies various types of messages to the user
 /// </summary>
-public interface INotificationService
+public interface INotifier
 {
 	/// <summary>
 	/// Used to display a success message to the user

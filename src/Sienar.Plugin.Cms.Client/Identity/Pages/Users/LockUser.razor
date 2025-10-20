@@ -98,7 +98,7 @@
 	public Guid UserId { get; set; }
 
 	[Inject]
-	private INotificationService Notifier { get; set; } = null!;
+	private INotifier Notifier { get; set; } = null!;
 
 	[Inject]
 	private ILogger<LockUser> Logger { get; set; } = null!;

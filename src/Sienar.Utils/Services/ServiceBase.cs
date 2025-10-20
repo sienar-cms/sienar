@@ -4,20 +4,20 @@ using Sienar.Infrastructure;
 namespace Sienar.Services;
 
 /// <summary>
-/// A base service that provides a <see cref="NotifyOfResult{TResult}"/> method which uses <see cref="INotificationService"/> to notify the user of the status of the operation if a status message is present on the <see cref="OperationResult{TResult}"/>
+/// A base service that provides a <see cref="NotifyOfResult{TResult}"/> method which uses <see cref="INotifier"/> to notify the user of the status of the operation if a status message is present on the <see cref="OperationResult{TResult}"/>
 /// </summary>
 public abstract class ServiceBase
 {
 	/// <summary>
 	/// The notification service
 	/// </summary>
-	protected readonly INotificationService Notifier;
+	protected readonly INotifier Notifier;
 
 	/// <summary>
 	/// Creates a new instance of <c>ServiceBase</c>
 	/// </summary>
 	/// <param name="notifier">The notification service</param>
-	protected ServiceBase(INotificationService notifier)
+	protected ServiceBase(INotifier notifier)
 	{
 		Notifier = notifier;
 	}

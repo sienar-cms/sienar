@@ -26,7 +26,7 @@ public class ResultService<TResult> : ServiceBase, IResultService<TResult>
 		IAccessValidationRunner<TResult> accessValidator,
 		IAfterActionRunner<TResult> afterHooks,
 		IResultProcessor<TResult> processor,
-		INotificationService notifier)
+		INotifier notifier)
 		: base(notifier)
 	{
 		_logger = logger;

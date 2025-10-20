@@ -129,7 +129,7 @@ public class CmsClientPlugin : IPlugin
 				.AddStartupTask<InitializeCsrfTokenOnAppStartHook>()
 				.AddStartupTask<LoadUserDataProcessor>();
 
-			s.TryAddScoped<INotificationService, NotificationService>();
+			s.TryAddScoped<INotifier, DefaultNotifier>();
 			s.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 
 			s

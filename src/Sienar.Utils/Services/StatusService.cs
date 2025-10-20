@@ -31,7 +31,7 @@ public class StatusService<TRequest> : ServiceBase, IStatusService<TRequest>
 		IBeforeActionRunner<TRequest> beforeHooks,
 		IAfterActionRunner<TRequest> afterHooks,
 		IStatusProcessor<TRequest> processor,
-		INotificationService notifier)
+		INotifier notifier)
 		: base(notifier)
 	{
 		_logger = logger;

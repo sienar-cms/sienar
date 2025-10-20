@@ -22,7 +22,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
 	public DefaultEntityWriter(
-		INotificationService notifier,
+		INotifier notifier,
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityWriter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,

@@ -4,9 +4,9 @@ using Sienar.Data;
 namespace Sienar.Infrastructure;
 
 /// <summary>
-/// The default implementation of <see cref="IReadableNotificationService"/>
+/// The default implementation of <see cref="IReadableNotifier"/>
 /// </summary>
-public class RestNotificationService : IReadableNotificationService
+public class RestNotifier : IReadableNotifier
 {
 	/// <inheritdoc />
 	public List<Notification> Notifications { get; } = [];

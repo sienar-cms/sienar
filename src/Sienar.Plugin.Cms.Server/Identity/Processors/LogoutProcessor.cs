@@ -12,11 +12,11 @@ namespace Sienar.Identity.Processors;
 public class LogoutProcessor : IStatusProcessor<LogoutRequest>
 {
 	private readonly ISignInManager _signInManager;
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 
 	public LogoutProcessor(
 		ISignInManager signInManager,
-		INotificationService notifier)
+		INotifier notifier)
 	{
 		_signInManager = signInManager;
 		_notifier = notifier;

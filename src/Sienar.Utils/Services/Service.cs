@@ -32,7 +32,7 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 		IBeforeActionRunner<TRequest> beforeHooks,
 		IAfterActionRunner<TRequest> afterHooks,
 		IProcessor<TRequest, TResult> processor,
-		INotificationService notifier)
+		INotifier notifier)
 		: base(notifier)
 	{
 		_logger = logger;

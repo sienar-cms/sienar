@@ -16,11 +16,11 @@ public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 	IStateValidator<RegisterRequest>
 {
 	private readonly IUserRepository _userRepository;
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 
 	public EnsureAccountInfoUniqueValidator(
 		IUserRepository userRepository,
-		INotificationService notifier)
+		INotifier notifier)
 	{
 		_userRepository = userRepository;
 		_notifier = notifier;

@@ -22,7 +22,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
 	public DefaultEntityDeleter(
-		INotificationService notifier,
+		INotifier notifier,
 		IRepository<TEntity> repository,
 		ILogger<DefaultEntityDeleter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,

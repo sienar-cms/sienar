@@ -12,9 +12,9 @@ namespace Sienar.Identity.Hooks;
 /// <exclude />
 public class AcceptTosValidator : IStateValidator<RegisterRequest>
 {
-	private readonly INotificationService _notifier;
+	private readonly INotifier _notifier;
 
-	public AcceptTosValidator(INotificationService notifier)
+	public AcceptTosValidator(INotifier notifier)
 	{
 		_notifier = notifier;
 	}
