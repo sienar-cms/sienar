@@ -5,4 +5,4 @@ using System.Collections.Generic;
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class PluginDataProvider : List<PluginData>, IPluginDataProvider;
+public class PluginDataProvider : List<PluginData>;

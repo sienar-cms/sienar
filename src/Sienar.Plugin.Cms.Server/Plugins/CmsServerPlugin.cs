@@ -25,11 +25,11 @@ namespace Sienar.Plugins;
 public class CmsServerPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
-	private readonly IPluginDataProvider _pluginDataProvider;
+	private readonly PluginDataProvider _pluginDataProvider;
 
 	public CmsServerPlugin(
 		WebApplicationBuilder builder,
-		IPluginDataProvider pluginDataProvider)
+		PluginDataProvider pluginDataProvider)
 	{
 		_builder = builder;
 		_pluginDataProvider = pluginDataProvider;

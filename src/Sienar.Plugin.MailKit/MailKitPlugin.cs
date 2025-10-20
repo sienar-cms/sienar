@@ -15,7 +15,7 @@ public class MailKitPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
 	private readonly IConfiguration _configuration;
-	private readonly IPluginDataProvider _pluginDataProvider;
+	private readonly PluginDataProvider _pluginDataProvider;
 
 	/// <summary>
 	/// Creates a new instance of <c>MailKitPlugin</c>
@@ -23,7 +23,7 @@ public class MailKitPlugin : IPlugin
 	public MailKitPlugin(
 		IApplicationAdapter adapter,
 		IConfiguration configuration,
-		IPluginDataProvider pluginDataProvider)
+		PluginDataProvider pluginDataProvider)
 	{
 		_adapter = adapter;
 		_configuration = configuration;

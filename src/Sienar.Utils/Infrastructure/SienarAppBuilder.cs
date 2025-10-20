@@ -43,7 +43,7 @@ public sealed class SienarAppBuilder
 
 		StartupServices
 			.AddSingleton<IMenuProvider, MenuProvider>()
-			.AddSingleton<IPluginDataProvider, PluginDataProvider>()
+			.AddSingleton<PluginDataProvider>()
 			.AddSingleton<ScriptProvider>()
 			.AddSingleton<StyleProvider>();
 	}
