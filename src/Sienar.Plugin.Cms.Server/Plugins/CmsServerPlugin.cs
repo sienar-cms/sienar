@@ -157,12 +157,15 @@ public class CmsServerPlugin : IPlugin
 	{
 		builder.AddPlugin<MvcPlugin>();
 
-		builder.StartupServices
-			.TryAddConfigurer<DefaultAuthorizationConfigurer>()
-			.TryAddConfigurer<DefaultAuthenticationConfigurer>()
-			.TryAddConfigurer<DefaultAuthenticationBuilderConfigurer>()
-			.TryAddConfigurer<DefaultMvcConfigurer>()
-			.TryAddConfigurer<DefaultMvcBuilderConfigurer>()
-			.TryAddConfigurer<DefaultAntiforgeryConfigurer>();
+		builder.AddStartupServices(sp =>
+		{
+			sp
+				.TryAddConfigurer<DefaultAuthorizationConfigurer>()
+				.TryAddConfigurer<DefaultAuthenticationConfigurer>()
+				.TryAddConfigurer<DefaultAuthenticationBuilderConfigurer>()
+				.TryAddConfigurer<DefaultMvcConfigurer>()
+				.TryAddConfigurer<DefaultMvcBuilderConfigurer>()
+				.TryAddConfigurer<DefaultAntiforgeryConfigurer>();
+		});
 	}
 }

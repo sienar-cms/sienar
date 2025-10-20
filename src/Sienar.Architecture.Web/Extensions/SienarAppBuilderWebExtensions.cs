@@ -36,7 +36,7 @@ public static class SienarAppBuilderWebExtensions
 		this SienarAppBuilder self,
 		IApplicationAdapter<WebApplicationBuilder> adapter)
 	{
-		self.Adapter = adapter;
+		self.SetApplicationAdapter(adapter);
 		return self;
 	}
 }

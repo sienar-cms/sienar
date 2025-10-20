@@ -36,7 +36,7 @@ public static class SienarAppBuilderWasmExtensions
 		this SienarAppBuilder self,
 		IApplicationAdapter<WebAssemblyHostBuilder> adapter)
 	{
-		self.Adapter = adapter;
+		self.SetApplicationAdapter(adapter);
 		return self;
 	}
 }

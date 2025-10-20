@@ -83,9 +83,12 @@ public class BlazorPlugin : IPlugin
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
 		builder.AddPlugin<WebArchitecturePlugin>();
-		builder.StartupServices
-			.AddSingleton<RoutableAssemblyProvider>()
-			.AddSingleton<GlobalComponentProvider>()
-			.AddSingleton<ComponentProvider>();
+		builder.AddStartupServices(sp =>
+		{
+			sp
+				.AddSingleton<RoutableAssemblyProvider>()
+				.AddSingleton<GlobalComponentProvider>()
+				.AddSingleton<ComponentProvider>();
+		});
 	}
 }

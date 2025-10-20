@@ -17,22 +17,9 @@ namespace Sienar.Infrastructure;
 public sealed class SienarAppBuilder
 {
 	private readonly List<Type> _plugins = [];
-	private readonly List<Action<IServiceCollection>> _serviceRegistrars = [];
-
-	/// <summary>
-	/// The adapter that abstracts calls to the underlying, framework-specific application builder
-	/// </summary>
-	public IApplicationAdapter? Adapter = null;
-
-	/// <summary>
-	/// Services that are only used at application startup for configuration by Sienar
-	/// </summary>
-	public readonly IServiceCollection StartupServices;
-
-	/// <summary>
-	/// The startup args from the command line, if applicable
-	/// </summary>
-	public readonly string[] StartupArgs;
+	private readonly IServiceCollection _startupServices;
+	private IApplicationAdapter? _adapter;
+	private readonly string[] _startupArgs;
 
 	/// <summary>
 	/// Creates a new <see cref="SienarAppBuilder"/> and registers core Sienar services on its startup service collection
@@ -40,10 +27,10 @@ public sealed class SienarAppBuilder
 	/// <param name="args">The runtime arguments supplied to <c>Program.Main()</c></param>
 	private SienarAppBuilder(string[]? args = null)
 	{
-		StartupServices = new ServiceCollection();
-		StartupArgs = args ?? Environment.GetCommandLineArgs();
+		_startupServices = new ServiceCollection();
+		_startupArgs = args ?? Environment.GetCommandLineArgs();
 
-		StartupServices
+		_startupServices
 			.AddSingleton<MenuProvider>()
 			.AddSingleton<PluginDataProvider>()
 			.AddSingleton<ScriptProvider>()
@@ -58,7 +45,7 @@ public sealed class SienarAppBuilder
 	public static SienarAppBuilder Create(string[]? args = null)
 	{
 		return new SienarAppBuilder(args);
-	} 
+	}
 
 	/// <summary>
 	/// Adds an <see cref="IPlugin"/> to the Sienar app
@@ -81,20 +68,9 @@ public sealed class SienarAppBuilder
 
 			// Register plugin
 			_plugins.Add(type);
-			StartupServices.AddSingleton(type);
+			_startupServices.AddSingleton(type);
 		}
 
-		return this;
-	}
-
-	/// <summary>
-	/// Adds services to the underlying application
-	/// </summary>
-	/// <param name="configurer">The <see cref="Action"/> to call against the app builder's <see cref="IServiceCollection"/></param>
-	/// <returns>The Sienar app builder</returns>
-	public SienarAppBuilder AddServices(Action<IServiceCollection> configurer)
-	{
-		_serviceRegistrars.Add(configurer);
 		return this;
 	}
 
@@ -105,7 +81,18 @@ public sealed class SienarAppBuilder
 	/// <returns>The Sienar app builder</returns>
 	public SienarAppBuilder AddStartupServices(Action<IServiceCollection> configurer)
 	{
-		configurer(StartupServices);
+		configurer(_startupServices);
+		return this;
+	}
+
+	/// <summary>
+	/// Sets the application adapter
+	/// </summary>
+	/// <param name="adapter">The application adapter</param>
+	/// <returns>The Sienar app builder</returns>
+	public SienarAppBuilder SetApplicationAdapter(IApplicationAdapter adapter)
+	{
+		_adapter = adapter;
 		return this;
 	}
 
@@ -115,20 +102,15 @@ public sealed class SienarAppBuilder
 	/// <returns>The new application</returns>
 	public TApp Build<TApp>()
 	{
-		if (Adapter is null)
+		if (_adapter is null)
 		{
 			throw new InvalidOperationException($"You must register an {nameof(IApplicationAdapter)} before calling {nameof(Build)}.");
 		}
 
-		Adapter.Create(StartupArgs, StartupServices);
-		Adapter.AddServices(s => s.AddSienarCoreUtilities());
+		_adapter.Create(_startupArgs, _startupServices);
+		_adapter.AddServices(s => s.AddSienarCoreUtilities());
 
-		foreach (var registrar in _serviceRegistrars)
-		{
-			Adapter.AddServices(registrar);
-		}
-
-		var container = StartupServices.BuildServiceProvider();
+		var container = _startupServices.BuildServiceProvider();
 		using var scope = container.CreateScope();
 		var sp = scope.ServiceProvider;
 
@@ -138,6 +120,6 @@ public sealed class SienarAppBuilder
 			plugin.Configure();
 		}
 
-		return (TApp)Adapter.Build(sp);
+		return (TApp)_adapter.Build(sp);
 	}
 }

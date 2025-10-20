@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Sienar.Email;
 using Sienar.Html;
 using Sienar.Menus;
 using Sienar.Plugins;
+using Sienar.Security;
 
 namespace Sienar.Infrastructure;
 
@@ -42,6 +45,9 @@ public class WebApplicationAdapter : IApplicationAdapter<WebApplicationBuilder>
 			.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<ScriptProvider>())
 			.AddSingleton(sp.GetRequiredService<StyleProvider>());
+
+		Builder.Services.TryAddScoped<IEmailSender, DefaultEmailSender>();
+		Builder.Services.TryAddScoped<IBotDetector, DefaultBotDetector>();
 
 		var app = Builder.Build();
 

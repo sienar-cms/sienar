@@ -41,9 +41,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IStateValidationRunner<>), typeof(DefaultStateValidationRunner<>));
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(DefaultBeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(DefaultAfterActionRunner<>));
-		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
 		self.TryAddScoped<IMenuGenerator, DefaultMenuGenerator>();
-		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
 		self.TryAddScoped<AuthStateProvider>();
 		self.TryAddScoped<AuthenticationStateProvider>(
 			sp => sp.GetRequiredService<AuthStateProvider>());
