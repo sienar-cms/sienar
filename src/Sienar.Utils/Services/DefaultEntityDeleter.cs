@@ -11,32 +11,32 @@ using Sienar.Security;
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
+public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 	where TEntity : EntityBase
 {
 	private readonly IRepository<TEntity> _repository;
-	private readonly ILogger<EntityDeleter<TEntity>> _logger;
+	private readonly ILogger<DefaultEntityDeleter<TEntity>> _logger;
 	private readonly IAccessValidationRunner<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeActionService<TEntity> _beforeHooks;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IBeforeActionRunner<TEntity> _beforeActionRunner;
+	private readonly IAfterActionRunner<TEntity> _afterActionRunner;
 
-	public EntityDeleter(
+	public DefaultEntityDeleter(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
-		ILogger<EntityDeleter<TEntity>> logger,
+		ILogger<DefaultEntityDeleter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeActionService<TEntity> beforeHooks,
-		IAfterActionService<TEntity> afterHooks)
+		IBeforeActionRunner<TEntity> beforeActionRunner,
+		IAfterActionRunner<TEntity> afterActionRunner)
 		: base(notifier)
 	{
 		_repository = repository;
 		_logger = logger;
 		_accessValidator = accessValidator;
 		_stateValidator = stateValidator;
-		_beforeHooks = beforeHooks;
-		_afterHooks = afterHooks;
+		_beforeActionRunner = beforeActionRunner;
+		_afterActionRunner = afterActionRunner;
 	}
 
 	public async Task<OperationResult<bool>> Delete(Guid id)
@@ -83,7 +83,7 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 		}
 
 		// Run before hooks
-		var beforeHooksResult = await _beforeHooks.Run(entity, ActionType.Delete);
+		var beforeHooksResult = await _beforeActionRunner.Run(entity, ActionType.Delete);
 		if (!beforeHooksResult.Result)
 		{
 			return NotifyOfResult(new OperationResult<bool>(
@@ -106,7 +106,7 @@ public class EntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity>
 		}
 
 		// Run after hooks
-		await _afterHooks.Run(entity, ActionType.Delete);
+		await _afterActionRunner.Run(entity, ActionType.Delete);
 
 		return NotifyOfResult(new OperationResult<bool>(
 			OperationStatus.Success,

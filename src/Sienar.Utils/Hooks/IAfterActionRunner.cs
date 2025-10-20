@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Hooks;
 
 /// <summary>
 /// Runs after-action hooks for a hookable request
 /// </summary>
 /// <typeparam name="T">the type of the request or entity</typeparam>
 // ReSharper disable once TypeParameterCanBeVariant
-public interface IAfterActionService<T>
+public interface IAfterActionRunner<T>
 {
 	/// <summary>
 	///  Runs all after-action hooks for a hookable request

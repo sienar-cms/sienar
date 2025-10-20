@@ -30,16 +30,16 @@ public static class SienarUtilsServiceCollectionExtensions
 	[ExcludeFromCodeCoverage]
 	public static IServiceCollection AddSienarCoreUtilities(this IServiceCollection self)
 	{
-		self.TryAddScoped(typeof(IEntityReader<>), typeof(EntityReader<>));
-		self.TryAddScoped(typeof(IEntityWriter<>), typeof(EntityWriter<>));
-		self.TryAddScoped(typeof(IEntityDeleter<>), typeof(EntityDeleter<>));
+		self.TryAddScoped(typeof(IEntityReader<>), typeof(DefaultEntityReader<>));
+		self.TryAddScoped(typeof(IEntityWriter<>), typeof(DefaultEntityWriter<>));
+		self.TryAddScoped(typeof(IEntityDeleter<>), typeof(DefaultEntityDeleter<>));
 		self.TryAddScoped(typeof(IStatusService<>), typeof(StatusService<>));
 		self.TryAddScoped(typeof(IService<,>), typeof(Service<,>));
 		self.TryAddScoped(typeof(IResultService<>), typeof(ResultService<>));
 		self.TryAddScoped(typeof(IAccessValidationRunner<>), typeof(DefaultAccessValidationRunner<>));
 		self.TryAddScoped(typeof(IStateValidatorService<>), typeof(StateValidatorService<>));
-		self.TryAddScoped(typeof(IBeforeActionService<>), typeof(BeforeActionService<>));
-		self.TryAddScoped(typeof(IAfterActionService<>), typeof(AfterActionService<>));
+		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(BeforeActionRunner<>));
+		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(AfterActionRunner<>));
 		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
 		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();

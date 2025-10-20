@@ -20,8 +20,8 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 	private readonly IBotDetector _botDetector;
 	private readonly IAccessValidationRunner<TRequest> _accessValidator;
 	private readonly IStateValidatorService<TRequest> _stateValidator;
-	private readonly IBeforeActionService<TRequest> _beforeHooks;
-	private readonly IAfterActionService<TRequest> _afterHooks;
+	private readonly IBeforeActionRunner<TRequest> _beforeHooks;
+	private readonly IAfterActionRunner<TRequest> _afterHooks;
 	private readonly IProcessor<TRequest, TResult> _processor;
 
 	public Service(
@@ -29,8 +29,8 @@ public class Service<TRequest, TResult> : ServiceBase, IService<TRequest, TResul
 		IBotDetector botDetector,
 		IAccessValidationRunner<TRequest> accessValidator,
 		IStateValidatorService<TRequest> stateValidator,
-		IBeforeActionService<TRequest> beforeHooks,
-		IAfterActionService<TRequest> afterHooks,
+		IBeforeActionRunner<TRequest> beforeHooks,
+		IAfterActionRunner<TRequest> afterHooks,
 		IProcessor<TRequest, TResult> processor,
 		INotificationService notifier)
 		: base(notifier)

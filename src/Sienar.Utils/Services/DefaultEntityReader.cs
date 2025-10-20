@@ -11,20 +11,20 @@ using Sienar.Security;
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
+public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 	where TEntity : EntityBase, new()
 {
 	private readonly IRepository<TEntity> _repository;
-	private readonly ILogger<EntityReader<TEntity>> _logger;
+	private readonly ILogger<DefaultEntityReader<TEntity>> _logger;
 	private readonly IAccessValidationRunner<TEntity> _accessValidator;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IAfterActionRunner<TEntity> _afterHooks;
 
-	public EntityReader(
+	public DefaultEntityReader(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
-		ILogger<EntityReader<TEntity>> logger,
+		ILogger<DefaultEntityReader<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,
-		IAfterActionService<TEntity> afterHooks)
+		IAfterActionRunner<TEntity> afterHooks)
 		: base(notifier)
 	{
 		_repository = repository;

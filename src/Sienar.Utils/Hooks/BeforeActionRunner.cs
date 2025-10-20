@@ -7,17 +7,17 @@ using Microsoft.Extensions.Logging;
 using Sienar.Data;
 using Sienar.Hooks;
 
-namespace Sienar.Services;
+namespace Sienar.Hooks;
 
 /// <exclude />
-public class BeforeActionService<T> : IBeforeActionService<T>
+public class BeforeActionRunner<T> : IBeforeActionRunner<T>
 {
 	private readonly IEnumerable<IBeforeAction<T>> _hooks;
-	private readonly ILogger<IBeforeActionService<T>> _logger;
+	private readonly ILogger<IBeforeActionRunner<T>> _logger;
 
-	public BeforeActionService(
+	public BeforeActionRunner(
 		IEnumerable<IBeforeAction<T>> hooks,
-		ILogger<IBeforeActionService<T>> logger)
+		ILogger<IBeforeActionRunner<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;

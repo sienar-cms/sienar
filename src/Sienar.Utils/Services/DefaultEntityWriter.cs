@@ -11,24 +11,24 @@ using Sienar.Security;
 namespace Sienar.Services;
 
 /// <exclude />
-public class EntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
+public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 	where TEntity : EntityBase
 {
 	private readonly IRepository<TEntity> _repository;
-	private readonly ILogger<EntityWriter<TEntity>> _logger;
+	private readonly ILogger<DefaultEntityWriter<TEntity>> _logger;
 	private readonly IAccessValidationRunner<TEntity> _accessValidator;
 	private readonly IStateValidatorService<TEntity> _stateValidator;
-	private readonly IBeforeActionService<TEntity> _beforeHooks;
-	private readonly IAfterActionService<TEntity> _afterHooks;
+	private readonly IBeforeActionRunner<TEntity> _beforeHooks;
+	private readonly IAfterActionRunner<TEntity> _afterHooks;
 
-	public EntityWriter(
+	public DefaultEntityWriter(
 		INotificationService notifier,
 		IRepository<TEntity> repository,
-		ILogger<EntityWriter<TEntity>> logger,
+		ILogger<DefaultEntityWriter<TEntity>> logger,
 		IAccessValidationRunner<TEntity> accessValidator,
 		IStateValidatorService<TEntity> stateValidator,
-		IBeforeActionService<TEntity> beforeHooks,
-		IAfterActionService<TEntity> afterHooks)
+		IBeforeActionRunner<TEntity> beforeHooks,
+		IAfterActionRunner<TEntity> afterHooks)
 		: base(notifier)
 	{
 		_repository = repository;
