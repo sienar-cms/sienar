@@ -9,6 +9,7 @@ using Sienar.Identity.Data;
 using Sienar.Identity.Processors;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
+using Sienar.Menus;
 using Sienar.Ui;
 using Sienar.Ui.Views;
 

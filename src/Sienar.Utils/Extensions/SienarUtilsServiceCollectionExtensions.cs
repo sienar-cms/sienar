@@ -10,7 +10,7 @@ using Sienar.Configuration;
 using Sienar.Data;
 using Sienar.Email;
 using Sienar.Hooks;
-using Sienar.Infrastructure;
+using Sienar.Menus;
 using Sienar.Processors;
 using Sienar.Security;
 using Sienar.Services;
@@ -42,7 +42,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(DefaultBeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(DefaultAfterActionRunner<>));
 		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
-		self.TryAddScoped<IMenuGenerator, MenuGenerator>();
+		self.TryAddScoped<IMenuGenerator, DefaultMenuGenerator>();
 		self.TryAddScoped<IEmailSender, DefaultEmailSender>();
 		self.TryAddScoped<AuthStateProvider>();
 		self.TryAddScoped<AuthenticationStateProvider>(

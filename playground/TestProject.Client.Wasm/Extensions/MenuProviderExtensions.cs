@@ -1,5 +1,5 @@
 ﻿using MudBlazor;
-using Sienar.Infrastructure;
+using Sienar.Menus;
 
 namespace TestProject.Client.Extensions;
 

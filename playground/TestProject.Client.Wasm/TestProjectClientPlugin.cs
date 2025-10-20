@@ -3,6 +3,7 @@ using Sienar.Extensions;
 using Sienar.Html;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
+using Sienar.Menus;
 using Sienar.Plugins;
 using TestProject.Client.Extensions;
 using TestProject.Client.Layouts;

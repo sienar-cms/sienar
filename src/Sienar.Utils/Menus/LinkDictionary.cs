@@ -1,4 +1,6 @@
-﻿namespace Sienar.Infrastructure;
+﻿using Sienar.Infrastructure;
+
+namespace Sienar.Menus;
 
 /// <summary>
 /// A dictionary that contains a list of links at different <see cref="Priority"/> keys

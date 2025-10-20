@@ -1,5 +1,6 @@
-﻿@inject AuthenticationStateProvider AuthState
-@inject IMenuGenerator DashboardGenerator
+﻿@using Sienar.Menus
+@inject AuthenticationStateProvider AuthState
+@inject IMenuGenerator MenuGenerator
 
 <MudText Typo="Typo.h3" Class="mb-8">
 	@Name
@@ -55,7 +56,7 @@
 
 		foreach (var menuName in Categories)
 		{
-			_allMenus[menuName] = await DashboardGenerator.Create(menuName);
+			_allMenus[menuName] = await MenuGenerator.Create(menuName);
 		}
 
 		_menus = new(_allMenus);

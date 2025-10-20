@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Sienar.Infrastructure;
+namespace Sienar.Menus;
 
 /// <summary>
 /// Contains all the data needed to create a menu link

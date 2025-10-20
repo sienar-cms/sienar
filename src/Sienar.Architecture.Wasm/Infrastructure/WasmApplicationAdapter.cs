@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Html;
+using Sienar.Menus;
 using Sienar.Plugins;
 
 namespace Sienar.Infrastructure;

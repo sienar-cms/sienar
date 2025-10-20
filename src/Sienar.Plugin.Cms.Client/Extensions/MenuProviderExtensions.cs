@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Sienar.Data;
 using Sienar.Identity.Requests;
 using Sienar.Infrastructure;
+using Sienar.Menus;
 using Sienar.Services;
 
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="IMenuProvider"/> extension methods used by the <c>Sienar.Plugin.Cms.Server</c> assembly
+/// Contains <see cref="MenuProvider"/> extension methods used by the <c>Sienar.Plugin.Cms.Server</c> assembly
 /// </summary>
 public static class MenuProviderExtensions
 {
@@ -111,6 +111,35 @@ public static class MenuProviderExtensions
 					Text = "About",
 					Icon = Icons.Material.Outlined.Info,
 					Url = DashboardUrls.About
+				});
+
+		return self;
+	}
+
+	/// <summary>
+	/// Registers menu links for use by the default Sienar dashboard landing page
+	/// </summary>
+	/// <param name="self">The menu provider</param>
+	/// <returns>The menu provider</returns>
+	public static MenuProvider CreateUserManagementMenu(
+		this MenuProvider self)
+	{
+		self
+			.Access(SienarMenus.UserManagement)
+			.AddWithNormalPriority(
+				new MenuLink
+				{
+					Text = "Users",
+					Icon = Icons.Material.Filled.SupervisorAccount,
+					Url = DashboardUrls.Users.Index,
+					Roles = [Roles.Admin]
+				},
+				new MenuLink
+				{
+					Text = "Lockout reasons",
+					Icon = Icons.Material.Filled.Lock,
+					Url = DashboardUrls.LockoutReasons.Index,
+					Roles = [Roles.Admin]
 				});
 
 		return self;
