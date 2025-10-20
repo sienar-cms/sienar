@@ -10,12 +10,12 @@ using Sienar.Hooks;
 namespace Sienar.Hooks;
 
 /// <exclude />
-public class BeforeActionRunner<T> : IBeforeActionRunner<T>
+public class DefaultBeforeActionRunner<T> : IBeforeActionRunner<T>
 {
 	private readonly IEnumerable<IBeforeAction<T>> _hooks;
 	private readonly ILogger<IBeforeActionRunner<T>> _logger;
 
-	public BeforeActionRunner(
+	public DefaultBeforeActionRunner(
 		IEnumerable<IBeforeAction<T>> hooks,
 		ILogger<IBeforeActionRunner<T>> logger)
 	{

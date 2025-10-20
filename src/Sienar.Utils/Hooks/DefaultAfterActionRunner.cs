@@ -8,12 +8,12 @@ using Microsoft.Extensions.Logging;
 namespace Sienar.Hooks;
 
 /// <exclude />
-public class AfterActionRunner<T> : IAfterActionRunner<T>
+public class DefaultAfterActionRunner<T> : IAfterActionRunner<T>
 {
 	private readonly IEnumerable<IAfterAction<T>> _hooks;
 	private readonly ILogger<IAfterActionRunner<T>> _logger;
 
-	public AfterActionRunner(
+	public DefaultAfterActionRunner(
 		IEnumerable<IAfterAction<T>> hooks,
 		ILogger<IAfterActionRunner<T>> logger)
 	{
