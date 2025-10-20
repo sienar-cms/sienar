@@ -1,4 +1,4 @@
-﻿namespace Sienar.Data;
+﻿namespace Sienar.Infrastructure;
 
 /// <summary>
 /// Represents different statuses with which a hook or process can exit

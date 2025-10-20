@@ -7,6 +7,7 @@ using Sienar.Errors;
 using Sienar.Identity.Data;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
+using Sienar.Infrastructure;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;

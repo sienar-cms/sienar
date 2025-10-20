@@ -7,8 +7,8 @@ using Sienar.Email;
 using Sienar.Errors;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Data;
 using Sienar.Identity.Data;
+using Sienar.Infrastructure;
 using Sienar.Processors;
 using Sienar.Security;
 

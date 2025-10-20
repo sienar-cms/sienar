@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Sienar.Data;
-using Sienar.Hooks;
+using Sienar.Infrastructure;
 using Sienar.Services;
 
 namespace Sienar.Processors;

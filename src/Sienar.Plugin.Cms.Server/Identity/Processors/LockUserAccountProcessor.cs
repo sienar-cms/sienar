@@ -7,6 +7,7 @@ using Sienar.Identity.Requests;
 using Sienar.Data;
 using Sienar.Email;
 using Sienar.Identity.Data;
+using Sienar.Infrastructure;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;

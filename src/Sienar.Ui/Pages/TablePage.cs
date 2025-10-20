@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Sienar.Extensions;
 using Sienar.Data;
-using Sienar.Services;
+using Sienar.Infrastructure;
 using Sienar.Ui;
 
 namespace Sienar.Pages;

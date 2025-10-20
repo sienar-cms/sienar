@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sienar.Hooks;
+using Sienar.Infrastructure;
 
 namespace Sienar.Data;
 
