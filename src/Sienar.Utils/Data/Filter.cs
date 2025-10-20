@@ -51,7 +51,7 @@ public class Filter
 	public static Filter GetAll() => new() { PageSize = 0 };
 
 	/// <summary>
-	/// Creates a <c>Filter</c> that 
+	/// Creates a <c>Filter</c> that includes the given related entities
 	/// </summary>
 	/// <param name="includes"></param>
 	/// <returns></returns>
