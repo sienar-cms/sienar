@@ -7,7 +7,7 @@ namespace Sienar.Infrastructure;
 /// Arranges multiple lists by <see cref="Priority"/>
 /// </summary>
 /// <typeparam name="T">the type of the item to be contained in a <see cref="List{T}"/></typeparam>
-public class PrioritizedListDictionary<T> : Dictionary<Priority, List<T>>
+public class PrioritizedDictionaryOfLists<T> : Dictionary<Priority, List<T>>
 {
 	/// <summary>
 	/// Adds items with the specified priority level
@@ -15,7 +15,7 @@ public class PrioritizedListDictionary<T> : Dictionary<Priority, List<T>>
 	/// <param name="priority">The priority at which to add items</param>
 	/// <param name="prioritizedItems">The items to add</param>
 	/// <returns>self</returns>
-	public PrioritizedListDictionary<T> AddWithPriority(
+	public PrioritizedDictionaryOfLists<T> AddWithPriority(
 		Priority priority,
 		params T[] prioritizedItems)
 	{
@@ -35,7 +35,7 @@ public class PrioritizedListDictionary<T> : Dictionary<Priority, List<T>>
 	/// </summary>
 	/// <param name="prioritizedItems">The items to add</param>
 	/// <returns>self</returns>
-	public PrioritizedListDictionary<T> AddWithNormalPriority(
+	public PrioritizedDictionaryOfLists<T> AddWithNormalPriority(
 		params T[] prioritizedItems)
 		=> AddWithPriority(Priority.Normal, prioritizedItems);
 
