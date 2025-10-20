@@ -13,7 +13,7 @@ namespace TestProject.Client;
 public class TestProjectClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
-	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
+	private readonly RoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly ComponentProvider _componentProvider;
 	private readonly IGlobalComponentProvider _globalComponentProvider;
 	private readonly MenuProvider _menuProvider;
@@ -21,7 +21,7 @@ public class TestProjectClientPlugin : IPlugin
 
 	public TestProjectClientPlugin(
 		IApplicationAdapter adapter,
-		IRoutableAssemblyProvider routableAssemblyProvider,
+		RoutableAssemblyProvider routableAssemblyProvider,
 		ComponentProvider componentProvider,
 		IGlobalComponentProvider globalComponentProvider,
 		MenuProvider menuProvider,
