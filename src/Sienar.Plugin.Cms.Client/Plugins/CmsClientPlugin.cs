@@ -22,7 +22,7 @@ public class CmsClientPlugin : IPlugin
 	private readonly IApplicationAdapter _adapter;
 	private readonly IConfiguration _configuration;
 	private readonly ComponentProvider _componentProvider;
-	private readonly IGlobalComponentProvider _globalComponentProvider;
+	private readonly GlobalComponentProvider _globalComponentProvider;
 	private readonly MenuProvider _menuProvider;
 	private readonly PluginDataProvider _pluginDataProvider;
 	private readonly RoutableAssemblyProvider _routableAssemblyProvider;
@@ -36,7 +36,7 @@ public class CmsClientPlugin : IPlugin
 		IApplicationAdapter adapter,
 		IConfiguration configuration,
 		ComponentProvider componentProvider,
-		IGlobalComponentProvider globalComponentProvider,
+		GlobalComponentProvider globalComponentProvider,
 		MenuProvider menuProvider,
 		PluginDataProvider pluginDataProvider,
 		RoutableAssemblyProvider routableAssemblyProvider,

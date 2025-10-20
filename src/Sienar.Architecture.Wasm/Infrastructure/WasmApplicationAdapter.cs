@@ -30,7 +30,7 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton(Builder.HostEnvironment)
 			.AddSingleton<IConfiguration>(Builder.Configuration)
 			.AddSingleton<IApplicationAdapter>(this)
-			.AddSingleton<IGlobalComponentProvider, GlobalComponentProvider>()
+			.AddSingleton<GlobalComponentProvider>()
 			.AddSingleton<ComponentProvider>()
 			.AddSingleton<RoutableAssemblyProvider>();
 	}
@@ -40,7 +40,7 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 	{
 		Builder.Services
 			.AddSingleton(sp.GetRequiredService<ComponentProvider>())
-			.AddSingleton(sp.GetRequiredService<IGlobalComponentProvider>())
+			.AddSingleton(sp.GetRequiredService<GlobalComponentProvider>())
 			.AddSingleton(sp.GetRequiredService<MenuProvider>())
 			.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<RoutableAssemblyProvider>())

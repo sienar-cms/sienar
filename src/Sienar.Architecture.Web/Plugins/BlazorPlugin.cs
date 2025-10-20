@@ -20,7 +20,7 @@ public class BlazorPlugin : IPlugin
 	private readonly MiddlewareProvider _middlewareProvider;
 	private readonly RoutableAssemblyProvider _routableAssemblyProvider;
 	private readonly ComponentProvider _componentProvider;
-	private readonly IGlobalComponentProvider _globalComponentProvider;
+	private readonly GlobalComponentProvider _globalComponentProvider;
 
 	/// <summary>
 	/// Creates a new instance of <c>BlazorPlugin</c>
@@ -31,7 +31,7 @@ public class BlazorPlugin : IPlugin
 		MiddlewareProvider middlewareProvider,
 		RoutableAssemblyProvider routableAssemblyProvider,
 		ComponentProvider componentProvider,
-		IGlobalComponentProvider globalComponentProvider,
+		GlobalComponentProvider globalComponentProvider,
 		IConfigurer<RazorComponentsServiceOptions>? blazorConfigurer = null)
 	{
 		_builder = builder;
@@ -84,7 +84,7 @@ public class BlazorPlugin : IPlugin
 		builder.AddPlugin<WebArchitecturePlugin>();
 		builder.StartupServices
 			.AddSingleton<RoutableAssemblyProvider>()
-			.AddSingleton<IGlobalComponentProvider, GlobalComponentProvider>()
+			.AddSingleton<GlobalComponentProvider>()
 			.AddSingleton<ComponentProvider>();
 	}
 }
