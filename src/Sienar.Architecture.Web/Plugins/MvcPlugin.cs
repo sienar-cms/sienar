@@ -44,7 +44,7 @@ public class MvcPlugin : IPlugin
 			.AddScoped<IReadableNotifier, RestNotifier>()
 			.AddScoped<INotifier>(
 				sp => sp.GetRequiredService<IReadableNotifier>())
-			.AddScoped<IOperationResultMapper, OperationResultMapper>();
+			.AddScoped<IOperationResultMapper, DefaultOperationResultMapper>();
 
 		// Add and configure MVC
 		var mvcbuilder = _builder.Services.AddMvc(

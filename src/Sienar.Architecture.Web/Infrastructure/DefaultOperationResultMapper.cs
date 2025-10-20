@@ -7,12 +7,12 @@ using Sienar.Data;
 namespace Sienar.Infrastructure;
 
 /// <exclude />
-public class OperationResultMapper : IOperationResultMapper
+public class DefaultOperationResultMapper : IOperationResultMapper
 {
 	private readonly IReadableNotifier _notifier;
 	private readonly IHttpContextAccessor _contextAccessor;
 
-	public OperationResultMapper(
+	public DefaultOperationResultMapper(
 		IReadableNotifier notifier,
 		IHttpContextAccessor contextAccessor)
 	{
