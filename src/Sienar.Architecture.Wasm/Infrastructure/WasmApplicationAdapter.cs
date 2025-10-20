@@ -31,7 +31,7 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton<IConfiguration>(Builder.Configuration)
 			.AddSingleton<IApplicationAdapter>(this)
 			.AddSingleton<IGlobalComponentProvider, GlobalComponentProvider>()
-			.AddSingleton<IComponentProvider, ComponentProvider>()
+			.AddSingleton<ComponentProvider>()
 			.AddSingleton<IRoutableAssemblyProvider, RoutableAssemblyProvider>();
 	}
 
@@ -39,9 +39,9 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 	public object Build(IServiceProvider sp)
 	{
 		Builder.Services
-			.AddSingleton(sp.GetRequiredService<IComponentProvider>())
+			.AddSingleton(sp.GetRequiredService<ComponentProvider>())
 			.AddSingleton(sp.GetRequiredService<IGlobalComponentProvider>())
-			.AddSingleton(sp.GetRequiredService<IMenuProvider>())
+			.AddSingleton(sp.GetRequiredService<MenuProvider>())
 			.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
 			.AddSingleton(sp.GetRequiredService<IRoutableAssemblyProvider>())
 			.AddSingleton(sp.GetRequiredService<ScriptProvider>())

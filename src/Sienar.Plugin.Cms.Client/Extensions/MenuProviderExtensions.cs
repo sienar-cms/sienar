@@ -17,7 +17,7 @@ public static class MenuProviderExtensions
 	/// </summary>
 	/// <param name="self">the menu provider</param>
 	/// <returns>the menu provider</returns>
-	public static IMenuProvider CreateMainMenu(this IMenuProvider self)
+	public static MenuProvider CreateMainMenu(this MenuProvider self)
 	{
 		self
 			.Access(SienarMenus.Main)
@@ -38,7 +38,7 @@ public static class MenuProviderExtensions
 	/// </summary>
 	/// <param name="self">the menu provider</param>
 	/// <returns>the menu provider</returns>
-	public static IMenuProvider CreateUserSettingsMenu(this IMenuProvider self)
+	public static MenuProvider CreateUserSettingsMenu(this MenuProvider self)
 	{
 		self
 			.Access(SienarMenus.UserSettings)
@@ -101,7 +101,7 @@ public static class MenuProviderExtensions
 	/// </summary>
 	/// <param name="self">the menu provider</param>
 	/// <returns>the menu provider</returns>
-	public static IMenuProvider CreateInfoMenu(this IMenuProvider self)
+	public static MenuProvider CreateInfoMenu(this MenuProvider self)
 	{
 		self
 			.Access(SienarMenus.Info)

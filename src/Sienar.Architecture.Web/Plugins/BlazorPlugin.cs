@@ -19,7 +19,7 @@ public class BlazorPlugin : IPlugin
 	private readonly IEnumerable<IConfigurer<IRazorComponentsBuilder>> _additionalBlazorConfigurers;
 	private readonly MiddlewareProvider _middlewareProvider;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
-	private readonly IComponentProvider _componentProvider;
+	private readonly ComponentProvider _componentProvider;
 	private readonly IGlobalComponentProvider _globalComponentProvider;
 
 	/// <summary>
@@ -30,7 +30,7 @@ public class BlazorPlugin : IPlugin
 		IEnumerable<IConfigurer<IRazorComponentsBuilder>> additionalBlazorConfigurers,
 		MiddlewareProvider middlewareProvider,
 		IRoutableAssemblyProvider routableAssemblyProvider,
-		IComponentProvider componentProvider,
+		ComponentProvider componentProvider,
 		IGlobalComponentProvider globalComponentProvider,
 		IConfigurer<RazorComponentsServiceOptions>? blazorConfigurer = null)
 	{
@@ -85,6 +85,6 @@ public class BlazorPlugin : IPlugin
 		builder.StartupServices
 			.AddSingleton<IRoutableAssemblyProvider, RoutableAssemblyProvider>()
 			.AddSingleton<IGlobalComponentProvider, GlobalComponentProvider>()
-			.AddSingleton<IComponentProvider, ComponentProvider>();
+			.AddSingleton<ComponentProvider>();
 	}
 }

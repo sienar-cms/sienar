@@ -13,8 +13,8 @@ public static class DashboardProviderExtensions
 	/// </summary>
 	/// <param name="self">The menu provider</param>
 	/// <returns>The menu provider</returns>
-	public static IMenuProvider CreateUserManagementMenu(
-		this IMenuProvider self)
+	public static MenuProvider CreateUserManagementMenu(
+		this MenuProvider self)
 	{
 		self
 			.Access(SienarMenus.UserManagement)

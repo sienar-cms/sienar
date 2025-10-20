@@ -12,11 +12,11 @@ namespace Sienar.Infrastructure;
 public class MenuGenerator : IMenuGenerator
 {
 	private readonly IUserAccessor _userAccessor;
-	private readonly IMenuProvider _provider;
+	private readonly MenuProvider _provider;
 
 	public MenuGenerator(
 		IUserAccessor userAccessor,
-		IMenuProvider menuProvider)
+		MenuProvider menuProvider)
 	{
 		_userAccessor = userAccessor;
 		_provider = menuProvider;

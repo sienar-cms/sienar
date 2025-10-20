@@ -1,9 +1,8 @@
 ﻿using System;
-using Sienar.Infrastructure;
-
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Sienar.Infrastructure;
 
-/// <exclude />
-public class MenuProvider : DictionaryProvider<Enum, LinkDictionary<MenuLink>>,  IMenuProvider;
+/// <summary>
+/// The <see cref="DictionaryProvider{TKey, TValue}"/> used to contain <see cref="MenuLink">menu links</see>
+/// </summary>
+public class MenuProvider : DictionaryProvider<Enum, LinkDictionary<MenuLink>>;

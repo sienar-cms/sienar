@@ -14,17 +14,17 @@ public class TestProjectClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
 	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
-	private readonly IComponentProvider _componentProvider;
+	private readonly ComponentProvider _componentProvider;
 	private readonly IGlobalComponentProvider _globalComponentProvider;
-	private readonly IMenuProvider _menuProvider;
+	private readonly MenuProvider _menuProvider;
 	private readonly StyleProvider _styleProvider;
 
 	public TestProjectClientPlugin(
 		IApplicationAdapter adapter,
 		IRoutableAssemblyProvider routableAssemblyProvider,
-		IComponentProvider componentProvider,
+		ComponentProvider componentProvider,
 		IGlobalComponentProvider globalComponentProvider,
-		IMenuProvider menuProvider,
+		MenuProvider menuProvider,
 		StyleProvider styleProvider)
 	{
 		_adapter = adapter;

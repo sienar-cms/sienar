@@ -5,7 +5,7 @@ namespace TestProject.Client.Extensions;
 
 public static class MenuProviderExtensions
 {
-	public static void AddMenu(this IMenuProvider self)
+	public static void AddMenu(this MenuProvider self)
 	{
 		self
 			.Access(Menus.Main)

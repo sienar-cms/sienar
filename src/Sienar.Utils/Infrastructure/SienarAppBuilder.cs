@@ -43,7 +43,7 @@ public sealed class SienarAppBuilder
 		StartupArgs = args ?? Environment.GetCommandLineArgs();
 
 		StartupServices
-			.AddSingleton<IMenuProvider, MenuProvider>()
+			.AddSingleton<MenuProvider>()
 			.AddSingleton<PluginDataProvider>()
 			.AddSingleton<ScriptProvider>()
 			.AddSingleton<StyleProvider>();
