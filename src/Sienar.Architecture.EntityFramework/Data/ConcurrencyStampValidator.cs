@@ -2,10 +2,10 @@
 
 using System;
 using System.Threading.Tasks;
-using Sienar.Data;
+using Sienar.Hooks;
 using Sienar.Infrastructure;
 
-namespace Sienar.Hooks;
+namespace Sienar.Data;
 
 /// <exclude />
 public class ConcurrencyStampValidator<TEntity> : IStateValidator<TEntity>

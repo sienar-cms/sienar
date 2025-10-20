@@ -2,12 +2,12 @@
 
 using System;
 using System.Threading.Tasks;
-using Sienar.Data;
+using Sienar.Hooks;
 
-namespace Sienar.Hooks;
+namespace Sienar.Data;
 
 /// <exclude />
-public class ConcurrencyStampUpdateHook<TEntity> : IBeforeAction<TEntity>
+public class ConcurrencyStampUpdater<TEntity> : IBeforeAction<TEntity>
 	where TEntity : EntityBase
 {
 	public Task Handle(TEntity entity, ActionType action)
