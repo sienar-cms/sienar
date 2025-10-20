@@ -8,7 +8,7 @@ namespace Sienar.Security;
 /// <summary>
 /// A WASM-friendly implementation of <see cref="AuthenticationStateProvider"/>
 /// </summary>
-public class AuthStateProvider : AuthenticationStateProvider
+public class SienarAuthenticationStateProvider : AuthenticationStateProvider
 {
 	private AuthenticationState _authState = CreateAuthenticationState([], false);
 

@@ -13,11 +13,11 @@ namespace Sienar.Identity.Processors;
 public class ClientDeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 {
 	private readonly IRestClient _client;
-	private readonly AuthStateProvider _authStateProvider;
+	private readonly SienarAuthenticationStateProvider _authStateProvider;
 
 	public ClientDeleteAccountProcessor(
 		IRestClient client,
-		AuthStateProvider authStateProvider)
+		SienarAuthenticationStateProvider authStateProvider)
 	{
 		_client = client;
 		_authStateProvider = authStateProvider;

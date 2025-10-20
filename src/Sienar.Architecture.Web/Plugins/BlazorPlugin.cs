@@ -51,7 +51,7 @@ public class BlazorPlugin : IPlugin
 			.AddSingleton(_routableAssemblyProvider)
 			.AddSingleton(_componentProvider)
 			.AddSingleton(_globalComponentProvider)
-			.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+			.AddScoped<AuthenticationStateProvider, SienarAuthenticationStateProvider>();
 		var blazorBuilder = _builder.Services
 			.AddRazorComponents(o => _blazorConfigurer?.Configure(o))
 			.AddInteractiveWebAssemblyComponents();

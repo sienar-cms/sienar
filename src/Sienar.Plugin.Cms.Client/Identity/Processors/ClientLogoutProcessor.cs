@@ -14,11 +14,11 @@ namespace Sienar.Identity.Processors;
 public class ClientLogoutProcessor : IStatusProcessor<LogoutRequest>
 {
 	private readonly IRestClient _client;
-	private readonly AuthStateProvider _authStateProvider;
+	private readonly SienarAuthenticationStateProvider _authStateProvider;
 
 	public ClientLogoutProcessor(
 		IRestClient client,
-		AuthStateProvider authStateProvider)
+		SienarAuthenticationStateProvider authStateProvider)
 	{
 		_client = client;
 		_authStateProvider = authStateProvider;

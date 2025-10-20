@@ -18,12 +18,12 @@ public class LoadUserDataProcessor
 {
 	private readonly IRestClient _client;
 	private readonly IUserClaimsFactory _claimsFactory;
-	private readonly AuthStateProvider _authStateProvider;
+	private readonly SienarAuthenticationStateProvider _authStateProvider;
 
 	public LoadUserDataProcessor(
 		IRestClient client,
 		IUserClaimsFactory claimsFactory,
-		AuthStateProvider authStateProvider)
+		SienarAuthenticationStateProvider authStateProvider)
 	{
 		_client = client;
 		_claimsFactory = claimsFactory;

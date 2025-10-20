@@ -42,9 +42,9 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(DefaultBeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(DefaultAfterActionRunner<>));
 		self.TryAddScoped<IMenuGenerator, DefaultMenuGenerator>();
-		self.TryAddScoped<AuthStateProvider>();
+		self.TryAddScoped<SienarAuthenticationStateProvider>();
 		self.TryAddScoped<AuthenticationStateProvider>(
-			sp => sp.GetRequiredService<AuthStateProvider>());
+			sp => sp.GetRequiredService<SienarAuthenticationStateProvider>());
 
 		return self;
 	}
