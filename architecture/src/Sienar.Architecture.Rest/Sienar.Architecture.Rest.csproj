@@ -29,7 +29,7 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\src\Sienar.Utils\Sienar.Utils.csproj" />
+			Include="..\..\..\shared\src\Sienar.Utils\Sienar.Utils.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Utils" Version="0.1.0"/>

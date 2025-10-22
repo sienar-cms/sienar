@@ -48,7 +48,7 @@
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Rest" Version="0.1.0"/>
-		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\..\..\..\src\Sienar.Ui\Sienar.Ui.csproj" />
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\..\..\..\shared\src\Sienar.Ui\Sienar.Ui.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Ui" Version="0.1.0"/>

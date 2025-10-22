@@ -35,7 +35,7 @@
 
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\src\Sienar.Utils\Sienar.Utils.csproj"/>
+			Include="..\..\..\shared\src\Sienar.Utils\Sienar.Utils.csproj"/>
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Utils" Version="0.1.1"/>
