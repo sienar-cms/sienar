@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Data;
-using Sienar.Email;
 using Sienar.Hooks;
 using Sienar.Menus;
 using Sienar.Processors;

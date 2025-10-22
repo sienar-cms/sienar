@@ -59,6 +59,9 @@ public class CmsServerPlugin : IPlugin
 		services.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 		services.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
 
+		services.TryAddScoped<IEmailSender, DefaultEmailSender>();
+		services.TryAddScoped<IBotDetector, DefaultBotDetector>();
+
 
 		/************
 		 * Identity *
