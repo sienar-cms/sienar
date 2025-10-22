@@ -12,8 +12,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
-		<ProjectReference Include="..\..\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
+		<ProjectReference Include="..\..\architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
+		<ProjectReference Include="..\..\architecture\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
 		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Client\Sienar.Plugins.Core.Client.csproj" />
 		<ProjectReference Include="..\..\src\Sienar.Ui\Sienar.Ui.csproj" />
 		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />

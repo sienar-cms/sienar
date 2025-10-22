@@ -1,23 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Sienar</RootNamespace>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 
-		<PackageId>Sienar.Architecture.Wasm</PackageId>
-		<Title>Sienar.Architecture.Wasm</Title>
+		<PackageId>Sienar.Architecture.EntityFramework</PackageId>
+		<Title>Sienar.Architecture.EntityFramework</Title>
 		<PackageVersion>0.1.0</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>Contains the code infrastructure needed to create a Sienar Blazor WASM plugin</Description>
+		<Description>A Sienar package that adds support for Entity Framework repositories</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
 		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>sienar cms utilities blazor plugin</PackageTags>
+		<PackageTags>sienar cms utilities database entity framework plugin</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 
@@ -26,15 +26,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0"/>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.0"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
 
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Utils\Sienar.Utils.csproj"/>
+			Include="..\..\..\src\Sienar.Utils\Sienar.Utils.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Utils" Version="0.1.1"/>
+			Include="Sienar.Utils" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

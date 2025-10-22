@@ -32,7 +32,7 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\..\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Wasm" Version="0.1.0"/>
@@ -44,7 +44,7 @@
 			Include="Sienar.Plugins.Core.Shared" Version="0.1.1"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\..\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Rest" Version="0.1.0"/>
