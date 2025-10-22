@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Sienar.Data;
-using Sienar.Media;
 
 namespace Sienar.Identity;
 
@@ -107,8 +106,6 @@ public class SienarUser : EntityBase
 	public string? NormalizedPendingEmail { get; set; }
 
 #endregion
-
-	public List<Upload> Media { get; set; } = [];
 
 	/// <inheritdoc/>
 	public override string ToString() => Username;

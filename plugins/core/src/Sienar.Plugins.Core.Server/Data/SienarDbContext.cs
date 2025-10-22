@@ -4,8 +4,6 @@
 using Microsoft.EntityFrameworkCore;
 using Sienar.Identity;
 using Sienar.Identity.Data;
-using Sienar.Media;
-using Sienar.Media.Data;
 
 namespace Sienar.Data;
 
@@ -27,14 +25,10 @@ public class SienarDbContext : DbContext, ISienarDbContext
 	public DbSet<LockoutReason> LockoutReasons { get; set; }
 
 	/// <inheritdoc />
-	public DbSet<Upload> Files { get; set; }
-
-	/// <inheritdoc />
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		builder
 			.ApplyConfiguration(new SienarUserEntityConfigurer())
-			.ApplyConfiguration(new LockoutReasonEntityConfigurer())
-			.ApplyConfiguration(new UploadEntityConfigurer());
+			.ApplyConfiguration(new LockoutReasonEntityConfigurer());
 	}
 }

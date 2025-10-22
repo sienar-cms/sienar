@@ -44,10 +44,4 @@ public interface IUserRepository : IRepository<SienarUser>
 	/// </summary>
 	/// <param name="user">The user for which to load verification codes</param>
 	Task LoadVerificationCodes(SienarUser user);
-
-	/// <summary>
-	/// Loads a user's <see cref="Media"/> records
-	/// </summary>
-	/// <param name="user">The user for which to load media</param>
-	Task LoadMedia(SienarUser user);
 }

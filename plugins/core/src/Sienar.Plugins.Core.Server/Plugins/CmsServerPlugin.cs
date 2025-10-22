@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
@@ -14,19 +15,19 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Identity;
+using Sienar.Identity.Data;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
 using Sienar.Infrastructure;
-using Sienar.Media;
-using Sienar.Media.Hooks;
 using Sienar.Security;
 
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class CmsServerPlugin : IPlugin
+public class CmsServerPlugin<TContext> : IPlugin
+	where TContext : DbContext
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly PluginDataProvider _pluginDataProvider;
@@ -62,6 +63,8 @@ public class CmsServerPlugin : IPlugin
 		services.TryAddScoped<IPasswordManager, PasswordManager>();
 		services.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 		services.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
+		services.TryAddScoped<IVerificationCodeManager, VerificationCodeManager<TContext>>();
+		services.TryAddScoped<IUserRepository, UserRepository<TContext>>();
 
 		services.TryAddScoped<IEmailSender, DefaultEmailSender>();
 		services.TryAddScoped<IBotDetector, DefaultBotDetector>();
@@ -78,12 +81,15 @@ public class CmsServerPlugin : IPlugin
 
 		// CRUD
 		services
+			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor, IUserRepository, UserRepository<TContext>>()
 			.AddAccessValidator<UserIsAdminAccessValidator<SienarUser>, SienarUser>()
+			.AddBeforeActionHook<FetchNotUpdatedUserPropertiesHook<TContext>, SienarUser>()
 			.AddBeforeActionHook<UserMapNormalizedFieldsHook, SienarUser>()
 			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
-			.AddStateValidator<EnsureAccountInfoUniqueValidator, SienarUser>()
 			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, SienarUser>()
-			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>()
+			.AddStateValidator<EnsureAccountInfoUniqueValidator, SienarUser>()
+			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor, ILockoutReasonRepository, LockoutReasonRepository<TContext>>()
+			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEntityFrameworkEntityWithDefaultRepository<SienarRole, SienarRoleFilterProcessor, TContext>()
 
 		// Security
 			.AddProcessor<LoginProcessor, LoginRequest, LoginResult>()
@@ -126,21 +132,6 @@ public class CmsServerPlugin : IPlugin
 		 *******/
 
 		services.TryAddScoped<ISignInManager, CookieSignInManager>();
-
-
-		/*********
-		 * Media *
-		 ********/
-
-		services.TryAddScoped<IMediaDirectoryMapper, MediaDirectoryMapper>();
-		services.TryAddScoped<IMediaManager, MediaManager>();
-
-		services
-			.AddAccessValidator<VerifyUserCanReadFileHook, Upload>()
-			.AddAccessValidator<VerifyUserCanModifyFileHook, Upload>()
-			.AddAccessValidator<VerifyUserCanModifyFileHook, Upload>()
-			.AddBeforeActionHook<AssignMediaFieldsHook, Upload>()
-			.AddBeforeActionHook<UploadFileHook, Upload>();
 
 
 		/***********

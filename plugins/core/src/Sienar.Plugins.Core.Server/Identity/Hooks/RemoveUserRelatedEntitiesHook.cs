@@ -3,11 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sienar.Data;
 using Sienar.Identity.Requests;
 using Sienar.Hooks;
 using Sienar.Identity.Data;
-using Sienar.Media;
 using Sienar.Security;
 
 namespace Sienar.Identity.Hooks;
@@ -17,16 +15,13 @@ public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
 	IBeforeAction<DeleteAccountRequest>
 {
 	private readonly IUserRepository _userRepository;
-	private readonly IEntityDeleter<Upload> _mediaDeleter;
 	private readonly IUserAccessor _userAccessor;
 
 	public RemoveUserRelatedEntitiesHook(
 		IUserRepository userRepository,
-		IEntityDeleter<Upload> mediaDeleter,
 		IUserAccessor userAccessor)
 	{
 		_userRepository = userRepository;
-		_mediaDeleter = mediaDeleter;
 		_userAccessor = userAccessor;
 	}
 
@@ -53,30 +48,8 @@ public class RemoveUserRelatedEntitiesHook : IBeforeAction<SienarUser>,
 	private async Task HandleCore(SienarUser entity)
 	{
 		await _userRepository.LoadVerificationCodes(entity);
-		await _userRepository.LoadMedia(entity);
 
 		entity.VerificationCodes.Clear();
-
-		var filesToDelete = new List<Guid>();
-
-		foreach (var media in entity.Media)
-		{
-			if (media.IsPrivate)
-			{
-				filesToDelete.Add(media.Id);
-			}
-			else
-			{
-				media.UserId = null;
-			}
-		}
-
-		entity.Media.Clear();
-
-		foreach (var id in filesToDelete)
-		{
-			await _mediaDeleter.Delete(id);
-		}
 
 		await _userRepository.Update(entity);
 	}

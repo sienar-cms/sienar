@@ -33,6 +33,12 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Architecture.EntityFramework" Version="0.1.0"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\..\..\..\architecture\src\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "

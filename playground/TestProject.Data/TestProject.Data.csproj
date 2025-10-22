@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugin.Cms.EntityFramework\Sienar.Plugin.Cms.EntityFramework.csproj"/>
-		<ProjectReference Include="..\..\src\Sienar.Utils.Sqlite\Sienar.Utils.Sqlite.csproj"/>
+		<ProjectReference Include="..\..\shared\src\Sienar.Utils.Sqlite\Sienar.Utils.Sqlite.csproj"/>
 	</ItemGroup>
 
 </Project>

@@ -51,11 +51,4 @@ public class UserRepository<TContext>
 			.Entry(user)
 			.Collection(u => u.VerificationCodes)
 			.LoadAsync();
-
-	/// <inheritdoc />
-	public async Task LoadMedia(SienarUser user)
-		=> await Context
-			.Entry(user)
-			.Collection(u => u.Media)
-			.LoadAsync();
 }
