@@ -14,9 +14,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
 		<ProjectReference Include="..\..\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
-		<ProjectReference Include="..\..\src\Sienar.Plugin.Cms.Client\Sienar.Plugin.Cms.Client.csproj" />
+		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Client\Sienar.Plugins.Core.Client.csproj" />
 		<ProjectReference Include="..\..\src\Sienar.Ui\Sienar.Ui.csproj" />
-		<ProjectReference Include="..\..\src\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj" />
+		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -32,41 +32,26 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
+			Include="..\..\..\..\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Wasm" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj" />
+			Include="..\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Cms.Core" Version="0.1.1"/>
+			Include="Sienar.Plugins.Core.Shared" Version="0.1.1"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
+			Include="..\..\..\..\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Architecture.Rest" Version="0.1.0"/>
-		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\Sienar.Ui\Sienar.Ui.csproj" />
+			Include="Sienar.Architecture.Rest" Version="0.1.0"/>
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\..\..\..\src\Sienar.Ui\Sienar.Ui.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Ui.MudBlazor" Version="0.1.0"/>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordIndex.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\ResetPassword\ResetPasswordSuccessful.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailConfirm.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailIndex.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailRequested.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\ChangeEmail\ChangeEmailSuccessful.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterIndex.razor" />
-	  <UpToDateCheckInput Remove="Identity\Pages\Register\RegisterSuccessful.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AdditionalFiles Include="Identity\Pages\Account\Login.razor" />
+			Include="Sienar.Ui" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

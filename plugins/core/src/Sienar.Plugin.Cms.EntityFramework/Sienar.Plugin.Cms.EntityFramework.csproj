@@ -27,16 +27,16 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
+			Include="..\..\..\..\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.EntityFramework" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugin.Cms.Server\Sienar.Plugin.Cms.Server.csproj"/>
+			Include="..\Sienar.Plugins.Core.Server\Sienar.Plugins.Core.Server.csproj"/>
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Cms.Server" Version="0.1.1"/>
+			Include="Sienar.Plugins.Core.Server" Version="0.1.1"/>
 	</ItemGroup>
 
 </Project>

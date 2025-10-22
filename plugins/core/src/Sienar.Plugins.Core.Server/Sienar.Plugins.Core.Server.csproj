@@ -7,8 +7,8 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugin.Cms.Server</PackageId>
-		<Title>Sienar.Plugin.Cms.Server.Core</Title>
+		<PackageId>Sienar.Plugins.Core.Server</PackageId>
+		<Title>Sienar.Plugins.Core.Server</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
@@ -33,16 +33,16 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
+			Include="..\..\..\..\src\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Web" Version="0.1.1"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugin.Cms.Core\Sienar.Plugin.Cms.Core.csproj" />
+			Include="..\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugin.Cms.Core" Version="0.1.0"/>
+			Include="Sienar.Plugins.Core.Shared" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

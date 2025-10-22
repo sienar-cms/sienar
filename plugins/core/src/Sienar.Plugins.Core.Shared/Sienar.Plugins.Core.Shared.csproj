@@ -3,21 +3,21 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Sienar.Email</RootNamespace>
+		<RootNamespace>Sienar</RootNamespace>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugin.MailKit</PackageId>
-		<Title>Sienar.Plugin.MailKit</Title>
-		<PackageVersion>0.1.0</PackageVersion>
+		<PackageId>Sienar.Plugin.Cms.Core</PackageId>
+		<Title>Sienar.Plugin.Cms.Core</Title>
+		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>A Sienar plugin to facilitate sending SMTP email via MailKit</Description>
+		<Description>The core application code for Sienar CMS, including services, entities, entity managers, etc.</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
 		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>sienar cms utilities email mailkit</PackageTags>
+		<PackageTags>sienar cms utilities</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 
@@ -26,16 +26,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MailKit" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="MimeMapping" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
+			Include="..\..\..\..\src\Sienar.Utils\Sienar.Utils.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Architecture.Web" Version="0.1.1"/>
+			Include="Sienar.Utils" Version="0.1.1"/>
 	</ItemGroup>
 
 </Project>
