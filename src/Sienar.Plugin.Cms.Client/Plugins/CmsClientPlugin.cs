@@ -7,6 +7,8 @@ using Sienar.Html;
 using Sienar.Identity;
 using Sienar.Identity.Data;
 using Sienar.Identity.Processors;
+using Sienar.Identity.Requests;
+using Sienar.Identity.Results;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
 using Sienar.Menus;
@@ -126,7 +128,7 @@ public class CmsClientPlugin : IPlugin
 			// Infrastructure
 			s
 				.AddCookieRestClient()
-				.AddBeforeTaskHook<AddCsrfTokenToHttpRequestHook>()
+				.AddBeforeTaskHook<AddCsrfTokenToHttpRequestHook, RestClientRequest<CookieRestClient>>()
 				.AddStartupTask<InitializeCsrfTokenOnAppStartHook>()
 				.AddStartupTask<LoadUserDataProcessor>();
 
@@ -135,25 +137,25 @@ public class CmsClientPlugin : IPlugin
 
 			s
 				// Account
-				.TryAddProcessor<ClientLoginProcessor>()
-				.TryAddProcessor<ClientAccountLockoutProcessor>()
-				.TryAddStatusProcessor<ClientLogoutProcessor>()
-				.TryAddStatusProcessor<ClientRegisterProcessor>()
-				.TryAddStatusProcessor<ClientConfirmAccountProcessor>()
-				.TryAddStatusProcessor<ClientInitiateEmailChangeProcessor>()
-				.TryAddStatusProcessor<ClientPerformEmailChangeProcessor>()
-				.TryAddStatusProcessor<ClientChangePasswordProcessor>()
-				.TryAddStatusProcessor<ClientForgotPasswordProcessor>()
-				.TryAddStatusProcessor<ClientResetPasswordProcessor>()
-				.TryAddStatusProcessor<ClientDeleteAccountProcessor>()
-				.TryAddResultProcessor<LoadUserDataProcessor>()
+				.TryAddProcessor<ClientLoginProcessor, LoginRequest, LoginResult>()
+				.TryAddProcessor<ClientAccountLockoutProcessor, AccountLockoutRequest, AccountLockoutResult>()
+				.TryAddStatusProcessor<ClientLogoutProcessor, LogoutRequest>()
+				.TryAddStatusProcessor<ClientRegisterProcessor, RegisterRequest>()
+				.TryAddStatusProcessor<ClientConfirmAccountProcessor, ConfirmAccountRequest>()
+				.TryAddStatusProcessor<ClientInitiateEmailChangeProcessor, InitiateEmailChangeRequest>()
+				.TryAddStatusProcessor<ClientPerformEmailChangeProcessor, PerformEmailChangeRequest>()
+				.TryAddStatusProcessor<ClientChangePasswordProcessor, ChangePasswordRequest>()
+				.TryAddStatusProcessor<ClientForgotPasswordProcessor, ForgotPasswordRequest>()
+				.TryAddStatusProcessor<ClientResetPasswordProcessor, ResetPasswordRequest>()
+				.TryAddStatusProcessor<ClientDeleteAccountProcessor, DeleteAccountRequest>()
+				.TryAddResultProcessor<LoadUserDataProcessor, AccountDataResult>()
 
 				// Users
-				.TryAddStatusProcessor<ClientLockUserAccountProcessor>()
-				.TryAddStatusProcessor<ClientUnlockUserAccountProcessor>()
-				.TryAddStatusProcessor<ClientManuallyConfirmUserAccountProcessor>()
-				.TryAddStatusProcessor<ClientAddUsertoRoleProcessor>()
-				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor>()
+				.TryAddStatusProcessor<ClientLockUserAccountProcessor, LockUserAccountRequest>()
+				.TryAddStatusProcessor<ClientUnlockUserAccountProcessor, UnlockUserAccountRequest>()
+				.TryAddStatusProcessor<ClientManuallyConfirmUserAccountProcessor, ManuallyConfirmUserAccountRequest>()
+				.TryAddStatusProcessor<ClientAddUsertoRoleProcessor, AddUserToRoleRequest>()
+				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor, RemoveUserFromRoleRequest>()
 				.AddRestfulEntity<SienarUser, UsersUrlProvider>()
 				.AddRestfulEntity<SienarRole, RolesUrlProvider>()
 

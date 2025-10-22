@@ -81,19 +81,6 @@ public static class SienarUtilsServiceCollectionExtensions
 		=> self.AddScoped<IConfigurer<TOptions>, TConfigurer>();
 
 	/// <summary>
-	/// Adds a configurer of type <c>IConfigurer&lt;TOptions&gt;</c> for the given <c>TOptions</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TConfigurer">the type of the configurer</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddConfigurer<TConfigurer>(this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TConfigurer),
-			typeof(IConfigurer<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
 	/// Adds a configurer of type <c>IConfigurer&lt;TOptions&gt;</c> for the given <c>TOptions</c> if one hasn't already been registered
 	/// </summary>
 	/// <param name="self">the service collection</param>
@@ -109,121 +96,53 @@ public static class SienarUtilsServiceCollectionExtensions
 	}
 
 	/// <summary>
-	/// Adds a configurer of type <c>IConfigurer&lt;TOptions&gt;</c> for the given <c>TOptions</c> if one hasn't already been registered
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TConfigurer">the type of the configurer</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddConfigurer<TConfigurer>(this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TConfigurer),
-			typeof(IConfigurer<>),
-			ServiceLifetime.Scoped,
-			true);
-
-	/// <summary>
 	/// Adds an access validator for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
-	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="TValidator">the validator implementation</typeparam>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAccessValidator<TRequest, TValidator>(
+	public static IServiceCollection AddAccessValidator<TValidator, TRequest>(
 		this IServiceCollection self)
 		where TValidator : class, IAccessValidator<TRequest>
 		=> self.AddScoped<IAccessValidator<TRequest>, TValidator>();
 
 	/// <summary>
-	/// Adds an access validator for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TValidator">the validator implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAccessValidator<TValidator>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TValidator),
-			typeof(IAccessValidator<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
 	/// Adds a state validator for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
-	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="TValidator">the validator implementation</typeparam>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStateValidator<TRequest, TValidator>(
+	public static IServiceCollection AddStateValidator<TValidator, TRequest>(
 		this IServiceCollection self)
 		where TValidator : class, IStateValidator<TRequest>
 		=> self.AddScoped<IStateValidator<TRequest>, TValidator>();
 
 	/// <summary>
-	/// Adds a state validator for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TValidator">the validator implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStateValidator<TValidator>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TValidator),
-			typeof(IStateValidator<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
 	/// Adds a before-action hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeActionHook<TRequest, THook>(
+	public static IServiceCollection AddBeforeActionHook<THook, TRequest>(
 		this IServiceCollection self)
 		where THook : class, IBeforeAction<TRequest>
 		=> self.AddScoped<IBeforeAction<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds a before-action hook for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="THook">the hook implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeActionHook<THook>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(THook),
-			typeof(IBeforeAction<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
 	/// Adds a before-task hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
-	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeTaskHook<TRequest, THook>(
+	public static IServiceCollection AddBeforeTaskHook<THook, TRequest>(
 		this IServiceCollection self)
-		where TRequest : class
 		where THook : class, IBeforeTask<TRequest>
+		where TRequest : class
 		=> self.AddScoped<IBeforeTask<TRequest>, THook>();
-
-	/// <summary>
-	/// Adds a before-task hook for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="THook">the hook implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddBeforeTaskHook<THook>(this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(THook),
-			typeof(IBeforeTask<>),
-			ServiceLifetime.Scoped,
-			false);
 
 	/// <summary>
 	/// Adds an after-action hook for the given <c>TRequest</c>
@@ -232,61 +151,33 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterActionHook<TRequest, THook>(
+	public static IServiceCollection AddAfterActionHook<THook, TRequest>(
 		this IServiceCollection self)
 		where THook : class, IAfterAction<TRequest>
 		=> self.AddScoped<IAfterAction<TRequest>, THook>();
 
 	/// <summary>
-	/// Adds an after-action hook for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="THook">the hook implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterActionHook<THook>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(THook),
-			typeof(IAfterAction<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
 	/// Adds an after-task hook for the given <c>TRequest</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
+	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
-	/// <typeparam name="THook">the hook implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterTaskHook<TRequest, THook>(
+	public static IServiceCollection AddAfterTaskHook<THook, TRequest>(
 		this IServiceCollection self)
-		where TRequest : class
 		where THook : class, IAfterTask<TRequest>
+		where TRequest : class
 		=> self.AddScoped<IAfterTask<TRequest>, THook>();
-
-	/// <summary>
-	/// Adds an after-action hook for the given <c>TRequest</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="THook">the hook implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddAfterTaskHook<THook>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(THook),
-			typeof(IAfterTask<>),
-			ServiceLifetime.Scoped,
-			false);
 
 	/// <summary>
 	/// Adds a processor
 	/// </summary>
 	/// <param name="self">the service collection</param>
+	/// <typeparam name="TProcessor">the processor implementation</typeparam>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="TResult">the data type of the result</typeparam>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddProcessor<TRequest, TResult, TProcessor>(
+	public static IServiceCollection AddProcessor<TProcessor, TRequest, TResult>(
 		this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
 		where TRequest : IRequest
@@ -298,24 +189,10 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IProcessor<,>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
-	/// Adds a processor
-	/// </summary>
-	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="TResult">the data type of the result</typeparam>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddProcessor<TRequest, TResult, TProcessor>(this IServiceCollection self)
+	public static IServiceCollection TryAddProcessor<TProcessor, TRequest, TResult>(this IServiceCollection self)
 		where TProcessor : class, IProcessor<TRequest, TResult>
 		where TRequest : IRequest
 		where TResult : IResult
@@ -323,20 +200,6 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 		return self;
 	}
-
-	/// <summary>
-	/// Adds a processor
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IProcessor<,>),
-			ServiceLifetime.Scoped,
-			true);
 
 	/// <summary>
 	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
@@ -352,10 +215,10 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
 	/// </summary>
 	/// <param name="self">the service collection</param>
-	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <typeparam name="TProcessor">the processor implementation</typeparam>
+	/// <typeparam name="TRequest">the data type of the request</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStatusProcessor<TRequest, TProcessor>(
+	public static IServiceCollection AddStatusProcessor<TProcessor, TRequest>(
 		this IServiceCollection self)
 		where TProcessor : class, IStatusProcessor<TRequest>
 		where TRequest : IRequest
@@ -366,23 +229,9 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStatusProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IStatusProcessor<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
-	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
 	/// <typeparam name="TRequest">the data type of the request</typeparam>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddStatusProcessor<TRequest, TProcessor>(
+	public static IServiceCollection TryAddStatusProcessor<TProcessor, TRequest>(
 		this IServiceCollection self)
 		where TProcessor : class, IStatusProcessor<TRequest>
 		where TRequest : IRequest
@@ -392,27 +241,13 @@ public static class SienarUtilsServiceCollectionExtensions
 	}
 
 	/// <summary>
-	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddStatusProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IStatusProcessor<>),
-			ServiceLifetime.Scoped,
-			true);
-
-	/// <summary>
 	/// Adds a result processor (<c>IProcessor&lt;TRequest&gt;</c>)
 	/// </summary>
 	/// <param name="self">the service collection</param>
-	/// <typeparam name="TResult">the data type of the result</typeparam>
 	/// <typeparam name="TProcessor">the processor implementation</typeparam>
+	/// <typeparam name="TResult">the data type of the result</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection AddResultProcessor<TResult, TProcessor>(
+	public static IServiceCollection AddResultProcessor<TProcessor, TResult>(
 		this IServiceCollection self)
 		where TProcessor : class, IResultProcessor<TResult>
 		where TResult : IResult
@@ -423,77 +258,14 @@ public static class SienarUtilsServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">the service collection</param>
 	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddResultProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IResultProcessor<>),
-			ServiceLifetime.Scoped,
-			false);
-
-	/// <summary>
-	/// Adds a result processor (<c>IProcessor&lt;TRequest&gt;</c>)
-	/// </summary>
-	/// <param name="self">the service collection</param>
 	/// <typeparam name="TResult">the data type of the result</typeparam>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
 	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddResultProcessor<TResult, TProcessor>(
+	public static IServiceCollection TryAddResultProcessor<TProcessor, TResult>(
 		this IServiceCollection self)
 		where TProcessor : class, IResultProcessor<TResult>
 		where TResult : IResult
 	{
 		self.TryAddScoped<IResultProcessor<TResult>, TProcessor>();
-		return self;
-	}
-
-	/// <summary>
-	/// Adds a result processor (<c>IProcessor&lt;TRequest&gt;</c>)
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TProcessor">the processor implementation</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection TryAddResultProcessor<TProcessor>(
-		this IServiceCollection self)
-		=> self.AddImplementationAsInterface(
-			typeof(TProcessor),
-			typeof(IResultProcessor<>),
-			ServiceLifetime.Scoped,
-			true);
-
-	private static IServiceCollection AddImplementationAsInterface(
-		this IServiceCollection self,
-		Type implementationType,
-		Type interfaceType,
-		ServiceLifetime lifetime,
-		bool tryAdd)
-	{
-		var concreteInterfaceTypes = implementationType
-			.GetInterfaces()
-			.Where(
-				i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType);
-		var implementsSpecifiedInterface = false;
-
-		foreach (var t in concreteInterfaceTypes)
-		{
-			implementsSpecifiedInterface = true;
-			var descriptor = new ServiceDescriptor(t, implementationType, lifetime);
-			if (tryAdd)
-			{
-				self.TryAdd(descriptor);
-			}
-			else
-			{
-				self.Add(descriptor);
-			}
-		}
-
-		if (!implementsSpecifiedInterface)
-		{
-			throw new InvalidOperationException($"Type {implementationType} does not inherit from {interfaceType}.");
-		}
-
 		return self;
 	}
 }

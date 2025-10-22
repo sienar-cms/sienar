@@ -1,8 +1,12 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
@@ -74,48 +78,48 @@ public class CmsServerPlugin : IPlugin
 
 		// CRUD
 		services
-			.AddAccessValidator<SienarUser, UserIsAdminAccessValidator<SienarUser>>()
-			.AddBeforeActionHook<SienarUser, UserMapNormalizedFieldsHook>()
-			.AddBeforeActionHook<SienarUser, UserPasswordUpdateHook>()
-			.AddStateValidator<SienarUser, EnsureAccountInfoUniqueValidator>()
-			.AddBeforeActionHook<SienarUser, RemoveUserRelatedEntitiesHook>()
-			.AddBeforeActionHook<LockoutReason, LockoutReasonMapNormalizedFieldsHook>()
+			.AddAccessValidator<UserIsAdminAccessValidator<SienarUser>, SienarUser>()
+			.AddBeforeActionHook<UserMapNormalizedFieldsHook, SienarUser>()
+			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
+			.AddStateValidator<EnsureAccountInfoUniqueValidator, SienarUser>()
+			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, SienarUser>()
+			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>()
 
 		// Security
-			.AddProcessor<LoginRequest, LoginResult, LoginProcessor>()
-			.AddStatusProcessor<LogoutRequest, LogoutProcessor>()
-			.AddResultProcessor<PersonalDataResult, PersonalDataProcessor>()
-			.AddStatusProcessor<AddUserToRoleRequest, UserRoleChangeProcessor>()
-			.AddAccessValidator<AddUserToRoleRequest, UserIsAdminAccessValidator<AddUserToRoleRequest>>()
-			.AddStatusProcessor<RemoveUserFromRoleRequest, UserRoleChangeProcessor>()
-			.AddAccessValidator<RemoveUserFromRoleRequest, UserIsAdminAccessValidator<RemoveUserFromRoleRequest>>()
-			.AddStatusProcessor<LockUserAccountRequest, LockUserAccountProcessor>()
-			.AddAccessValidator<LockUserAccountRequest, UserIsAdminAccessValidator<LockUserAccountRequest>>()
-			.AddStatusProcessor<UnlockUserAccountRequest, UnlockUserAccountProcessor>()
-			.AddAccessValidator<UnlockUserAccountRequest, UserIsAdminAccessValidator<UnlockUserAccountRequest>>()
-			.AddStatusProcessor<ManuallyConfirmUserAccountRequest, ManuallyConfirmUserAccountProcessor>()
-			.AddAccessValidator<ManuallyConfirmUserAccountRequest, UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>>()
-			.AddStatusProcessor<ChangePasswordRequest, ChangePasswordProcessor>()
-			.AddStatusProcessor<ForgotPasswordRequest, ForgotPasswordProcessor>()
-			.AddStatusProcessor<ResetPasswordRequest, ResetPasswordProcessor>()
-			.AddResultProcessor<AccountDataResult, GetAccountDataProcessor>()
-			.AddStatusProcessor<AccessTokenRequest, AccessTokenProcessor>()
-			.AddProcessor<AccountLockoutRequest, AccountLockoutResult, GetLockoutReasonsProcessor>()
+			.AddProcessor<LoginProcessor, LoginRequest, LoginResult>()
+			.AddStatusProcessor<LogoutProcessor, LogoutRequest>()
+			.AddResultProcessor<PersonalDataProcessor, PersonalDataResult>()
+			.AddStatusProcessor<UserRoleChangeProcessor, AddUserToRoleRequest>()
+			.AddAccessValidator<UserIsAdminAccessValidator<AddUserToRoleRequest>, AddUserToRoleRequest>()
+			.AddStatusProcessor<UserRoleChangeProcessor, RemoveUserFromRoleRequest>()
+			.AddAccessValidator<UserIsAdminAccessValidator<RemoveUserFromRoleRequest>, RemoveUserFromRoleRequest>()
+			.AddStatusProcessor<LockUserAccountProcessor, LockUserAccountRequest>()
+			.AddAccessValidator<UserIsAdminAccessValidator<LockUserAccountRequest>, LockUserAccountRequest>()
+			.AddStatusProcessor<UnlockUserAccountProcessor, UnlockUserAccountRequest>()
+			.AddAccessValidator<UserIsAdminAccessValidator<UnlockUserAccountRequest>, UnlockUserAccountRequest>()
+			.AddStatusProcessor<ManuallyConfirmUserAccountProcessor, ManuallyConfirmUserAccountRequest>()
+			.AddAccessValidator<UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>, ManuallyConfirmUserAccountRequest>()
+			.AddStatusProcessor<ChangePasswordProcessor, ChangePasswordRequest>()
+			.AddStatusProcessor<ForgotPasswordProcessor, ForgotPasswordRequest>()
+			.AddStatusProcessor<ResetPasswordProcessor, ResetPasswordRequest>()
+			.AddResultProcessor<GetAccountDataProcessor, AccountDataResult>()
+			.AddStatusProcessor<AccessTokenProcessor, AccessTokenRequest>()
+			.AddProcessor<GetLockoutReasonsProcessor, AccountLockoutRequest, AccountLockoutResult>()
 
 		// Registration
-			.AddStateValidator<RegisterRequest, RegistrationOpenValidator>()
-			.AddStateValidator<RegisterRequest, AcceptTosValidator>()
-			.AddStateValidator<RegisterRequest, EnsureAccountInfoUniqueValidator>()
-			.AddStatusProcessor<RegisterRequest, RegisterProcessor>()
+			.AddStateValidator<RegistrationOpenValidator, RegisterRequest>()
+			.AddStateValidator<AcceptTosValidator, RegisterRequest>()
+			.AddStateValidator<EnsureAccountInfoUniqueValidator, RegisterRequest>()
+			.AddStatusProcessor<RegisterProcessor, RegisterRequest>()
 
 		// Email
-			.AddStatusProcessor<ConfirmAccountRequest, ConfirmAccountProcessor>()
-			.AddStatusProcessor<InitiateEmailChangeRequest, InitiateEmailChangeProcessor>()
-			.AddStatusProcessor<PerformEmailChangeRequest, PerformEmailChangeProcessor>()
+			.AddStatusProcessor<ConfirmAccountProcessor, ConfirmAccountRequest>()
+			.AddStatusProcessor<InitiateEmailChangeProcessor, InitiateEmailChangeRequest>()
+			.AddStatusProcessor<PerformEmailChangeProcessor, PerformEmailChangeRequest>()
 
 		// Personal data
-			.AddBeforeActionHook<DeleteAccountRequest, RemoveUserRelatedEntitiesHook>()
-			.AddStatusProcessor<DeleteAccountRequest, DeleteAccountProcessor>();
+			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, DeleteAccountRequest>()
+			.AddStatusProcessor<DeleteAccountProcessor, DeleteAccountRequest>();
 
 
 		/********
@@ -133,11 +137,11 @@ public class CmsServerPlugin : IPlugin
 		services.TryAddScoped<IMediaManager, MediaManager>();
 
 		services
-			.AddAccessValidator<Upload, VerifyUserCanReadFileHook>()
-			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
-			.AddAccessValidator<Upload, VerifyUserCanModifyFileHook>()
-			.AddBeforeActionHook<Upload, AssignMediaFieldsHook>()
-			.AddBeforeActionHook<Upload, UploadFileHook>();
+			.AddAccessValidator<VerifyUserCanReadFileHook, Upload>()
+			.AddAccessValidator<VerifyUserCanModifyFileHook, Upload>()
+			.AddAccessValidator<VerifyUserCanModifyFileHook, Upload>()
+			.AddBeforeActionHook<AssignMediaFieldsHook, Upload>()
+			.AddBeforeActionHook<UploadFileHook, Upload>();
 
 
 		/***********
@@ -163,12 +167,12 @@ public class CmsServerPlugin : IPlugin
 		builder.AddStartupServices(sp =>
 		{
 			sp
-				.TryAddConfigurer<DefaultAuthorizationConfigurer>()
-				.TryAddConfigurer<DefaultAuthenticationConfigurer>()
-				.TryAddConfigurer<DefaultAuthenticationBuilderConfigurer>()
-				.TryAddConfigurer<DefaultMvcConfigurer>()
-				.TryAddConfigurer<DefaultMvcBuilderConfigurer>()
-				.TryAddConfigurer<DefaultAntiforgeryConfigurer>();
+				.TryAddConfigurer<DefaultAuthorizationConfigurer, AuthorizationOptions>()
+				.TryAddConfigurer<DefaultAuthenticationConfigurer, AuthenticationOptions>()
+				.TryAddConfigurer<DefaultAuthenticationBuilderConfigurer, AuthenticationBuilder>()
+				.TryAddConfigurer<DefaultMvcConfigurer, MvcOptions>()
+				.TryAddConfigurer<DefaultMvcBuilderConfigurer, IMvcBuilder>()
+				.TryAddConfigurer<DefaultAntiforgeryConfigurer, AntiforgeryOptions>();
 		});
 	}
 }

@@ -45,7 +45,7 @@ public class SienarCmsEfRepositoriesPlugin<TContext> : IPlugin
 
 		services
 			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor, IUserRepository, UserRepository<TContext>>()
-			.AddBeforeActionHook<SienarUser, FetchNotUpdatedUserPropertiesHook<TContext>>()
+			.AddBeforeActionHook<FetchNotUpdatedUserPropertiesHook<TContext>, SienarUser>()
 			.AddEntityFrameworkEntityWithDefaultRepository<SienarRole, SienarRoleFilterProcessor, TContext>()
 			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor, ILockoutReasonRepository, LockoutReasonRepository<TContext>>()
 			.AddEntityFrameworkEntityWithDefaultRepository<Upload, UploadFilterProcessor, TContext>();
