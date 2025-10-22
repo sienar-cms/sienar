@@ -103,7 +103,6 @@ public class CmsServerPlugin : IPlugin
 			.AddStatusProcessor<ForgotPasswordProcessor, ForgotPasswordRequest>()
 			.AddStatusProcessor<ResetPasswordProcessor, ResetPasswordRequest>()
 			.AddResultProcessor<GetAccountDataProcessor, AccountDataResult>()
-			.AddStatusProcessor<AccessTokenProcessor, AccessTokenRequest>()
 			.AddProcessor<GetLockoutReasonsProcessor, AccountLockoutRequest, AccountLockoutResult>()
 
 		// Registration
