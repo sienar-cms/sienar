@@ -8,12 +8,12 @@ namespace Sienar.Identity;
 public class SienarRole : EntityBase
 {
 	/// <summary>
-	/// Represents the name of the role
+	/// The name of the role
 	/// </summary>
 	public required string Name { get; set; }
 
 	/// <summary>
-	/// Represents the normalized name of the role
+	/// The normalized name of the role
 	/// </summary>
 	[JsonIgnore]
 	public string NormalizedName { get; set; } = string.Empty;

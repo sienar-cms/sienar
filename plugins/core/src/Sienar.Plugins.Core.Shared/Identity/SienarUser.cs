@@ -12,25 +12,25 @@ public class SienarUser : EntityBase
 #region Security
 
 	/// <summary>
-	/// Gets or sets the username
+	/// The user's username
 	/// </summary>
 	[PersonalData]
 	public string Username { get; set; } = default!;
 
 	/// <summary>
-	/// Gets or sets the normalized username
+	/// The user's normalized username
 	/// </summary>
 	[JsonIgnore]
 	public string NormalizedUsername { get; set; } = string.Empty;
 
 	/// <summary>
-	/// Gets or sets a salted and hashed representation of the password
+	/// The user's salted and hashed password
 	/// </summary>
 	[JsonIgnore]
 	public string PasswordHash { get; set; } = string.Empty;
 
 	/// <summary>
-	/// Gets or sets the user's plain text password
+	/// The user's plain text password
 	/// </summary>
 	/// <remarks>
 	/// This property is only used to update a user's password. The value is never stored or logged.
@@ -41,7 +41,7 @@ public class SienarUser : EntityBase
 	public string Password { get; set; } = SienarConstants.PasswordPlaceholder;
 
 	/// <summary>
-	/// Gets or sets a confirmation copy of the user's plain text password
+	/// A confirmation copy of the user's plain text password
 	/// </summary>
 	/// <remarks>
 	/// This property is only used to update a user's password. The value is never stored or logged.
@@ -52,17 +52,17 @@ public class SienarUser : EntityBase
 	public string ConfirmPassword { get; set; } = SienarConstants.PasswordPlaceholder;
 
 	/// <summary>
-	/// Gets or sets the number of failed login attempts
+	/// The number of failed login attempts
 	/// </summary>
 	public int LoginFailedCount { get; set; }
 
 	/// <summary>
-	/// Gets or sets the end date of the lockout period
+	/// The end date of the lockout period
 	/// </summary>
 	public DateTime? LockoutEnd { get; set; }
 
 	/// <summary>
-	/// Gets or sets a list of verification codes
+	/// A list of verification codes
 	/// </summary>
 	[JsonIgnore]
 	public List<VerificationCode> VerificationCodes { get; set; } = [];
@@ -76,31 +76,31 @@ public class SienarUser : EntityBase
 #region Contact information
 
 	/// <summary>
-	/// Gets or sets the email address
+	/// The user's email address
 	/// </summary>
 	[PersonalData]
 	[EmailAddress]
 	public string Email { get; set; } = string.Empty;
 
 	/// <summary>
-	/// Gets or sets the normalized email address
+	/// The user's normalized email address
 	/// </summary>
 	[JsonIgnore]
 	public string NormalizedEmail { get; set; } = string.Empty;
 
 	/// <summary>
-	/// Gets or sets whether the email address for the user has been confirmed
+	/// Whether the email address for the user has been confirmed
 	/// </summary>
 	public bool EmailConfirmed { get; set; }
 
 	/// <summary>
-	/// Gets or sets the pending email address
+	/// The user's pending email address
 	/// </summary>
 	[PersonalData]
 	public string? PendingEmail { get; set; }
 
 	/// <summary>
-	/// Gets or sets the normalized pending email address
+	/// The user's normalized pending email address
 	/// </summary>
 	[JsonIgnore]
 	public string? NormalizedPendingEmail { get; set; }
