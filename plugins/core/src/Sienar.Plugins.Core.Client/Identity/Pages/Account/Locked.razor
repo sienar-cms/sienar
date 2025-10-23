@@ -40,7 +40,7 @@
 	private AccountLockoutResult? _result;
 
 	[SupplyParameterFromQuery]
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 
 	[SupplyParameterFromQuery]
 	public Guid VerificationCode { get; set; }

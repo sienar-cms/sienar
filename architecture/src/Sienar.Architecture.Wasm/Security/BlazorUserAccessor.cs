@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -33,14 +32,14 @@ public class BlazorUserAccessor : IUserAccessor
 	}
 
 	/// <exclude />
-	public async Task<Guid?> GetUserId()
+	public async Task<int?> GetUserId()
 	{
 		var state = await _authStateProvider.GetAuthenticationStateAsync();
 		var claim = state.User.Claims.FirstOrDefault(
 			c => c.Type == ClaimTypes.NameIdentifier);
 		return claim is null
 			? null
-			: Guid.Parse(claim.Value);
+			: int.Parse(claim.Value);
 	}
 
 	/// <exclude />

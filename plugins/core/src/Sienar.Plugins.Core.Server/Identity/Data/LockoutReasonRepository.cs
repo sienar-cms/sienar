@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ public class LockoutReasonRepository<TContext> : EntityFrameworkRepository<Locko
 		: base(context, filterProcessor) {}
 
 	/// <inheritdoc />
-	public async Task<List<LockoutReason>> Read(List<Guid> ids)
+	public async Task<List<LockoutReason>> Read(List<int> ids)
 		=> await Context
 			.Set<LockoutReason>()
 			.Where(l => ids.Contains(l.Id))

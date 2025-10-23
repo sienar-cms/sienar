@@ -34,12 +34,12 @@ public class UserRepository<TContext>
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> UsernameIsTaken(Guid id, string username)
+	public async Task<bool> UsernameIsTaken(int id, string username)
 		=> await EntitySet
 			.CountAsync(u => u.Id != id && u.Username == username) > 0;
 
 	/// <inheritdoc />
-	public async Task<bool> EmailIsTaken(Guid id, string email)
+	public async Task<bool> EmailIsTaken(int id, string email)
 		=> await EntitySet
 			.CountAsync(
 				u => u.Id != id

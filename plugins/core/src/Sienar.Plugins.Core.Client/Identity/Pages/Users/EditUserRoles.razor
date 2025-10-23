@@ -33,12 +33,12 @@
 @code {
 
 	[Parameter]
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 
 	[Inject]
 	private ILogger<EditUserRoles> Logger { get; set; } = null!;
 
-	private readonly Dictionary<Guid, bool> _roleMap = new();
+	private readonly Dictionary<int, bool> _roleMap = new();
 	private SienarUser? _user;
 	private IEnumerable<SienarRole> _roles = Array.Empty<SienarRole>();
 
@@ -67,7 +67,7 @@
 	/// <param name="roleId">The ID of the role</param>
 	protected async Task UpdateRoleStatus(
 		bool shouldBeInRole,
-		Guid roleId)
+		int roleId)
 	{
 		bool successful;
 		if (shouldBeInRole)

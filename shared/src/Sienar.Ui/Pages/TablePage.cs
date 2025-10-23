@@ -24,7 +24,7 @@ public class TablePage<TEntity> : ComponentBase
 	protected Table<TEntity> Table = null!;
 
 	protected Task DeleteEntity(
-		Guid id,
+		int id,
 		string? title = null,
 		string? question = null)
 	{

@@ -19,7 +19,7 @@ public interface IUserAccessor
 	/// Gets the GUID of the currently logged in user, if any
 	/// </summary>
 	/// <returns>the GUID</returns>
-	Task<Guid?> GetUserId();
+	Task<int?> GetUserId();
 
 	/// <summary>
 	/// Gets the username of the currently logged in user, if any

@@ -8,7 +8,7 @@ public class UsersUrlProvider : IRestfulRepositoryUrlProvider<SienarUser>
 	private const string BaseUrl = "users";
 
 	/// <inheritdoc />
-	public string GenerateReadUrl(Guid id)
+	public string GenerateReadUrl(int id)
 		=> $"{BaseUrl}/{id}";
 
 	/// <inheritdoc />
@@ -24,6 +24,6 @@ public class UsersUrlProvider : IRestfulRepositoryUrlProvider<SienarUser>
 		=> BaseUrl;
 
 	/// <inheritdoc />
-	public string GenerateDeleteUrl(Guid id)
+	public string GenerateDeleteUrl(int id)
 		=> $"{BaseUrl}/{id}";
 }

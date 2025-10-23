@@ -14,7 +14,7 @@ public interface IRestfulRepositoryUrlProvider<TEntity>
 	/// </summary>
 	/// <param name="id">the ID of the entity to read</param>
 	/// <returns>the URL</returns>
-	string GenerateReadUrl(Guid id);
+	string GenerateReadUrl(int id);
 
 	/// <summary>
 	/// Generates a URL to perform a read operation on multiple entities
@@ -41,5 +41,5 @@ public interface IRestfulRepositoryUrlProvider<TEntity>
 	/// </summary>
 	/// <param name="id">the ID of the entity to delete</param>
 	/// <returns>the URL</returns>
-	string GenerateDeleteUrl(Guid id);
+	string GenerateDeleteUrl(int id);
 }

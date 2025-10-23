@@ -12,7 +12,7 @@ public abstract class EntityBase
 	/// <summary>
 	/// Represents the primary key of the entity
 	/// </summary>
-	public Guid Id { get; set; }
+	public int Id { get; set; }
 
 	/// <summary>
 	/// A unique value on the entity that ensures the entity is not modified concurrently

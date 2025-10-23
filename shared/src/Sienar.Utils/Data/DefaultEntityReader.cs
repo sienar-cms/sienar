@@ -34,7 +34,7 @@ public class DefaultEntityReader<TEntity> : ServiceBase, IEntityReader<TEntity>
 	}
 
 	public async Task<OperationResult<TEntity?>> Read(
-		Guid id,
+		int id,
 		Filter? filter = null)
 	{
 		TEntity? entity;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sienar.Infrastructure;
 
 namespace Sienar.Data;
@@ -15,8 +14,8 @@ public interface IEntityWriter<TEntity>
 	/// Creates a new entry in the database
 	/// </summary>
 	/// <param name="model">The entity to create</param>
-	/// <returns>the <see cref="Guid"/> representing the entity's primary key</returns>
-	Task<OperationResult<Guid?>> Create(TEntity model);
+	/// <returns>the entity's primary key</returns>
+	Task<OperationResult<int?>> Create(TEntity model);
 
 	/// <summary>
 	/// Updates an existing entity in the database

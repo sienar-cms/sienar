@@ -95,7 +95,7 @@
 	private IEnumerable<LockoutReason> _selectedReasons = [];
 
 	[Parameter]
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 
 	[Inject]
 	private INotifier Notifier { get; set; } = null!;

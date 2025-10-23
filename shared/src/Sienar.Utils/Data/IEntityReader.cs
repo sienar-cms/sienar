@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sienar.Infrastructure;
 
 namespace Sienar.Data;
@@ -17,7 +16,7 @@ public interface IEntityReader<TEntity>
 	/// <param name="filter">A <see cref="Filter"/> to specify included results</param>
 	/// <returns>the requested entity</returns>
 	Task<OperationResult<TEntity?>> Read(
-		Guid id,
+		int id,
 		Filter? filter = null);
 
 	/// <summary>

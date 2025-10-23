@@ -15,7 +15,7 @@ public interface IRepository<TEntity>
 	/// <param name="id">the ID of the entity</param>
 	/// <param name="filter">a <see cref="Filter"/> to to specify included results</param>
 	/// <returns>the entity if it exists, else <c>null</c></returns>
-	Task<TEntity?> Read(Guid id, Filter? filter = null);
+	Task<TEntity?> Read(int id, Filter? filter = null);
 
 	/// <summary>
 	/// Reads all entities from the datastore that satisfy the provided filter
@@ -29,7 +29,7 @@ public interface IRepository<TEntity>
 	/// </summary>
 	/// <param name="entity">the entity to create</param>
 	/// <returns>the entity's primary key</returns>
-	Task<Guid> Create(TEntity entity);
+	Task<int> Create(TEntity entity);
 
 	/// <summary>
 	/// Updates an existing entity in the datastore
@@ -43,12 +43,12 @@ public interface IRepository<TEntity>
 	/// </summary>
 	/// <param name="id">the primary key of the entity to delete</param>
 	/// <returns>whether the delete operation was successful</returns>
-	Task<bool> Delete(Guid id);
+	Task<bool> Delete(int id);
 
 	/// <summary>
 	/// Reads the concurrency stamp for the entity with the given ID
 	/// </summary>
 	/// <param name="id">the ID of the entity</param>
 	/// <returns>the concurrency stamp of the entity if it exists, else <c>null</c></returns>
-	Task<Guid?> ReadConcurrencyStamp(Guid id);
+	Task<Guid?> ReadConcurrencyStamp(int id);
 }

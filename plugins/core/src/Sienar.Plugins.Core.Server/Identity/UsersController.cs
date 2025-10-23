@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +25,9 @@ public class UsersController : SienarController
 		[FromServices] IEntityReader<SienarUser> service)
 		=> Execute(() => service.Read(filter));
 
-	[HttpGet("{id:guid}")]
+	[HttpGet("{id:int}")]
 	public Task<IActionResult> Read(
-		Guid id,
+		int id,
 		[FromQuery] Filter? filter,
 		[FromServices] IEntityReader<SienarUser> service)
 		=> Execute(() => service.Read(id, filter));
@@ -45,9 +44,9 @@ public class UsersController : SienarController
 		[FromServices] IEntityWriter<SienarUser> service)
 		=> Execute(() => service.Update(entity));
 
-	[HttpDelete("{id:guid}")]
+	[HttpDelete("{id:int}")]
 	public Task<IActionResult> Delete(
-		Guid id,
+		int id,
 		[FromServices] IEntityDeleter<SienarUser> service)
 		=> Execute(() => service.Delete(id));
 

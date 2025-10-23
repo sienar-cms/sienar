@@ -16,5 +16,5 @@ public class AccountLockoutRequest : IRequest
 	/// <summary>
 	/// The ID of the user for which to fetch lockout reasons 
 	/// </summary>
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 }

@@ -39,7 +39,7 @@ public class DefaultEntityDeleter<TEntity> : ServiceBase, IEntityDeleter<TEntity
 		_afterActionRunner = afterActionRunner;
 	}
 
-	public async Task<OperationResult<bool>> Delete(Guid id)
+	public async Task<OperationResult<bool>> Delete(int id)
 	{
 		TEntity? entity;
 		try

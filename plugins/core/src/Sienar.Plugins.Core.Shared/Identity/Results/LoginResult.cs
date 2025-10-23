@@ -11,7 +11,7 @@ public class LoginResult : IResult
 	/// <summary>
 	/// The ID of the user who failed to log in
 	/// </summary>
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 
 	/// <summary>
 	/// The verification code the user can use to view the reason(s) their account is locked

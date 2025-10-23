@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sienar.Data;
 
@@ -15,5 +14,5 @@ public interface ILockoutReasonRepository : IRepository<LockoutReason>
 	/// </summary>
 	/// <param name="ids">the IDs of lockout reasons to read</param>
 	/// <returns>a list of lockout reasons matching the input IDs</returns>
-	Task<List<LockoutReason>> Read(List<Guid> ids);
+	Task<List<LockoutReason>> Read(List<int> ids);
 }

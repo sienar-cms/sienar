@@ -1,9 +1,8 @@
-﻿using System;
-using Sienar.Services;
+﻿using Sienar.Services;
 
 namespace Sienar.Identity.Requests;
 
 public class UnlockUserAccountRequest : IRequest
 {
-	public Guid UserId { get; set; }
+	public int UserId { get; set; }
 }

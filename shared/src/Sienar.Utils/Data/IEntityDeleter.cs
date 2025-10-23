@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sienar.Infrastructure;
 
 namespace Sienar.Data;
@@ -15,5 +14,5 @@ public interface IEntityDeleter<TEntity>
 	/// </summary>
 	/// <param name="id">The primary key of the entity to delete</param>
 	/// <returns>whether the delete operation was successful</returns>
-	Task<OperationResult<bool>> Delete(Guid id);
+	Task<OperationResult<bool>> Delete(int id);
 }

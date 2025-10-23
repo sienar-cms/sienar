@@ -39,13 +39,13 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		_afterActionRunner = afterActionRunner;
 	}
 
-	public async Task<OperationResult<Guid?>> Create(TEntity model)
+	public async Task<OperationResult<int?>> Create(TEntity model)
 	{
 		// Run access validation
 		var accessValidationResult = await _accessValidator.Validate(model, ActionType.Create);
 		if (!accessValidationResult.Result)
 		{
-			return NotifyOfResult(new OperationResult<Guid?>(
+			return NotifyOfResult(new OperationResult<int?>(
 				OperationStatus.Unauthorized,
 				null,
 				StatusMessages.Crud<TEntity>.NoPermission()));
@@ -55,7 +55,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		var stateValidationResult = await _stateValidationRunner.Validate(model, ActionType.Create);
 		if (!stateValidationResult.Result)
 		{
-			return NotifyOfResult(new OperationResult<Guid?>(
+			return NotifyOfResult(new OperationResult<int?>(
 				OperationStatus.Unprocessable,
 				null,
 				stateValidationResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed()));
@@ -65,7 +65,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		var beforeHooksResult = await _beforeActionRunner.Run(model, ActionType.Create);
 		if (!beforeHooksResult.Result)
 		{
-			return NotifyOfResult(new OperationResult<Guid?>(
+			return NotifyOfResult(new OperationResult<int?>(
 				OperationStatus.Unknown,
 				null,
 				beforeHooksResult.Message ?? StatusMessages.Crud<TEntity>.CreateFailed()));
@@ -78,7 +78,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		catch (Exception e)
 		{
 			_logger.LogError(e, StatusMessages.Database.QueryFailed);
-			return NotifyOfResult(new OperationResult<Guid?>(
+			return NotifyOfResult(new OperationResult<int?>(
 				OperationStatus.Unknown,
 				null,
 				StatusMessages.Crud<TEntity>.CreateFailed()));
@@ -87,7 +87,7 @@ public class DefaultEntityWriter<TEntity> : ServiceBase, IEntityWriter<TEntity>
 		// Run after hooks
 		await _afterActionRunner.Run(model, ActionType.Create);
 
-		return NotifyOfResult(new OperationResult<Guid?>(
+		return NotifyOfResult(new OperationResult<int?>(
 			OperationStatus.Success,
 			model.Id,
 			StatusMessages.Crud<TEntity>.CreateSuccessful()));

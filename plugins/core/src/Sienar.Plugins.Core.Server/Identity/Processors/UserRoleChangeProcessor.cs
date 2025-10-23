@@ -73,6 +73,6 @@ public class UserRoleChangeProcessor
 		return new(OperationStatus.Success, true, $"User {user.Username} removed from role {role.Name}");
 	}
 
-	private Task<SienarUser?> GetSienarUserWithRoles(Guid id)
+	private Task<SienarUser?> GetSienarUserWithRoles(int id)
 		=> _userRepository.Read(id, SienarUserFilterFactory.WithRoles());
 }

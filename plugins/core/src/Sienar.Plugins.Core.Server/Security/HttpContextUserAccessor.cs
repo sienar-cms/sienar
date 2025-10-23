@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -20,13 +19,13 @@ public class HttpContextUserAccessor : IUserAccessor
 		HttpContext.User.Identity?.IsAuthenticated ?? false);
 
 	/// <inheritdoc />
-	public virtual Task<Guid?> GetUserId()
+	public virtual Task<int?> GetUserId()
 	{
 		var claim = HttpContext.User.Claims
 			.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-		Guid? id = claim is null
+		int? id = claim is null
 			? null
-			: Guid.Parse(claim.Value);
+			: int.Parse(claim.Value);
 		return Task.FromResult(id);
 	}
 

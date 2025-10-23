@@ -8,7 +8,7 @@ public class LockoutReasonsUrlProvider : IRestfulRepositoryUrlProvider<LockoutRe
 	private const string BaseUrl = "lockout-reasons";
 
 	/// <inheritdoc />
-	public string GenerateReadUrl(Guid id)
+	public string GenerateReadUrl(int id)
 		=> $"{BaseUrl}/{id}";
 
 	/// <inheritdoc />
@@ -24,6 +24,6 @@ public class LockoutReasonsUrlProvider : IRestfulRepositoryUrlProvider<LockoutRe
 		=> BaseUrl;
 
 	/// <inheritdoc />
-	public string GenerateDeleteUrl(Guid id)
+	public string GenerateDeleteUrl(int id)
 		=> $"{BaseUrl}/{id}";
 }

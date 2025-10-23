@@ -39,7 +39,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<TEntity?> Read(Guid id, Filter? filter = null)
+	public async Task<TEntity?> Read(int id, Filter? filter = null)
 	{
 		filter = FilterProcessor.ModifyFilter(filter, ActionType.Read);
 		return filter == null
@@ -73,7 +73,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<Guid> Create(TEntity entity)
+	public async Task<int> Create(TEntity entity)
 	{
 		await EntitySet.AddAsync(entity);
 		await Context.SaveChangesAsync();
@@ -89,7 +89,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> Delete(Guid id)
+	public async Task<bool> Delete(int id)
 	{
 		var entity = await EntitySet.FindAsync(id);
 		if (entity is null) return false;
@@ -100,7 +100,7 @@ public class EntityFrameworkRepository<TEntity, TContext> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<Guid?> ReadConcurrencyStamp(Guid id)
+	public async Task<Guid?> ReadConcurrencyStamp(int id)
 		=> await EntitySet
 			.Where(e => e.Id == id)
 			.Select(e => e.ConcurrencyStamp)

@@ -16,7 +16,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> WelcomeEmailHtml(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>
@@ -28,7 +28,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> WelcomeEmailText(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>
@@ -40,7 +40,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> ChangeEmailHtml(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>
@@ -52,7 +52,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> ChangeEmailText(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>
@@ -64,7 +64,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> ResetPasswordHtml(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>
@@ -76,7 +76,7 @@ public interface IAccountEmailMessageFactory
 	/// <returns>the string of the email body</returns>
 	Task<string> ResetPasswordText(
 		string username,
-		Guid userId,
+		int userId,
 		Guid code);
 
 	/// <summary>

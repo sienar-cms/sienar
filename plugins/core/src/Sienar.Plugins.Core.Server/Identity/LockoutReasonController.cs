@@ -25,9 +25,9 @@ public class LockoutReasonController : SienarController
 		[FromServices] IEntityReader<LockoutReason> service)
 		=> Execute(() => service.Read(filter));
 
-	[HttpGet("{id:guid}")]
+	[HttpGet("{id:int}")]
 	public Task<IActionResult> Read(
-		Guid id,
+		int id,
 		[FromQuery] Filter? filter,
 		[FromServices] IEntityReader<LockoutReason> service)
 		=> Execute(() => service.Read(id, filter));
@@ -44,9 +44,9 @@ public class LockoutReasonController : SienarController
 		[FromServices] IEntityWriter<LockoutReason> service)
 		=> Execute(() => service.Update(entity));
 
-	[HttpDelete("{id:guid}")]
+	[HttpDelete("{id:int}")]
 	public Task<IActionResult> Delete(
-		Guid id,
+		int id,
 		[FromServices] IEntityDeleter<LockoutReason> service)
 		=> Execute(() => service.Delete(id));
 }

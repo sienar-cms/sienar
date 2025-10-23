@@ -23,7 +23,7 @@ public class RestfulRepository<TEntity> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<TEntity?> Read(Guid id, Filter? filter = null)
+	public async Task<TEntity?> Read(int id, Filter? filter = null)
 	{
 		var response = await _client.Get<TEntity>(
 			_urlProvider.GenerateReadUrl(id),
@@ -41,12 +41,12 @@ public class RestfulRepository<TEntity> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<Guid> Create(TEntity entity)
+	public async Task<int> Create(TEntity entity)
 	{
-		var response = await _client.Post<Guid?>(
+		var response = await _client.Post<int?>(
 			_urlProvider.GenerateCreateUrl(entity),
 			entity);
-		return response.Result ?? Guid.Empty;
+		return response.Result ?? 0;
 	}
 
 	/// <inheritdoc />
@@ -59,14 +59,14 @@ public class RestfulRepository<TEntity> : IRepository<TEntity>
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> Delete(Guid id)
+	public async Task<bool> Delete(int id)
 	{
 		var response = await _client.Delete<bool?>(_urlProvider.GenerateDeleteUrl(id));
 		return response.Result ?? false;
 	}
 
 	/// <inheritdoc />
-	public async Task<Guid?> ReadConcurrencyStamp(Guid id)
+	public async Task<Guid?> ReadConcurrencyStamp(int id)
 	{
 		var response = await _client.Get<TEntity>(_urlProvider.GenerateReadUrl(id));
 		return response.Result?.ConcurrencyStamp;

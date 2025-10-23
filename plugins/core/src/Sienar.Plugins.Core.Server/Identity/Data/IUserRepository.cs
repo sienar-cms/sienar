@@ -26,7 +26,7 @@ public interface IUserRepository : IRepository<SienarUser>
 	/// <param name="username">the username to check</param>
 	/// <returns><c>true</c> if the username is already taken, else <c>false</c></returns>
 	Task<bool> UsernameIsTaken(
-		Guid id,
+		int id,
 		string username);
 
 	/// <summary>
@@ -36,7 +36,7 @@ public interface IUserRepository : IRepository<SienarUser>
 	/// <param name="email"></param>
 	/// <returns></returns>
 	Task<bool> EmailIsTaken(
-		Guid id,
+		int id,
 		string email);
 
 	/// <summary>

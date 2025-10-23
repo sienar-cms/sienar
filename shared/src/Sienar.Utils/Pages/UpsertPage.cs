@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Sienar.Data;
 using Sienar.Extensions;
-using Sienar.Services;
 
 namespace Sienar.Pages;
 
@@ -18,7 +16,7 @@ public abstract class UpsertPage<TModel> : FormPage<TModel>
 	/// The ID of the entity to edit, if editing
 	/// </summary>
 	[Parameter]
-	public Guid? Id { get; set; }
+	public int? Id { get; set; }
 
 	/// <summary>
 	/// The entity reader for the current <c>TModel</c>

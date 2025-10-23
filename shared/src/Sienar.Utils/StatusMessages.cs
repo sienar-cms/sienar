@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using Sienar.Extensions;
 using Sienar.Data;
 
@@ -37,7 +36,7 @@ public static class StatusMessages
 		public static string UpdateSuccessful() => $"{typeof(TEntity).GetEntityName()} updated successfully";
 		public static string DeleteFailed() => $"Unable to delete {typeof(TEntity).GetEntityName()}";
 		public static string DeleteSuccessful() => $"{typeof(TEntity).GetEntityName()} deleted successfully";
-		public static string NotFound(Guid id) => $"{typeof(TEntity).GetEntityName()} with ID {id} not found";
+		public static string NotFound(int id) => $"{typeof(TEntity).GetEntityName()} with ID {id} not found";
 		public static string NoPermission() => $"You do not have permission to access this {typeof(TEntity).GetEntityName()}";
 	}
 

@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using System.Threading.Tasks;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
@@ -44,7 +43,7 @@ public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 		string username,
 		string email,
 		string? pendingEmail = null,
-		Guid id = default)
+		int id = 0)
 	{
 		if (await _userRepository.UsernameIsTaken(id, username))
 		{
