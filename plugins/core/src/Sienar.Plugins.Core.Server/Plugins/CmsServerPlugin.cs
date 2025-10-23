@@ -152,7 +152,7 @@ public class CmsServerPlugin<TContext> : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<MvcPlugin>();
+		builder.AddPlugin<WebArchitecturePlugin>();
 
 		builder.AddStartupServices(sp =>
 		{

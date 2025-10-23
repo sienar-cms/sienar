@@ -75,14 +75,4 @@ public class MvcPlugin : IPlugin
 				app.MapRazorPages();
 			});
 	}
-
-	/// <summary>
-	/// Informs Sienar that this plugin depends on the <see cref="WebArchitecturePlugin"/>
-	/// </summary>
-	/// <param name="builder">The <see cref="SienarAppBuilder"/></param>
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
-	{
-		builder.AddPlugin<WebArchitecturePlugin>();
-	}
 }

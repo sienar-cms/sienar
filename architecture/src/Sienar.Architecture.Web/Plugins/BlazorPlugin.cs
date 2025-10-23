@@ -76,13 +76,12 @@ public class BlazorPlugin : IPlugin
 	}
 
 	/// <summary>
-	/// Adds necessary plugin and service dependencies to the Sienar app
+	/// Adds necessary Blazor service dependencies to the Sienar app
 	/// </summary>
 	/// <param name="builder">The <see cref="SienarAppBuilder"/></param>
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<WebArchitecturePlugin>();
 		builder.AddStartupServices(sp =>
 		{
 			sp
