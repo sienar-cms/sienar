@@ -47,7 +47,7 @@ public class InitiateEmailChangeProcessor : IStatusProcessor<InitiateEmailChange
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var user = await _userRepository.Read(userId.Value);
@@ -55,14 +55,14 @@ public class InitiateEmailChangeProcessor : IStatusProcessor<InitiateEmailChange
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		if (!await _passwordManager.VerifyPassword(user, request.ConfirmPassword))
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: CoreErrors.Account.LoginFailedInvalid);
 		}
 
 		var shouldSendConfirmationEmail = SienarUserExtensions.ShouldSendEmailConfirmationEmail(
@@ -93,7 +93,7 @@ public class InitiateEmailChangeProcessor : IStatusProcessor<InitiateEmailChange
 				return new(
 					OperationStatus.Unknown,
 					true,
-					CmsErrors.Email.FailedToSend);
+					CoreErrors.Email.FailedToSend);
 			}
 		}
 

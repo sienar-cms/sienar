@@ -24,7 +24,7 @@ public class AcceptTosValidator : IStateValidator<RegisterRequest>
 	{
 		if (!request.AcceptTos)
 		{
-			_notifier.Error(CmsErrors.Account.MustAcceptTos);
+			_notifier.Error(CoreErrors.Account.MustAcceptTos);
 			return Task.FromResult(OperationStatus.Unprocessable);
 		}
 

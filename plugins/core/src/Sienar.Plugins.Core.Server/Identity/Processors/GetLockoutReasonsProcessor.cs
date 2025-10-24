@@ -50,14 +50,14 @@ public class GetLockoutReasonsProcessor
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.VerificationCodeInvalid);
+				message: CoreErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status is VerificationCodeStatus.Expired)
 		{
 			return new(
 				OperationStatus.Unprocessable,
-				message: CmsErrors.Account.VerificationCodeExpired);
+				message: CoreErrors.Account.VerificationCodeExpired);
 		}
 
 		if (user.LockoutReasons.Count == 0)

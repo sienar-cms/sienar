@@ -29,7 +29,7 @@ public class RegistrationOpenValidator : IStateValidator<RegisterRequest>
 	{
 		if (!_sienarOptions.RegistrationOpen)
 		{
-			_notifier.Error(CmsErrors.Account.RegistrationDisabled);
+			_notifier.Error(CoreErrors.Account.RegistrationDisabled);
 			return Task.FromResult(OperationStatus.Conflict);
 		}
 

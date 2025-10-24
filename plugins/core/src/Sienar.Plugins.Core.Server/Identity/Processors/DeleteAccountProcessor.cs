@@ -37,7 +37,7 @@ public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var user = await _userRepository.Read(userId.Value);
@@ -45,14 +45,14 @@ public class DeleteAccountProcessor : IStatusProcessor<DeleteAccountRequest>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		if (!await _passwordManager.VerifyPassword(user, request.Password))
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: CoreErrors.Account.LoginFailedInvalid);
 		}
 
 		var deleted = await _userRepository.Delete(user.Id);

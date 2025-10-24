@@ -42,7 +42,7 @@ public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.AccountErrorInvalidId);
+				message: CoreErrors.Account.AccountErrorInvalidId);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -55,7 +55,7 @@ public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.VerificationCodeInvalid);
+				message: CoreErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
@@ -65,12 +65,12 @@ public class ResetPasswordProcessor : IStatusProcessor<ResetPasswordRequest>
 				await _emailManager.SendPasswordResetEmail(user);
 				return new(
 					OperationStatus.Unprocessable,
-					message: CmsErrors.Account.VerificationCodeExpired);
+					message: CoreErrors.Account.VerificationCodeExpired);
 			}
 
 			return new(
 				OperationStatus.Unprocessable,
-                message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
+                message: CoreErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid

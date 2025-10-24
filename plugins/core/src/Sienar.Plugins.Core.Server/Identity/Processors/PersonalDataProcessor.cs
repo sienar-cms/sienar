@@ -40,7 +40,7 @@ public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var user = await _userRepository.Read(userId.Value);
@@ -48,7 +48,7 @@ public class PersonalDataProcessor : IResultProcessor<PersonalDataResult>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var file = new DownloadFile

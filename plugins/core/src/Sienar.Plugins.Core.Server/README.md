@@ -1,5 +1,5 @@
-﻿# Sienar.Plugin.Cms.Server.Core
+﻿# Sienar.Plugins.Core.Server
 
-This package contains the backend CMS portion of Sienar, packaged as a class library. You probably don't want to reference this package directly, unless you want to create your own backend for Sienar.
+This package contains the backend portion of the core Sienar application, packaged as a class library.
 
 For more information, see the [Sienar docs](https://sienar.io).

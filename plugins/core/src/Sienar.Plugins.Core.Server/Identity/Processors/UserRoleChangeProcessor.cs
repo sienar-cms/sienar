@@ -33,18 +33,18 @@ public class UserRoleChangeProcessor
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)
 		{
-			return new(OperationStatus.NotFound, message: CmsErrors.Account.NotFound);
+			return new(OperationStatus.NotFound, message: CoreErrors.Account.NotFound);
 		}
 
 		if (user.Roles.Any(r => r.Id == request.RoleId))
 		{
-			return new(OperationStatus.Unprocessable, message: CmsErrors.Account.AccountAlreadyInRole);
+			return new(OperationStatus.Unprocessable, message: CoreErrors.Account.AccountAlreadyInRole);
 		}
 
 		var role = await _roleRepository.Read(request.RoleId);
 		if (role is null)
 		{
-			return new(OperationStatus.NotFound, message: CmsErrors.Roles.NotFound);
+			return new(OperationStatus.NotFound, message: CoreErrors.Roles.NotFound);
 		}
 
 		user.Roles.Add(role);
@@ -58,13 +58,13 @@ public class UserRoleChangeProcessor
 		var user = await GetSienarUserWithRoles(request.UserId);
 		if (user is null)
 		{
-			return new(OperationStatus.NotFound, message: CmsErrors.Account.NotFound);
+			return new(OperationStatus.NotFound, message: CoreErrors.Account.NotFound);
 		}
 
 		var role = user.Roles.FirstOrDefault(r => r.Id == request.RoleId);
 		if (role is null)
 		{
-			return new(OperationStatus.Unprocessable, message: CmsErrors.Account.AccountNotInRole);
+			return new(OperationStatus.Unprocessable, message: CoreErrors.Account.AccountNotInRole);
 		}
 
 		user.Roles.Remove(role);

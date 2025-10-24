@@ -29,7 +29,7 @@ public class UnlockUserAccountProcessor : IStatusProcessor<UnlockUserAccountRequ
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.NotFound);
+				message: CoreErrors.Account.NotFound);
 		}
 
 		user.LockoutEnd = null;

@@ -26,13 +26,13 @@ using Sienar.Security;
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class CmsServerPlugin<TContext> : IPlugin
+public class CoreServerPlugin<TContext> : IPlugin
 	where TContext : DbContext
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly PluginDataProvider _pluginDataProvider;
 
-	public CmsServerPlugin(
+	public CoreServerPlugin(
 		WebApplicationBuilder builder,
 		PluginDataProvider pluginDataProvider)
 	{
@@ -44,7 +44,7 @@ public class CmsServerPlugin<TContext> : IPlugin
 	{
 		_pluginDataProvider.Add(new PluginData
 		{
-			Name = "Sienar CMS - REST API",
+			Name = "Sienar Core - REST API",
 			Description = "Configures Sienar as a collection of REST API endpoints that can be used as a backend for desktop applications, mobile apps, or JavaScript/WebAssembly SPAs.",
 			Author = "Christian LeVesque",
 			AuthorUrl = "https://levesque.dev",

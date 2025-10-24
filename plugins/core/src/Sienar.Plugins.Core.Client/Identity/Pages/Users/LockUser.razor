@@ -109,7 +109,7 @@
 		_user = (await UserReader.Read(UserId)).Result;
 		if (_user is null)
 		{
-			Notifier.Error(CmsErrors.Account.NotFound);
+			Notifier.Error(CoreErrors.Account.NotFound);
 			return;
 		}
 

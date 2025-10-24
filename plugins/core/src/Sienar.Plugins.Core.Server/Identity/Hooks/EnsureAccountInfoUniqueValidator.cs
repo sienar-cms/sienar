@@ -47,14 +47,14 @@ public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 	{
 		if (await _userRepository.UsernameIsTaken(id, username))
 		{
-			_notifier.Error(CmsErrors.Account.UsernameTaken);
+			_notifier.Error(CoreErrors.Account.UsernameTaken);
 			return OperationStatus.Conflict;
 		}
 
 		if (await _userRepository.EmailIsTaken(id, email) ||
 			(!string.IsNullOrEmpty(pendingEmail) && await _userRepository.EmailIsTaken(id, pendingEmail)))
 		{
-			_notifier.Error(CmsErrors.Account.EmailTaken);
+			_notifier.Error(CoreErrors.Account.EmailTaken);
 			return OperationStatus.Conflict;
 		}
 

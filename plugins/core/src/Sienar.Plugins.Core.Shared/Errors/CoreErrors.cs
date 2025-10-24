@@ -3,7 +3,7 @@
 namespace Sienar.Errors;
 
 /// <exclude />
-public static class CmsErrors
+public static class CoreErrors
 {
 	public static class Account
 	{

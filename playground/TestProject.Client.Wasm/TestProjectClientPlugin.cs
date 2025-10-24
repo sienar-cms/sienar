@@ -63,6 +63,6 @@ public class TestProjectClientPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<CmsClientPlugin>();
+		builder.AddPlugin<CoreClientPlugin>();
 	}
 }

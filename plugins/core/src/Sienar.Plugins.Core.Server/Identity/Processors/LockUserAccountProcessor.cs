@@ -39,7 +39,7 @@ public class LockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.NotFound);
+				message: CoreErrors.Account.NotFound);
 		}
 
 		var reasons = await _lockoutReasonRepository.Read(request.Reasons);
@@ -47,7 +47,7 @@ public class LockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.LockoutReason.NotFound);
+				message: CoreErrors.LockoutReason.NotFound);
 		}
 
 		user.LockoutReasons.AddRange(reasons);

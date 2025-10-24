@@ -3,7 +3,7 @@
 namespace Sienar.Infrastructure;
 
 /// <summary>
-/// The menus supported by Sienar CMS out of the box
+/// The menus supported by Sienar out of the box
 /// </summary>
 public enum SienarMenus
 {

@@ -28,7 +28,7 @@ public class ManuallyConfirmUserAccountProcessor
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.NotFound);
+				message: CoreErrors.Account.NotFound);
 		}
 
 		if (user.EmailConfirmed)

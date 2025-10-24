@@ -18,9 +18,9 @@ using Sienar.Ui.Views;
 namespace Sienar.Plugins;
 
 /// <summary>
-/// Configures the Sienar application to run the WASM CMS client
+/// Configures the Sienar application to run the WASM client
 /// </summary>
-public class CmsClientPlugin : IPlugin
+public class CoreClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
 	private readonly IConfiguration _configuration;
@@ -29,13 +29,12 @@ public class CmsClientPlugin : IPlugin
 	private readonly MenuProvider _menuProvider;
 	private readonly PluginDataProvider _pluginDataProvider;
 	private readonly RoutableAssemblyProvider _routableAssemblyProvider;
-	private readonly ScriptProvider _scriptProvider;
 	private readonly StyleProvider _styleProvider;
 
 	/// <summary>
-	/// Creates a new instance of <c>CmsClientPlugin</c>
+	/// Creates a new instance of <c>CoreClientPlugin</c>
 	/// </summary>
-	public CmsClientPlugin(
+	public CoreClientPlugin(
 		IApplicationAdapter adapter,
 		IConfiguration configuration,
 		ComponentProvider componentProvider,
@@ -43,7 +42,6 @@ public class CmsClientPlugin : IPlugin
 		MenuProvider menuProvider,
 		PluginDataProvider pluginDataProvider,
 		RoutableAssemblyProvider routableAssemblyProvider,
-		ScriptProvider scriptProvider,
 		StyleProvider styleProvider)
 	{
 		_adapter = adapter;
@@ -53,7 +51,6 @@ public class CmsClientPlugin : IPlugin
 		_menuProvider = menuProvider;
 		_pluginDataProvider = pluginDataProvider;
 		_routableAssemblyProvider = routableAssemblyProvider;
-		_scriptProvider = scriptProvider;
 		_styleProvider = styleProvider;
 	}
 
@@ -64,7 +61,6 @@ public class CmsClientPlugin : IPlugin
 		SetupMenu();
 		SetupPluginData();
 		SetupRoutableAssemblies();
-		SetupScripts();
 		SetupStyles();
 		SetupServices();
 	}
@@ -94,29 +90,24 @@ public class CmsClientPlugin : IPlugin
 	{
 		_pluginDataProvider.Add(new PluginData
 		{
-			Name = "Sienar CMS Client",
+			Name = "Sienar Core Client",
 			Version = Version.Parse("0.1.0"),
 			Author = "Christian LeVesque",
 			AuthorUrl = "https://levesque.dev",
-			Description = "The Sienar CMS Client plugin provides all of the main services and configuration required to render the Sienar CMS user interface.",
+			Description = "The Sienar Core Client plugin provides all of the main services and configuration required to render the Sienar Core user interface.",
 			Homepage = "https://sienar.io"
 		});
 	}
 
 	private void SetupRoutableAssemblies()
 	{
-		_routableAssemblyProvider.Add(typeof(CmsClientPlugin).Assembly);
-	}
-
-	private void SetupScripts()
-	{
-		_scriptProvider.Add("/_content/Sienar.Plugin.Cms.Client/sienar-cms.js");
+		_routableAssemblyProvider.Add(typeof(CoreClientPlugin).Assembly);
 	}
 
 	private void SetupStyles()
 	{
-		_styleProvider.Add("/_content/Sienar.UI/sienar.css");
-		_styleProvider.Add("/_content/Sienar.Ui/Sienar.UI.bundle.scp.css");
+		_styleProvider.Add("/_content/Sienar.Ui/sienar.css");
+		_styleProvider.Add("/_content/Sienar.Ui/Sienar.Ui.bundle.scp.css");
 	}
 
 	private void SetupServices()

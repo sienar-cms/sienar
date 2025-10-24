@@ -8,7 +8,7 @@ using Sienar.Services;
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="MenuProvider"/> extension methods used by the <c>Sienar.Plugin.Cms.Server</c> assembly
+/// Contains <see cref="MenuProvider"/> extension methods used by the <c>Sienar.Plugins.Core.Client</c> assembly
 /// </summary>
 public static class MenuProviderExtensions
 {

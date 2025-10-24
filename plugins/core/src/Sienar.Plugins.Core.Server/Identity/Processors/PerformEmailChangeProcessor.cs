@@ -44,7 +44,7 @@ public class PerformEmailChangeProcessor
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var user = await _userRepository.Read(userId.Value);
@@ -52,21 +52,21 @@ public class PerformEmailChangeProcessor
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		if (user.Id != request.UserId)
 		{
 			return new(
 				OperationStatus.Unprocessable,
-				message: CmsErrors.Account.AccountErrorWrongId);
+				message: CoreErrors.Account.AccountErrorWrongId);
 		}
 
 		if (string.IsNullOrEmpty(user.PendingEmail))
 		{
 			return new(
 				OperationStatus.Unprocessable,
-				message: CmsErrors.Account.NoPendingEmail);
+				message: CoreErrors.Account.NoPendingEmail);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -79,7 +79,7 @@ public class PerformEmailChangeProcessor
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.VerificationCodeInvalid);
+				message: CoreErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
@@ -89,12 +89,12 @@ public class PerformEmailChangeProcessor
 				await _emailManager.SendEmailChangeConfirmationEmail(user);
 				return new(
 					OperationStatus.Unprocessable,
-					message: CmsErrors.Account.VerificationCodeExpired);
+					message: CoreErrors.Account.VerificationCodeExpired);
 			}
 
 			return new(
 				OperationStatus.Unprocessable,
-				message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
+				message: CoreErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid

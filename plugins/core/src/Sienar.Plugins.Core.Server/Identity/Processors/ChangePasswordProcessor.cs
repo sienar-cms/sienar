@@ -34,7 +34,7 @@ public class ChangePasswordProcessor : IStatusProcessor<ChangePasswordRequest>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		var user = await _userRepository.Read(userId.Value);
@@ -42,14 +42,14 @@ public class ChangePasswordProcessor : IStatusProcessor<ChangePasswordRequest>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginRequired);
+				message: CoreErrors.Account.LoginRequired);
 		}
 
 		if (!await _passwordManager.VerifyPassword(user, request.CurrentPassword))
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: CoreErrors.Account.LoginFailedInvalid);
 		}
 
 		await _passwordManager.UpdatePassword(user, request.NewPassword);

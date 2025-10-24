@@ -26,7 +26,7 @@ public class ClientRegisterProcessor : IStatusProcessor<RegisterRequest>
 			return new OperationResult<bool>(
 				OperationStatus.Unprocessable,
 				false,
-				CmsErrors.Account.MustAcceptTos);
+				CoreErrors.Account.MustAcceptTos);
 		}
 
 		return await _client.Post<bool>("account", request);

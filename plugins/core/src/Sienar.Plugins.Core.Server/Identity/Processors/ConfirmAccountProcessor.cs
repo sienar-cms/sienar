@@ -39,7 +39,7 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.AccountErrorInvalidId);
+				message: CoreErrors.Account.AccountErrorInvalidId);
 		}
 
 		var status = await _vcManager.VerifyCode(
@@ -52,7 +52,7 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.VerificationCodeInvalid);
+				message: CoreErrors.Account.VerificationCodeInvalid);
 		}
 
 		if (status == VerificationCodeStatus.Expired)
@@ -60,8 +60,8 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 			if (_options.EnableEmail)
 			{
 				var errorMessage = await _emailManager.SendWelcomeEmail(user)
-					? CmsErrors.Account.VerificationCodeExpired
-					: CmsErrors.Email.FailedToSend;
+					? CoreErrors.Account.VerificationCodeExpired
+					: CoreErrors.Email.FailedToSend;
 
 				return new(
 					OperationStatus.Unprocessable,
@@ -70,7 +70,7 @@ public class ConfirmAccountProcessor : IStatusProcessor<ConfirmAccountRequest>
 
 			return new(
 				OperationStatus.Unprocessable,
-				message: CmsErrors.Account.VerificationCodeExpiredEmailDisabled);
+				message: CoreErrors.Account.VerificationCodeExpiredEmailDisabled);
 		}
 
 		// Code was valid

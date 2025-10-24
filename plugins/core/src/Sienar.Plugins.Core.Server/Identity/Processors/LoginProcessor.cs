@@ -54,7 +54,7 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 		{
 			return new(
 				OperationStatus.NotFound,
-				message: CmsErrors.Account.LoginFailedNotFound);
+				message: CoreErrors.Account.LoginFailedNotFound);
 		}
 
 		if (user.IsLockedOut())
@@ -67,7 +67,7 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 					UserId = user.Id,
 					VerificationCode = code.Code
 				},
-				message: CmsErrors.Account.AccountLocked);
+				message: CoreErrors.Account.AccountLocked);
 		}
 
 		if (!await _passwordManager.VerifyPassword(user, request.Password))
@@ -88,14 +88,14 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 						UserId = user.Id,
 						VerificationCode = code.Code
 					},
-					message: CmsErrors.Account.LoginFailedLocked);
+					message: CoreErrors.Account.LoginFailedLocked);
 			}
 
 			await _repository.Update(user);
 
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedInvalid);
+				message: CoreErrors.Account.LoginFailedInvalid);
 		}
 
 		// Still check if email is confirmed no matter what
@@ -108,12 +108,12 @@ public class LoginProcessor : IProcessor<LoginRequest, LoginResult>
 				await _emailManager.SendWelcomeEmail(user);
 				return new(
 					OperationStatus.Unauthorized,
-					message: CmsErrors.Account.LoginFailedNotConfirmed);
+					message: CoreErrors.Account.LoginFailedNotConfirmed);
 			}
 
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.LoginFailedNotConfirmedEmailDisabled);
+				message: CoreErrors.Account.LoginFailedNotConfirmedEmailDisabled);
 		}
 
 		// User is authenticated and able to log in

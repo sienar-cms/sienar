@@ -6,18 +6,18 @@
 		<RootNamespace>Sienar</RootNamespace>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugin.Cms.Blazor</PackageId>
-		<Title>Sienar.Plugin.Cms</Title>
+		<PackageId>Sienar.Plugins.Core.Client</PackageId>
+		<Title>Sienar.Plugins.Core.Client</Title>
 		<PackageVersion>0.1.0</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>The CMS portion of Sienar applications</Description>
+		<Description>The core Sienar applications</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
-		<PackageProjectUrl>https://sienar.levesque.dev</PackageProjectUrl>
+		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>sienar cms utilities blazor plugin</PackageTags>
+		<PackageTags>sienar framework utilities blazor plugin</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 

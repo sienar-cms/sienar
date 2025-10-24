@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MudBlazor;
-using MudBlazor.Services;
 using Sienar.Infrastructure;
 using Sienar.Ui;
 
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="IServiceCollection"/> extension methods used by the <c>Sienar.Plugin.Cms.Server</c> assembly
+/// Contains <see cref="IServiceCollection"/> extension methods used by the <c>Sienar.Ui</c> assembly
 /// </summary>
-public static class SienarUiMudBlazorServiceCollectionExtensions
+public static class SienarUiServiceCollectionExtensions
 {
 	/// <summary>
 	/// Adds the default <see cref="SienarTheme"/> for use in Sienar's <see cref="ThemeState"/>

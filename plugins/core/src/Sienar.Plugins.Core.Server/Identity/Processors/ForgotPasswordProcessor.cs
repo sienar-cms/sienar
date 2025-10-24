@@ -42,7 +42,7 @@ public class ForgotPasswordProcessor : IStatusProcessor<ForgotPasswordRequest>
 		{
 			return new(
 				OperationStatus.Unauthorized,
-				message: CmsErrors.Account.AccountLocked);
+				message: CoreErrors.Account.AccountLocked);
 		}
 
 		// They don't need to know whether the user exists or not
@@ -54,7 +54,7 @@ public class ForgotPasswordProcessor : IStatusProcessor<ForgotPasswordRequest>
 			{
 				return new(
 					OperationStatus.Unknown,
-					message: CmsErrors.Email.FailedToSend);
+					message: CoreErrors.Email.FailedToSend);
 			}
 		}
 

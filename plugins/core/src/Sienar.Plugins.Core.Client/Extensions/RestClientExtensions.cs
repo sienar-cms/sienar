@@ -4,7 +4,7 @@ using Sienar.Infrastructure;
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="IRestClient"/> extension methods used by the <c>Sienar.Plugin.Cms.Client</c> assembly
+/// Contains <see cref="IRestClient"/> extension methods used by the <c>Sienar.Plugins.Core.Client</c> assembly
 /// </summary>
 public static class RestClientExtensions
 {
