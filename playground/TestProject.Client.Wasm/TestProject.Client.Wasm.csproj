@@ -19,4 +19,8 @@
 		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
 </Project>
