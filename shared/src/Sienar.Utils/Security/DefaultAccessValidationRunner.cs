@@ -13,11 +13,11 @@ namespace Sienar.Security;
 public class DefaultAccessValidationRunner<T> : IAccessValidationRunner<T>
 {
 	private readonly IEnumerable<IAccessValidator<T>> _validators;
-	private readonly ILogger<IAccessValidationRunner<T>> _logger;
+	private readonly ILogger<DefaultAccessValidationRunner<T>> _logger;
 
 	public DefaultAccessValidationRunner(
 		IEnumerable<IAccessValidator<T>> validators,
-		ILogger<IAccessValidationRunner<T>> logger)
+		ILogger<DefaultAccessValidationRunner<T>> logger)
 	{
 		_validators = validators;
 		_logger = logger;

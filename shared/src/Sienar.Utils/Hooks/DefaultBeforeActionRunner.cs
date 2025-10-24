@@ -12,11 +12,11 @@ namespace Sienar.Hooks;
 public class DefaultBeforeActionRunner<T> : IBeforeActionRunner<T>
 {
 	private readonly IEnumerable<IBeforeAction<T>> _hooks;
-	private readonly ILogger<IBeforeActionRunner<T>> _logger;
+	private readonly ILogger<DefaultBeforeActionRunner<T>> _logger;
 
 	public DefaultBeforeActionRunner(
 		IEnumerable<IBeforeAction<T>> hooks,
-		ILogger<IBeforeActionRunner<T>> logger)
+		ILogger<DefaultBeforeActionRunner<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;

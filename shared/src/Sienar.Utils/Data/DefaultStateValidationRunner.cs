@@ -13,11 +13,11 @@ namespace Sienar.Data;
 public class DefaultStateValidationRunner<T> : IStateValidationRunner<T>
 {
 	private readonly IEnumerable<IStateValidator<T>> _validators;
-	private readonly ILogger<IStateValidationRunner<T>> _logger;
+	private readonly ILogger<DefaultStateValidationRunner<T>> _logger;
 
 	public DefaultStateValidationRunner(
 		IEnumerable<IStateValidator<T>> validators,
-		ILogger<IStateValidationRunner<T>> logger)
+		ILogger<DefaultStateValidationRunner<T>> logger)
 	{
 		_validators = validators;
 		_logger = logger;

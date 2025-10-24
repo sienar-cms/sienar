@@ -11,11 +11,11 @@ namespace Sienar.Hooks;
 public class DefaultAfterActionRunner<T> : IAfterActionRunner<T>
 {
 	private readonly IEnumerable<IAfterAction<T>> _hooks;
-	private readonly ILogger<IAfterActionRunner<T>> _logger;
+	private readonly ILogger<DefaultAfterActionRunner<T>> _logger;
 
 	public DefaultAfterActionRunner(
 		IEnumerable<IAfterAction<T>> hooks,
-		ILogger<IAfterActionRunner<T>> logger)
+		ILogger<DefaultAfterActionRunner<T>> logger)
 	{
 		_hooks = hooks;
 		_logger = logger;
