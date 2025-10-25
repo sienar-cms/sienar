@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Sienar</RootNamespace>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<PackageId>Sienar.Plugins.Core.Server</PackageId>
+		<Title>Sienar.Plugins.Core.Server</Title>
+		<PackageVersion>0.1.1</PackageVersion>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>Christian LeVesque</Authors>
+		<Description>The core Sienar application</Description>
+		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
+		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>sienar framework utilities blazor plugin</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Architecture.EntityFramework" Version="0.1.0"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Architecture.Web" Version="0.1.1"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugins.Core.Shared" Version="0.1.0"/>
+	</ItemGroup>
+
+</Project>

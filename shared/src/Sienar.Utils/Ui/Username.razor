@@ -1,0 +1,34 @@
+﻿@using Sienar.Security
+@implements IDisposable
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IUserAccessor UserAccessor
+
+@_username
+
+@code {
+
+	private string? _username;
+
+	/// <inheritdoc />
+	protected override async Task OnInitializedAsync()
+	{
+		_username = await UserAccessor.GetUsername();
+		AuthStateProvider.AuthenticationStateChanged += HandleRerender;
+	}
+
+	private void HandleRerender(Task<AuthenticationState> s) => _ = RefreshUsername();
+
+	private async Task RefreshUsername()
+	{
+		_username = await UserAccessor.GetUsername();
+		StateHasChanged();
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		AuthStateProvider.AuthenticationStateChanged -= HandleRerender;
+		GC.SuppressFinalize(this);
+	}
+
+}

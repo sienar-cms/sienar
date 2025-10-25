@@ -173,49 +173,6 @@ namespace TestProject.Data.Migrations
                     b.ToTable("VerificationCode");
                 });
 
-            modelBuilder.Entity("Sienar.Media.Upload", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ConcurrencyStamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsPrivate")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MediaType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Files");
-                });
-
             modelBuilder.Entity("SienarRoleSienarUser", b =>
                 {
                     b.Property<Guid>("RolesId")
@@ -253,15 +210,6 @@ namespace TestProject.Data.Migrations
                         .HasForeignKey("SienarUserId");
                 });
 
-            modelBuilder.Entity("Sienar.Media.Upload", b =>
-                {
-                    b.HasOne("Sienar.Identity.SienarUser", "User")
-                        .WithMany("Media")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SienarRoleSienarUser", b =>
                 {
                     b.HasOne("Sienar.Identity.SienarRole", null)
@@ -279,8 +227,6 @@ namespace TestProject.Data.Migrations
 
             modelBuilder.Entity("Sienar.Identity.SienarUser", b =>
                 {
-                    b.Navigation("Media");
-
                     b.Navigation("VerificationCodes");
                 });
 #pragma warning restore 612, 618

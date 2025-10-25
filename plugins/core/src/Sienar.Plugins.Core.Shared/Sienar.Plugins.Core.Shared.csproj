@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Sienar</RootNamespace>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<PackageId>Sienar.Plugins.Core.Shared</PackageId>
+		<Title>Sienar.Plugins.Core.Shared</Title>
+		<PackageVersion>0.1.1</PackageVersion>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>Christian LeVesque</Authors>
+		<Description>The core application code for Sienar, including services, entities, etc.</Description>
+		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
+		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>sienar framework utilities</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="MimeMapping" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\shared\src\Sienar.Utils\Sienar.Utils.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Utils" Version="0.1.1"/>
+	</ItemGroup>
+
+</Project>

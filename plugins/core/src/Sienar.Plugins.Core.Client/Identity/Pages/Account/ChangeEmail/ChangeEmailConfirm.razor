@@ -1,0 +1,49 @@
+@inherits ActionPage<PerformEmailChangeRequest>
+@attribute [Route(DashboardUrls.Account.EmailChange.Confirm)]
+@inject IStatusService<PerformEmailChangeRequest> EmailChangeService
+
+<DocTitle Title="Updating your email address"/>
+
+<NarrowContainer>
+	<MudText Typo="Typo.h1">Updating your email address</MudText>
+
+	@if (IsLoading)
+	{
+		<MudText>
+			We are verifying your new email address. Please wait...
+		</MudText>
+	}
+</NarrowContainer>
+
+@code {
+
+	/// <summary>
+	/// The ID of the user whose email to confirm
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public int UserId { get; set; }
+
+	/// <summary>
+	/// The verification code of the user whose email to confirm
+	/// </summary>
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public Guid Code { get; set; }
+
+	/// <inheritdoc />
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender) return;
+
+		Model.UserId = UserId;
+		Model.VerificationCode = Code;
+
+		await SubmitRequest(() => EmailChangeService.Execute(Model));
+		if (WasSuccessful)
+		{
+			NavManager.NavigateTo(DashboardUrls.Account.EmailChange.Successful);
+		}
+	}
+
+}

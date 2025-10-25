@@ -1,0 +1,28 @@
+@layout DashboardLayout
+@attribute [Route(DashboardUrls.Index)]
+@inject ComponentProvider ComponentProvider
+
+<DocTitle Title="Dashboard"/>
+
+@if (_dashboardComponent is null)
+{
+	<Dashboard Categories="@([SienarMenus.UserManagement])"/>
+}
+else
+{
+	<DynamicComponent Type="_dashboardComponent" />
+}
+
+@code {
+
+	private Type? _dashboardComponent;
+
+	/// <inheritdoc />
+	protected override void OnInitialized()
+	{
+		_dashboardComponent = ComponentProvider
+			.Access<DashboardLayout>()
+			.GetComponent(DashboardLayoutSections.Dashboard);
+	}
+
+}

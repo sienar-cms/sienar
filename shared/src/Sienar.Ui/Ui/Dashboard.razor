@@ -1,0 +1,65 @@
+﻿@using Sienar.Menus
+@inject AuthenticationStateProvider AuthState
+@inject IMenuGenerator MenuGenerator
+
+<MudText Typo="Typo.h3" Class="mb-8">
+	@Name
+</MudText>
+
+@foreach (var menuName in _menus.Keys)
+{
+	@if (!_menus[menuName].Any()) continue;
+
+	<MudText Typo="Typo.h5">@menuName.GetDescription()</MudText>
+	<MudDivider Class="mt-1 mb-6"/>
+
+	<div class="d-flex flex-wrap">
+		@foreach (var menuItem in _menus[menuName])
+		{
+			@if (LinkTemplate is not null)
+			{
+				@LinkTemplate(menuItem)
+			}
+			else
+			{
+				<DashboardItem Item="menuItem"/>
+			}
+		}
+	</div>
+}
+
+@code {
+
+	private readonly Dictionary<Enum, List<MenuLink>> _allMenus = new();
+	private Dictionary<Enum, List<MenuLink>> _menus = new();
+
+	[Parameter]
+	public string Name { get; set; } = "Dashboard";
+
+	[Parameter]
+	public required List<Enum> Categories { get; set; }
+
+	[Parameter]
+	public RenderFragment<MenuLink>? LinkTemplate { get; set; }
+
+	protected override void OnInitialized()
+	{
+		AuthState.AuthenticationStateChanged += UpdateMenuAndRender;
+		UpdateMenuAndRender(AuthState.GetAuthenticationStateAsync());
+	}
+
+	private async void UpdateMenuAndRender(Task<AuthenticationState> s)
+	{
+		await s;
+		_allMenus.Clear();
+		_menus.Clear();
+
+		foreach (var menuName in Categories)
+		{
+			_allMenus[menuName] = await MenuGenerator.Create(menuName);
+		}
+
+		_menus = new(_allMenus);
+	}
+
+}

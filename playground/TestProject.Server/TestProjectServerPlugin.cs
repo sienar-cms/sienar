@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Sienar.Configuration;
 using Sienar.Infrastructure;
 using Sienar.Plugins;
 using TestProject.Data;
@@ -23,9 +24,6 @@ public class TestProjectServerPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder
-			.AddPlugin<BlazorPlugin>()
-			.AddPlugin<CmsServerPlugin>()
-			.AddPlugin<SienarCmsEfRepositoriesPlugin<AppDbContext>>();
+		builder.AddPlugin<CoreServerPlugin<AppDbContext>>();
 	}
 }

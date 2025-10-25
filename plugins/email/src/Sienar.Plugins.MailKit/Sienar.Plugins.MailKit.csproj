@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Sienar.Email</RootNamespace>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<PackageId>Sienar.Plugins.MailKit</PackageId>
+		<Title>Sienar.Plugins.MailKit</Title>
+		<PackageVersion>0.1.0</PackageVersion>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>Christian LeVesque</Authors>
+		<Description>A Sienar plugin to facilitate sending SMTP email via MailKit</Description>
+		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
+		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/sienar-cms/sienar</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>sienar framework utilities email mailkit</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="./README.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MailKit" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Architecture.Web" Version="0.1.1"/>
+	</ItemGroup>
+
+</Project>

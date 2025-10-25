@@ -1,6 +1,9 @@
-﻿using Sienar.Extensions;
+﻿using Sienar.Configuration;
+using Sienar.Extensions;
+using Sienar.Html;
 using Sienar.Infrastructure;
 using Sienar.Layouts;
+using Sienar.Menus;
 using Sienar.Plugins;
 using TestProject.Client.Extensions;
 using TestProject.Client.Layouts;
@@ -11,19 +14,19 @@ namespace TestProject.Client;
 public class TestProjectClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
-	private readonly IRoutableAssemblyProvider _routableAssemblyProvider;
-	private readonly IComponentProvider _componentProvider;
-	private readonly IGlobalComponentProvider _globalComponentProvider;
-	private readonly IMenuProvider _menuProvider;
-	private readonly IStyleProvider _styleProvider;
+	private readonly RoutableAssemblyProvider _routableAssemblyProvider;
+	private readonly ComponentProvider _componentProvider;
+	private readonly GlobalComponentProvider _globalComponentProvider;
+	private readonly MenuProvider _menuProvider;
+	private readonly StyleProvider _styleProvider;
 
 	public TestProjectClientPlugin(
 		IApplicationAdapter adapter,
-		IRoutableAssemblyProvider routableAssemblyProvider,
-		IComponentProvider componentProvider,
-		IGlobalComponentProvider globalComponentProvider,
-		IMenuProvider menuProvider,
-		IStyleProvider styleProvider)
+		RoutableAssemblyProvider routableAssemblyProvider,
+		ComponentProvider componentProvider,
+		GlobalComponentProvider globalComponentProvider,
+		MenuProvider menuProvider,
+		StyleProvider styleProvider)
 	{
 		_adapter = adapter;
 		_routableAssemblyProvider = routableAssemblyProvider;
@@ -60,6 +63,6 @@ public class TestProjectClientPlugin : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<CmsClientPlugin>();
+		builder.AddPlugin<CoreClientPlugin>();
 	}
 }
