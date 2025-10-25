@@ -236,7 +236,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		where TProcessor : class, IStatusProcessor<TRequest>
 		where TRequest : IRequest
 	{
-		self.TryAddScoped<IStatusProcessor<TRequest>>();
+		self.TryAddScoped<IStatusProcessor<TRequest>, TProcessor>();
 		return self;
 	}
 
