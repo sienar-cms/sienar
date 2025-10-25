@@ -44,6 +44,7 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped<SienarAuthenticationStateProvider>();
 		self.TryAddScoped<AuthenticationStateProvider>(
 			sp => sp.GetRequiredService<SienarAuthenticationStateProvider>());
+		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
 
 		return self;
 	}

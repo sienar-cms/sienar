@@ -67,7 +67,6 @@ public class CoreServerPlugin<TContext> : IPlugin
 		services.TryAddScoped<IUserRepository, UserRepository<TContext>>();
 
 		services.TryAddScoped<IEmailSender, DefaultEmailSender>();
-		services.TryAddScoped<IBotDetector, DefaultBotDetector>();
 
 
 		/************
