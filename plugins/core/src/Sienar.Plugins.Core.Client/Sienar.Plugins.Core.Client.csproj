@@ -52,6 +52,10 @@
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Ui" Version="0.1.0"/>
+		<ProjectReference Condition=" '$(Configuration)' != 'Release' " Include="..\..\..\..\shared\src\Sienar.Utils.Blazor\Sienar.Utils.Blazor.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Utils.Blazor" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>
