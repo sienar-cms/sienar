@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Hooks;
+using Sienar.Security;
 using Sienar.Ui;
 
 namespace Sienar.Extensions;
@@ -9,6 +12,20 @@ namespace Sienar.Extensions;
 /// </summary>
 public static class SienarUtilsBlazorServiceCollectionExtensions
 {
+	/// <summary>
+	/// Adds Sienar Blazor utilities to the DI contaziner
+	/// </summary>
+	/// <param name="self">The service collection</param>
+	/// <returns>The service collection</returns>
+	public static IServiceCollection AddSienarBlazorUtilities(this IServiceCollection self)
+	{
+		self.TryAddScoped<SienarAuthenticationStateProvider>();
+		self.TryAddScoped<AuthenticationStateProvider>(
+			sp => sp.GetRequiredService<SienarAuthenticationStateProvider>());
+
+		return self;
+	}
+
 	/// <summary>
 	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
 	/// </summary>
