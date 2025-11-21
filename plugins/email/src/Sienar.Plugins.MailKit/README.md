@@ -4,7 +4,7 @@ This plugin configures your Sienar application to send email via SMTP through th
 
 ## Configuration
 
-You need to configure the MailKit plugin with your SMTP information in order to send mail. You can do this in one of two ways: via `appsettings.json` or directly on the `IServiceCollection` like normal. If you apply your own configuration, Sienar will detect an existing configuration and skip adding its own. All configuration is stored on the [SmtpOptions](https://github.com/sienar-cms/sienar/blob/main/plugins/mailkit/src/Sienar.Plugins.MailKit/SmtpOptions.cs) class.
+You need to configure the MailKit plugin with your SMTP information in order to send mail. You can do this in one of two ways: via `appsettings.json` or directly on the `IServiceCollection` like normal. If you apply your own configuration, Sienar will detect an existing configuration and skip adding its own. All configuration is stored on the [SmtpOptions](https://github.com/christianlevesque/sienar/blob/main/plugins/email/src/Sienar.Plugins.MailKit/SmtpOptions.cs) class.
 
 ### `appsettings.json` configuration
 
