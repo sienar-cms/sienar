@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -13,7 +11,6 @@ using Sienar.Menus;
 using Sienar.Processors;
 using Sienar.Security;
 using Sienar.Services;
-using Sienar.Ui;
 
 namespace Sienar.Extensions;
 
@@ -41,9 +38,6 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped(typeof(IBeforeActionRunner<>), typeof(DefaultBeforeActionRunner<>));
 		self.TryAddScoped(typeof(IAfterActionRunner<>), typeof(DefaultAfterActionRunner<>));
 		self.TryAddScoped<IMenuGenerator, DefaultMenuGenerator>();
-		self.TryAddScoped<SienarAuthenticationStateProvider>();
-		self.TryAddScoped<AuthenticationStateProvider>(
-			sp => sp.GetRequiredService<SienarAuthenticationStateProvider>());
 		self.TryAddScoped<IBotDetector, DefaultBotDetector>();
 
 		return self;
@@ -201,16 +195,6 @@ public static class SienarUtilsServiceCollectionExtensions
 		self.TryAddScoped<IProcessor<TRequest, TResult>, TProcessor>();
 		return self;
 	}
-
-	/// <summary>
-	/// Adds a task to run once the Blazor UI has rendered and is ready to execute JavaScript
-	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="T">The type of the startup task</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddStartupTask<T>(this IServiceCollection self)
-		where T : class, IBeforeTask<SienarStartupActor>
-		=> self.AddScoped<IBeforeTask<SienarStartupActor>, T>();
 
 	/// <summary>
 	/// Adds a status processor (<c>IProcessor&lt;TRequest, bool&gt;</c>
