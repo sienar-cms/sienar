@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace Sienar.Menus;
 
@@ -59,7 +58,7 @@ public class MenuLink
 	/// A function to execute when the menu link is clicked
 	/// </summary>
 	/// <remarks>
-	/// The arguments of the provided delegate will be resolved from the DI container. The only exception to this is the <see cref="MouseEventArgs"/> from the <c>onclick</c> handler, which can be provided at any position (but is not required).
+	/// The arguments of the provided delegate will be resolved from the DI container. The only exception to this is the <c>MouseEventArgs</c> from the <c>onclick</c> handler, which can be provided at any position (but is not required).
 	/// </remarks>
 	public Delegate? OnClick { get; set; }
 
