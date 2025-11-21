@@ -1,9 +1,9 @@
-﻿@inherits ServiceAwareClickHandlerBase
-@using Sienar.Menus
+﻿@using Sienar.Menus
 @implements IDisposable
 @inject IMenuGenerator MenuGenerator
 @inject IUserAccessor UserAccessor
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IDelegateHandler DelegateHandler
 
 <MudDivider Class="mb-2"/>
 
@@ -31,7 +31,7 @@
 			{
 				<MudMenuItem
 					Href="@submenu.Url"
-					OnClick="@(e => HandleClick(submenu.OnClick, e))">
+					OnClick="@(e => DelegateHandler.Handle(submenu.OnClick, e))">
 					<div class="d-flex align-center">
 						<MudIcon
 							Class="mr-2"
