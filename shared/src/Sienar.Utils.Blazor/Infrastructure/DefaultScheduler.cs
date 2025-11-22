@@ -11,17 +11,34 @@ public class DefaultScheduler : IScheduler
 
 	/// <inheritdoc />
 	public Guid SetTimeout(Action func, int interval)
+		=> CreateTask(func, interval, false);
+
+	/// <inheritdoc />
+	public void ClearTimeout(Guid id) => DeleteTask(id);
+
+	/// <inheritdoc />
+	public Guid SetInterval(Action func, int interval)
+		=> CreateTask(func, interval, true);
+
+	/// <inheritdoc />
+	public void ClearInterval(Guid id) => DeleteTask(id);
+
+	private Guid CreateTask(Action func, int interval, bool shouldRepeat)
 	{
 		var id = Guid.NewGuid();
 		ElapsedEventHandler handler = (_, _) =>
 		{
 			func();
-			ClearTimeout(id);
+
+			if (!shouldRepeat)
+			{
+				ClearTimeout(id);
+			}
 		};
 		var timer = new Timer(interval)
 		{
 			Enabled = true,
-			AutoReset = false
+			AutoReset = shouldRepeat
 		};
 		timer.Elapsed += handler;
 
@@ -36,10 +53,9 @@ public class DefaultScheduler : IScheduler
 		return id;
 	}
 
-	/// <inheritdoc />
-	public void ClearTimeout(Guid id)
+	private void DeleteTask(Guid id)
 	{
-		// For parity with the JavaScript clearTimeout() API,
+		// For parity with the JavaScript clearTimeout()/clearInterval() API,
 		// we should silently return if the timeout doesn't exist
 		if (!_tasks.TryGetValue(id, out var timeout))
 		{

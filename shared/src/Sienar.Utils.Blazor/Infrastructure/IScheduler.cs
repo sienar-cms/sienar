@@ -23,4 +23,21 @@ public interface IScheduler
 	/// </remarks>
 	/// <param name="id">The ID of the timeout to clear</param>
 	void ClearTimeout(Guid id);
+
+	/// <summary>
+	/// Registers an <see cref="Action"/> to be called repeatedly at certain intervals. Semantically identical to JavaScript's <c>setInterval()</c> function 
+	/// </summary>
+	/// <param name="func">The action to call</param>
+	/// <param name="interval">The time interval to wait between calls (in ms)</param>
+	/// <returns>The ID of the interval, which can be used to cancel the interval by passing it to <see cref="ClearInterval"/> method</returns>
+	Guid SetInterval(Action func, int interval);
+
+	/// <summary>
+	/// Clears an interval that was previously registered. Semantically identical to JavaScript's <c>clearInterval()</c> function
+	/// </summary>
+	/// <remarks>
+	/// Similarly to the JavaScript <c>clearInterval()</c> function, this method will silently fail if a timeout does not exist.
+	/// </remarks>
+	/// <param name="id">The ID of the interval to clear</param>
+	void ClearInterval(Guid id);
 }
