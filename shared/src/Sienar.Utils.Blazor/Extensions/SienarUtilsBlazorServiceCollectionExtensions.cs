@@ -24,6 +24,7 @@ public static class SienarUtilsBlazorServiceCollectionExtensions
 		self.TryAddScoped<AuthenticationStateProvider>(
 			sp => sp.GetRequiredService<SienarAuthenticationStateProvider>());
 		self.TryAddScoped<IDelegateHandler, DefaultDelegateHandler>();
+		self.TryAddScoped<IScheduler, DefaultScheduler>();
 
 		return self;
 	}
