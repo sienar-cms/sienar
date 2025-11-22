@@ -7,8 +7,8 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugins.Core.Server</PackageId>
-		<Title>Sienar.Plugins.Core.Server</Title>
+		<PackageId>Sienar.Plugins.Identity.Server</PackageId>
+		<Title>Sienar.Plugins.Identity.Server</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
@@ -45,10 +45,10 @@
 			Include="Sienar.Architecture.Web" Version="0.1.1"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
+			Include="..\Sienar.Plugins.Identity.Shared\Sienar.Plugins.Identity.Shared.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Plugins.Core.Shared" Version="0.1.0"/>
+			Include="Sienar.Plugins.Identity.Shared" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

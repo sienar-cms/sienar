@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Server\Sienar.Plugins.Core.Server.csproj"/>
+		<ProjectReference Include="..\..\plugins\identity\src\Sienar.Plugins.Identity.Server\Sienar.Plugins.Identity.Server.csproj"/>
 		<ProjectReference Include="..\..\shared\src\Sienar.Utils.Sqlite\Sienar.Utils.Sqlite.csproj"/>
 	</ItemGroup>
 

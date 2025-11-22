@@ -1,4 +1,4 @@
-﻿# Sienar.Plugins.Core.Server
+﻿# Sienar.Plugins.Identity.Server
 
 This package contains the backend portion of the core Sienar application, packaged as a class library.
 
