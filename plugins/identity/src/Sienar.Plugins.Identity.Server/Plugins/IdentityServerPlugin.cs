@@ -26,13 +26,13 @@ using Sienar.Security;
 namespace Sienar.Plugins;
 
 /// <exclude />
-public class CoreServerPlugin<TContext> : IPlugin
+public class IdentityServerPlugin<TContext> : IPlugin
 	where TContext : DbContext
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly PluginDataProvider _pluginDataProvider;
 
-	public CoreServerPlugin(
+	public IdentityServerPlugin(
 		WebApplicationBuilder builder,
 		PluginDataProvider pluginDataProvider)
 	{

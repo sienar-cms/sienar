@@ -20,7 +20,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar application to run the WASM client
 /// </summary>
-public class CoreClientPlugin : IPlugin
+public class IdentityClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
 	private readonly IConfiguration _configuration;
@@ -34,7 +34,7 @@ public class CoreClientPlugin : IPlugin
 	/// <summary>
 	/// Creates a new instance of <c>CoreClientPlugin</c>
 	/// </summary>
-	public CoreClientPlugin(
+	public IdentityClientPlugin(
 		IApplicationAdapter adapter,
 		IConfiguration configuration,
 		ComponentProvider componentProvider,
@@ -101,7 +101,7 @@ public class CoreClientPlugin : IPlugin
 
 	private void SetupRoutableAssemblies()
 	{
-		_routableAssemblyProvider.Add(typeof(CoreClientPlugin).Assembly);
+		_routableAssemblyProvider.Add(typeof(IdentityClientPlugin).Assembly);
 	}
 
 	private void SetupStyles()
