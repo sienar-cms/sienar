@@ -13,7 +13,7 @@ public interface IScheduler
 	/// <param name="func">The action to call in the future</param>
 	/// <param name="interval">The time interval to wait to call the action (in ms)</param>
 	/// <returns>The ID of the timeout, which can be used to cancel the timeout by passing it to <see cref="ClearTimeout"/></returns>
-	Guid SetTimeout(Action func, int interval);
+	Guid SetTimeout(Delegate func, int interval);
 
 	/// <summary>
 	/// Clears a timeout that was previously registered. Semantically identical to JavaScript's <c>clearTimeout()</c> function
@@ -30,7 +30,7 @@ public interface IScheduler
 	/// <param name="func">The action to call</param>
 	/// <param name="interval">The time interval to wait between calls (in ms)</param>
 	/// <returns>The ID of the interval, which can be used to cancel the interval by passing it to <see cref="ClearInterval"/> method</returns>
-	Guid SetInterval(Action func, int interval);
+	Guid SetInterval(Delegate func, int interval);
 
 	/// <summary>
 	/// Clears an interval that was previously registered. Semantically identical to JavaScript's <c>clearInterval()</c> function

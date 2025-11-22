@@ -8,27 +8,34 @@ namespace Sienar.Infrastructure;
 public class DefaultScheduler : IScheduler
 {
 	private readonly Dictionary<Guid, ScheduledTask> _tasks = new();
+	private readonly IDelegateHandler _delegateHandler;
+
+	/// <summary>
+	/// Creates a new instance of <c>DefaultScheduler</c>
+	/// </summary>
+	/// <param name="delegateHandler">The delegate handler</param>
+	public DefaultScheduler(IDelegateHandler delegateHandler) => _delegateHandler = delegateHandler;
 
 	/// <inheritdoc />
-	public Guid SetTimeout(Action func, int interval)
+	public Guid SetTimeout(Delegate func, int interval)
 		=> CreateTask(func, interval, false);
 
 	/// <inheritdoc />
 	public void ClearTimeout(Guid id) => DeleteTask(id);
 
 	/// <inheritdoc />
-	public Guid SetInterval(Action func, int interval)
+	public Guid SetInterval(Delegate func, int interval)
 		=> CreateTask(func, interval, true);
 
 	/// <inheritdoc />
 	public void ClearInterval(Guid id) => DeleteTask(id);
 
-	private Guid CreateTask(Action func, int interval, bool shouldRepeat)
+	private Guid CreateTask(Delegate func, int interval, bool shouldRepeat)
 	{
 		var id = Guid.NewGuid();
-		ElapsedEventHandler handler = (_, _) =>
+		ElapsedEventHandler handler = (_, e) =>
 		{
-			func();
+			_delegateHandler.Handle(func, e);
 
 			if (!shouldRepeat)
 			{
@@ -69,7 +76,7 @@ public class DefaultScheduler : IScheduler
 
 	private class ScheduledTask
 	{
-		public required Action Action { get; set; }
+		public required Delegate Action { get; set; }
 		public required ElapsedEventHandler Handler { get; set; }
 		public required Timer Timer { get; set; }
 	}
