@@ -14,7 +14,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar app to run with pre-rendered Blazor WASM application support
 /// </summary>
-public class BlazorPlugin : IPlugin
+public class CoreBlazorPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly IConfigurer<RazorComponentsServiceOptions>? _blazorConfigurer;
@@ -27,7 +27,7 @@ public class BlazorPlugin : IPlugin
 	/// <summary>
 	/// Creates a new instance of <c>BlazorPlugin</c>
 	/// </summary>
-	public BlazorPlugin(
+	public CoreBlazorPlugin(
 		WebApplicationBuilder builder,
 		IEnumerable<IConfigurer<IRazorComponentsBuilder>> additionalBlazorConfigurers,
 		MiddlewareProvider middlewareProvider,

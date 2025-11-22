@@ -11,7 +11,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar app to run as an MVC application with controllers, views, and Razor Pages
 /// </summary>
-public class MvcPlugin : IPlugin
+public class CoreMvcPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly MiddlewareProvider _middlewareProvider;
@@ -21,7 +21,7 @@ public class MvcPlugin : IPlugin
 	/// <summary>
 	/// Creates a new instance of <c>MvcPlugin</c>
 	/// </summary>
-	public MvcPlugin(
+	public CoreMvcPlugin(
 		WebApplicationBuilder builder,
 		MiddlewareProvider middlewareProvider,
 		IEnumerable<IConfigurer<IMvcBuilder>> additionalMvcConfigurers, 

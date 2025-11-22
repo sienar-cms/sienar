@@ -12,7 +12,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar app to run as a web application with auth, CORS, and other core web-based services
 /// </summary>
-public class WebArchitecturePlugin : IPlugin
+public class CoreServerPlugin : IPlugin
 {
 	/// <inheritdoc />
 	public void Configure() {}
@@ -25,8 +25,8 @@ public class WebArchitecturePlugin : IPlugin
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
 		builder
-			.AddPlugin<SecurityPlugin>()
-			.AddPlugin<MvcPlugin>()
-			.AddPlugin<BlazorPlugin>();
+			.AddPlugin<CoreSecurityPlugin>()
+			.AddPlugin<CoreMvcPlugin>()
+			.AddPlugin<CoreBlazorPlugin>();
 	}
 }

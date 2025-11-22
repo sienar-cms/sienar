@@ -8,7 +8,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// configures the Sienar app to run with Blazor WASM application support
 /// </summary>
-public class WasmPlugin : IPlugin
+public class CoreClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
 
@@ -16,7 +16,7 @@ public class WasmPlugin : IPlugin
 	/// Creates a new instance of <c>WasmPlugin</c>
 	/// </summary>
 	/// <param name="adapter"></param>
-	public WasmPlugin(IApplicationAdapter adapter)
+	public CoreClientPlugin(IApplicationAdapter adapter)
 	{
 		_adapter = adapter;
 	}

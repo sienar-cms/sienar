@@ -163,6 +163,6 @@ public class IdentityClientPlugin : IPlugin
 	{
 		builder
 			.AddPlugin<MudBlazorPlugin>()
-			.AddPlugin<WasmPlugin>();
+			.AddPlugin<CoreClientPlugin>();
 	}
 }

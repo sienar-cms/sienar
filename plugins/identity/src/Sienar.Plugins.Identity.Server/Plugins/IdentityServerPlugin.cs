@@ -151,7 +151,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 	[AppConfigurer]
 	public static void ConfigureApp(SienarAppBuilder builder)
 	{
-		builder.AddPlugin<WebArchitecturePlugin>();
+		builder.AddPlugin<CoreServerPlugin>();
 
 		builder.AddStartupServices(sp =>
 		{
