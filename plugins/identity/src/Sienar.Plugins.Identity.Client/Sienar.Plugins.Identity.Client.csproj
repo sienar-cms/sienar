@@ -32,16 +32,16 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\..\architecture\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
-		<PackageReference
-			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Architecture.Wasm" Version="0.1.0"/>
-		<ProjectReference
-			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\Sienar.Plugins.Identity.Shared\Sienar.Plugins.Identity.Shared.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Plugins.Identity.Shared" Version="0.1.1"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\..\..\core\src\Sienar.Plugins.Core.Client\Sienar.Plugins.Core.Client.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugins.Core.Client" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\..\..\..\architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
