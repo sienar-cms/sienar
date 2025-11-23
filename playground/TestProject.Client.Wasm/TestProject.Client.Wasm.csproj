@@ -13,10 +13,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj" />
-		<ProjectReference Include="..\..\architecture\src\Sienar.Architecture.Wasm\Sienar.Architecture.Wasm.csproj" />
-		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Client\Sienar.Plugins.Core.Client.csproj" />
 		<ProjectReference Include="..\..\shared\src\Sienar.Ui\Sienar.Ui.csproj" />
-		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Shared\Sienar.Plugins.Core.Shared.csproj" />
+		<ProjectReference Include="..\..\plugins\core\src\Sienar.Plugins.Core.Client\Sienar.Plugins.Core.Client.csproj" />
+		<ProjectReference Include="..\..\plugins\identity\src\Sienar.Plugins.Identity.Client\Sienar.Plugins.Identity.Client.csproj" />
+		<ProjectReference Include="..\..\plugins\identity\src\Sienar.Plugins.Identity.Shared\Sienar.Plugins.Identity.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

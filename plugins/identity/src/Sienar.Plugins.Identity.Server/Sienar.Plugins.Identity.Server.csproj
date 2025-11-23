@@ -1,23 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Sienar</RootNamespace>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Architecture.Web</PackageId>
-		<Title>Sienar.Architecture.Web</Title>
+		<PackageId>Sienar.Plugins.Identity.Server</PackageId>
+		<Title>Sienar.Plugins.Identity.Server</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>
-		<Description>Contains the code infrastructure needed to create a Sienar web app plugin</Description>
+		<Description>The core Sienar application</Description>
 		<Copyright>Copyright 2024 Christian LeVesque</Copyright>
 		<PackageProjectUrl>https://sienar.io</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/christianlevesque/sienar</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>sienar framework utilities web plugin</PackageTags>
+		<PackageTags>sienar framework utilities blazor plugin</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 
@@ -30,21 +31,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
-
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\shared\src\Sienar.Utils\Sienar.Utils.csproj"/>
+			Include="..\..\..\..\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Utils" Version="0.1.1"/>
+			Include="Sienar.Architecture.EntityFramework" Version="0.1.0"/>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\shared\src\Sienar.Utils.Blazor\Sienar.Utils.Blazor.csproj"/>
+			Include="..\..\..\..\plugins\core\src\Sienar.Plugins.Core.Server\Sienar.Plugins.Core.Server.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
-			Include="Sienar.Utils.Blazor" Version="0.1.0"/>
+			Include="Sienar.Architecture.Web" Version="0.1.1"/>
+		<ProjectReference
+			Condition=" '$(Configuration)' != 'Release' "
+			Include="..\Sienar.Plugins.Identity.Shared\Sienar.Plugins.Identity.Shared.csproj" />
+		<PackageReference
+			Condition=" '$(Configuration)' == 'Release' "
+			Include="Sienar.Plugins.Identity.Shared" Version="0.1.0"/>
 	</ItemGroup>
 
 </Project>

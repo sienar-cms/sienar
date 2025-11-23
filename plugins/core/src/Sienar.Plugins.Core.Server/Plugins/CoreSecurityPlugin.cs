@@ -12,7 +12,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the authorization, authentication, antiforgery, and CORS settings of the Sienar application
 /// </summary>
-public class SecurityPlugin : IPlugin
+public class CoreSecurityPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly MiddlewareProvider _middlewareProvider;
@@ -26,7 +26,7 @@ public class SecurityPlugin : IPlugin
 	/// <summary>
 	/// Creates a new instance of <c>WebArchitecturePlugin</c>
 	/// </summary>
-	public SecurityPlugin(
+	public CoreSecurityPlugin(
 		WebApplicationBuilder builder,
 		MiddlewareProvider middlewareProvider,
 		IConfigurer<AuthorizationOptions>? authorizationConfigurer = null,

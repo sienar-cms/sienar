@@ -3,7 +3,7 @@
 namespace Sienar.Extensions;
 
 /// <summary>
-/// Contains <see cref="AuthenticationState"/> extension methods used by the <c>Sienar.Plugins.Core.Client</c> assembly
+/// Contains <see cref="AuthenticationState"/> extension methods used by the <c>Sienar.Plugins.Identity.Client</c> assembly
 /// </summary>
 public static class AuthenticationStateExtensions
 {

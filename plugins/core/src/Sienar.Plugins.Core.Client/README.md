@@ -1,5 +1,5 @@
-﻿# Sienar.Plugins.Core.Client
+﻿# Sienar.Architecture.Web
 
-This package contains the core web application portion of Sienar, packaged as a Blazor United application. If you want basic UI, user login, account administration, etc. managed for you, you're in the right place. If you'd rather handle those things yourself, you should use one of Sienar's lower-level packages instead.
+This package contains the basic Sienar WASM plugin architecture, as well as references to the lower-level Sienar packages. Use this package if you're creating new functionality for Blazor WASM applications that you want to package in a Sienar plugin.
 
 For more information, see the [Sienar docs](https://sienar.io).

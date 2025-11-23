@@ -32,7 +32,7 @@
 	<ItemGroup>
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
-			Include="..\..\..\..\architecture\src\Sienar.Architecture.Web\Sienar.Architecture.Web.csproj" />
+			Include="..\..\..\..\plugins\core\src\Sienar.Plugins.Core.Server\Sienar.Plugins.Core.Server.csproj" />
 		<PackageReference
 			Condition=" '$(Configuration)' == 'Release' "
 			Include="Sienar.Architecture.Web" Version="0.1.1"/>

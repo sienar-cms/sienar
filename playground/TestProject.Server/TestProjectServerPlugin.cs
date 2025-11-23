@@ -7,6 +7,7 @@ using TestProject.Data;
 
 namespace TestProject;
 
+[AppConfigurer(typeof(SienarAppConfigurer))]
 public class TestProjectServerPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
@@ -21,9 +22,11 @@ public class TestProjectServerPlugin : IPlugin
 		_builder.Services.AddDbContext<AppDbContext>(o => o.UseSienarDb());
 	}
 
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
+	private class SienarAppConfigurer : IConfigurer<SienarAppBuilder>
 	{
-		builder.AddPlugin<CoreServerPlugin<AppDbContext>>();
+		public void Configure(SienarAppBuilder builder)
+		{
+			builder.AddPlugin<IdentityServerPlugin<AppDbContext>>();
+		}
 	}
 }

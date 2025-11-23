@@ -6,8 +6,8 @@
 		<RootNamespace>Sienar</RootNamespace>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<PackageId>Sienar.Plugins.Core.Shared</PackageId>
-		<Title>Sienar.Plugins.Core.Shared</Title>
+		<PackageId>Sienar.Plugins.Identity.Shared</PackageId>
+		<Title>Sienar.Plugins.Identity.Shared</Title>
 		<PackageVersion>0.1.1</PackageVersion>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<Authors>Christian LeVesque</Authors>

@@ -14,7 +14,8 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar app to run with pre-rendered Blazor WASM application support
 /// </summary>
-public class BlazorPlugin : IPlugin
+[AppConfigurer(typeof(SienarAppConfigurer))]
+public class CoreBlazorPlugin : IPlugin
 {
 	private readonly WebApplicationBuilder _builder;
 	private readonly IConfigurer<RazorComponentsServiceOptions>? _blazorConfigurer;
@@ -27,7 +28,7 @@ public class BlazorPlugin : IPlugin
 	/// <summary>
 	/// Creates a new instance of <c>BlazorPlugin</c>
 	/// </summary>
-	public BlazorPlugin(
+	public CoreBlazorPlugin(
 		WebApplicationBuilder builder,
 		IEnumerable<IConfigurer<IRazorComponentsBuilder>> additionalBlazorConfigurers,
 		MiddlewareProvider middlewareProvider,
@@ -77,19 +78,17 @@ public class BlazorPlugin : IPlugin
 			});
 	}
 
-	/// <summary>
-	/// Adds necessary Blazor service dependencies to the Sienar app
-	/// </summary>
-	/// <param name="builder">The <see cref="SienarAppBuilder"/></param>
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
+	private class SienarAppConfigurer : IConfigurer<SienarAppBuilder>
 	{
-		builder.AddStartupServices(sp =>
+		public void Configure(SienarAppBuilder builder)
 		{
-			sp
-				.AddSingleton<RoutableAssemblyProvider>()
-				.AddSingleton<GlobalComponentProvider>()
-				.AddSingleton<ComponentProvider>();
-		});
+			builder.AddStartupServices(sp =>
+			{
+				sp
+					.AddSingleton<RoutableAssemblyProvider>()
+					.AddSingleton<GlobalComponentProvider>()
+					.AddSingleton<ComponentProvider>();
+			});
+		}
 	}
 }

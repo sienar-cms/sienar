@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Html;
-using Sienar.Menus;
-using Sienar.Plugins;
 
 namespace Sienar.Infrastructure;
 
@@ -30,19 +27,12 @@ public class WebApplicationAdapter : IApplicationAdapter<WebApplicationBuilder>
 			.AddSingleton(Builder)
 			.AddSingleton(Builder.Environment)
 			.AddSingleton<IConfiguration>(Builder.Configuration)
-			.AddSingleton<IApplicationAdapter>(this)
-			.AddSingleton<MiddlewareProvider>();
+			.AddSingleton<IApplicationAdapter>(this);
 	}
 
 	/// <inheritdoc />
 	public object Build(IServiceProvider sp)
 	{
-		Builder.Services
-			.AddSingleton(sp.GetRequiredService<MenuProvider>())
-			.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
-			.AddSingleton(sp.GetRequiredService<ScriptProvider>())
-			.AddSingleton(sp.GetRequiredService<StyleProvider>());
-
 		var app = Builder.Build();
 
 		var middlewareProvider = sp.GetRequiredService<MiddlewareProvider>();
