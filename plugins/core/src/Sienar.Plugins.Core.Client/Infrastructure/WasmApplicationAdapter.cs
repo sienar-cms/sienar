@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Extensions;
 using Sienar.Html;
 using Sienar.Menus;
 using Sienar.Plugins;
@@ -41,7 +40,6 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 	public object Build(IServiceProvider sp)
 	{
 		Builder.Services
-			.AddSienarBlazorUtilities()
 			.AddSingleton(sp.GetRequiredService<ComponentProvider>())
 			.AddSingleton(sp.GetRequiredService<GlobalComponentProvider>())
 			.AddSingleton(sp.GetRequiredService<MenuProvider>())

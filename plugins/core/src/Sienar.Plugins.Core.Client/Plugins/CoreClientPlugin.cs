@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Sienar.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Security;
 
@@ -13,7 +14,7 @@ public class CoreClientPlugin : IPlugin
 	private readonly IApplicationAdapter _adapter;
 
 	/// <summary>
-	/// Creates a new instance of <c>WasmPlugin</c>
+	/// Creates a new instance of <c>CoreClientPlugin</c>
 	/// </summary>
 	/// <param name="adapter"></param>
 	public CoreClientPlugin(IApplicationAdapter adapter)
@@ -24,10 +25,15 @@ public class CoreClientPlugin : IPlugin
 	/// <inheritdoc />
 	public void Configure()
 	{
-		if (_adapter.ApplicationType is not ApplicationType.Client) return;
-
 		_adapter.AddServices(sp =>
 		{
+			sp.AddSienarBlazorUtilities();
+
+			if (_adapter.ApplicationType is not ApplicationType.Client)
+			{
+				return;
+			}
+
 			sp.TryAddScoped<IUserAccessor, BlazorUserAccessor>();
 
 			sp.AddAuthorizationCore();
