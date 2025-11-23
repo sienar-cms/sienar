@@ -23,9 +23,6 @@ public interface IApplicationAdapter
 	/// <summary>
 	/// Calls the underlying app builder's <c>Build()</c> method
 	/// </summary>
-	/// <remarks>
-	/// This method is responsible for building the final application. It is also responsible for translating any services between the startup service provider and the runtime service collection. For example, <see cref="Sienar.Menus.MenuProvider"/>, which is configured at application startup in the startup service provider, should be transferred over to the runtime service collection in this method.
-	/// </remarks>
 	/// <param name="startupServiceProvider">The application startup service container</param>
 	/// <returns>The built application</returns>
 	object Build(IServiceProvider startupServiceProvider);
