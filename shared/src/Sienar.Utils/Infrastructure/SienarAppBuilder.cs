@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Sienar.Configuration;
@@ -59,12 +58,14 @@ public sealed class SienarAppBuilder
 
 		if (!_plugins.Contains(type))
 		{
-			// Call startup configurer, if defined
-			var startupConfigurer = type
-				.GetMethods(BindingFlags.Public | BindingFlags.Static)
-				.FirstOrDefault(
-					m => m.GetCustomAttribute<AppConfigurerAttribute>() is not null);
-			startupConfigurer?.Invoke(null, [this]);
+			var startupConfigurers = type.GetCustomAttributes<AppConfigurerAttribute>();
+
+			// Call startup configurers, if defined
+			foreach (var c in startupConfigurers)
+			{
+				var configurer = (IConfigurer<SienarAppBuilder>)Activator.CreateInstance(c.Configurer)!;
+				configurer.Configure(this);
+			}
 
 			// Register plugin
 			_plugins.Add(type);
