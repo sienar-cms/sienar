@@ -3,9 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Configuration;
 using Sienar.Extensions;
-using Sienar.Html;
 using Sienar.Infrastructure;
-using Sienar.Menus;
 using Sienar.Security;
 
 namespace Sienar.Plugins;
@@ -41,11 +39,7 @@ public class CoreClientPlugin : IPlugin
 				.AddSienarBlazorUtilities()
 				.AddSingleton(_sp.GetRequiredService<GlobalComponentProvider>())
 				.AddSingleton(_sp.GetRequiredService<ComponentProvider>())
-				.AddSingleton(_sp.GetRequiredService<MenuProvider>())
-				.AddSingleton(_sp.GetRequiredService<PluginDataProvider>())
-				.AddSingleton(_sp.GetRequiredService<RoutableAssemblyProvider>())
-				.AddSingleton(_sp.GetRequiredService<ScriptProvider>())
-				.AddSingleton(_sp.GetRequiredService<StyleProvider>());
+				.AddSingleton(_sp.GetRequiredService<RoutableAssemblyProvider>());
 
 			if (_adapter.ApplicationType is not ApplicationType.Client)
 			{

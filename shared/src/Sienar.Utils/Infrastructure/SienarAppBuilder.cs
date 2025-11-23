@@ -121,6 +121,15 @@ public sealed class SienarAppBuilder
 			plugin.Configure();
 		}
 
+		_adapter.AddServices(services =>
+		{
+			services
+				.AddSingleton(sp.GetRequiredService<MenuProvider>())
+				.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
+				.AddSingleton(sp.GetRequiredService<ScriptProvider>())
+				.AddSingleton(sp.GetRequiredService<StyleProvider>());
+		});
+
 		return (TApp)_adapter.Build(sp);
 	}
 }
