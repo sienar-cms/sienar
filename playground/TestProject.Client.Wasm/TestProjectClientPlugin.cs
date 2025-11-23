@@ -11,6 +11,7 @@ using TestProject.Client.UI;
 
 namespace TestProject.Client;
 
+[AppConfigurer(typeof(SienarAppConfigurer))]
 public class TestProjectClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
@@ -60,9 +61,11 @@ public class TestProjectClientPlugin : IPlugin
 		_styleProvider.Add("/TestProject.Client.Wasm.styles.css");
 	}
 
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
+	private class SienarAppConfigurer : IConfigurer<SienarAppBuilder>
 	{
-		builder.AddPlugin<IdentityClientPlugin>();
+		public void Configure(SienarAppBuilder builder)
+		{
+			builder.AddPlugin<IdentityClientPlugin>();
+		}
 	}
 }

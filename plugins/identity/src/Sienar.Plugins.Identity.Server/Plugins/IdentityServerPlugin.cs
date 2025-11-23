@@ -1,12 +1,8 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,12 +16,12 @@ using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
-using Sienar.Infrastructure;
 using Sienar.Security;
 
 namespace Sienar.Plugins;
 
 /// <exclude />
+[AppConfigurer(typeof(IdentityServerAppConfigurer))]
 public class IdentityServerPlugin<TContext> : IPlugin
 	where TContext : DbContext
 {
@@ -142,26 +138,5 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.ApplyDefaultConfiguration<EmailSenderOptions>(config.GetSection("Sienar:Email:Sender"))
 			.ApplyDefaultConfiguration<IdentityEmailSubjectOptions>(config.GetSection("Sienar:Email:IdentityEmailSubjects"))
 			.ApplyDefaultConfiguration<LoginOptions>(config.GetSection("Sienar:Login"));
-	}
-
-	/// <summary>
-	/// Configures the <see cref="SienarAppBuilder"/> with configurers and dependent plugins
-	/// </summary>
-	/// <param name="builder">The <see cref="SienarAppBuilder"/></param>
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
-	{
-		builder.AddPlugin<CoreServerPlugin>();
-
-		builder.AddStartupServices(sp =>
-		{
-			sp
-				.TryAddConfigurer<DefaultAuthorizationConfigurer, AuthorizationOptions>()
-				.TryAddConfigurer<DefaultAuthenticationConfigurer, AuthenticationOptions>()
-				.TryAddConfigurer<DefaultAuthenticationBuilderConfigurer, AuthenticationBuilder>()
-				.TryAddConfigurer<DefaultMvcConfigurer, MvcOptions>()
-				.TryAddConfigurer<DefaultMvcBuilderConfigurer, IMvcBuilder>()
-				.TryAddConfigurer<DefaultAntiforgeryConfigurer, AntiforgeryOptions>();
-		});
 	}
 }

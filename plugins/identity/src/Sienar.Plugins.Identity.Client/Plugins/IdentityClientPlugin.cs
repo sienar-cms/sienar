@@ -20,6 +20,7 @@ namespace Sienar.Plugins;
 /// <summary>
 /// Configures the Sienar application to run the WASM client
 /// </summary>
+[AppConfigurer(typeof(SienarAppConfigurer))]
 public class IdentityClientPlugin : IPlugin
 {
 	private readonly IApplicationAdapter _adapter;
@@ -158,11 +159,13 @@ public class IdentityClientPlugin : IPlugin
 		});
 	}
 
-	[AppConfigurer]
-	public static void ConfigureApp(SienarAppBuilder builder)
+	private class SienarAppConfigurer : IConfigurer<SienarAppBuilder>
 	{
-		builder
-			.AddPlugin<MudBlazorPlugin>()
-			.AddPlugin<CoreClientPlugin>();
+		public void Configure(SienarAppBuilder builder)
+		{
+			builder
+				.AddPlugin<MudBlazorPlugin>()
+				.AddPlugin<CoreClientPlugin>();
+		}
 	}
 }
