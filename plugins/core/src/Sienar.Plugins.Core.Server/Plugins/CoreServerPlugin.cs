@@ -1,4 +1,5 @@
-﻿using Sienar.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Sienar.Configuration;
 using Sienar.Infrastructure;
 
 namespace Sienar.Plugins;
@@ -19,7 +20,8 @@ public class CoreServerPlugin : IPlugin
 			builder
 				.AddPlugin<CoreSecurityPlugin>()
 				.AddPlugin<CoreMvcPlugin>()
-				.AddPlugin<CoreBlazorPlugin>();
+				.AddPlugin<CoreBlazorPlugin>()
+				.AddStartupServices(sp => sp.AddSingleton<MiddlewareProvider>());
 		}
 	}
 }

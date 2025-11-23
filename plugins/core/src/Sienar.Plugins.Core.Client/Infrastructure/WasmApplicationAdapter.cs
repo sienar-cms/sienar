@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sienar.Html;
-using Sienar.Menus;
-using Sienar.Plugins;
 
 namespace Sienar.Infrastructure;
 
@@ -30,26 +27,11 @@ public class WasmApplicationAdapter : IApplicationAdapter<WebAssemblyHostBuilder
 			.AddSingleton(Builder)
 			.AddSingleton(Builder.HostEnvironment)
 			.AddSingleton<IConfiguration>(Builder.Configuration)
-			.AddSingleton<IApplicationAdapter>(this)
-			.AddSingleton<GlobalComponentProvider>()
-			.AddSingleton<ComponentProvider>()
-			.AddSingleton<RoutableAssemblyProvider>();
+			.AddSingleton<IApplicationAdapter>(this);
 	}
 
 	/// <inheritdoc />
-	public object Build(IServiceProvider sp)
-	{
-		Builder.Services
-			.AddSingleton(sp.GetRequiredService<ComponentProvider>())
-			.AddSingleton(sp.GetRequiredService<GlobalComponentProvider>())
-			.AddSingleton(sp.GetRequiredService<MenuProvider>())
-			.AddSingleton(sp.GetRequiredService<PluginDataProvider>())
-			.AddSingleton(sp.GetRequiredService<RoutableAssemblyProvider>())
-			.AddSingleton(sp.GetRequiredService<ScriptProvider>())
-			.AddSingleton(sp.GetRequiredService<StyleProvider>());
-
-		return Builder.Build();
-	}
+	public object Build(IServiceProvider sp) => Builder.Build();
 
 	/// <inheritdoc />
 	public void AddServices(Action<IServiceCollection> configurer)
