@@ -19,12 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54399205-682
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugins.MailKit", "plugins\email\src\Sienar.Plugins.MailKit\Sienar.Plugins.MailKit.csproj", "{BDC43676-8F1B-4EF1-8492-248C7EECC3EF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{5C5ACAE0-EDCC-4E78-AEEE-0BFC5944F3D6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Architecture.EntityFramework", "architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj", "{71FF4437-F76C-45C3-B62D-5BBC5ABECC70}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Architecture.Rest", "architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj", "{6C40B5DE-0161-489F-B108-6ED5385F5DB2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{AB411524-8DBB-4BC9-BD47-BA8822402E93}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{11C863C2-C181-4284-974F-9DEC271D6EE3}"
@@ -59,6 +53,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugins.Core.Client"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Plugins.Core.Server", "plugins\core\src\Sienar.Plugins.Core.Server\Sienar.Plugins.Core.Server.csproj", "{EB6E4C24-A9E1-4187-ACAD-37A1A6638516}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "architecture", "architecture", "{5FFAD9EC-F653-4607-B054-26D7051226B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0225173F-8318-4B1A-96F7-64C74977A53A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Architecture.EntityFramework", "architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj", "{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sienar.Architecture.Rest", "architecture\src\Sienar.Architecture.Rest\Sienar.Architecture.Rest.csproj", "{A825B3A1-14F5-4018-B4A3-B6998844A39A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,14 +86,6 @@ Global
 		{BDC43676-8F1B-4EF1-8492-248C7EECC3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDC43676-8F1B-4EF1-8492-248C7EECC3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDC43676-8F1B-4EF1-8492-248C7EECC3EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71FF4437-F76C-45C3-B62D-5BBC5ABECC70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71FF4437-F76C-45C3-B62D-5BBC5ABECC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71FF4437-F76C-45C3-B62D-5BBC5ABECC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71FF4437-F76C-45C3-B62D-5BBC5ABECC70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C40B5DE-0161-489F-B108-6ED5385F5DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C40B5DE-0161-489F-B108-6ED5385F5DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C40B5DE-0161-489F-B108-6ED5385F5DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C40B5DE-0161-489F-B108-6ED5385F5DB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD5E598C-20F1-4E00-87A6-1046C8D8D034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD5E598C-20F1-4E00-87A6-1046C8D8D034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5E598C-20F1-4E00-87A6-1046C8D8D034}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -132,6 +126,14 @@ Global
 		{EB6E4C24-A9E1-4187-ACAD-37A1A6638516}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB6E4C24-A9E1-4187-ACAD-37A1A6638516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB6E4C24-A9E1-4187-ACAD-37A1A6638516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A825B3A1-14F5-4018-B4A3-B6998844A39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A825B3A1-14F5-4018-B4A3-B6998844A39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A825B3A1-14F5-4018-B4A3-B6998844A39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A825B3A1-14F5-4018-B4A3-B6998844A39A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{288EEDA5-EC96-45F3-896B-067F5019C32A} = {AECA84A1-073B-49F3-A5FB-0218436826FB}
@@ -156,5 +158,8 @@ Global
 		{85B30A28-4595-4CE4-9A00-3DAE5B0F4FFF} = {609794E4-4A3D-4430-863B-5382AD4B585A}
 		{2030D6E4-A1BC-4BEE-805D-3356F5EE8BCB} = {85B30A28-4595-4CE4-9A00-3DAE5B0F4FFF}
 		{EB6E4C24-A9E1-4187-ACAD-37A1A6638516} = {85B30A28-4595-4CE4-9A00-3DAE5B0F4FFF}
+		{0225173F-8318-4B1A-96F7-64C74977A53A} = {5FFAD9EC-F653-4607-B054-26D7051226B6}
+		{C0AC1893-DBC9-4B03-B4DF-EA4280CAFEC0} = {0225173F-8318-4B1A-96F7-64C74977A53A}
+		{A825B3A1-14F5-4018-B4A3-B6998844A39A} = {0225173F-8318-4B1A-96F7-64C74977A53A}
 	EndGlobalSection
 EndGlobal
