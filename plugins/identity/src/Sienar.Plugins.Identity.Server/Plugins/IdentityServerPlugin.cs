@@ -102,7 +102,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddAccessValidator<UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>, ManuallyConfirmUserAccountRequest>()
 			.AddStatusProcessor<ChangePasswordProcessor<TContext>, ChangePasswordRequest>()
 			.AddStatusProcessor<ForgotPasswordProcessor<TContext>, ForgotPasswordRequest>()
-			.AddStatusProcessor<ResetPasswordProcessor, ResetPasswordRequest>()
+			.AddStatusProcessor<ResetPasswordProcessor<TContext>, ResetPasswordRequest>()
 			.AddResultProcessor<GetAccountDataProcessor, AccountDataResult>()
 			.AddProcessor<GetLockoutReasonsProcessor, AccountLockoutRequest, AccountLockoutResult>()
 
