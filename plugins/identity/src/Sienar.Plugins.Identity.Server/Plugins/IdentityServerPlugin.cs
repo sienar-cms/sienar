@@ -56,7 +56,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 		services.AddHttpContextAccessor();
 
 		services.TryAddScoped<IPasswordHasher<SienarUser>, PasswordHasher<SienarUser>>();
-		services.TryAddScoped<IPasswordManager, PasswordManager>();
+		services.TryAddScoped<IPasswordManager, PasswordManager<TContext>>();
 		services.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 		services.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
 		services.TryAddScoped<IVerificationCodeManager, VerificationCodeManager<TContext>>();
