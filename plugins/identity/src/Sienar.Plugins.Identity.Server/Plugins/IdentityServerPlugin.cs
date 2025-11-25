@@ -115,7 +115,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 		// Email
 			.AddStatusProcessor<ConfirmAccountProcessor<TContext>, ConfirmAccountRequest>()
 			.AddStatusProcessor<InitiateEmailChangeProcessor<TContext>, InitiateEmailChangeRequest>()
-			.AddStatusProcessor<PerformEmailChangeProcessor, PerformEmailChangeRequest>()
+			.AddStatusProcessor<PerformEmailChangeProcessor<TContext>, PerformEmailChangeRequest>()
 
 		// Personal data
 			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook<TContext>, DeleteAccountRequest>()
