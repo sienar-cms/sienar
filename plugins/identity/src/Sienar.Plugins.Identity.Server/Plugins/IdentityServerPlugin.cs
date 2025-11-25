@@ -89,8 +89,8 @@ public class IdentityServerPlugin<TContext> : IPlugin
 		// Security
 			.AddProcessor<LoginProcessor<TContext>, LoginRequest, LoginResult>()
 			.AddStatusProcessor<LogoutProcessor, LogoutRequest>()
-			.AddResultProcessor<PersonalDataProcessor, PersonalDataResult>()
-			.AddStatusProcessor<UserRoleChangeProcessor, AddUserToRoleRequest>()
+			.AddResultProcessor<PersonalDataProcessor<TContext>, PersonalDataResult>()
+			.AddStatusProcessor<UserRoleChangeProcessor<TContext>, AddUserToRoleRequest>()
 			.AddAccessValidator<UserIsAdminAccessValidator<AddUserToRoleRequest>, AddUserToRoleRequest>()
 			.AddStatusProcessor<UserRoleChangeProcessor, RemoveUserFromRoleRequest>()
 			.AddAccessValidator<UserIsAdminAccessValidator<RemoveUserFromRoleRequest>, RemoveUserFromRoleRequest>()
