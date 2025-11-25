@@ -17,7 +17,7 @@ public static class SienarEntityFrameworkServiceCollectionExtensions
 	/// <typeparam name="TFilterProcessor">The type of the filter processor</typeparam>
 	/// <typeparam name="TContext">The type of the filter processor</typeparam>
 	/// <returns>The service collection</returns>
-	public static IServiceCollection AddEntityFrameworkEntity<TEntity, TFilterProcessor, TContext>(
+	public static IServiceCollection AddEfEntity<TEntity, TFilterProcessor, TContext>(
 		this IServiceCollection self)
 		where TEntity : EntityBase
 		where TFilterProcessor : class, IEntityFrameworkFilterProcessor<TEntity>

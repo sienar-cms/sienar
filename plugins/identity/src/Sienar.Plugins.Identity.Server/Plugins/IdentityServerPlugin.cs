@@ -76,15 +76,15 @@ public class IdentityServerPlugin<TContext> : IPlugin
 
 		// CRUD
 		services
-			.AddEntityFrameworkEntity<SienarUser, SienarUserFilterProcessor, IUserRepository, UserRepository<TContext>>()
+			.AddEfEntity<SienarUser, SienarUserFilterProcessor, TContext>()
 			.AddAccessValidator<UserIsAdminAccessValidator<SienarUser>, SienarUser>()
 			.AddBeforeActionHook<FetchNotUpdatedUserPropertiesHook<TContext>, SienarUser>()
 			.AddBeforeActionHook<UserMapNormalizedFieldsHook, SienarUser>()
 			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
 			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, SienarUser>()
 			.AddStateValidator<EnsureAccountInfoUniqueValidator, SienarUser>()
-			.AddEntityFrameworkEntity<LockoutReason, LockoutReasonFilterProcessor, ILockoutReasonRepository, LockoutReasonRepository<TContext>>()
-			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEntityFrameworkEntityWithDefaultRepository<SienarRole, SienarRoleFilterProcessor, TContext>()
+			.AddEfEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
+			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
 
 		// Security
 			.AddProcessor<LoginProcessor, LoginRequest, LoginResult>()
