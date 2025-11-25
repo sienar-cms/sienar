@@ -11,7 +11,6 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Identity;
-using Sienar.Identity.Data;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
@@ -60,7 +59,6 @@ public class IdentityServerPlugin<TContext> : IPlugin
 		services.TryAddScoped<IUserClaimsFactory, UserClaimsFactory>();
 		services.TryAddScoped<IUserClaimsPrincipalFactory<SienarUser>, UserClaimsPrincipalFactory>();
 		services.TryAddScoped<IVerificationCodeManager, VerificationCodeManager<TContext>>();
-		services.TryAddScoped<IUserRepository, UserRepository<TContext>>();
 
 		services.TryAddScoped<IEmailSender, DefaultEmailSender>();
 
