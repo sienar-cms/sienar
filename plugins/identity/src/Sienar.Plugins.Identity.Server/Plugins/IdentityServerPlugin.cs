@@ -82,7 +82,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddBeforeActionHook<UserMapNormalizedFieldsHook, SienarUser>()
 			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
 			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, SienarUser>()
-			.AddStateValidator<EnsureAccountInfoUniqueValidator, SienarUser>()
+			.AddStateValidator<EnsureAccountInfoUniqueValidator<TContext>, SienarUser>()
 			.AddEfEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
 			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
 
@@ -109,7 +109,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 		// Registration
 			.AddStateValidator<RegistrationOpenValidator, RegisterRequest>()
 			.AddStateValidator<AcceptTosValidator, RegisterRequest>()
-			.AddStateValidator<EnsureAccountInfoUniqueValidator, RegisterRequest>()
+			.AddStateValidator<EnsureAccountInfoUniqueValidator<TContext>, RegisterRequest>()
 			.AddStatusProcessor<RegisterProcessor, RegisterRequest>()
 
 		// Email

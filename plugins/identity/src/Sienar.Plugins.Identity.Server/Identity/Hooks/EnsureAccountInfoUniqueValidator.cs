@@ -1,9 +1,11 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
 using Sienar.Data;
+using Sienar.Extensions;
 using Sienar.Infrastructure;
 using Sienar.Hooks;
 using Sienar.Identity.Data;
@@ -11,17 +13,18 @@ using Sienar.Identity.Data;
 namespace Sienar.Identity.Hooks;
 
 /// <exclude />
-public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
-	IStateValidator<RegisterRequest>
+public class EnsureAccountInfoUniqueValidator<TContext>
+	: IStateValidator<SienarUser>, IStateValidator<RegisterRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly INotifier _notifier;
 
 	public EnsureAccountInfoUniqueValidator(
-		IUserRepository userRepository,
+		TContext context,
 		INotifier notifier)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_notifier = notifier;
 	}
 
@@ -45,14 +48,23 @@ public class EnsureAccountInfoUniqueValidator : IStateValidator<SienarUser>,
 		string? pendingEmail = null,
 		int id = 0)
 	{
-		if (await _userRepository.UsernameIsTaken(id, username))
+		var userSet = _context.Set<SienarUser>();
+
+		username = username.ToNormalized();
+		var usernameTaken = await userSet
+			.AnyAsync(u => u.Id != id &&
+				u.NormalizedUsername == username);
+		if (usernameTaken)
 		{
 			_notifier.Error(CoreErrors.Account.UsernameTaken);
 			return OperationStatus.Conflict;
 		}
 
-		if (await _userRepository.EmailIsTaken(id, email) ||
-			(!string.IsNullOrEmpty(pendingEmail) && await _userRepository.EmailIsTaken(id, pendingEmail)))
+		email = email.ToNormalized();
+		var emailTaken = await userSet
+			.AnyAsync(u => u.Id != id &&
+				(u.NormalizedEmail == email || u.NormalizedPendingEmail == email));
+		if (emailTaken)
 		{
 			_notifier.Error(CoreErrors.Account.EmailTaken);
 			return OperationStatus.Conflict;
