@@ -28,6 +28,7 @@ public static class SienarEfServiceCollectionExtensions
 		self.TryAddScoped<IEntityFrameworkFilterProcessor<TEntity>, TFilterProcessor>();
 		self.TryAddScoped<IEntityReader<TEntity>, EfEntityReader<TEntity, TContext>>();
 		self.TryAddScoped<IEntityWriter<TEntity>, EfEntityWriter<TEntity, TContext>>();
+		self.TryAddScoped<IEntityDeleter<TEntity>, EfEntityDeleter<TEntity, TContext>>();
 
 		return self;
 	}
