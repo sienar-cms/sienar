@@ -87,7 +87,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
 
 		// Security
-			.AddProcessor<LoginProcessor, LoginRequest, LoginResult>()
+			.AddProcessor<LoginProcessor<TContext>, LoginRequest, LoginResult>()
 			.AddStatusProcessor<LogoutProcessor, LogoutRequest>()
 			.AddResultProcessor<PersonalDataProcessor, PersonalDataResult>()
 			.AddStatusProcessor<UserRoleChangeProcessor, AddUserToRoleRequest>()
@@ -101,7 +101,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddStatusProcessor<ManuallyConfirmUserAccountProcessor, ManuallyConfirmUserAccountRequest>()
 			.AddAccessValidator<UserIsAdminAccessValidator<ManuallyConfirmUserAccountRequest>, ManuallyConfirmUserAccountRequest>()
 			.AddStatusProcessor<ChangePasswordProcessor, ChangePasswordRequest>()
-			.AddStatusProcessor<ForgotPasswordProcessor, ForgotPasswordRequest>()
+			.AddStatusProcessor<ForgotPasswordProcessor<TContext>, ForgotPasswordRequest>()
 			.AddStatusProcessor<ResetPasswordProcessor, ResetPasswordRequest>()
 			.AddResultProcessor<GetAccountDataProcessor, AccountDataResult>()
 			.AddProcessor<GetLockoutReasonsProcessor, AccountLockoutRequest, AccountLockoutResult>()
