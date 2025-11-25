@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
@@ -16,16 +17,13 @@ public class LockUserAccountProcessor<TContext> : IStatusProcessor<LockUserAccou
 	where TContext : DbContext
 {
 	private readonly TContext _context;
-	private readonly ILockoutReasonRepository _lockoutReasonRepository;
 	private readonly IAccountEmailManager _emailManager;
 
 	public LockUserAccountProcessor(
 		TContext context,
-		ILockoutReasonRepository lockoutReasonRepository,
 		IAccountEmailManager emailManager)
 	{
 		_context = context;
-		_lockoutReasonRepository = lockoutReasonRepository;
 		_emailManager = emailManager;
 	}
 
@@ -43,7 +41,10 @@ public class LockUserAccountProcessor<TContext> : IStatusProcessor<LockUserAccou
 				message: CoreErrors.Account.NotFound);
 		}
 
-		var reasons = await _lockoutReasonRepository.Read(request.Reasons);
+		var reasons = await _context
+			.Set<LockoutReason>()
+			.Where(l => request.Reasons.Contains(l.Id))
+			.ToListAsync();
 		if (reasons.Count != request.Reasons.Count)
 		{
 			return new(
