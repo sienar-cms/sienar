@@ -5,7 +5,6 @@ using Sienar.Configuration;
 using Sienar.Extensions;
 using Sienar.Html;
 using Sienar.Identity;
-using Sienar.Identity.Data;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
 using Sienar.Identity.Results;
@@ -147,12 +146,7 @@ public class IdentityClientPlugin : IPlugin
 				.TryAddStatusProcessor<ClientUnlockUserAccountProcessor, UnlockUserAccountRequest>()
 				.TryAddStatusProcessor<ClientManuallyConfirmUserAccountProcessor, ManuallyConfirmUserAccountRequest>()
 				.TryAddStatusProcessor<ClientAddUsertoRoleProcessor, AddUserToRoleRequest>()
-				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor, RemoveUserFromRoleRequest>()
-				.AddRestfulEntity<SienarUser, UsersUrlProvider>()
-				.AddRestfulEntity<SienarRole, RolesUrlProvider>()
-
-				// Lockout reasons
-				.AddRestfulEntity<LockoutReason, LockoutReasonsUrlProvider>();
+				.TryAddStatusProcessor<ClientRemoveUserFromRoleProcessor, RemoveUserFromRoleRequest>();
 
 			s.ApplyDefaultConfiguration<SienarOptions>(
 				_configuration.GetSection("Sienar:Core"));
