@@ -27,6 +27,7 @@ public static class SienarEfServiceCollectionExtensions
 		self.TryAddScoped<IStateValidator<TEntity>, ConcurrencyStampValidator<TEntity, TContext>>();
 		self.TryAddScoped<IEntityFrameworkFilterProcessor<TEntity>, TFilterProcessor>();
 		self.TryAddScoped<IEntityReader<TEntity>, EfEntityReader<TEntity, TContext>>();
+		self.TryAddScoped<IEntityWriter<TEntity>, EfEntityWriter<TEntity, TContext>>();
 
 		return self;
 	}
