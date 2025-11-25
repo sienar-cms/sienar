@@ -110,7 +110,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddStateValidator<RegistrationOpenValidator, RegisterRequest>()
 			.AddStateValidator<AcceptTosValidator, RegisterRequest>()
 			.AddStateValidator<EnsureAccountInfoUniqueValidator<TContext>, RegisterRequest>()
-			.AddStatusProcessor<RegisterProcessor, RegisterRequest>()
+			.AddStatusProcessor<RegisterProcessor<TContext>, RegisterRequest>()
 
 		// Email
 			.AddStatusProcessor<ConfirmAccountProcessor, ConfirmAccountRequest>()

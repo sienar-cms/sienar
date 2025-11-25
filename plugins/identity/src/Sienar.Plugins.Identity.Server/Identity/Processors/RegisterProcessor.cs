@@ -3,34 +3,35 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sienar.Configuration;
 using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Identity.Requests;
-using Sienar.Identity.Data;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class RegisterProcessor : IStatusProcessor<RegisterRequest>
+public class RegisterProcessor<TContext> : IStatusProcessor<RegisterRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly IAccountEmailManager _emailManager;
 	private readonly IPasswordHasher<SienarUser> _passwordHasher;
 	private readonly LoginOptions _loginOptions;
 	private readonly SienarOptions _appOptions;
 
 	public RegisterProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		IAccountEmailManager emailManager,
 		IPasswordHasher<SienarUser> passwordHasher,
 		IOptions<LoginOptions> loginOptions,
 		IOptions<SienarOptions> appOptions)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_emailManager = emailManager;
 		_passwordHasher = passwordHasher;
 		_loginOptions = loginOptions.Value;
@@ -62,14 +63,15 @@ public class RegisterProcessor : IStatusProcessor<RegisterRequest>
 		}
 
 		// Try to create that user with the given password
-		if (!await _userRepository.Update(user))
-		{
-			return new(
-				OperationStatus.Unknown,
-				message: StatusMessages.Database.QueryFailed);
-		}
+		await _context
+			.Set<SienarUser>()
+			.AddAsync(user);
+		await _context.SaveChangesAsync();
 
-		if (shouldSendRegistrationEmail) await _emailManager.SendWelcomeEmail(user);
+		if (shouldSendRegistrationEmail)
+		{
+			await _emailManager.SendWelcomeEmail(user);
+		}
 
 		return new(
 			OperationStatus.Success,
