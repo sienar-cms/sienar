@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 using System.Threading.Tasks;
+using Sienar.Extensions;
 using Sienar.Hooks;
 
 namespace Sienar.Identity.Hooks;
@@ -15,9 +16,9 @@ public class UserMapNormalizedFieldsHook : IBeforeAction<SienarUser>
 			return Task.CompletedTask;
 		}
 
-		user.NormalizedUsername = user.Username.ToUpperInvariant();
-		user.NormalizedEmail = user.Email.ToUpperInvariant();
-		user.NormalizedPendingEmail = user.PendingEmail?.ToUpperInvariant();
+		user.NormalizedUsername = user.Username.ToNormalized();
+		user.NormalizedEmail = user.Email.ToNormalized();
+		user.NormalizedPendingEmail = user.PendingEmail?.ToNormalized();
 		return Task.CompletedTask;
 	}
 }

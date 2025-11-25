@@ -99,7 +99,7 @@ public class PerformEmailChangeProcessor
 
 		// Code was valid
 		user.Email = user.PendingEmail;
-		user.NormalizedEmail = user.NormalizedPendingEmail!.ToUpperInvariant();
+		user.NormalizedEmail = user.NormalizedPendingEmail!.ToNormalized();
 		user.PendingEmail = null;
 		user.NormalizedPendingEmail = null;
 

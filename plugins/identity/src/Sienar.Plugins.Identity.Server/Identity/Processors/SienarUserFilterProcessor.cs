@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Sienar.Data;
+using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Processors;
 
@@ -20,7 +21,7 @@ public class SienarUserFilterProcessor : IEntityFrameworkFilterProcessor<SienarU
 			return dataset;
 		}
 
-		var searchTerm = filter.SearchTerm.ToUpperInvariant();
+		var searchTerm = filter.SearchTerm.ToNormalized();
 
 		return dataset.Where(
 			s => s.NormalizedUsername.Contains(searchTerm)
