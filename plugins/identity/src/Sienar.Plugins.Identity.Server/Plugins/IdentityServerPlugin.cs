@@ -81,7 +81,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddBeforeActionHook<FetchNotUpdatedUserPropertiesHook<TContext>, SienarUser>()
 			.AddBeforeActionHook<UserMapNormalizedFieldsHook, SienarUser>()
 			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
-			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, SienarUser>()
+			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook<TContext>, SienarUser>()
 			.AddStateValidator<EnsureAccountInfoUniqueValidator<TContext>, SienarUser>()
 			.AddEfEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
 			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
@@ -118,7 +118,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddStatusProcessor<PerformEmailChangeProcessor, PerformEmailChangeRequest>()
 
 		// Personal data
-			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook, DeleteAccountRequest>()
+			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook<TContext>, DeleteAccountRequest>()
 			.AddStatusProcessor<DeleteAccountProcessor, DeleteAccountRequest>();
 
 
