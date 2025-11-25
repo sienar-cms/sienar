@@ -7,7 +7,7 @@ using Sienar.Processors;
 
 namespace Sienar.Extensions;
 
-public static class SienarEntityFrameworkServiceCollectionExtensions
+public static class SienarEfServiceCollectionExtensions
 {
 	/// <summary>
 	/// Adds the necessary services to use an entity via an EF repository
