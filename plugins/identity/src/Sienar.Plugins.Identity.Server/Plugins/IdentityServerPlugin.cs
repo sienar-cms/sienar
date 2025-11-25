@@ -104,7 +104,7 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddStatusProcessor<ForgotPasswordProcessor<TContext>, ForgotPasswordRequest>()
 			.AddStatusProcessor<ResetPasswordProcessor<TContext>, ResetPasswordRequest>()
 			.AddResultProcessor<GetAccountDataProcessor, AccountDataResult>()
-			.AddProcessor<GetLockoutReasonsProcessor, AccountLockoutRequest, AccountLockoutResult>()
+			.AddProcessor<GetLockoutReasonsProcessor<TContext>, AccountLockoutRequest, AccountLockoutResult>()
 
 		// Registration
 			.AddStateValidator<RegistrationOpenValidator, RegisterRequest>()
