@@ -2,38 +2,39 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Sienar.Errors;
 using Sienar.Identity.Requests;
-using Sienar.Data;
 using Sienar.Email;
-using Sienar.Identity.Data;
 using Sienar.Infrastructure;
 using Sienar.Processors;
 
 namespace Sienar.Identity.Processors;
 
 /// <exclude />
-public class LockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
+public class LockUserAccountProcessor<TContext> : IStatusProcessor<LockUserAccountRequest>
+	where TContext : DbContext
 {
-	private readonly IUserRepository _userRepository;
+	private readonly TContext _context;
 	private readonly ILockoutReasonRepository _lockoutReasonRepository;
 	private readonly IAccountEmailManager _emailManager;
 
 	public LockUserAccountProcessor(
-		IUserRepository userRepository,
+		TContext context,
 		ILockoutReasonRepository lockoutReasonRepository,
 		IAccountEmailManager emailManager)
 	{
-		_userRepository = userRepository;
+		_context = context;
 		_lockoutReasonRepository = lockoutReasonRepository;
 		_emailManager = emailManager;
 	}
 
 	public async Task<OperationResult<bool>> Process(LockUserAccountRequest request)
 	{
-		var user = await _userRepository.Read(
-			request.UserId,
-			Filter.WithIncludes(nameof(SienarUser.LockoutReasons)));
+		var userSet = _context.Set<SienarUser>();
+		var user = await userSet
+			.Include(u => u.LockoutReasons)
+			.FirstOrDefaultAsync(u => u.Id == request.UserId);
 
 		if (user is null)
 		{
@@ -53,12 +54,8 @@ public class LockUserAccountProcessor : IStatusProcessor<LockUserAccountRequest>
 		user.LockoutReasons.AddRange(reasons);
 		user.LockoutEnd = request.EndDate ?? DateTime.MaxValue;
 
-		if (!await _userRepository.Update(user))
-		{
-			return new(
-				OperationStatus.Unknown,
-				message: StatusMessages.Database.QueryFailed);
-		}
+		userSet.Update(user);
+		await _context.SaveChangesAsync();
 
 		if (!await _emailManager.SendAccountLockedEmail(user))
 		{
