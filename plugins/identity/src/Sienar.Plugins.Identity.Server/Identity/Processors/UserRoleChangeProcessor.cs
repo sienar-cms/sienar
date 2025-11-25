@@ -17,14 +17,10 @@ public class UserRoleChangeProcessor<TContext>
 	where TContext : DbContext
 {
 	private readonly TContext _context;
-	private readonly IRepository<SienarRole> _roleRepository;
 
-	public UserRoleChangeProcessor(
-		TContext context,
-		IRepository<SienarRole> roleRepository)
+	public UserRoleChangeProcessor(TContext context)
 	{
 		_context = context;
-		_roleRepository = roleRepository;
 	}
 
 	async Task<OperationResult<bool>> IStatusProcessor<AddUserToRoleRequest>.Process(AddUserToRoleRequest request)
@@ -40,7 +36,9 @@ public class UserRoleChangeProcessor<TContext>
 			return new(OperationStatus.Unprocessable, message: CoreErrors.Account.AccountAlreadyInRole);
 		}
 
-		var role = await _roleRepository.Read(request.RoleId);
+		var role = await _context
+			.Set<SienarRole>()
+			.FindAsync(request.RoleId);
 		if (role is null)
 		{
 			return new(OperationStatus.NotFound, message: CoreErrors.Roles.NotFound);
