@@ -37,6 +37,7 @@ public class CoreClientPlugin : IPlugin
 		{
 			services
 				.AddSienarBlazorUtilities()
+				.AddRestfulEntities()
 				.AddSingleton(_sp.GetRequiredService<GlobalComponentProvider>())
 				.AddSingleton(_sp.GetRequiredService<ComponentProvider>())
 				.AddSingleton(_sp.GetRequiredService<RoutableAssemblyProvider>());
