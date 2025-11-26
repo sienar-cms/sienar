@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Infrastructure;
 using Sienar.Security;
@@ -18,6 +16,7 @@ public class RestEntityReader<TDto> : ServiceBase, IEntityReader<TDto>
 	where TDto : EntityBase
 {
 	private readonly IRestClient _client;
+	private readonly ICrudEndpointGenerator<TDto> _endpointGenerator;
 	private readonly ILogger<RestEntityReader<TDto>> _logger;
 	private readonly IAccessValidationRunner<TDto> _accessValidationRunner;
 	private readonly IAfterActionRunner<TDto> _afterActionRunner;
@@ -27,18 +26,21 @@ public class RestEntityReader<TDto> : ServiceBase, IEntityReader<TDto>
 	/// </summary>
 	/// <param name="notifier">The notifier</param>
 	/// <param name="client">The rest client</param>
+	/// <param name="endpointGenerator">The endpoint generator for the given DTO</param>
 	/// <param name="logger">The logger</param>
 	/// <param name="accessValidationRunner">The access validation runner</param>
 	/// <param name="afterActionRunner">The after-action runner</param>
 	public RestEntityReader(
 		INotifier notifier,
 		IRestClient client,
+		ICrudEndpointGenerator<TDto> endpointGenerator,
 		ILogger<RestEntityReader<TDto>> logger,
 		IAccessValidationRunner<TDto> accessValidationRunner,
 		IAfterActionRunner<TDto> afterActionRunner)
 		: base(notifier)
 	{
 		_client = client;
+		_endpointGenerator = endpointGenerator;
 		_logger = logger;
 		_accessValidationRunner = accessValidationRunner;
 		_afterActionRunner = afterActionRunner;
@@ -49,14 +51,12 @@ public class RestEntityReader<TDto> : ServiceBase, IEntityReader<TDto>
 		int id,
 		Filter? filter = null)
 	{
-		TDto? entity = null;
+		TDto? entity;
 		try
 		{
-			var baseEndpoint = entity.GetRestEndpoint();
-			ThrowIf(baseEndpoint is null);
-
+			var endpoint = _endpointGenerator.GenerateReadUrl(id);
 			entity = (await _client.Get<TDto>(
-				$"{baseEndpoint}/{id}",
+				endpoint,
 				filter)).Result;
 		}
 		catch (Exception e)
@@ -97,11 +97,9 @@ public class RestEntityReader<TDto> : ServiceBase, IEntityReader<TDto>
 
 		try
 		{
-			var baseEndpoint = typeof(TDto).GetRestEndpoint();
-			ThrowIf(baseEndpoint is null);
-
+			var endpoint = _endpointGenerator.GenerateReadUrl();
 			queryResult = (await _client.Get<PagedQueryResult<TDto>>(
-				baseEndpoint,
+				endpoint,
 				filter)).Result ?? new();
 		}
 		catch (Exception e)
@@ -119,13 +117,5 @@ public class RestEntityReader<TDto> : ServiceBase, IEntityReader<TDto>
 		}
 
 		return NotifyOfResult(new OperationResult<PagedQueryResult<TDto>>(result: queryResult));
-	}
-
-	private static void ThrowIf([DoesNotReturnIf(true)] bool isInvalid)
-	{
-		if (isInvalid)
-		{
-			throw new InvalidOperationException($"Cannot determine REST endpoint for DTO of type {typeof(TDto)}");
-		}
 	}
 }
