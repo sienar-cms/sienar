@@ -21,6 +21,7 @@ public static class SienarRestServiceCollectionExtensions
 	{
 		self.TryAddScoped<IEntityReader<TDto>, RestEntityReader<TDto>>();
 		self.TryAddScoped<IEntityWriter<TDto>, RestEntityWriter<TDto>>();
+		self.TryAddScoped<IEntityDeleter<TDto>, RestEntityDeleter<TDto>>();
 
 		return self;
 	}
