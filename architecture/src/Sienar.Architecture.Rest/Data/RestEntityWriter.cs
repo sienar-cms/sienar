@@ -157,11 +157,11 @@ T>> _logger;
 				beforeHooksResult.Message ?? StatusMessages.Crud<T>.UpdateFailed()));
 		}
 
-		bool success;
+		bool successful;
 		try
 		{
 			var endpoint = _endpointGenerator.GenerateUpdateUrl(model);
-			success = (await _client.Put<bool?>(
+			successful = (await _client.Put<bool?>(
 				endpoint,
 				model)).Result ?? false;
 		}
@@ -177,9 +177,17 @@ T>> _logger;
 		// Run after hooks
 		await _afterActionRunner.Run(model, ActionType.Update);
 
+		if (!successful)
+		{
+			return NotifyOfResult(new OperationResult<bool>(
+				OperationStatus.Unknown,
+				false,
+				StatusMessages.Crud<T>.UpdateFailed()));
+		}
+
 		return NotifyOfResult(new OperationResult<bool>(
 			OperationStatus.Success,
-			success,
+			true,
 			StatusMessages.Crud<T>.UpdateSuccessful()));
 	}
 }
