@@ -11,17 +11,16 @@ namespace Sienar.Extensions;
 public static class SienarRestServiceCollectionExtensions
 {
 	/// <summary>
-	/// Adds the necessary services to use an entity via a REST API repository
+	/// Adds the necessary services to use entities stored behind a REST API
 	/// </summary>
-	/// <param name="self">the service collection</param>
-	/// <typeparam name="TDto">The type of the DTO</typeparam>
-	/// <returns>the service collection</returns>
-	public static IServiceCollection AddRestfulEntity<TDto>(this IServiceCollection self)
-		where TDto : EntityBase
+	/// <param name="self">The service collection</param>
+	/// <returns>The service collection</returns>
+	public static IServiceCollection AddRestfulEntities(this IServiceCollection self)
 	{
-		self.TryAddScoped<IEntityReader<TDto>, RestEntityReader<TDto>>();
-		self.TryAddScoped<IEntityWriter<TDto>, RestEntityWriter<TDto>>();
-		self.TryAddScoped<IEntityDeleter<TDto>, RestEntityDeleter<TDto>>();
+		self.TryAddScoped(typeof(ICrudEndpointGenerator<>), typeof(DefaultCrudEndpointGenerator<>));
+		self.TryAddScoped(typeof(IEntityReader<>), typeof(RestEntityReader<>));
+		self.TryAddScoped(typeof(IEntityWriter<>), typeof(RestEntityWriter<>));
+		self.TryAddScoped(typeof(IEntityDeleter<>), typeof(RestEntityDeleter<>));
 
 		return self;
 	}
