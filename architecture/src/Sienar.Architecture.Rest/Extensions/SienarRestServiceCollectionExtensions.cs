@@ -20,6 +20,7 @@ public static class SienarRestServiceCollectionExtensions
 		where TDto : EntityBase
 	{
 		self.TryAddScoped<IEntityReader<TDto>, RestEntityReader<TDto>>();
+		self.TryAddScoped<IEntityWriter<TDto>, RestEntityWriter<TDto>>();
 
 		return self;
 	}
