@@ -18,6 +18,6 @@ public interface ICreateActionOrchestrator<TDto, TEntity>
 	/// Executes the orchestrated action
 	/// </summary>
 	/// <param name="dto">The type of the DTO</param>
-	/// <returns></returns>
+	/// <returns>The final action result</returns>
 	Task<IActionResult> Execute(TDto dto);
 }
