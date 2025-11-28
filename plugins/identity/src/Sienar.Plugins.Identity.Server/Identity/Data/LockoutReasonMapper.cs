@@ -18,6 +18,8 @@ public class LockoutReasonMapper : IMapper<LockoutReasonDto, LockoutReason>
 	/// <inheritdoc />
 	public void MapToDto(LockoutReasonDto dto, LockoutReason entity)
 	{
+		dto.Id = entity.Id;
+		dto.ConcurrencyStamp = entity.ConcurrencyStamp;
 		dto.Reason = entity.Reason;
 	}
 }
