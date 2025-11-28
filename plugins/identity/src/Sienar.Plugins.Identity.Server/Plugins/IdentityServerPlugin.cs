@@ -11,6 +11,7 @@ using Sienar.Email;
 using Sienar.Extensions;
 using Sienar.Hooks;
 using Sienar.Identity;
+using Sienar.Identity.Data;
 using Sienar.Identity.Hooks;
 using Sienar.Identity.Processors;
 using Sienar.Identity.Requests;
@@ -81,8 +82,9 @@ public class IdentityServerPlugin<TContext> : IPlugin
 			.AddBeforeActionHook<UserPasswordUpdateHook, SienarUser>()
 			.AddBeforeActionHook<RemoveUserRelatedEntitiesHook<TContext>, SienarUser>()
 			.AddStateValidator<EnsureAccountInfoUniqueValidator<TContext>, SienarUser>()
-			.AddEfEntity<LockoutReason, LockoutReasonFilterProcessor, TContext>()
-			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>().AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
+			.AddEfEntity<LockoutReasonDto, LockoutReasonMapper, LockoutReason, LockoutReasonFilterProcessor, TContext>()
+			.AddBeforeActionHook<LockoutReasonMapNormalizedFieldsHook, LockoutReason>()
+			.AddEfEntity<SienarRole, SienarRoleFilterProcessor, TContext>()
 
 		// Security
 			.AddProcessor<LoginProcessor<TContext>, LoginRequest, LoginResult>()
