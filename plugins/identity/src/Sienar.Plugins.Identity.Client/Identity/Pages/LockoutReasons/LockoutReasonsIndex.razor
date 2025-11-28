@@ -1,4 +1,4 @@
-﻿@inherits TablePage<LockoutReason>
+﻿@inherits TablePage<LockoutReasonDto>
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.LockoutReasons.Index)]
 
@@ -58,7 +58,7 @@
 	/// <summary>
 	/// Creates a prompt to delete a lockout reason
 	/// </summary>
-	protected Task DeleteReason(LockoutReason reason)
+	protected Task DeleteReason(LockoutReasonDto reason)
 		=> DeleteEntity(
 			reason.Id,
 			"Delete lockout reason",
