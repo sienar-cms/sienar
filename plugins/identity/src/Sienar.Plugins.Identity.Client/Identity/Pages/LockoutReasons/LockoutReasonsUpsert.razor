@@ -1,7 +1,7 @@
 ﻿@inherits UpsertPage<LockoutReasonDto>
 @attribute [Authorize(Roles = Roles.Admin)]
 @attribute [Route(DashboardUrls.LockoutReasons.Add)]
-@attribute [Route($"{DashboardUrls.LockoutReasons.Index}/{{id:guid}}")]
+@attribute [Route($"{DashboardUrls.LockoutReasons.Index}/{{id:int}}")]
 
 <DocTitle Title="@Title"/>
 
