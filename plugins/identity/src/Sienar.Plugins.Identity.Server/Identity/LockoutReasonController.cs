@@ -34,9 +34,9 @@ public class LockoutReasonController : SienarController
 
 	[HttpPost]
 	public Task<IActionResult> Create(
-		LockoutReason entity,
-		[FromServices] IEntityWriter<LockoutReason> service)
-		=> Execute(() => service.Create(entity));
+		LockoutReasonDto lockoutReason,
+		[FromServices] ICreateActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
+		=> orchestrator.Execute(lockoutReason);
 
 	[HttpPut]
 	public Task<IActionResult> Update(
