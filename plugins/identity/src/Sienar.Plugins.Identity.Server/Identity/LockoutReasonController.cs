@@ -22,8 +22,8 @@ public class LockoutReasonController : SienarController
 	[HttpGet]
 	public Task<IActionResult> Read(
 		[FromQuery] Filter? filter,
-		[FromServices] IEntityReader<LockoutReason> service)
-		=> Execute(() => service.Read(filter));
+		[FromServices] IReadAllActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
+		=> orchestrator.Execute(filter);
 
 	[HttpGet("{id:int}")]
 	public Task<IActionResult> Read(
