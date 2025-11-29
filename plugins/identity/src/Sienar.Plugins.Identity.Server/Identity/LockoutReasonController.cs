@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sienar.Data;
@@ -20,12 +21,14 @@ public class LockoutReasonController : SienarController
 		: base(mapper) {}
 
 	[HttpGet]
+	[UsedImplicitly]
 	public Task<IActionResult> Read(
 		[FromQuery] Filter? filter,
 		[FromServices] IReadAllActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
 		=> orchestrator.Execute(filter);
 
 	[HttpGet("{id:int}")]
+	[UsedImplicitly]
 	public Task<IActionResult> Read(
 		int id,
 		[FromQuery] Filter? filter,
@@ -33,18 +36,21 @@ public class LockoutReasonController : SienarController
 		=> orchestrator.Execute(id, filter);
 
 	[HttpPost]
+	[UsedImplicitly]
 	public Task<IActionResult> Create(
 		LockoutReasonDto lockoutReason,
 		[FromServices] ICreateActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
 		=> orchestrator.Execute(lockoutReason);
 
 	[HttpPut]
+	[UsedImplicitly]
 	public Task<IActionResult> Update(
 		LockoutReasonDto lockoutReason,
 		[FromServices] IUpdateActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
 		=> orchestrator.Execute(lockoutReason);
 
 	[HttpDelete("{id:int}")]
+	[UsedImplicitly]
 	public Task<IActionResult> Delete(
 		int id,
 		[FromServices] IDeleteActionOrchestrator<LockoutReason> orchestrator)

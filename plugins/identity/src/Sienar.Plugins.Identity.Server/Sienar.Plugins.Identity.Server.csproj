@@ -31,6 +31,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+
 		<ProjectReference
 			Condition=" '$(Configuration)' != 'Release' "
 			Include="..\..\..\..\architecture\src\Sienar.Architecture.EntityFramework\Sienar.Architecture.EntityFramework.csproj"/>
