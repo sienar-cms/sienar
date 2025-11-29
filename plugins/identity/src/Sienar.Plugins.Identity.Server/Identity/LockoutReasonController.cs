@@ -1,13 +1,11 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sienar.Data;
 using Sienar.Infrastructure;
-using Sienar.Services;
 
 namespace Sienar.Identity;
 
@@ -15,11 +13,8 @@ namespace Sienar.Identity;
 [ApiController]
 [Route("/api/lockout-reasons")]
 [Authorize(Roles = Roles.Admin)]
-public class LockoutReasonController : SienarController
+public class LockoutReasonController
 {
-	public LockoutReasonController(IOperationResultMapper mapper)
-		: base(mapper) {}
-
 	[HttpGet]
 	[UsedImplicitly]
 	public Task<IActionResult> Read(
