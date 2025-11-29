@@ -40,9 +40,9 @@ public class LockoutReasonController : SienarController
 
 	[HttpPut]
 	public Task<IActionResult> Update(
-		LockoutReason entity,
-		[FromServices] IEntityWriter<LockoutReason> service)
-		=> Execute(() => service.Update(entity));
+		LockoutReasonDto lockoutReason,
+		[FromServices] IUpdateActionOrchestrator<LockoutReasonDto, LockoutReason> orchestrator)
+		=> orchestrator.Execute(lockoutReason);
 
 	[HttpDelete("{id:int}")]
 	public Task<IActionResult> Delete(
