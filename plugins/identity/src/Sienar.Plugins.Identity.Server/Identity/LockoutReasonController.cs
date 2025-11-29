@@ -47,6 +47,6 @@ public class LockoutReasonController : SienarController
 	[HttpDelete("{id:int}")]
 	public Task<IActionResult> Delete(
 		int id,
-		[FromServices] IEntityDeleter<LockoutReason> service)
-		=> Execute(() => service.Delete(id));
+		[FromServices] IDeleteActionOrchestrator<LockoutReason> orchestrator)
+		=> orchestrator.Execute(id);
 }
