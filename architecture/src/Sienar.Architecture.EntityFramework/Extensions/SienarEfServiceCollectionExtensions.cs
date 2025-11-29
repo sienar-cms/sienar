@@ -15,7 +15,7 @@ public static class SienarEfServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">The service collection</param>
 	/// <param name="optionsAction">The options configuration, if any</param>
-	/// <typeparam name="TContext">The type of the contexxt</typeparam>
+	/// <typeparam name="TContext">The type of the context</typeparam>
 	/// <returns>The service collection</returns>
 	public static IServiceCollection AddDbContextForSienar<TContext>(
 		this IServiceCollection self,
@@ -28,7 +28,8 @@ public static class SienarEfServiceCollectionExtensions
 	/// </summary>
 	/// <param name="self">The service collection</param>
 	/// <param name="optionsAction">The options configuration, if any</param>
-	/// <typeparam name="TContext">The type of the contexxt</typeparam>
+	/// <typeparam name="TContext">The type of the context</typeparam>
+	/// <typeparam name="TContextImplementation">The implementation type of the context</typeparam>
 	/// <returns>The service collection</returns>
 	public static IServiceCollection AddDbContextForSienar<TContext, TContextImplementation>(
 		this IServiceCollection self,
