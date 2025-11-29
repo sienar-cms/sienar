@@ -7,7 +7,7 @@ using Sienar.Identity.Data;
 
 namespace Sienar.Data;
 
-public class SienarDbContext : DbContext, ISienarDbContext
+public class SienarDbContext : DbContext, IDbContext, ISienarDbContext
 {
 	/// <inheritdoc />
 	public SienarDbContext() {}
