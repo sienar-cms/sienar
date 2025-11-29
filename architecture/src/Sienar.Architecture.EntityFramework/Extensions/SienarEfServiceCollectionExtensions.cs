@@ -21,7 +21,7 @@ public static class SienarEfServiceCollectionExtensions
 		this IServiceCollection self,
 		Action<DbContextOptionsBuilder>? optionsAction = null)
 		where TContext : DbContext, IDbContext
-		=> self.AddDbContext<IDbContext, TContext>(optionsAction);
+		=> AddDbContextForSienar<IDbContext, TContext>(self, optionsAction);
 
 	/// <summary>
 	/// Registers a <see cref="DbContext"/> as an <see cref="IDbContext"/> and as a <c>TContext>
