@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -38,7 +39,28 @@ public static class SienarEfServiceCollectionExtensions
 		where TContextImplementation : DbContext, TContext
 	{
 		self.AddDbContext<TContext, TContextImplementation>(optionsAction);
-		self.AddScoped<IDbContext>(sp => sp.GetRequiredService<TContext>());
+
+		if (typeof(TContext) != typeof(IDbContext))
+		{
+			self.AddScoped<IDbContext>(sp => sp.GetRequiredService<TContext>());
+		}
+
+		// Add the TContextImplementation to DI as all its interfaces
+		// but skip any Microsoft-provided interfaces
+		// Because IDbContext is in the Microsoft.EntityFrameworkCore namespace,
+		// it will also be skipped here
+		var interfaces = typeof(TContextImplementation)
+			.GetInterfaces()
+			.Where(
+				i => i.Namespace is not null &&
+				!i.Namespace.StartsWith("Microsoft") &&
+				!i.Namespace.StartsWith("System"));
+
+		foreach (var i in interfaces)
+		{
+			self.AddScoped(i, sp => sp.GetRequiredService<TContext>());
+		}
+
 		return self;
 	}
 
