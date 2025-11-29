@@ -47,7 +47,8 @@ public class CoreMvcPlugin : IPlugin
 			.AddScoped<IOperationResultMapper, DefaultOperationResultMapper>()
 			.AddScoped(typeof(IReadActionOrchestrator<,>), typeof(DefaultReadActionOrchestrator<,>))
 			.AddScoped(typeof(IReadAllActionOrchestrator<,>), typeof(DefaultReadAllActionOrchestrator<,>))
-			.AddScoped(typeof(ICreateActionOrchestrator<,>), typeof(DefaultCreateActionOrchestrator<,>));
+			.AddScoped(typeof(ICreateActionOrchestrator<,>), typeof(DefaultCreateActionOrchestrator<,>))
+			.AddScoped(typeof(IUpdateActionOrchestrator<,>), typeof(DefaultUpdateActionOrchestrator<,>));
 
 		// Add and configure MVC
 		var mvcbuilder = _builder.Services.AddMvc(
