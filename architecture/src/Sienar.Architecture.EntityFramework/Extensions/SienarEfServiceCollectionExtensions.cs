@@ -25,7 +25,7 @@ public static class SienarEfServiceCollectionExtensions
 		=> AddDbContextForSienar<IDbContext, TContext>(self, optionsAction);
 
 	/// <summary>
-	/// Registers a <see cref="DbContext"/> as an <see cref="IDbContext"/> and as a <c>TContext>
+	/// Registers a <see cref="DbContext"/> as an <see cref="IDbContext"/> and as a <c>TContext</c>
 	/// </summary>
 	/// <param name="self">The service collection</param>
 	/// <param name="optionsAction">The options configuration, if any</param>
