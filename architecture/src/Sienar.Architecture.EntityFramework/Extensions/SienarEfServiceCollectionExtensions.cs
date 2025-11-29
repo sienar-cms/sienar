@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Sienar.Data;
@@ -9,6 +10,37 @@ namespace Sienar.Extensions;
 
 public static class SienarEfServiceCollectionExtensions
 {
+	/// <summary>
+	/// Registers a <see cref="DbContext"/> as an <see cref="IDbContext"/>
+	/// </summary>
+	/// <param name="self">The service collection</param>
+	/// <param name="optionsAction">The options configuration, if any</param>
+	/// <typeparam name="TContext">The type of the contexxt</typeparam>
+	/// <returns>The service collection</returns>
+	public static IServiceCollection AddDbContextForSienar<TContext>(
+		this IServiceCollection self,
+		Action<DbContextOptionsBuilder>? optionsAction = null)
+		where TContext : DbContext, IDbContext
+		=> self.AddDbContext<IDbContext, TContext>(optionsAction);
+
+	/// <summary>
+	/// Registers a <see cref="DbContext"/> as an <see cref="IDbContext"/> and as a <c>TContext>
+	/// </summary>
+	/// <param name="self">The service collection</param>
+	/// <param name="optionsAction">The options configuration, if any</param>
+	/// <typeparam name="TContext">The type of the contexxt</typeparam>
+	/// <returns>The service collection</returns>
+	public static IServiceCollection AddDbContextForSienar<TContext, TContextImplementation>(
+		this IServiceCollection self,
+		Action<DbContextOptionsBuilder>? optionsAction = null)
+		where TContext : IDbContext
+		where TContextImplementation : DbContext, TContext
+	{
+		self.AddDbContext<TContext, TContextImplementation>(optionsAction);
+		self.AddScoped<IDbContext>(sp => sp.GetRequiredService<TContext>());
+		return self;
+	}
+
 	/// <summary>
 	/// Adds the necessary services to use an entity via an EF repository
 	/// </summary>
